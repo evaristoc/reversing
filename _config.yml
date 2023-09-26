@@ -17,7 +17,7 @@ title: Re-Versing
 email: ec.tech.ccs@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Blogging the reverse-engineering of some playful and sometimes delicious code scripts
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/re-versing" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: ecccs_fcc
 github_username:  evaristoc
