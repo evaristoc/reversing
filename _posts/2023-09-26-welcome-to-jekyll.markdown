@@ -1,25 +1,19 @@
 ---
 layout: post
-title:  "Welcome to Jekyll!"
+title:  "Welcome to Re-Versing!"
 date:   2023-09-26 20:16:21 +0200
-categories: jekyll update
+categories: blog update
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
+# Thanks for landing here.
 
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+Re-Versing is about that - reverse-engineering some beautiful projects I have been founding on the web during my time learning to code.
 
-Jekyll also offers powerful support for code snippets:
+This blog focuses mostly on Javascript. There will be a bit a old fashion Javascript or any other language as there are projects dating to the times of ES5 (I hope you don't mind). At the end the whole purpose of this blog is to get into the minds of those who made those projects.
 
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
+This intents to be a bit different to similar projects not necessarily in the content, as there are many similar proposals of looking into existing codes, but in its presentation: I will try to use more interactive and visual tools to point out what made the reversed codes so attractive to me.
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
+Hope you like what find!
 
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+Regards,
+
+Evaristo
