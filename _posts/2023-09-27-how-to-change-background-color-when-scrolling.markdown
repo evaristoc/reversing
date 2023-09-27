@@ -8,12 +8,12 @@ categories: blog update
 
 # Hello, scrollMagic!
 
-Adding animation when scrolling is one of the most popular animations you can ever find. There are many ways of adding those animations but for quite some time one of the most used tools has been through [scrollMagic](https://scrollmagic.io/).
+Adding animation when scrolling is one of the most popular animations you can ever find. There are many ways of adding those animations but for quite some time one of the most used tools has been [scrollMagic](https://scrollmagic.io/).
 
-Here it is a simple example of the use of scrollMagic by someone who has been learning to use it. The code used for this post is based on a work by Yasser Aziz and can be found at 
+Here it is an example of the use of **scrollMagic** by someone who has been learning to use it. The code used for this post is based on a work by Yasser Aziz and can be found at 
 [codepen](https://codepen.io/yasserius/pen/rNmExLN){:target="_blank"}.
 
-> I advice to open that codepen to see the code
+> I advice to open that pen so you can study the scripts
 
 <div class="container">
     <section class="slide" id="first">
@@ -32,12 +32,14 @@ Here it is a simple example of the use of scrollMagic by someone who has been le
         <div class="centered-content title"><h1>Now, scroll to see color change...</h1></div>
         <br>
         <br>
-        <br>       
+        <br>
+        <br>
+        <br>
+        <br>  
     </section>
     <section class="slide" id="second">
         <h3>Second Step: Instantiating the Red Scene</h3>
-            <p><strong>scrollMagic</strong> needs an anchor or trigger in the HTML to indicate where the new scene should start and where should end. For some authors, those changes belong to different <strong>scenes</strong>. The author of the code found convenient to separate the triggers of the scenes into HTML sections. There are 4 sections in this code, each section identified with an id ('first', 'second', 'third'  and 'fourth'). Those ids are used to tell <strong>scrollMagic</strong> "Hey, this is the next scene!".</p>
-            <p>Our very first change occurs when the id of the HTML section element is equal to <em><strong>third</strong></em> as <span class='highlight'>triggerElement</span> and a class that is added to the ccs file, <strong>green-bg</strong>, as <span class='highlight'>setClassToggle</span>:</p>
+            <p><strong>scrollMagic</strong> needs an anchor or trigger in the HTML to indicate where the new scene should start and where should end. Some coders might interpret the start and end of a transformation as different <strong>scenes</strong>. The author of this code separated the triggers of the scenes into <em>HTML sections</em>. There are 5 sections in this code, each section identified with an id ('first', 'second', 'third', 'fourth' and 'fifth'). Those ids are used to tell <strong>scrollMagic</strong> "Hey, this is the next scene!".</p>
             <div class="language-javascript highlighter-rouge">
                 <div class="highlight">
                     <pre class="highlight">
@@ -53,15 +55,24 @@ Here it is a simple example of the use of scrollMagic by someone who has been le
                     </pre>
                 </div>
             </div>
+            <p>This code reads something like:</p>
+            <div class="highlight" style="color: black;">
+            "<em>When finding a trigger with value equal 'second', add to body the red-bg class in an animated way</em>"
+            </div>
+            <p>Let's explain this in more details how the <strong>scene</strong> object is instantiated:</p>
+            <p>The very first change should occur when we reach an HTML element, in this case a section, with an id of value equal '<em>second</em>'. The selector was assigned to the <span class='highlight'><strong>triggerElement</strong></span> property of the new <span class='highlight'><strong>ScrollMagic.Scene</strong></span>. Similarly, the element to be affected - in this case the HTML <strong>body</strong> - should change based on the styling kept under a class, <strong style='color:brown;'>red-bg</strong>. The author defined the new styling in a css file. Then, the <span class='highlight'><strong>setClassToggle</strong></span> property of the **scene** will keep the target HTML element and its new styling.</p>
             <p>Notice that the <strong>scene</strong> is added to the <strong>controller</strong> at the end of the code.</p>     
         <br>
         <br>
-        <br> 
+        <br>
+        <br>
+        <br>
+        <br>  
     </section>
     <section class="slide" id="third">
         <h3>Third Step: Repeating Code - Instantiating a Green Scene</h3>
             <p>Here it is something interesting. Notice that the approach of the author consisted <em>in instantiating a new scene object for each section</em>.</p>
-            <p>To save time, our author just copied and pasted the code to instantiate an new <strong>scene</strong> object but with different attributes - actually, a different class, <span class='highlight'>green-bg</span>.</p>
+            <p>To save time, our author just copied and pasted the code to instantiate an new <strong>scene</strong> object but with different attributes for <span class='highlight'><strong>triggerElement</strong></span> and <span class='highlight'><strong>setClassToggle</strong></span> - the last with a different class, <strong style='color:brown;'>green-bg</strong>.</p>
             <p>Here it is the third scene, changing the background to green:</p>
             <div class="language-javascript highlighter-rouge">
                 <div class="highlight">
@@ -80,11 +91,14 @@ Here it is a simple example of the use of scrollMagic by someone who has been le
             </div> 
         <br>
         <br>
-        <br>   
+        <br>
+        <br>
+        <br>
+        <br>    
     </section>
     <section class="slide" id="fourth">
-        <h3>Fourth Step: The Same: Instantiating a Blue Scene</h3>
-            <p>There is one more change before the code ends, this time changing the background to blue. The code is just the same as before except for the <span class='highlight'>triggerElement</span> and the <span class='highlight'>setClassToggle</span>.</p>
+        <h3>Fourth Step: And Again...: Instantiating a Blue Scene</h3>
+            <p>There is one more change before the code ends, this time changing the background to blue. The code is just the same as before except for the values of <span class='highlight'>triggerElement</span> and the <span class='highlight'>setClassToggle</span>.</p>
             <div class="language-javascript highlighter-rouge">
                 <div class="highlight">
                     <pre class="highlight">
@@ -102,6 +116,9 @@ Here it is a simple example of the use of scrollMagic by someone who has been le
             </div>
         <br>
         <br>
+        <br>
+        <br>
+        <br>
         <br> 
     </section>           
 </div>
@@ -109,26 +126,28 @@ Here it is a simple example of the use of scrollMagic by someone who has been le
 
 # Tada!
 
-The actual code finish on a fifth html section which is not associated to any animation, therefore **scrollMagic** sets the non-existing scene to the default layout.
+In the original code, the last animation is *not* instantiated. The fifth HTML section doesn't have a **scrollMagic** scene associated with it. As soon as we leave the previous scene (i.e. the fourth HTML section) **scrollMagic** implements an animation that ends in a default layout (white background).
 
-And that was it. So how all that happened?
+And that was it. So... how all that happened? What should we know in order to do something similar?
 
-In order to make this animation, the author had to provide the code with an indication on when and how the changes should trigger.
+One thing that the coder must do is to find a proper identification of the HTML elements that will hold the triggers of the animation, and pass that identification to **scrollMagic** as property.
 
-*A couple of other things worth remembering about **scrollMagic** are scenes and controllers.*
+The other thing is to identify the HTML elements that will be changed. They might be different to those holding the trigger value. In the example above, changes were implemented to the **body** tag. Additionally, it is necessary to define how our target elements should change. Those changes might be set as (css) attributes included in our stylesheet under a single css selector (usually classes, but can be other).
 
-In **scrollMagic** (and in many other animation and visualization packages) the concept of ***scene*** is commonly used as reference of animation events.
+A couple of other things worth remembering about **scrollMagic** are *scenes and controllers.*
 
-Another concept was the **controller**. This is actually the executor of the animation. Once the scenes are instantiated, they have to be added to the controller in order to start the animation.
+In **scrollMagic** (and in many other animation and visualization packages) the concept of ***scene*** is commonly used as declaration of the animation events and contain the trigger, the HTML elements to be affected when reaching that trigger, and the new styling of the affected HTML elements.
 
-**scrollMagic** uses that also the same concept and it is to the coder to define those scenes and how they will change.
+The **scene** also contains the animation properties (eg. duration).
 
-> Something to remember... The way the coder decides what the element of the scene are might not be always the same, and sometimes depends of what you are allow to do given the limitations of the technology.
+Once you have identified the scenes, you might want to call the ***controller***. This is actually the executor of the animation. Once the scenes are instantiated, they have to be added to the controller in order to start the animation. Every time a trigger is activated, the **controller** will look for the target elements in the HTML page and will add / replace the styling selectors as defined on the associated **scene**.
+
+> Something to remember... Different coders working on a similar project might define the scenes differently, and sometimes the definition of the scene might depend of what you are allow to do given the limitations of the technology.
 
 
 ## Final remarks
 
-This code worked just fine as first example but before think on things that could be done differently regarding the code by this author?
+This code worked just fine as first example. However I wonder if there would be things that could have been done differently? Do you have any ideas? Try to think at different ways to code this project!
 
 Ok, this is all for this post! Hope it was helpful. And keep coding!
 
