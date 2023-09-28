@@ -60,7 +60,7 @@ Here it is an example of the use of **scrollMagic** by someone who has been lear
             "<em>When finding a trigger with value equal 'second', add to body the red-bg class in an animated way</em>"
             </div>
             <p>Let's explain this in more details how the <strong>scene</strong> object is instantiated:</p>
-            <p>The very first change should occur when we reach an HTML element, in this case a section, with an id of value equal '<em>second</em>'. The selector was assigned to the <span class='highlight'><strong>triggerElement</strong></span> property of the new <span class='highlight'><strong>ScrollMagic.Scene</strong></span>. Similarly, the element to be affected - in this case the HTML <strong>body</strong> - should change based on the styling kept under a class, <strong style='color:brown;'>red-bg</strong>. The author defined the new styling in a css file. Then, the <span class='highlight'><strong>setClassToggle</strong></span> property of the **scene** will keep the target HTML element and its new styling.</p>
+            <p>The very first change should occur when we reach an HTML element, in this case a section, with an id of value equal '<em>second</em>'. The selector was assigned to the <span class='highlight'><strong>triggerElement</strong></span> property of the new <span class='highlight'><strong>ScrollMagic.Scene</strong></span>. Similarly, the element to be affected - in this case the HTML <strong>body</strong> - should change based on the styling kept under a class, <strong style='color:brown;'>red-bg</strong>. The author defined the new styling in a css file. Then, the <span class='highlight'><strong>setClassToggle</strong></span> property of the <strong>scene</strong> will keep the target HTML element and its new styling.</p>
             <p>Notice that the <strong>scene</strong> is added to the <strong>controller</strong> at the end of the code.</p>     
         <br>
         <br>
@@ -72,7 +72,7 @@ Here it is an example of the use of **scrollMagic** by someone who has been lear
     <section class="slide" id="third">
         <h3>Third Step: Repeating Code - Instantiating a Green Scene</h3>
             <p>Here it is something interesting. Notice that the approach of the author consisted <em>in instantiating a new scene object for each section</em>.</p>
-            <p>To save time, our author just copied and pasted the code to instantiate an new <strong>scene</strong> object but with different attributes for <span class='highlight'><strong>triggerElement</strong></span> and <span class='highlight'><strong>setClassToggle</strong></span> - the last with a different class, <strong style='color:brown;'>green-bg</strong>.</p>
+            <p>To save time, our author just copied and pasted the code to instantiate a new <strong>scene</strong> object modifying only the assigned values of <span class='highlight'><strong>triggerElement</strong></span> and <span class='highlight'><strong>setClassToggle</strong></span> - the last with a different class, <strong style='color:brown;'>green-bg</strong>.</p>
             <p>Here it is the third scene, changing the background to green:</p>
             <div class="language-javascript highlighter-rouge">
                 <div class="highlight">
@@ -98,7 +98,7 @@ Here it is an example of the use of **scrollMagic** by someone who has been lear
     </section>
     <section class="slide" id="fourth">
         <h3>Fourth Step: And Again...: Instantiating a Blue Scene</h3>
-            <p>There is one more change before the code ends, this time changing the background to blue. The code is just the same as before except for the values of <span class='highlight'>triggerElement</span> and the <span class='highlight'>setClassToggle</span>.</p>
+            <p>There is one more instantiation before the code ends, this time changing the background to blue. The code is just the same as before except for the values of <span class='highlight'>triggerElement</span> and the <span class='highlight'>setClassToggle</span>.</p>
             <div class="language-javascript highlighter-rouge">
                 <div class="highlight">
                     <pre class="highlight">
@@ -128,7 +128,9 @@ Here it is an example of the use of **scrollMagic** by someone who has been lear
 
 In the original code, the last animation is *not* instantiated. The fifth HTML section doesn't have a **scrollMagic** scene associated with it. As soon as we leave the previous scene (i.e. the fourth HTML section) **scrollMagic** implements an animation that ends in a default layout (white background).
 
-And that was it. So... how all that happened? What should we know in order to do something similar?
+And that was it. 
+
+# So... how all that happened? What should we know in order to do something similar?
 
 One thing that the coder must do is to find a proper identification of the HTML elements that will hold the triggers of the animation, and pass that identification to **scrollMagic** as property.
 
