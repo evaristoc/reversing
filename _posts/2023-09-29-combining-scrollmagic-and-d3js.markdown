@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "How to combine scrollMagic and D3.js"
-date:   2023-09-29 12:00:00 +0200
+date:   2030-09-29 12:00:00 +0200
 categories: blog update
 ---
 <style>
@@ -119,7 +119,8 @@ categories: blog update
   }
   
   .graphic__vis {
-      position: absolute;
+      position: -webkit-sticky;
+      position: sticky;
       top: 0;
       margin-left: 30rem;
       -webkit-transform: translate3d(0, 0, 0);
@@ -134,7 +135,7 @@ categories: blog update
   
   .graphic__vis.is-bottom {
       top: auto;
-      bottom: -30%;
+      bottom: 0;
   }
   
   .graphic__vis svg {
@@ -307,9 +308,52 @@ window.createGraphic = function(graphicSelector) {
        function setupCharts() {
      
      //E: setting up the "canvas"
-           var svg = graphicVisEl.append('svg')
-               .attr('width', size + 'px')
-               .attr('height', size + 'px')
+           var svg = graphicVisEl
+                    .append('svg')
+                    //.attr("viewBox", '0 0 300 600')
+                    .attr('width', size + 'px')
+                    .attr('height', size*1.2 + 'px')
+                    .call(responsivefy)
+            
+            function responsivefy(svg) {
+            // container will be the DOM element
+            // that the svg is appended to
+            // we then measure the container
+            // and find its aspect ratio
+            const container = d3.select(svg.node().parentNode),
+                width = parseInt(svg.style('width'), 10),
+                height = parseInt(svg.style('height'), 10),
+                aspect = width / (height*.5);
+            
+            // set viewBox attribute to the initial size
+            // control scaling with preserveAspectRatio
+            // resize svg on inital page load
+            svg.attr('viewBox', `0 0 ${width} ${height}`)
+                .attr('preserveAspectRatio', 'xMinYMid')
+                .call(resize);
+            
+            // add a listener so the chart will be resized
+            // when the window resizes
+            // multiple listeners for the same event type
+            // requires a namespace, i.e., 'click.foo'
+            // api docs: https://goo.gl/F3ZCFr
+            d3.select(window).on(
+                'resize.' + container.attr('id'), 
+                resize
+            );
+            
+            // this is the code that resizes the chart
+            // it will be called on load
+            // and in response to window resizes
+            // gets the width of the container
+            // and resizes the svg to fill it
+            // while maintaining a consistent aspect ratio
+            function resize() {
+                const w = parseInt(container.style('width'));
+                svg.attr('width', w);
+                svg.attr('height', Math.round(w / aspect));
+            }
+            }
            
            var chart = svg.append('g')
                .classed('chart', true)
@@ -451,11 +495,11 @@ window.createGraphic = function(graphicSelector) {
                          .on('leave', function(event) {
                                             var fixed = false
                                             var bottom = event.scrollDirection === 'FORWARD'
-                                            toggle(fixed, bottom)
+                                           toggle(fixed, bottom)
                           })
                    
         enterExitScene.addTo(controller)
                }
-               scrollmagic()
+              scrollmagic()
            //})()    
 </script>
