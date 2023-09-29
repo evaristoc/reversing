@@ -5,502 +5,317 @@ date:   2023-09-29 12:00:00 +0200
 categories: blog update
 ---
 <style>
-/* reset stuff */
-* {
-    box-sizing: border-box;
-  }
-  a,
-  body,
-  div,
-  h1,
-  h2,
-  html,
-  p {
+
+#outro {
+  height: 640px;
+}
+
+
+#scrolly {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    background-color: #f3f3f3;
+    padding: 1rem;
+}
+		
+#scrolly > * {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+div .articlepost {
+    position: relative;
+    padding: 0 1rem 0 0;
+    max-width: 20rem;
+}
+		
+figure {
+    position: -webkit-sticky;
+    position: sticky;
+    width: 100%;
     margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-  }
-  main {
-    display: block;
-  }
-  body,
-  html {
-    height: 100%;
-  }
-  html {
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-  }
-  body {
-    font-feature-settings: "kern" 1, "onum" 1, "liga" 0;
-  }
-  
-  body {
-    background: #fff;
-    font-size: 17px;
-  }
-  
-  body {
-    font-size: 17px;
-    font-weight: 400;
-    background-color: #fffffc;
-    color: #1a1a1a;
-    line-height: 1.8;
-    font-family: "Whitney SSm A", "Whitney SSm B", Helvetica, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  main {
-    padding: 0.75rem;
-    padding-bottom: 5rem;
-  }
-  
-  p {
-    margin: 1.5rem 0;
-  }
-  
-  a {
-    color: #1a1a1a;
-    text-decoration: none;
-    border-bottom: 1px dotted currentColor;
-  }
-  
-  a:hover {
-    color: #f33;
-  }
-  
-  .intro {
-    max-width: 60rem;
-    margin: 4rem auto 2rem auto;
-  }
-  
-  .intro p {
-    max-width: 40rem;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .hed {
-    font-family: "Mercury SSm A", "Mercury SSm B", Georgia, serif;
-    font-size: 2rem;
-    font-weight: bold;
-    line-height: 1.4;
-    margin-bottom: 3rem;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 40rem;
-  }
-  
-  .hed a {
-    border: none;
-  }
-  
-  
-  /* GRAPHIC CODE */
-  .graphic {
-      width: 100%;
-      position: relative;
-  }
-  
-  .graphic__prose {
-      width: 24rem;
-  }
-  
-  .graphic__prose .trigger {
-      padding: 0;
-      margin: 0;
-      min-height: 240px;
-      
-  }
-  
-  .graphic__vis {
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      margin-left: 30rem;
-      -webkit-transform: translate3d(0, 0, 0);
-      -moz-transform: translate3d(0, 0, 0);
-      transform: translate3d(0, 0, 0);
-      height: 100vh;
-  }
-  
-  .graphic__vis.is-fixed {
-      position: fixed;
-  }
-  
-  .graphic__vis.is-bottom {
-      top: auto;
-      bottom: 0;
-  }
-  
-  .graphic__vis svg {
-   background-color: blue;
-      border: 1px dashed black;
-      top: 20%;
-      position: relative;
-      -webkit-transform: translateY(-50%);
-      -moz-transform: translateY(-50%);
-      transform: translateY(-50%);
-  
-  }
-  
-  .item circle {
-      stroke: #666;
-      stroke-width: 1px;
-      fill: #fff;
-  }
-  
-  .item text {
-      fill: #666;
-      font-size: 12px;
-      text-anchor: middle;
-      alignment-baseline: middle;
-  }
-  
-  
-  
-  /* graph-scroll.js version */
-  .graphic__vis.graph-scroll-fixed {
-      position: fixed;
-      right: auto;
-  }
-  
-  .graphic__vis.graph-scroll-below {
-      top: auto;
-      bottom: 0;
-  }    
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    background-color: #8a8a8a;
+}
+figure p {
+    text-align: center;
+    padding: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-size: 8rem;
+    font-weight: 900;
+    color: #ff1;
+}
+
+.step {
+    margin: 0 auto 2rem auto;
+    background-color: #3b3b3b;
+    color: #fff;
+}
+.step:last-child {
+    margin-bottom: 0;
+}
+.step.is-active {
+    background-color: goldenrod;
+    color: #3b3b3b;
+}
+
+.step p {
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 1.5rem;
+} 
+
+.step p .title {
+    color: #3b3b3b;
+} 
+
+div .explain p {
+    color: #3b3b3b;
+    text-align: start;
+    font-size: 1rem;
+} 
+
 </style>
 
+# Sticky figure with Scrollama
 
-<main>
+This is a dissection of [Russell Goldenberg's scrollama sticky-side "Basic" example](https://russellsamora.github.io/scrollama/sticky-side/), which is also on [github](https://github.com/russellsamora/scrollama).
 
-    <div class='library'>
-        <div class='library__graphic graphic'>
-            <div class='graphic__prose'>
-                <p class='trigger' data-step='0'>Step 1 in the graphic. It triggers in the middle of the viewport. For this graphic, it is the same as the initial state so the reader doesn&rsquo;t miss anything.</p>
-                <p class='trigger' data-step='1'>Step 2 arrives. The graphic should be locking into a fixed position right about now. We could have a whole bunch of these &ldquo;fixed&rdquo; steps.</p>
-                <p class='trigger' data-step='2'>Step 3 concludes our brief tour. The graphic should now go back to its original in-flow position, elegantly snapping back into place.</p>
+Russell Goldenberg made **Scrollama** to use [the intersection observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) in favor of scroll events, with excellent results.
+
+> What is the intersection observer API? As stated in [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), the API '*... observes changes in the intersection of target elements with an ancestor element or with a top-level document's viewport*'.
+
+# Using Scrollama
+
+In this example the first action was to instatiate all the libraries used in the example:
+
+#### **D3.js**
+
+**D3.js** is used in this example mostly to facilitate the DOM manipulation
+
+```javascript
+var main = d3.select('main')
+var scrolly = main.select('#scrolly');
+var figure = scrolly.select('figure');
+var article = scrolly.select('div .articlepost');
+var step = article.selectAll('.step');
+```
+
+With **D3.js** the author selected and named the main html elements that will characterize the animation:
+- A ***main*** HTML element enclosing all other elements that will be animated
+- A HTML section with an id with ***scrolly*** as value
+- A HTML ***figure*** tag, having the area that will be sticked
+- A *div* which was an ***article*** tag in the original code
+- A list of divs children of the HTML **article** all of class **step** with a digit from 1 to 4 as value for their corresponding *data-step* attributes
+
+
+#### **Scrollama**
+
+```javascript
+var scroller = scrollama();
+```
+
+The name of the **Scrollama** instantiation is a choice made by the coder. The resulting variable though can be compared to the practice of calling it ***scene*** when using other technologies. 
+
+**Scrollama** object will be called again within several functions in the code:
+* A resizing function, **```handleResize```**, where **scrollama** is called to update the dimensions of the elements that are registered in its instance - *scroller*
+
+```javascript
+function handleResize() {
+			
+   // 1. update height of step elements
+    var stepH = Math.floor(window.innerHeight * 0.75);
+    step.style('height', stepH + 'px');
+    var figureHeight = window.innerHeight / 2;
+    var figureMarginTop = (window.innerHeight - figureHeight) / 2;  
+    figure
+        .style('height', figureHeight + 'px')
+        .style('top', figureMarginTop + 'px');
+			
+   
+   // 2. tell scrollama to update new element dimensions
+	scroller.resize();
+}
+```
+
+* The **```init```** function, where the variable *scroller* is setup
+
+```javascript
+function init() {
+			
+    setupStickyfill();
+			
+    // 1. force a resize on load to ensure proper dimensions are sent to scrollama
+	handleResize();
+			
+   // 2. setup the scroller passing options
+	// 		this will also initialize trigger observations
+			
+   // 3. bind scrollama event handlers (this can be chained like below)
+    scroller.setup({
+        step: '#scrolly div.articlepost .step',
+        offset: 0.33,
+        //debug: true,
+    })
+        .onStepEnter(handleStepEnter)
+    
+    // setup resize event
+    window.addEventListener('resize', handleResize);
+}
+```
+
+In the example, setting up the *scroller* required at least 3 properties:
+* The **```step```** property, which get as value(s) the target elements that will be subject to animation; in our case are all those classed as **step**
+
+```javascript
+{
+    step: '#scrolly div.articlepost .step'
+}
+```
+
+* The **```offset```** property, which "locates" the intersection observer on the physical view in relation to the **viewport** dimensions; once the target element crosses the offset, **Scrollama** will add a **is-active** class.
+
+```javascript
+{
+    offset: 0.33
+}
+```
+* An event handler every time the offset is crossed, the **```handleStepEnter```**, assigned to the **```onStepEnter```** **Scrollama** event handler 
+
+```javascript
+// scrollama event handlers
+function handleStepEnter(response) {
+			
+    // response = { element, direction, index }
+    // add color to current step only
+    step.classed('is-active', function (d, i) {
+        return i === response.index;
+    })
+			
+    // update graphic based on step
+	figure.select('p').text(response.index + 1);
+}
+```
+The key of the **Scrollama** **```onStepEnter```** event handler is that it passes a *response* object to the handler function that contains information about the DOM, allowing the definition of different handling functionalities using, for example, **``if-else``** statements. 
+
+In this example, the *response*'s index is used to add color only to the active step.
+
+
+<section id='scrolly'>
+    <div class="articlepost">
+        <div class='step' data-step='1'>
+            <div class="explain">
+            <p>This target (a HTML div classed as '<strong>step</strong>') crossed the 33% viewport offset calculated from top to down. Its index is now passed to the figure.</p>            
             </div>
-            <div class='graphic__vis'></div>
+        </div>
+        <div class='step' data-step='2'>
+            <div class="explain">
+            <p>This is the second target that cross the offset. Its index is now passed to the figure.</p>
+            </div>
+        </div>
+        <div class='step' data-step='3'>
+            <div class="explain">
+            <p><em>index</em> property is passed through the <em>response</em> object from the <strong>scrollama</strong> instance into your animation handler (in the exercise the <strong>handleStepEnter</strong>).</p>
+            </div>
+        </div>
+        <div class='step' data-step='4'>
+            <div class="explain">
+            <p>Every time that a target passes the offset, a  <strong>is-active</strong> class is assigned to it.</p>            
+            </div>
         </div>
     </div>
-</main>
+
+    <figure>
+        <p>0</p>
+    </figure>
+</section>
+<section id='outro'></section>
+
 <script src="{{ site.baseurl }}{% link src/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link src/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
 <script>
-/* 
-	Russell Goldenberg created a function that is a simple d3 chart.
-	This could be anthing that has discrete steps, as simple as changing
-	the background color, or playing/pausing a video.
-	The important part is that it exposes and update function that
-	calls a new thing on a scroll trigger.
-*/
-window.createGraphic = function(graphicSelector) {
+		// using d3 for convenience
+  // E: could have been something like jQuery, etc...
+		var main = d3.select('main')
+		var scrolly = main.select('#scrolly');
+		var figure = scrolly.select('figure');
+		var article = scrolly.select('div .articlepost');
+		var step = article.selectAll('.step');
+		
+// initialize the scrollama
+		var scroller = scrollama();
+		
+// generic window resize listener event
+function handleResize() {
+			
+   // 1. update height of step elements
+			var stepH = Math.floor(window.innerHeight * 0.75);
+			step.style('height', stepH + 'px');
+			var figureHeight = window.innerHeight / 2
+			var figureMarginTop = (window.innerHeight - figureHeight) / 2  
+			figure
+				.style('height', figureHeight + 'px')
+				.style('top', figureMarginTop + 'px');
+			
+   // 3. tell scrollama to update new element dimensions
+			scroller.resize();
+		}
+
+// scrollama event handlers
+function handleStepEnter(response) {
+			//console.log(response)
+			
+   // response = { element, direction, index }
+			// add color to current step only
+			step.classed('is-active', function (d, i) {
+                //console.log('response', response);
+                //response.element.querySelector('.explain').style.display = 'inline';
+				return i === response.index;
+			})
+			
+   // update graphic based on step
+            figure.select('p').text(response.index + 1);
+		}
+
+//E: RELEVANT - it is a different library to stick the menu; scrollama doesn't handle this!
+function setupStickyfill() {
+			d3.selectAll('.sticky').each(function () {
+				//Stickyfill.add(this);
+			});
+		}
 	
-    // E: existing html elements using d3.js
-    var graphicEl = d3.select('.graphic')
-       var graphicVisEl = graphicEl.select('.graphic__vis')
-       var graphicProseEl = graphicEl.select('.graphic__prose')
-   
-    // E: (constant) parameters of the chart
-       var margin = 20
-       var size = 400
-       var chartSize = size - margin * 2
-       var scaleX = null
-       var scaleR = null
-       var data = [8, 6, 7, 5, 3, 0, 9]
-       var extent = d3.extent(data)
-       var minR = 10
-       var maxR = 24
-       
-       // actions to take on each step of our scroll-driven story
-       var steps = [
-           
-     function step0() { // circles are centered and small
-      
-      // E: attributes of the transition t
-               var t = d3.transition()
-                   .duration(800)
-                   .ease(d3.easeQuadInOut)
-                   
-      // E: remember - those items will be generated in another function further below when setting up the image
-               var item = graphicVisEl.selectAll('.item')
-               
-      // E: assign transition t properties to a created item
-               item.transition(t)
-                   .attr('transform', translate(chartSize / 2, chartSize / 2))
-   
-      // E: item is now a d3.js element; now using select would attach a SVG circle to it
-      // E: it is also assigning the transition to the circle, as well as it properties
-               item.select('circle')
-                   .transition(t)
-                   .attr('r', minR)
-   
-      // E: same as above but for text
-      item.select('text')
-                   .transition(t)
-                   .style('opacity', 0)
-           },
-   
-           function step1() { // E: equal circles are positioned side by side
-               var t = d3.transition()
-                   .duration(800)
-                   .ease(d3.easeQuadInOut)
-               
-               // circles are positioned
-      // E: remember that they were created in the previous step.
-      // E: don't forget that graphicsVisEl is a global to this function!!
-               var item = graphicVisEl.selectAll('.item')
-               
-      // E: positioning the items according to scaleX(i)
-               item.transition(t)
-                   .attr('transform', function(d, i) {
-                       return translate(scaleX(i), chartSize / 2)
-                   })
-   
-      // E: defining the properties of each fo the circles and texts associated to their respective "item" HTML element
-               item.select('circle')
-                   .transition(t)
-                   .attr('r', minR)
-   
-               item.select('text')
-                   .transition(t)
-                   .style('opacity', 0)
-           },
-   
-           function step2() { // E: circles are resized to the value of data and text embedded
-               var t = d3.transition()
-                   .duration(800)
-                   .ease(d3.easeQuadInOut)
-   
-               var item = graphicVisEl.selectAll('.item')
-   
-      // E: circles are sized and texts are assigned
-               item.select('circle')
-                   .transition(t)
-                   .delay(function(d, i) { return i * 200 })
-                   .attr('r', function(d, i) {
-                       return scaleR(d)
-                   })
-   
-               item.select('text')
-                   .transition(t)
-                   .delay(function(d, i) { return i * 200 })
-                   .style('opacity', 1)
-           },
-       ]
-   
-       // update our chart
-       function update(step) {
-           steps[step].call() //E: call the function!
-       }
-       
-       // little helper for string concat if using es5
-       function translate(x, y) {
-           return 'translate(' + x + ',' + y + ')'
-       }
-   
-       function setupCharts() {
-     
-     //E: setting up the "canvas"
-           var svg = graphicVisEl
-                    .append('svg')
-                    //.attr("viewBox", '0 0 300 600')
-                    .attr('width', size + 'px')
-                    .attr('height', size*1.2 + 'px')
-                    .call(responsivefy)
-            
-            function responsivefy(svg) {
-            // container will be the DOM element
-            // that the svg is appended to
-            // we then measure the container
-            // and find its aspect ratio
-            const container = d3.select(svg.node().parentNode),
-                width = parseInt(svg.style('width'), 10),
-                height = parseInt(svg.style('height'), 10),
-                aspect = width / (height*.5);
-            
-            // set viewBox attribute to the initial size
-            // control scaling with preserveAspectRatio
-            // resize svg on inital page load
-            svg.attr('viewBox', `0 0 ${width} ${height}`)
-                .attr('preserveAspectRatio', 'xMinYMid')
-                .call(resize);
-            
-            // add a listener so the chart will be resized
-            // when the window resizes
-            // multiple listeners for the same event type
-            // requires a namespace, i.e., 'click.foo'
-            // api docs: https://goo.gl/F3ZCFr
-            d3.select(window).on(
-                'resize.' + container.attr('id'), 
-                resize
-            );
-            
-            // this is the code that resizes the chart
-            // it will be called on load
-            // and in response to window resizes
-            // gets the width of the container
-            // and resizes the svg to fill it
-            // while maintaining a consistent aspect ratio
-            function resize() {
-                const w = parseInt(container.style('width'));
-                svg.attr('width', w);
-                svg.attr('height', Math.round(w / aspect));
-            }
-            }
-           
-           var chart = svg.append('g')
-               .classed('chart', true)
-               .attr('transform', 'translate(' + margin + ',' + margin + ')')
-   
-           scaleR = d3.scaleLinear()
-           scaleX = d3.scaleBand()
-   
-           var domainX = d3.range(data.length)
-   
-           scaleX
-               .domain(domainX)
-               .range([0, chartSize])
-               .padding(1)
-   
-           scaleR
-               .domain(extent)
-               .range([minR, maxR])
-   
-           // E: setup the data; values should be appended to HTML elements of class item, which are created here
-     var item = chart.selectAll('.item')
-               .data(data)
-               .enter()
-      .append('g')
-               .classed('item', true)
-               .attr('transform', translate(chartSize / 2, chartSize / 2))
-           
-           item.append('circle')
-               .attr('cx', 0)
-               .attr('cy', 0)
-   
-           item.append('text')
-               .text(function(d) { return d })
-               .attr('y', 1)
-               .style('opacity', 0)
-       }
-   
-       function setupProse() { 
-     
-     // E: placing the written content
-            var height = window.innerHeight * 0.5;
-            graphicProseEl
-            .selectAll('.trigger')
-                     .style('height', height + 'px')
-       }
-   
-       function init() {
-           setupCharts()
-           setupProse()
-           update(0)
-       }
-       
-       init()
-       
-       return {
-           update: update,
-       }
-   }		
-   
-   
-   //(function() {
-   // helper function so we can map over dom selection
-               
-     function selectionToArray(selection) {
-                   var len = selection.length
-                   var result = []
-                   for (var i = 0; i < len; i++) {
-                       result.push(selection[i])
-                   }
-                   return result
-               }
-               
-     function scrollmagic() {
-                   // select elements
-                   var graphicEl = document.querySelector('.graphic')
-                   var graphicVisEl = graphicEl.querySelector('.graphic__vis')
-                   var triggerEls = selectionToArray(graphicEl.querySelectorAll('.trigger'))
-                   // viewport height
-                   var viewportHeight = window.innerHeight
-                   var halfViewportHeight = Math.floor(viewportHeight / 2)
-                   // a global function creates and handles all the vis + updates
-                   var graphic = createGraphic('.graphic')
-                   
-      // handle the fixed/static position of graphic
-            var toggle = function(fixed, bottom) {
-                       if (fixed) graphicVisEl.classList.add('is-fixed')
-                       else graphicVisEl.classList.remove('is-fixed')
-                       if (bottom) graphicVisEl.classList.add('is-bottom')
-                       else graphicVisEl.classList.remove('is-bottom')
-                   }
-                   
-       // init controller
-                   var controller = new ScrollMagic.Controller()
-                   
-               // setup a scrollmagic trigger ("scene") for each trigger element
-      // E: similar to waypoints combined with canvas/three.js
-      // --- this library is made to link with TweenMax 
-               var scenes = triggerEls.map(function(el) {
-                       // get the step, cast as number					
-                       var step = +el.getAttribute('data-step')
-                       var scene = new ScrollMagic.Scene({
-                           triggerElement: el, // our trigger element
-                           triggerHook: 'onCenter', // 0.5, defaults to this
-                           // duration: el.offsetHeight, // how long it lasts for (in pixels)
-                       })
-                       
-        scene
-           //E: entering and leaving phases are clearer than with waypoints, with specific event handlers
-           //--- the library is very much declarative; more intuitive if you have experience with this declarative syntax
-                             .on('enter', function(event) {
-                                               // tell our graphic to update with a specific step
-                                               graphic.update(step)
-                             })
-                             .on('leave', function(event) {
-                                               var nextStep = Math.max(0, step - 1)
-                                               graphic.update(nextStep)
-                             })
-                       
-                       // add it to controller so it actually fires
-        // E: required, nice!
-                       scene.addTo(controller)
-                   })
-      
-                   // create a scene to toggle fixed position
-       // E: requires an overall understanding of the properties; eg. triggerHook?
-       // --- enterExit is more like initial and final states
-                   var enterExitScene = new ScrollMagic.Scene({
-                       triggerElement: graphicEl,
-                       triggerHook: '0',
-                       duration: graphicEl.offsetHeight - viewportHeight,
-                   })
-                   
-       enterExitScene
-                         .on('enter', function(event) {
-                                            var fixed = true
-                                            var bottom = false
-                                            toggle(fixed, bottom)
-                         })
-                         .on('leave', function(event) {
-                                            var fixed = false
-                                            var bottom = event.scrollDirection === 'FORWARD'
-                                           toggle(fixed, bottom)
-                          })
-                   
-        enterExitScene.addTo(controller)
-               }
-              scrollmagic()
-           //})()    
+
+function init() {
+			setupStickyfill();
+			// 1. force a resize on load to ensure proper dimensions are sent to scrollama
+			handleResize();
+			
+   // 2. setup the scroller passing options
+			// 		this will also initialize trigger observations
+			
+   // 3. bind scrollama event handlers (this can be chained like below)
+			scroller.setup({
+				step: '#scrolly div.articlepost .step',
+				offset: .33,
+				//debug: true,
+			})
+				.onStepEnter(handleStepEnter)
+			
+   // setup resize event
+			window.addEventListener('resize', handleResize);
+		}
+		
+  // kick things off
+		init();
 </script>
