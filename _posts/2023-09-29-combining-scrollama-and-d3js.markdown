@@ -4,87 +4,8 @@ title:  "How to combine scrollama and D3.js"
 date:   2023-09-29 12:00:00 +0200
 categories: blog update
 ---
-<style>
 
-#outro {
-  height: 640px;
-}
-
-
-#scrolly {
-    position: relative;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    background-color: #f3f3f3;
-    padding: 1rem;
-}
-		
-#scrolly > * {
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-}
-div .articlepost {
-    position: relative;
-    padding: 0 1rem 0 0;
-    max-width: 20rem;
-}
-		
-figure {
-    position: -webkit-sticky;
-    position: sticky;
-    width: 100%;
-    margin: 0;
-    -webkit-transform: translate3d(0, 0, 0);
-    -moz-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    background-color: #8a8a8a;
-}
-figure p {
-    text-align: center;
-    padding: 1rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -moz-transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    font-size: 8rem;
-    font-weight: 900;
-    color: #ff1;
-}
-
-.step {
-    margin: 0 auto 2rem auto;
-    background-color: #3b3b3b;
-    color: #fff;
-}
-.step:last-child {
-    margin-bottom: 0;
-}
-.step.is-active {
-    background-color: goldenrod;
-    color: #3b3b3b;
-}
-
-.step p {
-    text-align: center;
-    padding: 1.5rem;
-    font-size: 1.5rem;
-} 
-
-.step p .title {
-    color: #3b3b3b;
-} 
-
-div .explain p {
-    color: #3b3b3b;
-    text-align: start;
-    font-size: 1rem;
-} 
-
-</style>
+<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-09-29-combining-scrollama-and-d3js/2023-09-29-combining-scrollama-and-d3js.css %}">
 
 # Sticky figure with Scrollama
 
@@ -238,84 +159,10 @@ In this example, the *response*'s index is used to add color only to the active 
         <p>0</p>
     </figure>
 </section>
-<section id='outro'></section>
+<section class="outro" id='outro'></section>
 
 <script src="{{ site.baseurl }}{% link src/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
-<script>
-		// using d3 for convenience
-  // E: could have been something like jQuery, etc...
-		var main = d3.select('main')
-		var scrolly = main.select('#scrolly');
-		var figure = scrolly.select('figure');
-		var article = scrolly.select('div .articlepost');
-		var step = article.selectAll('.step');
-		
-// initialize the scrollama
-		var scroller = scrollama();
-		
-// generic window resize listener event
-function handleResize() {
-			
-   // 1. update height of step elements
-			var stepH = Math.floor(window.innerHeight * 0.75);
-			step.style('height', stepH + 'px');
-			var figureHeight = window.innerHeight / 2
-			var figureMarginTop = (window.innerHeight - figureHeight) / 2  
-			figure
-				.style('height', figureHeight + 'px')
-				.style('top', figureMarginTop + 'px');
-			
-   // 3. tell scrollama to update new element dimensions
-			scroller.resize();
-		}
-
-// scrollama event handlers
-function handleStepEnter(response) {
-			//console.log(response)
-			
-   // response = { element, direction, index }
-			// add color to current step only
-			step.classed('is-active', function (d, i) {
-                //console.log('response', response);
-                //response.element.querySelector('.explain').style.display = 'inline';
-				return i === response.index;
-			})
-			
-   // update graphic based on step
-            figure.select('p').text(response.index + 1);
-		}
-
-//E: RELEVANT - it is a different library to stick the menu; scrollama doesn't handle this!
-function setupStickyfill() {
-			d3.selectAll('.sticky').each(function () {
-				//Stickyfill.add(this);
-			});
-		}
-	
-
-function init() {
-			setupStickyfill();
-			// 1. force a resize on load to ensure proper dimensions are sent to scrollama
-			handleResize();
-			
-   // 2. setup the scroller passing options
-			// 		this will also initialize trigger observations
-			
-   // 3. bind scrollama event handlers (this can be chained like below)
-			scroller.setup({
-				step: '#scrolly div.articlepost .step',
-				offset: .33,
-				//debug: true,
-			})
-				.onStepEnter(handleStepEnter)
-			
-   // setup resize event
-			window.addEventListener('resize', handleResize);
-		}
-		
-  // kick things off
-		init();
-</script>
+<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-09-29-combining-scrollama-and-d3js/2023-09-29-combining-scrollama-and-d3js.js %}"></script>
