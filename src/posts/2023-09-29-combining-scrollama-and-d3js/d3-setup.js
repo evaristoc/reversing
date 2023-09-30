@@ -51,7 +51,7 @@ const chart = (selector)=>{
         .attr('y', 1)
         .style('opacity', 0)
 
-    return svg, chart, item
+    return [svg, chart, item];
 
 }
 
@@ -61,5 +61,9 @@ const chart = (selector)=>{
 
 export default {
 chart,
-data
+data,
+minR,
+chartSize,
+scaleR,
+scaleX
 }

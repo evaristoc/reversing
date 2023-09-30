@@ -1,4 +1,5 @@
 import d3setup from './d3-setup.js';
+import {steps} from './d3-steps.js';
 
 window.onload = (event) => {
     // using d3 for convenience
@@ -11,10 +12,10 @@ window.onload = (event) => {
     
     // initialize the scrollama
     var scroller = scrollama();
-    
-    
+
     var svg, chart, item;
-    
+
+
     // generic window resize listener event
     function handleResize() {
         
@@ -34,14 +35,26 @@ window.onload = (event) => {
     // scrollama event handlers
     function handleStepEnter(response) {
         //console.log(response)
-        
-    // response = { element, direction, index }
+        // response = { element, direction, index }
         // add color to current step only
-        step.classed('is-active', function (d, i) {
+        step.classed('is-active', function (d, i) { return i === response.index; });
             //console.log('response', response);
             //response.element.querySelector('.explain').style.display = 'inline';
-            return i === response.index;
-        })
+    // update graphic based on step
+    let currentIndex = response.index;
+    switch(currentIndex){
+    case 0:
+        steps.step01();
+        break;
+    case 1:
+        steps.step02();
+        break;
+    case 2:
+        steps.step03();
+        break;
+    default:
+        break;
+    }
         
     // update graphic based on step
         figure.select('p').text(response.index + 1);
@@ -55,11 +68,7 @@ window.onload = (event) => {
     }
 
     function setupCharts(){
-        svg, chart, item = d3setup.chart("figure");
-        console.log('svg' , svg);
-        console.log('chart' , chart);
-        console.log('item', item);
-
+        return svg, chart, item = d3setup.chart("figure");
     }
 
     function init() {
@@ -67,8 +76,15 @@ window.onload = (event) => {
         // 1. force a resize on load to ensure proper dimensions are sent to scrollama
         handleResize();
 
-        setupCharts();
-        
+        let [svg, chart, item] = setupCharts();
+        steps.chart = chart;
+        steps.minR = d3setup.minR;
+        steps.chartSize = d3setup.chartSize;
+        steps.scaleR = d3setup.scaleR;
+        steps.scaleX = d3setup.scaleX;
+
+        console.log('scaleR' , steps.scaleR);
+        console.log('scaleX', steps.scaleX);
     // 2. setup the scroller passing options
         // 		this will also initialize trigger observations
         
@@ -78,7 +94,7 @@ window.onload = (event) => {
             offset: .33,
             //debug: true,
         })
-            .onStepEnter(handleStepEnter)
+            .onStepEnter(handleStepEnter);
         
     // setup resize event
         window.addEventListener('resize', handleResize);
