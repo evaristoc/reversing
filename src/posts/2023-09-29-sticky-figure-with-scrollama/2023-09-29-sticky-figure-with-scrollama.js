@@ -1,6 +1,3 @@
-import d3setup from './d3-setup.js';
-import {steps} from './d3-steps.js';
-
 window.onload = (event) => {
     // using d3 for convenience
     // E: could have been something like jQuery, etc...
@@ -13,7 +10,6 @@ window.onload = (event) => {
     // initialize the scrollama
     var scroller = scrollama();
 
-    var svg, chart, item;
 
 
     // generic window resize listener event
@@ -40,21 +36,6 @@ window.onload = (event) => {
         step.classed('is-active', function (d, i) { return i === response.index; });
             //console.log('response', response);
             //response.element.querySelector('.explain').style.display = 'inline';
-    // update graphic based on step
-    let currentIndex = response.index;
-    switch(currentIndex){
-    case 0:
-        steps.step01();
-        break;
-    case 1:
-        steps.step02();
-        break;
-    case 2:
-        steps.step03();
-        break;
-    default:
-        break;
-    }
         
     // update graphic based on step
         figure.select('p').text(response.index + 1);
@@ -76,15 +57,6 @@ window.onload = (event) => {
         // 1. force a resize on load to ensure proper dimensions are sent to scrollama
         handleResize();
 
-        let [svg, chart, item] = setupCharts();
-        steps.chart = chart;
-        steps.minR = d3setup.minR;
-        steps.chartSize = d3setup.chartSize;
-        steps.scaleR = d3setup.scaleR;
-        steps.scaleX = d3setup.scaleX;
-
-        console.log('scaleR' , steps.scaleR);
-        console.log('scaleX', steps.scaleX);
     // 2. setup the scroller passing options
         // 		this will also initialize trigger observations
         
@@ -92,7 +64,7 @@ window.onload = (event) => {
         scroller.setup({
             step: '#scrolly div.articlepost .step',
             offset: .33,
-            //debug: true,
+            debug: false,
         })
             .onStepEnter(handleStepEnter);
         

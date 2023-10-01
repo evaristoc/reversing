@@ -34,12 +34,6 @@
       background-color: #8a8a8a;
   }
 
-  figure svg {
-    background-color: blue;
-       border: 1px dashed black;
-       position: relative;
-   }
-
   figure p {
       text-align: center;
       padding: 1rem;
