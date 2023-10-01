@@ -11,13 +11,13 @@ categories: blog update
 
 This is a dissection of [Russell Goldenberg's scrollama sticky-side example](https://russellsamora.github.io/scrollama/sticky-side/), which is also on [github](https://github.com/russellsamora/scrollama).
 
-Russell Goldenberg made **scrollama** to use [the intersection observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) in favor of scroll events, with excellent results.
+Russell Goldenberg made **scrollama** to use [the intersection observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) in favor of scroll events, with excellent results. As stated in [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), the API:
 
-> As stated in [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), the API '*... observes changes in the intersection of target elements with an ancestor element or with a top-level document's viewport*'.
+>  '... observes changes in the intersection of target elements with an ancestor element or with a top-level document's viewport'.
 
 # The code
 
-The first action was to instatiate all the libraries used in the example:
+The first that the original author of the demo did was to instatiate all the libraries used in the example:
 
 #### **D3.js**
 
@@ -45,8 +45,8 @@ With **D3.js** the author selected and named the main HTML elements that will ch
 var scroller = scrollama();
 ```
 
-The **scrollama** instance will be called again within several functions in the code:
-* A resizing function, **```handleResize```**, where **scrollama** is called to update the dimensions of the elements that are registered in its instance - *scroller*
+The **scrollama** instance was called within several functions in the code:
+* In a resizing function, **```handleResize```**, where **scrollama** instance (*scroller*) was called to update the dimensions of the HTML elements that would be eventually registered on it.
 
 ```javascript
 function handleResize() {
@@ -73,7 +73,7 @@ function init() {
 ```
 
 In the example, setting up the values of 3 *scroller* properties were required:
-* The **```step```** property, which get as value(s) the target elements that will be subject to animation; in our case are all those classed as **step**
+* The **```step```** property, which get as value(s) the target HTML elements that will be subject to animation; in our case are all those classed as **step**
 
 ```javascript
 {
@@ -81,7 +81,7 @@ In the example, setting up the values of 3 *scroller* properties were required:
 }
 ```
 
-* The **```offset```** property, which "locates" the intersection observer on the physical view in relation to the **viewport** dimensions; once the target element crosses the offset, **scrollama** will add an **is-active** class.
+* The **```offset```** property, which is the "location" of the intersection observer somewhere on the **viewport**. Once the target element crosses the offset, **scrollama** will add an **is-active** class to it, and it will remove it from any other target that is already handled.
 
 ```javascript
 {
@@ -108,7 +108,7 @@ The **scrollama** **```onStepEnter```** event handler functionality passes a *re
 
 # In Action
 
-The example uses the *response*'s index property to change color and modify the value of a "figure":
+The example by Russell Goldenberg used the *response*'s index property to change color and modify the value of a "figure":
 
 
 <section id='scrolly'>
@@ -140,6 +140,9 @@ The example uses the *response*'s index property to change color and modify the 
     </figure>
 </section>
 
+
+
+
 # So... What did we learn from this code?
 
 It seems that when what you want is to change the status of your page based on up/down scrolling, the use of **scrollama** seems to be easier and natural. That, at least, was my impression. The use of a simple offset of the viewport based on the intersection observer API might be much more convenient for several cases.
@@ -162,9 +165,9 @@ function init() {
 
 **scrollMagic** and other packages using scroll events are harder to set. However, they seem to offer more possibilities and they might be more appropriate for situations where a more advanced animation is required. For example, I don't know if **scrollama** could be easy to use when the reposition of an HTML element is the trigger of another event.
 
-## Final remarks
+# Final remarks
 
-I guess there are many examples out there using **scrollama**. A simple example I came across while looking for some was this one by [Erik Driessen](https://github.com/edriessen/scrollytelling-scrollama-d3-demo). Like me, he is interested in the use of this tools for storytelling and also incorporates **D3.js** in his demos. Just like I did, the code by Erik's appears to be based on the Russell Goldenberg's demos.
+I guess there are many examples out there using **scrollama**. A simple one I came across while looking for some was this one by [Erik Driessen](https://github.com/edriessen/scrollytelling-scrollama-d3-demo). Like me, Erik is interested in the use of this tools for storytelling and also incorporates **D3.js** in his demos. Just like I did, the code by Erik's appears to be based on the Russell Goldenberg's demos.
 
 And that's it! I hope you found this post useful for your projects. I think I will be using **scrollama** myself for some of my post in the future. Meanwhile, happy coding! 
 
