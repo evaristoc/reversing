@@ -8,12 +8,12 @@ categories: blog update
 
 # Hello, scrollMagic!
 
-Adding animation when scrolling is one of the most popular animations you can ever find. There are many ways of adding those animations but for quite some time one of the most used tools has been [scrollMagic](https://scrollmagic.io/).
+Adding animation when scrolling is one of the most popular animations you can ever find. There are many ways of adding those animations but for quite some time one of the most used tools has been [scrollMagic](https://scrollmagic.io/), an original work by Jan Paekpe.
+
+> **scrollMagic** was still maintained on GitHub by 2023, naming about 35 contributors, with a new version (slowly) on the making.
 
 Here it is an example of the use of **scrollMagic** by someone who has been learning to use it. The code used for this post is based on a work by Yasser Aziz and can be found at 
-[codepen](https://codepen.io/yasserius/pen/rNmExLN){:target="_blank"}.
-
-> I advice to open that pen so you can study the scripts along with this post
+[codepen](https://codepen.io/yasserius/pen/rNmExLN){:target="_blank"}. I advice to open that pen so you can study the scripts along with this post.
 
 <div class="container">
     <section class="slide" id="first">

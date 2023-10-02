@@ -9,11 +9,11 @@ categories: blog update
 
 # Sticky figure with scrollama
 
-This is a dissection of [Russell Goldenberg's scrollama sticky-side example](https://russellsamora.github.io/scrollama/sticky-side/), which is also on [github](https://github.com/russellsamora/scrollama).
+This is a dissection of [Russell Samora's scrollama sticky-side example](https://russellsamora.github.io/scrollama/sticky-side/), which is also on [github](https://github.com/russellsamora/scrollama).
 
-Russell Goldenberg made **scrollama** to use [the intersection observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) in favor of scroll events, with excellent results. As stated in [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), the API:
+Russell Samora made **scrollama** to use [the intersection observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) in favor of scroll events, with excellent results. As stated in [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), the API: '... observes changes in the intersection of target elements with an ancestor element or with a top-level document's viewport'.
 
->  '... observes changes in the intersection of target elements with an ancestor element or with a top-level document's viewport'.
+> **scrollama** was still maintained by 2023 and included other 20 contributors, with a new version on the making.
 
 # The code
 
@@ -108,7 +108,7 @@ The **scrollama** **```onStepEnter```** event handler functionality passes a *re
 
 # In Action
 
-The example by Russell Goldenberg used the *response*'s index property to change color and modify the value of a "figure":
+The example by Russell Samora used the *response*'s index property to change color and modify the value of a "figure":
 
 
 <section id='scrolly'>
@@ -167,7 +167,9 @@ function init() {
 
 # Final remarks
 
-I guess there are many examples out there using **scrollama**. A simple one I came across while looking for some was this one by [Erik Driessen](https://github.com/edriessen/scrollytelling-scrollama-d3-demo). Like me, Erik is interested in the use of this tools for storytelling and also incorporates **D3.js** in his demos. Just like I did, the code by Erik's appears to be based on the Russell Goldenberg's demos.
+A more detailed post about the Russell Samora's sticky side demo could be found at [The Pudding](https://pudding.cool/process/introducing-scrollama/), which includes a better description of the "sticky graphic pattern"  and gives a look at the css used in the demo. (*Observation: the post assumes the use of jQuery for the javascript part*)
+
+There are many examples out there using **scrollama**. A simple one I came across while looking for some was this one by [Erik Driessen](https://github.com/edriessen/scrollytelling-scrollama-d3-demo). Like me, Erik is interested in the use of this tools for storytelling and also incorporates **D3.js** in his demos. Just like I did, the code by Erik's appears to be based on the Russell Samora's demos.
 
 And that's it! I hope you found this post useful for your projects. I think I will be using **scrollama** myself for some of my post in the future. Meanwhile, happy coding! 
 
