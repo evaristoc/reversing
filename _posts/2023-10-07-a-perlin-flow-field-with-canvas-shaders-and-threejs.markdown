@@ -21,3 +21,9 @@ The pen looks like this:
 </p>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
 
+I was primarily interested in that combination of all those graphic functionalities and tools. For this pen Darryl used canvas (the 2D graphics API), three.js (the 3D graphics library) and shaders (which can be associated to the WebGL API, which is the base of three.js).
+
+So, what sort of effect was the author after by mixing all those graphics? The first thing should be to look at the noise funcion.
+
+# Noisy Perlin Noise
+
