@@ -4,6 +4,8 @@ title:  "A Perlin-like flow with canvas, shaders and three.js"
 date:   2023-10-07 12:00:00 +0200
 categories: blog update
 ---
+<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs.css %}">
+
 # Adding Noise with Shaders is very nice!
 
 Yeah... but let's be honest: unless you really master shaders and understand what those noise functions do, it is truly hard to get to the right effect programmatically.
@@ -57,88 +59,37 @@ I won't add much about the shader as it is containing the noise function.
 
 Let's see the canvas:
 
-<div id="canvas-container-01"></div>
-<script>
-let container = document.querySelector("#canvas-container-01");
-let startTime = new Date().getTime();
-let renderer;
+<section id='scrolly'>
+    <figure>
+        <p>0</p>
+    </figure>
+    <div class="articlepost">
+        <div class='step' data-step='1'>
+            <div class="explain">
+            <p>This div with a gold background has a class '<strong>step</strong>' and just crossed an offset of 33% of your viewport calculated from top to down.</p>            
+            </div>
+        </div>
+        <div class='step' data-step='2'>
+            <div class="explain">
+            <p>This is the second target that cross the offset. Everytime a target crosses the offset, its index is passed as value to be shown in the figure.</p>
+            </div>
+        </div>
+        <div class='step' data-step='3'>
+            <div class="explain">
+            <p>The <em>index</em> is a property hold by a <em>response</em> that is passed from  <strong>scrollama</strong> into your animation handler (eg. the <strong>handleStepEnter</strong>).</p>
+            </div>
+        </div>
+        <div class='step' data-step='4'>
+            <div class="explain">
+            <p>Every time that a target passes the offset, an  <strong>is-active</strong> class is assigned to it.</p>            
+            </div>
+        </div>
+    </div>
+</section>
 
-function init(){
-	const canvas = container.createElement('canvas'),
-		 context = canvas.getContext('2d'),
-		 perlinCanvas = container.createElement('canvas'),
-		 perlinContext = perlinCanvas.getContext('2d'),
-		 width = canvas.width = container.offsetWidth,
-		 height = canvas.height = container.offsetHeight,
-		 circle = {
-			 x: width / 2,
-			 y: height / 2,
-			 r: width * .2
-		 },
-		 hairs = []
-	
-	container.appendChild(canvas)
-	
-	let perlinImgData = undefined
-	
-	perlinCanvas.width = width
-	perlinCanvas.height = height
-	
-	context.strokeStyle = '#111'
-	
-	class Hair {
-		constructor(){
-			let r = 2 * Math.PI * Math.random(),
-			    d = Math.sqrt(Math.random())
-
-			this.position = {
-				x: Math.floor(circle.x + Math.cos(r) * d * circle.r),
-				y: Math.floor(circle.y + Math.sin(r) * d * circle.r)
-			}
-			
-			this.length = Math.floor(Math.random() * 10) + 10
-			hairs.push(this)
-		}
-		
-		draw(){
-    			let { position, length } = this,
-			    { x, y } = position,
-			    i = (y * width + x) * 4,
-			    d = perlinImgData.data,
-			    noise = d[i],
-			    angle = (noise / 255) * Math.PI
-			
-			context.moveTo(x, y)
-			context.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length)
-		}
-	}
-	
-	
-	for(var i = 0; i < 6000; i++){
-		new Hair()
-	}
-	
-	
-	function render() {
-		var now = new Date().getTime();
-		currentTime = (now - startTime) / 1000
-		
-		context.clearRect(0,0,width,height)
-
-		perlinContext.clearRect(0, 0, width, height)
-		perlinContext.drawImage(renderer.domElement, 0, 0)
-		perlinImgData = perlinContext.getImageData(0, 0, width, height)
-		
-		context.beginPath()
-		hairs.map(hair => hair.draw())
-		context.stroke()
-		
-		requestAnimationFrame( render );
-	}
-	render()
-	
-}
-
-init();
-</script>
+<script src="{{ site.baseurl }}{% link src/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link src/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link src/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link src/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-09-29-sticky-figure-with-scrollama/2023-09-29-sticky-figure-with-scrollama.js %}"></script>
 
