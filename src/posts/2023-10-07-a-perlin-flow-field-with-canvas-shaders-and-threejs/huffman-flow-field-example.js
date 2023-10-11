@@ -6,22 +6,31 @@ renderer = new THREE.WebGLRenderer({ alpha: true })
 
 function init(){
 	//console.log(container);
-    const baseCanvas = document.createElement('canvas'),
-		 baseContext = baseCanvas.getContext('2d'),
-		 perlinCanvas = document.createElement('canvas'),
-		 perlinContext = perlinCanvas.getContext('2d'),
-		 width = baseCanvas.width = container.offsetWidth,
+    const baseCanvas = document.createElement('canvas');
+	const baseContext = baseCanvas.getContext('2d');
+	const perlinCanvas = document.createElement('canvas');
+	const perlinContext = perlinCanvas.getContext('2d');
+	//const width = baseCanvas.width = container.offsetWidth;
 		 //height = baseCanvas.height = container.offsetHeight,
-		 height = baseCanvas.height = 150,
-         circle = {
-			 x: width / 2,
-			 y: height / 2,
-			 r: width * .2
-		 },
-		 hairs = []
+		 //height = baseCanvas.height = container.offsetWidth/2,
+    const  width = container.offsetWidth;
+	const height = baseCanvas.height = baseCanvas.width / 2.;
+	const circle = {
+			 //y: container.offsetHeight === 0? container.offsetWidth/ 2. : container.offsetHeight / 2., 
+			 x:  container.offsetWidth / 2.,
+			 y: 75,
+			 r: 236/2/2
+		 };
+	const hairs = [];
 	
 
-	console.log("container.offsetHeight ", container.offsetHeight);
+	console.log("container.offsetHeight ", container.offsetWidth);
+	console.log("baseCanvas.height ", baseCanvas.height);
+	console.log("container.offsetWidth ", container.offsetWidth);
+	console.log("baseCanvas.width ", baseCanvas.width);
+	console.log("width ", width);
+	console.log("height ", height);
+	console.log("circle ", circle);
 
     baseCanvas.setAttribute("id", "context");
     perlinCanvas.setAttribute("id", "perlinCanvas");

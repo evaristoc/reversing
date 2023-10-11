@@ -1,27 +1,43 @@
 window.onload = (event) => {
     // using d3 for convenience
     // E: could have been something like jQuery, etc...
+    let container = document.querySelector("figure");
     var main = d3.select('main')
     var scrolly = main.select('#stickyoverlay');
     var figure = scrolly.select('figure');
     var article = scrolly.select('div .articlepost');
     var step = article.selectAll('.step');
-    
+    var baseCanvas = document.getElementById('context');
+    var baseContext = baseCanvas.getContext('2d');
+    var width;
+    var height;
+
     // initialize the scrollama
     var scroller = scrollama();
 
     // generic window resize listener event
     function handleResize() {
         
-    // 1. update height of step elements
+    	console.log("container.offsetHeight handleResize ", container.offsetWidth);
+        console.log("baseCanvas.height handleResize ", baseCanvas.height);
+        console.log("container.offsetWidth handleResize ", container.offsetWidth);
+        console.log("baseCanvas.width handleResize ", baseCanvas.width);
+        console.log("width handleResize", width);
+        console.log("height handleResize", height);
+        console.log("figureHeight ", figureHeight);
+    
+        // 1. update height of step elements
         var stepH = Math.floor(window.innerHeight * 0.75);
         step.style('height', stepH + 'px');
-        var figureHeight = window.innerHeight / 2
-        var figureMarginTop = (window.innerHeight - figureHeight) / 2  
+        var figureHeight = window.innerHeight / 2;
+        var figureMarginTop = (window.innerHeight - figureHeight) / 2;  
         figure
-            .style('height', figureHeight + 'px')
+            //.style('height', figureHeight + 'px')
             .style('top', figureMarginTop + 'px');
-        
+        //baseCanvas.width = figure.offsetWidth
+        //baseCanvas.width = figureHeight;
+        baseCanvas.width = container.offsetWidth;
+        baseCanvas.height = 150;
     // 3. tell scrollama to update new element dimensions
         scroller.resize();
     }
@@ -37,8 +53,6 @@ window.onload = (event) => {
         
     // update graphic based on step
     // figure.select('p').text(response.index + 1);
-        let canvas = document.getElementById('context');
-        let baseContext = canvas.getContext('2d');
         //console.log(baseContext);
         //console.log(baseContext.fillStyle);
         //returns a random integer in a range
