@@ -4,7 +4,7 @@ title:  "A Perlin-like flow with canvas, shaders and three.js"
 date:   2023-10-07 12:00:00 +0200
 categories: blog update
 ---
-<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/scrollama-setup.css %}">
 
 # Adding Noise with Shaders is very nice!
 
@@ -61,7 +61,7 @@ Let's see the canvas:
 
 <section id='stickyoverlay'>
     <figure>
-        <p>0</p>
+        <!--<p>0</p>-->
     </figure>
     <div class="articlepost">
         <div class='step' data-step='1'>
@@ -87,10 +87,12 @@ Let's see the canvas:
     </div>
 </section>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.5/plugins/ColorPropsPlugin.min.js"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/threejs/v104/three.v104.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
-<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/scrollama-setup.js %}"></script>
-
+<script src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/scrollama-setup.js %}"></script>
+<script src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/huffman-flow-field-example.js %}"></script>

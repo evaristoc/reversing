@@ -10,8 +10,6 @@ window.onload = (event) => {
     // initialize the scrollama
     var scroller = scrollama();
 
-
-
     // generic window resize listener event
     function handleResize() {
         
@@ -38,7 +36,17 @@ window.onload = (event) => {
             //response.element.querySelector('.explain').style.display = 'inline';
         
     // update graphic based on step
-        figure.select('p').text(response.index + 1);
+    // figure.select('p').text(response.index + 1);
+        let canvas = document.getElementById('context');
+        let baseContext = canvas.getContext('2d');
+        //console.log(baseContext);
+        //console.log(baseContext.fillStyle);
+        baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
+
+        baseContext.strokeStyle = "#000075";
+        //baseContext.fillRect(0,0,900,500);
+        //console.log(baseContext.fillStyle);
+        //baseContext.stroke(); 
     }
 
     //E: RELEVANT - it is a different library to stick the menu; scrollama doesn't handle this!
