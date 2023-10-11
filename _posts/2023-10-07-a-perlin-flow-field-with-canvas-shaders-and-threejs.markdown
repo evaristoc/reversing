@@ -59,7 +59,7 @@ I won't add much about the shader as it is containing the noise function.
 
 Let's see the canvas:
 
-<section id='scrolly'>
+<section id='stickyoverlay'>
     <figure>
         <p>0</p>
     </figure>
@@ -87,9 +87,10 @@ Let's see the canvas:
     </div>
 </section>
 
+<script src="{{ site.baseurl }}{% link src/vendor/js/threejs/v104/three.v104.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
-<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-09-29-sticky-figure-with-scrollama/2023-09-29-sticky-figure-with-scrollama.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/scrollama-setup.js %}"></script>
 
