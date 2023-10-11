@@ -1,48 +1,100 @@
+import {hello} from './huffman-flow-field-example.js';
+
 window.onload = (event) => {
     // using d3 for convenience
     // E: could have been something like jQuery, etc...
-    let container = document.querySelector("figure");
-    var main = d3.select('main')
-    var scrolly = main.select('#stickyoverlay');
-    var figure = scrolly.select('figure');
-    var article = scrolly.select('div .articlepost');
-    var step = article.selectAll('.step');
-    var baseCanvas = document.getElementById('context');
-    var baseContext = baseCanvas.getContext('2d');
+    let paramScrollama = {
+        container : null,
+        main : null,
+        scrolly : null,
+        figure : null,
+        article: null,
+        step : null,
+        baseCanvas : null,
+        baseContext : null,
+        width : null,
+        height : null
+    }
+
+    function getElement(parent, selector, all=false){
+        if(!all) {
+            return parent.querySelector(selector);
+        }else{
+            return parent.querySelectorAll(selector);
+        }
+        
+    }
+
+    function getElementById(parent, selector){
+        return parent.getElementById(selector);
+    }
+
+    function getElementD3js(parent, selector, all=false){
+        console.warn("Using D3.js to manipulate the DOM elements");
+        if(!all) {
+            return parent.select(selector);
+        }else{
+            return parent.selectAll(selector);
+        }
+        
+    }
+
+    const scrolly = paramScrollama.scrolly = getElementD3js(d3, "#stickyoverlay");
+    const container = paramScrollama.container = getElementD3js(scrolly, "figure");
+    const figure = paramScrollama.figure = container;
+    const article = paramScrollama.article = getElementD3js(scrolly, "div .articlepost");
+    const step = paramScrollama.step = getElementD3js(article, ".step", true);
+    const baseCanvas = paramScrollama.baseCanvas = getElementById(document, "context");
+    const baseContext = paramScrollama.baseContext = paramScrollama.baseCanvas.getContext("2d");
+
     var width;
     var height;
 
     // initialize the scrollama
     var scroller = scrollama();
 
-    // generic window resize listener event
-    function handleResize() {
-        
-    	console.log("container.offsetHeight handleResize ", container.offsetWidth);
-        console.log("baseCanvas.height handleResize ", baseCanvas.height);
-        console.log("container.offsetWidth handleResize ", container.offsetWidth);
-        console.log("baseCanvas.width handleResize ", baseCanvas.width);
-        console.log("width handleResize", width);
-        console.log("height handleResize", height);
-        console.log("figureHeight ", figureHeight);
-    
+    function updateSizeStepElements(){
         // 1. update height of step elements
         var stepH = Math.floor(window.innerHeight * 0.75);
         step.style('height', stepH + 'px');
+
         var figureHeight = window.innerHeight / 2;
         var figureMarginTop = (window.innerHeight - figureHeight) / 2;  
-        figure
+        container
             //.style('height', figureHeight + 'px')
             .style('top', figureMarginTop + 'px');
+    
+        //DEBUG
+        console.log("figureHeight ", figureHeight);
+    }
+
+    function updateSizeCanvas(){
         //baseCanvas.width = figure.offsetWidth
         //baseCanvas.width = figureHeight;
-        width = baseCanvas.width = container.offsetWidth;
+        let containerNode = container.node();
+        width = baseCanvas.width = containerNode.offsetWidth;
         //baseContext.rect(20,20,150,100);
         height =  200;
         baseContext.fillRect(0, 0, width, height); 
         baseContext.fill();
         //baseCanvas.height = 150;
-    // 3. tell scrollama to update new element dimensions
+
+        //DEBUG
+        console.log("container.offsetHeight handleResize ", container.offsetWidth);
+        console.log("baseCanvas.height handleResize ", baseCanvas.height);
+        console.log("container.offsetWidth handleResize ", container.offsetWidth);
+        console.log("baseCanvas.width handleResize ", baseCanvas.width);
+        console.log("width handleResize", width);
+        console.log("height handleResize", height);
+    }
+
+    // generic window resize listener event
+    function handleResize() {
+        
+        updateSizeStepElements();
+        updateSizeCanvas();
+
+    // tell scrollama to update new element dimensions
         scroller.resize();
     }
 
@@ -103,6 +155,9 @@ window.onload = (event) => {
     function init() {
         setupStickyfill();
         // 1. force a resize on load to ensure proper dimensions are sent to scrollama
+        //console.log("initFigure", initFigure);
+        hello();
+        
         handleResize();
 
     // 2. setup the scroller passing options

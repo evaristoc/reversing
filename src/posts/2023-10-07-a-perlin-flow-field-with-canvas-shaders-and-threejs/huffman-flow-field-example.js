@@ -1,11 +1,17 @@
+let paramsFigure = {
+	renderer: ()=>{return new THREE.WebGLRenderer({ alpha: true })},
+	baseCanvas: null,
+	baseContext: null,
+	perlinCanvas: null,
+	perlinContext: null,
+}
+
 let container = document.querySelector("figure");
 let startTime = new Date().getTime();
-let renderer;
-
-renderer = new THREE.WebGLRenderer({ alpha: true })
+let renderer = paramsFigure.renderer();
 
 function init(){
-	//console.log(container);
+	console.log(container);
     const baseCanvas = document.createElement('canvas');
 	const baseContext = baseCanvas.getContext('2d');
 	const perlinCanvas = document.createElement('canvas');
@@ -15,7 +21,7 @@ function init(){
 		 //height = baseCanvas.height = container.offsetWidth/2,
     const  width = container.offsetWidth;
 	//const height = baseCanvas.height = baseCanvas.width / 2.;
-	height = baseCanvas.height = 200;
+	const height = baseCanvas.height = 200;
 	const circle = {
 			 //y: container.offsetHeight === 0? container.offsetWidth/ 2. : container.offsetHeight / 2., 
 			 x:  container.offsetWidth / 2.,
@@ -82,7 +88,7 @@ function init(){
 	
 	function render() {
 		var now = new Date().getTime();
-		currentTime = (now - startTime) / 1000
+		var currentTime = (now - startTime) / 1000
 		
 		baseContext.clearRect(0,0,width,height)
 
@@ -103,3 +109,6 @@ function init(){
 }
 
 init();
+export function hello(){
+	alert(hello);
+}
