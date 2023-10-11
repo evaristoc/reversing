@@ -36,8 +36,12 @@ window.onload = (event) => {
             .style('top', figureMarginTop + 'px');
         //baseCanvas.width = figure.offsetWidth
         //baseCanvas.width = figureHeight;
-        baseCanvas.width = container.offsetWidth;
-        baseCanvas.height = 150;
+        width = baseCanvas.width = container.offsetWidth;
+        //baseContext.rect(20,20,150,100);
+        height =  200;
+        baseContext.fillRect(0, 0, width, height); 
+        baseContext.fill();
+        //baseCanvas.height = 150;
     // 3. tell scrollama to update new element dimensions
         scroller.resize();
     }

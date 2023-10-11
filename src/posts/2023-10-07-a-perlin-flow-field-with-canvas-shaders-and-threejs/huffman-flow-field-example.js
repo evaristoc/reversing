@@ -14,12 +14,13 @@ function init(){
 		 //height = baseCanvas.height = container.offsetHeight,
 		 //height = baseCanvas.height = container.offsetWidth/2,
     const  width = container.offsetWidth;
-	const height = baseCanvas.height = baseCanvas.width / 2.;
+	//const height = baseCanvas.height = baseCanvas.width / 2.;
+	height = baseCanvas.height = 200;
 	const circle = {
 			 //y: container.offsetHeight === 0? container.offsetWidth/ 2. : container.offsetHeight / 2., 
 			 x:  container.offsetWidth / 2.,
-			 y: 75,
-			 r: 236/2/2
+			 y: 100,
+			 r: container.offsetWidth / 2. / 2. / 2.
 		 };
 	const hairs = [];
 	
