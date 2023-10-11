@@ -20,6 +20,9 @@ function init(){
 		 },
 		 hairs = []
 	
+
+	console.log("container.offsetHeight ", container.offsetHeight);
+
     baseCanvas.setAttribute("id", "context");
     perlinCanvas.setAttribute("id", "perlinCanvas");
 	container.appendChild(baseCanvas);
@@ -33,16 +36,6 @@ function init(){
 	baseContext.strokeStyle = '#111'
     baseContext.fillStyle = "rgb(200,200,200)";
     baseContext.fillRect(0, 0, width, height);
-
-    //returns a random integer in a range
-    function random(min, max) {
-        return (min + Math.random() * (max - min) + 0.5) | 0;
-    }
-
-    function update() {
-        baseContext.rect(20,20,150,100);
-        baseContext.fill();
-      }
 
 	class Hair {
 		constructor(){
@@ -89,14 +82,11 @@ function init(){
 
     	baseContext.beginPath()
 		hairs.map(hair => hair.draw())
-        //baseContext.fillRect(0, 0, width, height)
-        function tweenToRandomColor() {
-            TweenLite.to(baseContext, 1, {colorProps:{fillStyle:"rgb(" + random(0,255) + "," + random(0,255) + "," + random(0,255) + ")"}, onUpdate:update, onComplete:tweenToRandomColor});
-          }
-          baseContext.stroke()
-
-        tweenToRandomColor();
-		requestAnimationFrame( render );
+        
+        baseContext.fillRect(0, 0, width, height); 
+        baseContext.stroke()
+	
+        requestAnimationFrame( render );
 	}
 	render()
 	

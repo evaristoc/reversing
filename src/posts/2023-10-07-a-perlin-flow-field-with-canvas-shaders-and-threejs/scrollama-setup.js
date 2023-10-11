@@ -41,8 +41,30 @@ window.onload = (event) => {
         let baseContext = canvas.getContext('2d');
         //console.log(baseContext);
         //console.log(baseContext.fillStyle);
-        baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
-
+        //returns a random integer in a range
+        //E - from https://codepen.io/GreenSock/pen/bGbQwo
+        function random(min, max) {
+            return (min + Math.random() * (max - min) + 0.5) | 0;
+        }
+    
+        //E - from https://codepen.io/GreenSock/pen/bGbQwo
+        function update() {
+            baseContext.rect(20,20,150,100);
+            baseContext.fill();
+        }
+        //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
+        function tweenToRandomColor() {
+            TweenLite.to(baseContext, 1, {
+                     colorProps:{
+                         //fillStyle:"rgb(" + random(0,255) + "," + random(0,255) + "," + random(0,255) + ")"
+                        fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
+                    }, 
+                     onUpdate:update, 
+                     //onComplete:tweenToRandomColor
+                 });
+         }        
+        tweenToRandomColor();
+        
         baseContext.strokeStyle = "#000075";
         //baseContext.fillRect(0,0,900,500);
         //console.log(baseContext.fillStyle);
