@@ -1,4 +1,4 @@
-import {hello} from './huffman-flow-field-example.js';
+import {hello} from './huffman-flow-field-setup.js';
 
 window.onload = (event) => {
     // using d3 for convenience
@@ -53,6 +53,7 @@ window.onload = (event) => {
     // initialize the scrollama
     var scroller = scrollama();
 
+
     function updateSizeStepElements(){
         // 1. update height of step elements
         var stepH = Math.floor(window.innerHeight * 0.75);
@@ -89,6 +90,7 @@ window.onload = (event) => {
     }
 
     // generic window resize listener event
+    // TODO - should stay here!
     function handleResize() {
         
         updateSizeStepElements();
@@ -156,7 +158,7 @@ window.onload = (event) => {
         setupStickyfill();
         // 1. force a resize on load to ensure proper dimensions are sent to scrollama
         //console.log("initFigure", initFigure);
-        hello();
+        //hello();
         
         handleResize();
 
