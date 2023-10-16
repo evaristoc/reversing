@@ -43,6 +43,35 @@ window.onload = (event) => {
         
     }
 
+
+    class Hair {
+        constructor(){
+            let r = 2 * Math.PI * Math.random(),
+                d = Math.sqrt(Math.random())
+    
+            this.position = {
+                x: Math.floor(paramsFigure.circle.x + Math.cos(r) * d * paramsFigure.circle.r),
+                y: Math.floor(paramsFigure.circle.y + Math.sin(r) * d * paramsFigure.circle.r)
+            }
+            
+            this.length = Math.floor(Math.random() * 10) + 10;
+            paramsFigure.hairs.push(this);
+        }
+        
+        draw(){
+                let { position, length } = this,
+                { x, y } = position,
+                i = (y * paramsFigure.width + x) * 4,
+                d = paramsFigure.perlinImgData.data,
+                noise = d[i],
+                angle = (noise / 255) * Math.PI
+            
+            paramsFigure.baseContext.moveTo(x, y)
+            paramsFigure.baseContext.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length)
+        }
+    }
+    
+    
     const scrolly = paramScrollama.scrolly = getElementD3js(d3, "#stickyoverlay");
     paramsFigure.container = eventHandlers.container = getElementD3js(scrolly, "figure");
     const figure = paramScrollama.figure = paramsFigure.container;
@@ -64,8 +93,14 @@ window.onload = (event) => {
     //paramsFigure.renderer.setSize( 300, 200 );
     paramsFigure.width = paramsFigure.container.node().offsetWidth;
     paramsFigure.height = 200;
-    paramsFigure.renderingFunc.startTime = paramsFigure.startTime;
-    
+    //paramsFigure.renderingFunc.startTime = paramsFigure.startTime;
+
+    for(var i = 0; i < 6000; i++){
+        new Hair();
+    }
+
+    console.log(paramsFigure.hairs.length)
+    console.log(paramsFigure.hairs[0])
 
 
     //var width;
@@ -117,6 +152,15 @@ window.onload = (event) => {
             let startTime = paramsFigure.startTime;
             let currentTime = (now - startTime)/10000;
             //console.log(currentTime);
+            let width = paramsFigure.width;
+            let height = paramsFigure.height;
+            paramsFigure.baseContext.clearRect(0,0,width,height);
+            paramsFigure.perlinContext.clearRect(0, 0, width, height);
+            paramsFigure.perlinImgData = paramsFigure.perlinContext.getImageData(0, 0, width, height);
+            paramsFigure.baseContext.beginPath();
+            paramsFigure.hairs.map(hair => hair.draw());
+            paramsFigure.baseContext.fillRect(0, 0, width, height);
+            paramsFigure.baseContext.stroke();
             requestAnimationFrame( figRender );
         }
         

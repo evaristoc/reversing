@@ -7,7 +7,7 @@ let paramsFigure = {
 	perlinCanvas: null,
 	perlinContext: null,
 	perlinImageData: null,
-	width: null,
+	width: 10,
 	height: 200,
 	circle: function(){
 		
@@ -19,20 +19,20 @@ let paramsFigure = {
 		};
 	},
 	startTime : new Date().getTime(),
-	hairs: Array(),
-	renderingFunc: {
-		now : new Date().getTime(),
-		startTime: null,
-		currentTime: function(){return (this.now - this.startTime)/10000},
-		renderer : null,
-		render: function(){
-			var zelf = this;
-			console.log(zelf.startTime);
-			console.log(zelf.now);
-			//requestAnimationFrame(zelf.render.bind(zelf));
-		}
+	hairs: [],
+	// renderingFunc: {
+	// 	now : new Date().getTime(),
+	// 	startTime: null,
+	// 	currentTime: function(){return (this.now - this.startTime)/10000},
+	// 	renderer : null,
+	// 	render: function(){
+	// 		var zelf = this;
+	// 		console.log(zelf.startTime);
+	// 		console.log(zelf.now);
+	// 		//requestAnimationFrame(zelf.render.bind(zelf));
+	// 	}
 
-	}
+	// }
 	
         //requestAnimationFrame( render );
 }
@@ -62,7 +62,7 @@ let paramsFigure = {
 // let startTime = new Date().getTime();
 // let renderer = paramsFigure.rendererFunc();
 
-const hairs = [];
+//const hairs = [];
 	
 
 // console.log("container.offsetHeight ", container.offsetWidth);
@@ -97,8 +97,8 @@ class Hair {
 			y: Math.floor(paramsFigure.circle.y + Math.sin(r) * d * paramsFigure.circle.r)
 		}
 		
-		this.length = Math.floor(Math.random() * 10) + 10
-		hairs.push(this)
+		this.length = Math.floor(Math.random() * 10) + 10;
+		paramsFigure.hairs.push(this);
 	}
 	
 	draw(){
@@ -119,9 +119,9 @@ for(var i = 0; i < 6000; i++){
 	new Hair()
 }
 
-paramsFigure.hairs = hairs;
+//paramsFigure.hairs = hairs;
 
-export {paramsFigure};
+export {paramsFigure}
 
 
 
