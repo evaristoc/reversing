@@ -68,45 +68,7 @@ window.onload = (event) => {
 
     // scrollama event handlers
     function handleStepEnter(response) {
-        //console.log(response)
-        // response = { element, direction, index }
-        // add color to current step only
-        eventHandlers.step.classed('is-active', function (d, i) { return i === response.index; });
-            //console.log('response', response);
-            //response.element.querySelector('.explain').style.display = 'inline';
-        
-    // update graphic based on step
-    // figure.select('p').text(response.index + 1);
-        //console.log(baseContext);
-        //console.log(baseContext.fillStyle);
-        //returns a random integer in a range
-        //E - from https://codepen.io/GreenSock/pen/bGbQwo
-        function random(min, max) {
-            return (min + Math.random() * (max - min) + 0.5) | 0;
-        }
-    
-        //E - from https://codepen.io/GreenSock/pen/bGbQwo
-        function update() {
-            eventHandlers.baseContext.rect(20,20,150,100);
-            eventHandlers.baseContext.fill();
-        }
-        //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
-        function tweenToRandomColor() {
-            TweenLite.to(baseContext, 1, {
-                     colorProps:{
-                         //fillStyle:"rgb(" + random(0,255) + "," + random(0,255) + "," + random(0,255) + ")"
-                        fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
-                    }, 
-                     onUpdate:update, 
-                     //onComplete:tweenToRandomColor
-                 });
-         }        
-        tweenToRandomColor();
-        
-        baseContext.strokeStyle = "#000075";
-        //baseContext.fillRect(0,0,900,500);
-        //console.log(baseContext.fillStyle);
-        //baseContext.stroke(); 
+        eventHandlers.handleStepEnter01(response);
     }
 
     //E: RELEVANT - it is a different library to stick the menu; scrollama doesn't handle this!
@@ -132,7 +94,8 @@ window.onload = (event) => {
         // 		this will also initialize trigger observations
         
     // 3. bind scrollama event handlers (this can be chained like below)
-        scroller.setup({
+    
+    scroller.setup({
             step: '#stickyoverlay div.articlepost .step',
             offset: .33,
             debug: false,

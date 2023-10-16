@@ -61,19 +61,42 @@ export let eventHandlers = {
     },
     handleStepEnter01 : function(response){
         // response = { element, direction, index }
+
+        /*
+        ~~~~~~~~~~~~ OBSERVATION ~~~~~~~~~~~~~~
+        E: baseContext and updateCanvasBackground had to be brought to scope
+        they both will be called by a super-function that doesn't have those two in their inheritance hierarchy
+        while they are called from a global-scope functionality (Tweenlite) that is called from a local function (this one, handleStepEnter01)
+        which is then called from the event handler of the scrollama (!!!!)
+        The worst placed is updateCanvasBackground
+        So before calling it, I had to bind the scope of this object, eventHandlers
+        
+        If not asserting to capture the right scope, the variables/arguments of the functions (eg. step, baseContext) come as null
+
+        It is working. However, I am passing copies to tweenToRamdomColor instead. 
+        
+        Is there a better solution? Probably bringing out the tweenToRamdomColor function to an upper scope?
+        Another way to define the variables?
+        */
+
         this.step.classed('is-active', function (d, i) { return i === response.index; });
 
+        const baseContext = this.baseContext;
+        const updateCanvasBackground = this.updateCanvasBackground.bind(this, this.baseContext);
+        
+        
+        
         //E - from https://codepen.io/GreenSock/pen/bGbQwo
         //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
         function tweenToRandomColor() {
             TweenLite.to(
-                    this.baseContext, 
+                    baseContext, 
                     1, 
                     {
                         colorProps:{
                             fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
                         }, 
-                        onUpdate: this.updateCanvasBackground, 
+                        onUpdate: updateCanvasBackground, 
                     //onComplete:tweenToRandomColor
                     });
         }        
