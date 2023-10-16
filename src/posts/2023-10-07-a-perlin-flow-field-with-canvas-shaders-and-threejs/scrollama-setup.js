@@ -95,6 +95,12 @@ window.onload = (event) => {
     paramsFigure.height = 200;
     //paramsFigure.renderingFunc.startTime = paramsFigure.startTime;
 
+    paramsFigure.circle = {
+        x: paramsFigure.container.node().offsetWidth / 2,
+        y: 100,
+        r: paramsFigure.container.node().offsetWidth / 2. / 2. / 2.
+    }
+
     for(var i = 0; i < 6000; i++){
         new Hair();
     }
