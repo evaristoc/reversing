@@ -1,4 +1,6 @@
 import {hello} from './huffman-flow-field-setup.js';
+import {eventHandlers} from './scrollama-eventhandlers.js';
+//console.log("eventHandlers",eventHandlers);
 
 window.onload = (event) => {
     // using d3 for convenience
@@ -40,12 +42,12 @@ window.onload = (event) => {
     }
 
     const scrolly = paramScrollama.scrolly = getElementD3js(d3, "#stickyoverlay");
-    const container = paramScrollama.container = getElementD3js(scrolly, "figure");
+    const container = eventHandlers.container = getElementD3js(scrolly, "figure");
     const figure = paramScrollama.figure = container;
     const article = paramScrollama.article = getElementD3js(scrolly, "div .articlepost");
-    const step = paramScrollama.step = getElementD3js(article, ".step", true);
-    const baseCanvas = paramScrollama.baseCanvas = getElementById(document, "context");
-    const baseContext = paramScrollama.baseContext = paramScrollama.baseCanvas.getContext("2d");
+    const step = eventHandlers.step = getElementD3js(article, ".step", true);
+    const baseCanvas = eventHandlers.baseCanvas = getElementById(document, "context");
+    const baseContext = eventHandlers.baseContext = baseCanvas.getContext("2d");
 
     var width;
     var height;
@@ -54,47 +56,47 @@ window.onload = (event) => {
     var scroller = scrollama();
 
 
-    function updateSizeStepElements(){
-        // 1. update height of step elements
-        var stepH = Math.floor(window.innerHeight * 0.75);
-        step.style('height', stepH + 'px');
+    // function updateSizeStepElements(){
+    //     // 1. update height of step elements
+    //     var stepH = Math.floor(window.innerHeight * 0.75);
+    //     step.style('height', stepH + 'px');
 
-        var figureHeight = window.innerHeight / 2;
-        var figureMarginTop = (window.innerHeight - figureHeight) / 2;  
-        container
-            //.style('height', figureHeight + 'px')
-            .style('top', figureMarginTop + 'px');
+    //     var figureHeight = window.innerHeight / 2;
+    //     var figureMarginTop = (window.innerHeight - figureHeight) / 2;  
+    //     container
+    //         //.style('height', figureHeight + 'px')
+    //         .style('top', figureMarginTop + 'px');
     
-        //DEBUG
-        console.log("figureHeight ", figureHeight);
-    }
+    //     //DEBUG
+    //     console.log("figureHeight ", figureHeight);
+    // }
 
-    function updateSizeCanvas(){
-        //baseCanvas.width = figure.offsetWidth
-        //baseCanvas.width = figureHeight;
-        let containerNode = container.node();
-        width = baseCanvas.width = containerNode.offsetWidth;
-        //baseContext.rect(20,20,150,100);
-        height =  200;
-        baseContext.fillRect(0, 0, width, height); 
-        baseContext.fill();
-        //baseCanvas.height = 150;
+    // function updateSizeCanvas(){
+    //     //baseCanvas.width = figure.offsetWidth
+    //     //baseCanvas.width = figureHeight;
+    //     let containerNode = container.node();
+    //     width = baseCanvas.width = containerNode.offsetWidth;
+    //     //baseContext.rect(20,20,150,100);
+    //     height =  200;
+    //     baseContext.fillRect(0, 0, width, height); 
+    //     baseContext.fill();
+    //     //baseCanvas.height = 150;
 
-        //DEBUG
-        console.log("container.offsetHeight handleResize ", container.offsetWidth);
-        console.log("baseCanvas.height handleResize ", baseCanvas.height);
-        console.log("container.offsetWidth handleResize ", container.offsetWidth);
-        console.log("baseCanvas.width handleResize ", baseCanvas.width);
-        console.log("width handleResize", width);
-        console.log("height handleResize", height);
-    }
+    //     //DEBUG
+    //     console.log("container.offsetHeight handleResize ", eventHandlers.container.offsetWidth);
+    //     console.log("baseCanvas.height handleResize ", eventHandlers.baseCanvas.height);
+    //     console.log("container.offsetWidth handleResize ", eventHandlers.container.offsetWidth);
+    //     console.log("baseCanvas.width handleResize ", eventHandlers.baseCanvas.width);
+    //     console.log("width handleResize", width);
+    //     console.log("height handleResize", height);
+    // }
 
     // generic window resize listener event
     // TODO - should stay here!
     function handleResize() {
         
-        updateSizeStepElements();
-        updateSizeCanvas();
+        eventHandlers.updateSizeStepElements();
+        eventHandlers.updateSizeCanvas();
 
     // tell scrollama to update new element dimensions
         scroller.resize();
@@ -105,7 +107,7 @@ window.onload = (event) => {
         //console.log(response)
         // response = { element, direction, index }
         // add color to current step only
-        step.classed('is-active', function (d, i) { return i === response.index; });
+        eventHandlers.step.classed('is-active', function (d, i) { return i === response.index; });
             //console.log('response', response);
             //response.element.querySelector('.explain').style.display = 'inline';
         
@@ -121,8 +123,8 @@ window.onload = (event) => {
     
         //E - from https://codepen.io/GreenSock/pen/bGbQwo
         function update() {
-            baseContext.rect(20,20,150,100);
-            baseContext.fill();
+            eventHandlers.baseContext.rect(20,20,150,100);
+            eventHandlers.baseContext.fill();
         }
         //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
         function tweenToRandomColor() {

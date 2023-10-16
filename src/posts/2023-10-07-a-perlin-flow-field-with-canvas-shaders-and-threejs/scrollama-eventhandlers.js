@@ -1,23 +1,44 @@
-/*
-REMEMBER we are using d3.js to handle the DOM
 
-TODO:
-- make this an exportable object so it can be updated in scrollama-setup or any other script as required
+//REMEMBER we are using d3.js to handle the DOM
 
-*/
+//TODO:
+//- make this an exportable object so it can be updated in scrollama-setup or any other script as required
 
-let eventHandlers = {
+//function updateSizeStepElements(){
+//}
+
+//function updateSizeCanvas(){
+//}
+
+// function update() {
+// }
+
+// scrollama event handlers
+// function handleStepEnter(response) {
+// }
+
+//E: RELEVANT - it is a different library to stick the menu; scrollama doesn't handle this!
+function setupStickyfill() {
+    d3.selectAll('.sticky').each(function () {
+        //Stickyfill.add(this);
+    });
+};
+
+function setupCharts(){
+    return svg, chart, item = d3setup.chart("figure");
+};
+
+export let eventHandlers = {
     step : null,
     container: null,
     updateSizeStepElements : function(){
-`            // 1. update height of step elements
-            let stepH = Math.floor(window.innerHeight * 0.75);
-            this.step.style('height', stepH + 'px');
-
-            let figureHeight = window.innerHeight / 2;
-            let figureMarginTop = (window.innerHeight - figureHeight) / 2;  
-            this.container
-                .style('top', figureMarginTop + 'px');`
+        //1. update height of step elements
+        let stepH = Math.floor(window.innerHeight * 0.75);
+        this.step.style('height', stepH + 'px');
+        let figureHeight = window.innerHeight / 2;       
+        let figureMarginTop = (window.innerHeight - figureHeight) / 2;  
+        this.container
+            .style('top', figureMarginTop + 'px');
         },
     width: null,
     height : null,
@@ -31,7 +52,7 @@ let eventHandlers = {
             let containerNode = this.container.node();
             this.width = this.baseCanvas.width = containerNode.offsetWidth;
             this.height =  200;
-            this.baseContext.fillRect(0, 0, this.width, this.height); 
+            this.baseContext.fillRect(0, 0, this.baseCanvas.width, this.height); 
             this.baseContext.fill();
         },
     updateCanvasBackground : function(){
@@ -60,29 +81,4 @@ let eventHandlers = {
         
         this.baseContext.strokeStyle = "#000075";
     }
-}
-
-
-//function updateSizeStepElements(){
-//}
-
-//function updateSizeCanvas(){
-//}
-
-// function update() {
-// }
-
-// scrollama event handlers
-// function handleStepEnter(response) {
-// }
-
-//E: RELEVANT - it is a different library to stick the menu; scrollama doesn't handle this!
-function setupStickyfill() {
-    d3.selectAll('.sticky').each(function () {
-        //Stickyfill.add(this);
-    });
-}
-
-function setupCharts(){
-    return svg, chart, item = d3setup.chart("figure");
 }
