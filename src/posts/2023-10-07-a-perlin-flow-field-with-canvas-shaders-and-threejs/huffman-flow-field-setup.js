@@ -44,6 +44,40 @@ let paramsFigure = {
 }
 	
 
+// class Hair {
+// 	constructor(){
+// 		let r = 2 * Math.PI * Math.random(),
+// 			d = Math.sqrt(Math.random())
+
+// 		this.position = {
+// 			x: Math.floor(paramsFigure.circle.x + Math.cos(r) * d * paramsFigure.circle.r),
+// 			y: Math.floor(paramsFigure.circle.y + Math.sin(r) * d * paramsFigure.circle.r)
+// 		}
+		
+// 		this.length = Math.floor(Math.random() * 10) + 10;
+// 		paramsFigure.hairs.push(this);
+// 	}
+	
+// 	draw(){
+// 			let { position, length } = this,
+// 			{ x, y } = position,
+// 			i = (y * paramsFigure.width + x) * 4,
+// 			d = paramsFigure.perlinImgData.data,
+// 			noise = d[i],
+// 			angle = (noise / 255) * Math.PI
+		
+// 		paramsFigure.baseContext.moveTo(x, y)
+// 		paramsFigure.baseContext.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length)
+// 	}
+// }
+
+
+// for(var i = 0; i < 6000; i++){
+// 	new Hair()
+// }
+
+//paramsFigure.hairs = hairs;
+
 class Hair {
 	constructor(){
 		let r = 2 * Math.PI * Math.random(),
@@ -71,14 +105,8 @@ class Hair {
 	}
 }
 
-
-for(var i = 0; i < 6000; i++){
-	new Hair()
-}
-
-//paramsFigure.hairs = hairs;
-
 export {paramsFigure}
+export {Hair}
 
 
 

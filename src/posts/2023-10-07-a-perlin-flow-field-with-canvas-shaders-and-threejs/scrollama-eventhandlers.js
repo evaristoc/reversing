@@ -50,14 +50,15 @@ export let eventHandlers = {
             - also Three.js renderer
             */
             let containerNode = this.container.node();
-            this.width = this.baseCanvas.width = containerNode.offsetWidth;
-            this.height =  200;
-            this.baseContext.fillRect(0, 0, this.baseCanvas.width, this.height); 
+            let width = this.baseCanvas.width = containerNode.offsetWidth;
+            let height =  200;
+            this.baseContext.fillRect(0, 0, width, height); 
             this.baseContext.fill();
         },
     updateCanvasBackground : function(){
-        this.baseContext.rect(20,20,150,100);
-        this.baseContext.fill();
+        //this.baseContext.rect(0,0,500,200);
+        //this.baseContext.fillStyle = "#f3f3f3";
+        //this.baseContext.fill();
     },
     handleStepEnter01 : function(response){
         // response = { element, direction, index }
@@ -88,20 +89,43 @@ export let eventHandlers = {
         
         //E - from https://codepen.io/GreenSock/pen/bGbQwo
         //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
-        function tweenToRandomColor() {
-            TweenLite.to(
-                    baseContext, 
-                    1, 
-                    {
-                        colorProps:{
-                            fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
-                        }, 
-                        onUpdate: updateCanvasBackground, 
-                    //onComplete:tweenToRandomColor
-                    });
-        }        
-        tweenToRandomColor();
-        
-        this.baseContext.strokeStyle = "#000075";
+        if(response.index === 0){
+            function tweenToRandomColor() {
+                TweenLite.to(
+                        baseContext, 
+                        1, 
+                        {
+                            colorProps:{
+                                //fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
+                                fillStyle: "#404040",
+                                strokeStyle: "#f3f3f3"
+                            }, 
+                            onUpdate: updateCanvasBackground, 
+                        //onComplete:tweenToRandomColor
+                        });
+            }        
+            tweenToRandomColor();
+
+        }
+        if(response.index === 1){
+            //this.baseContext.rect(0,0,500,200);
+            //this.baseContext.fillStyle = "#404040";
+            //this.baseContext.fill();
+            //this.baseContext.strokeStyle = "#0000aa";
+            function tweenToRandomColor02() {
+                TweenLite.to(
+                        baseContext, 
+                        1, 
+                        {
+                            colorProps:{
+                                //fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
+                                strokeStyle: "#AAAAFF",
+                            }, 
+                            onUpdate: updateCanvasBackground, 
+                        //onComplete:tweenToRandomColor
+                        });
+            }
+            tweenToRandomColor02(); 
+        }
     }
 }

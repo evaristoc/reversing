@@ -1,24 +1,25 @@
 //import {hello} from './huffman-flow-field-setup.js';
 import {eventHandlers} from './scrollama-eventhandlers.js';
 import {paramsFigure} from './huffman-flow-field-setup.js';
+import {Hair} from './huffman-flow-field-setup.js';
 //console.log("eventHandlers",eventHandlers);
 //console.log("paramsFigure", paramsFigure);
 
 window.onload = (event) => {
     // using d3 for convenience
     // E: could have been something like jQuery, etc...
-    let paramScrollama = {
-        container : null,
-        main : null,
-        scrolly : null,
-        figure : null,
-        article: null,
-        step : null,
-        baseCanvas : null,
-        baseContext : null,
-        width : null,
-        height : null
-    }
+    // let paramScrollama = {
+    //     container : null,
+    //     main : null,
+    //     scrolly : null,
+    //     figure : null,
+    //     article: null,
+    //     step : null,
+    //     baseCanvas : null,
+    //     baseContext : null,
+    //     width : null,
+    //     height : null
+    // }
 
     function getElement(parent, selector, all=false){
         if(!all) {
@@ -44,55 +45,27 @@ window.onload = (event) => {
     }
 
 
-    class Hair {
-        constructor(){
-            let r = 2 * Math.PI * Math.random(),
-                d = Math.sqrt(Math.random())
-    
-            this.position = {
-                x: Math.floor(paramsFigure.circle.x + Math.cos(r) * d * paramsFigure.circle.r),
-                y: Math.floor(paramsFigure.circle.y + Math.sin(r) * d * paramsFigure.circle.r)
-            }
-            
-            this.length = Math.floor(Math.random() * 10) + 10;
-            paramsFigure.hairs.push(this);
-        }
-        
-        draw(){
-                let { position, length } = this,
-                { x, y } = position,
-                i = (y * paramsFigure.width + x) * 4,
-                d = paramsFigure.perlinImgData.data,
-                noise = d[i],
-                angle = (noise / 255) * Math.PI
-            
-            paramsFigure.baseContext.moveTo(x, y)
-            paramsFigure.baseContext.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length)
-        }
-    }
-    
-    
-    const scrolly = paramScrollama.scrolly = getElementD3js(d3, "#stickyoverlay");
+  
+    const scrolly = getElementD3js(d3, "#stickyoverlay");
     paramsFigure.container = eventHandlers.container = getElementD3js(scrolly, "figure");
-    const figure = paramScrollama.figure = paramsFigure.container;
-    const article = paramScrollama.article = getElementD3js(scrolly, "div .articlepost");
-    const step = eventHandlers.step = getElementD3js(article, ".step", true);
+    //const figure = paramsFigure.container;
+    const article = getElementD3js(scrolly, "div .articlepost");
+    eventHandlers.step = getElementD3js(article, ".step", true);
     const baseCanvas = document.createElement('canvas');
     const baseContext = baseCanvas.getContext('2d');
     const perlinCanvas = document.createElement('canvas');
     const perlinContext = perlinCanvas.getContext('2d');
-    //const baseCanvas = getElementD3js(paramsFigure.container, "canvas");
-    //const perlinCanvas = getElementD3js(paramsFigure.container, "canvas");
     baseCanvas.setAttribute("id", "context");
     perlinCanvas.setAttribute("id", "perlinCanvas");
+    paramsFigure.width = paramsFigure.container.node().offsetWidth;
+    paramsFigure.height = baseCanvas.height = 200;
     paramsFigure.container.node().appendChild(baseCanvas);
     paramsFigure.baseCanvas = eventHandlers.baseCanvas = getElementById(document, "context");
     paramsFigure.baseContext = eventHandlers.baseContext = baseContext;
     paramsFigure.perlinCanvas = getElementById(document, "perlinCanvas");
     paramsFigure.perlinContext = perlinContext;
     //paramsFigure.renderer.setSize( 300, 200 );
-    paramsFigure.width = paramsFigure.container.node().offsetWidth;
-    paramsFigure.height = 200;
+
     //paramsFigure.renderingFunc.startTime = paramsFigure.startTime;
 
     paramsFigure.circle = {
@@ -101,12 +74,11 @@ window.onload = (event) => {
         r: paramsFigure.container.node().offsetWidth / 2. / 2. / 2.
     }
 
-    for(var i = 0; i < 6000; i++){
-        new Hair();
-    }
+    paramsFigure["renderer"] = paramsFigure.rendererFunc();
+    paramsFigure.renderer.setSize(paramsFigure.width, paramsFigure.height);
 
-    console.log(paramsFigure.hairs.length)
-    console.log(paramsFigure.hairs[0])
+    //console.log(paramsFigure.hairs.length)
+    //console.log(paramsFigure.hairs[0])
 
 
     //var width;
@@ -143,12 +115,25 @@ window.onload = (event) => {
     }
 
     function init() {
+ 
+        function start(){
+            return setTimeout(new Hair(), 10);
+        }
+
+        for(var i = 0; i < 6000; i++){
+            new Hair();
+            //start();
+        }
+
         setupStickyfill();
         // 1. force a resize on load to ensure proper dimensions are sent to scrollama
         //console.log("initFigure", initFigure);
         //hello();
         
         handleResize();
+
+        paramsFigure.baseContext.fillStyle = "#f3f3f3";
+        paramsFigure.baseContext.strokeStyle = "#f3f3f3";
 
         //paramsFigure.renderFunc.renderer = paramsFigure.renderer;
         //requestAnimationFrame(paramsFigure.render);
@@ -160,6 +145,7 @@ window.onload = (event) => {
             //console.log(currentTime);
             let width = paramsFigure.width;
             let height = paramsFigure.height;
+            //console.log(width, height);
             paramsFigure.baseContext.clearRect(0,0,width,height);
             paramsFigure.perlinContext.clearRect(0, 0, width, height);
             paramsFigure.perlinImgData = paramsFigure.perlinContext.getImageData(0, 0, width, height);

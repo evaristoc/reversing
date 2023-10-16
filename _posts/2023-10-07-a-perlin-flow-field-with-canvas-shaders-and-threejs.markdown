@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "A Perlin-like flow with canvas, shaders and three.js"
+title:  "A Perlin-like flow with canvas, shaders and three.js (Part 1)"
 date:   2023-10-07 12:00:00 +0200
 categories: blog update
 ---

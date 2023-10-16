@@ -52,10 +52,37 @@ figure p {
 }
 */
 
-.step {
+@keyframes myAnimation01{
+    0%{
+      opacity: 1;
+    }
+    50%{
+      opacity: 0.5;
+    }
+    100%{
+      opacity: 0;
+    }
+  }
+
+  @keyframes myAnimation02{
+    0%{
+      opacity: 0;
+    }
+    50%{
+      opacity: 0.5;
+    }
+    100%{
+      opacity: 1;
+    }
+  }
+
+.step p {
     margin: 0 auto 2rem auto;
     color: #fff;
     background-color: rgba(0, 0, 0, 0.1);
+    animation-name: myAnimation01;
+    animation-duration: 1000ms;
+    animation-fill-mode: forwards;
     /*z-index: 10;*/
 }
 
@@ -66,6 +93,9 @@ figure p {
 .step.is-active p {
     background-color: goldenrod;
     color: #3b3b3b;
+    animation-name: myAnimation02;
+    animation-duration: 1000ms;
+    animation-fill-mode: forwards;
 }
 
 .step p {
