@@ -55,42 +55,6 @@ window.onload = (event) => {
     // initialize the scrollama
     var scroller = scrollama();
 
-
-    // function updateSizeStepElements(){
-    //     // 1. update height of step elements
-    //     var stepH = Math.floor(window.innerHeight * 0.75);
-    //     step.style('height', stepH + 'px');
-
-    //     var figureHeight = window.innerHeight / 2;
-    //     var figureMarginTop = (window.innerHeight - figureHeight) / 2;  
-    //     container
-    //         //.style('height', figureHeight + 'px')
-    //         .style('top', figureMarginTop + 'px');
-    
-    //     //DEBUG
-    //     console.log("figureHeight ", figureHeight);
-    // }
-
-    // function updateSizeCanvas(){
-    //     //baseCanvas.width = figure.offsetWidth
-    //     //baseCanvas.width = figureHeight;
-    //     let containerNode = container.node();
-    //     width = baseCanvas.width = containerNode.offsetWidth;
-    //     //baseContext.rect(20,20,150,100);
-    //     height =  200;
-    //     baseContext.fillRect(0, 0, width, height); 
-    //     baseContext.fill();
-    //     //baseCanvas.height = 150;
-
-    //     //DEBUG
-    //     console.log("container.offsetHeight handleResize ", eventHandlers.container.offsetWidth);
-    //     console.log("baseCanvas.height handleResize ", eventHandlers.baseCanvas.height);
-    //     console.log("container.offsetWidth handleResize ", eventHandlers.container.offsetWidth);
-    //     console.log("baseCanvas.width handleResize ", eventHandlers.baseCanvas.width);
-    //     console.log("width handleResize", width);
-    //     console.log("height handleResize", height);
-    // }
-
     // generic window resize listener event
     // TODO - should stay here!
     function handleResize() {
