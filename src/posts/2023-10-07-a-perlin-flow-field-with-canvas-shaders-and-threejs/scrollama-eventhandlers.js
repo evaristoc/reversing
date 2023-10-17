@@ -44,6 +44,8 @@ export let eventHandlers = {
     height : null,
     baseCanvas: null,
     baseContext: null,
+    hairs: null,
+    passed: false,
     updateSizeCanvas : function(){
             /*TODO:
             - perlinCanvas to be added
@@ -90,6 +92,7 @@ export let eventHandlers = {
         //E - from https://codepen.io/GreenSock/pen/bGbQwo
         //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
         if(response.index === 0){
+            this.baseContext.clearRect(0,0,this.width,this.height);
             function tweenToRandomColor() {
                 TweenLite.to(
                         baseContext, 
@@ -98,7 +101,7 @@ export let eventHandlers = {
                             colorProps:{
                                 //fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
                                 fillStyle: "#404040",
-                                strokeStyle: "#f3f3f3"
+                                strokeStyle: "#404040"
                             }, 
                             onUpdate: updateCanvasBackground, 
                         //onComplete:tweenToRandomColor
@@ -119,13 +122,35 @@ export let eventHandlers = {
                         {
                             colorProps:{
                                 //fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
-                                strokeStyle: "#AAAAFF",
+                                //strokeStyle: "#AAAAFF",
                             }, 
                             onUpdate: updateCanvasBackground, 
                         //onComplete:tweenToRandomColor
                         });
             }
+            this.baseContext.strokeStyle = "#fff";
             tweenToRandomColor02(); 
+        }
+        if(response.index === 2){
+            this.baseContext.beginPath();
+            //console.log("hair", this.hairs[0].draw());
+            //this.hairs.map(hair => hair.draw());
+            let first10Hairs = this.hairs.slice(0, 10);
+            first10Hairs.map(hair => hair.draw());
+            this.baseContext.strokeStyle = "#AAAAFF";
+            //this.baseContext.stroke();
+        }
+        if(response.index === 4){
+            let remainingHairs = this.hairs.slice(9);
+            //remainingHairs.map(hair => hair.draw());
+            function delay(i){
+                setTimeout(()=>{remainingHairs[i].draw()}, i/2.);
+            }
+            this.passed = true;
+            for(let i = 0; i < remainingHairs.length; i++){
+                delay(i);
+            }
+            this.baseContext.strokeStyle = "#AAAAFF";
         }
     }
 }

@@ -120,9 +120,11 @@ window.onload = (event) => {
             return setTimeout(new Hair(), 10);
         }
 
+        
+        //E: instantiate all the hairs and save them in the hairs container
+        // but don't draw them yet... 
         for(var i = 0; i < 6000; i++){
             new Hair();
-            //start();
         }
 
         setupStickyfill();
@@ -133,7 +135,7 @@ window.onload = (event) => {
         handleResize();
 
         paramsFigure.baseContext.fillStyle = "#f3f3f3";
-        paramsFigure.baseContext.strokeStyle = "#f3f3f3";
+        //paramsFigure.baseContext.strokeStyle = "#f3f3f3";
 
         //paramsFigure.renderFunc.renderer = paramsFigure.renderer;
         //requestAnimationFrame(paramsFigure.render);
@@ -149,14 +151,18 @@ window.onload = (event) => {
             paramsFigure.baseContext.clearRect(0,0,width,height);
             paramsFigure.perlinContext.clearRect(0, 0, width, height);
             paramsFigure.perlinImgData = paramsFigure.perlinContext.getImageData(0, 0, width, height);
-            paramsFigure.baseContext.beginPath();
-            paramsFigure.hairs.map(hair => hair.draw());
+            //paramsFigure.baseContext.beginPath();
+            //paramsFigure.hairs.map(hair => hair.draw());
             paramsFigure.baseContext.fillRect(0, 0, width, height);
             paramsFigure.baseContext.stroke();
             requestAnimationFrame( figRender );
         }
         
         figRender();
+
+        //E: order of the functions is important!
+        //After rendering the canvas and before running the handler
+        eventHandlers.hairs = paramsFigure.hairs;
 
         // 2. setup the scroller passing options
             // 		this will also initialize trigger observations

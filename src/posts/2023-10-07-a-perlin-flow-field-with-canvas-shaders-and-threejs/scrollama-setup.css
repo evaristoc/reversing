@@ -76,33 +76,43 @@ figure p {
     }
   }
 
-.step p {
-    margin: 0 auto 2rem auto;
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.1);
+.step div {
     animation-name: myAnimation01;
     animation-duration: 1000ms;
     animation-fill-mode: forwards;
     /*z-index: 10;*/
 }
 
+.step p {
+    margin: 0 auto 0.5rem auto;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
 .step:last-child {
     margin-bottom: 0;
 }
 
-.step.is-active p {
-    background-color: goldenrod;
-    color: #3b3b3b;
+.step.is-active div {
     animation-name: myAnimation02;
     animation-duration: 1000ms;
     animation-fill-mode: forwards;
 }
 
+.step.is-active p {
+    background-color: goldenrod;
+    color: #3b3b3b;
+}
+
 .step p {
-    text-align: center;
+    text-align: align;
     padding: 1rem;
     font-size: 0.85rem;
     background-color: #3b3b3b;
+}
+
+code{
+    font-size:0.65rem;
 }
 
 canvas {
