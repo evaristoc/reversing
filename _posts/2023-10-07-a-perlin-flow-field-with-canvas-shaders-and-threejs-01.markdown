@@ -4,7 +4,7 @@ title:  "A Perlin-like flow with canvas, shaders and three.js (Part 1)"
 date:   2023-10-07 12:00:00 +0200
 categories: blog update
 ---
-<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/scrollama-setup.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/scrollama-setup.css %}">
 
 # Adding Noise with Shaders is very nice!
 
@@ -174,7 +174,7 @@ Let's see its functionality.
 <script src="{{ site.baseurl }}{% link src/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs.js %}"></script>
+<script src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/huffman-flow-field-setup.js %}"></script>
 <script type="module" src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/scrollama-setup.js %}"></script>
 
@@ -210,5 +210,5 @@ So far, one of the things that for me was very interesting from Darryl Huffman's
 
 Apart of that, there is still much to reveal about this code. What about the noise function? And what is the role of the "perlinContext" canvas? You might ask. Before we move to the next part, I can say that using two canvas elements is a common trick - using one canvas to extract data from an application (eg. a video) and to feed that data into another canvas to affect a visualization.
 
-Let's keep that part for another day? For now, happy coding!
+ For now, happy coding!
 
