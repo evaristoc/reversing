@@ -84,7 +84,7 @@ figure p {
 }
 
 .step p {
-    margin: 0 auto 0.5rem auto;
+    margin: 0 auto 0.01rem auto;
     color: #fff;
     background-color: rgba(0, 0, 0, 0.1);
 }

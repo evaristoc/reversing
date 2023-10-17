@@ -41,9 +41,9 @@ Let's go back to the Garryl Kuffman's pen...
 
 We can divide Garryl Kuffman's example in three sections:
 
-1- The "context" canvas and the Hair class
-2- The WebGL (Three.js), the *shader*, and the texture canvas
-3- The interaction between the texture (aka Garryl's "perlinCanvas") and the "context" canvas.
+- The "context" canvas and the Hair class
+- The WebGL (Three.js), the *shader*, and the texture canvas
+- The interaction between the texture (aka Garryl's "perlinCanvas") and the "context" canvas.
 
 Let's follow Garryl's code for each of those sections, in that order.
 
