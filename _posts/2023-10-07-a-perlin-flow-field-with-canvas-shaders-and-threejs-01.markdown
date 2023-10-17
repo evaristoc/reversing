@@ -175,8 +175,8 @@ Let's see its functionality.
 <script src="{{ site.baseurl }}{% link src/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/huffman-flow-field-setup.js %}"></script>
-<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs/scrollama-setup.js %}"></script>
+<script src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/huffman-flow-field-setup.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/scrollama-setup.js %}"></script>
 
 # Tada!
 
