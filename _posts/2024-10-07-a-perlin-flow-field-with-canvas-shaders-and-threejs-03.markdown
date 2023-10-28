@@ -1,20 +1,16 @@
 ---
 layout: post
-title:  "A Perlin-like flow with canvas, shaders and three.js (Part 1)"
-date:   2023-10-07 12:00:00 +0200
+title:  "A Perlin-like flow with canvas, shaders and three.js (Part 3)"
+date:   2024-10-20 12:00:00 +0200
 categories: blog update
 ---
-<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/scrollama-setup.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/scrollama-setup.css %}">
 
-# Adding Noise with Shaders is very nice!
+# Revealing the Noise
 
-Yeah... but let's be honest: unless you really master shaders and understand what those noise functions do, it is truly hard to programmatically get the right effect.
+In a [previous post]({{site.baseurl}}{% link _posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.markdown %}) we were revealing how Darryl Huffman worked the figure that will be affected by the animation on his "Perlin Flow Field".
 
-I am myself not an expert in the field. So what do I do...? Exactly: a bit of reverse engineering.
-
-I was looking for a nice candidate for some reverse engineering and recalled one implementation in codepen that I really liked. It is called ["Perlin Flow Field"](https://codepen.io/darrylhuffman/pen/vwmYgz) by [Darryl Huffman](https://darrylhuffman.com/).
-
-The pen looks like this:
+As a reminder, this is again a link to Darryl's work:
 
 <p class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="vwmYgz" data-user="darrylhuffman" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
   <span>See the Pen <a href="https://codepen.io/darrylhuffman/pen/vwmYgz">
@@ -23,23 +19,54 @@ The pen looks like this:
 </p>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
 
-For this pen Darryl used canvas (the 2D graphics API), three.js (the 3D graphics library) and GLSL shaders. I was primarily interested in that combination of all those graphic functionalities and tools, and how the noise affected the dynamics of the visualization.
+In this post we will have a look at the noise function.
 
-So, what sort of effect was the author after by mixing all those graphics?
+# Quick overview of the noise function used in the example
+
+For this project, Garryl Huffman made use of a *noise function*, which could be quickly derived from the name of the pen. "Perlin" is in fact the surname of [Ken Perlin](https://en.wikipedia.org/wiki/Ken_Perlin), the developer of a [noise function that bears his name](https://en.wikipedia.org/wiki/Perlin_noise) and that has been very influential to the digital graphics industry since its introduction in 1983.
+
+It is worth noting though that Garry Huffman might have used the wrong reference to name his pen. By reading the code in the pen you would notice that the noise function used by Garryl is actually authored by Ian McEwan who refers to it as a ***simplex*** *noise function*. The [simplex noise function](https://en.wikipedia.org/wiki/Simplex_noise) was an improved algorithm made by the same Ken Perlin over its classic Perlin noise. The [simplex noise function by Ian McEwan](https://github.com/ashima/webgl-noise/blob/master/src/noise4D.glsl), in collaboration with [Stefan Gustavson](https://github.com/stegu), is actually one of the several efforts to improve the Perlin's *simplex* noise function.
+
+Now, I won't extend about the noise function here. If you are still looking for a good explanation of noise functions and a clarification of how the Perlin noise differs from the simplex noise I will strongly recommend this [excellent chapter of "The Book of Shaders"](https://thebookofshaders.com/11/). Part of the work made by Ian McEwan and Stefan Gustavson can be found at the (apparently defunt) [Ashima Arts repository](https://github.com/ashima/webgl-noise) or even in recent articles, like [this scientific article dated 2022](https://jcgt.org/published/0011/01/02/paper.pdf).
+
+Let's go back to the Garryl Kuffman's pen...
 
 # The Code
 
-We can divide Garryl Kuffman's example in three sections:
+In the previous post we separated Darryl's code into three sections:
 
 - The "context" canvas and the Hair class
 - The WebGL (Three.js), the *shader*, and the texture canvas
 - The interaction between the texture (aka Garryl's "perlinCanvas") and the "context" canvas.
 
-Let's follow Garryl's code for each of those sections, in that order.
+Our focus is the second one.
 
-**THE "context" CANVAS AND THE *Hair* CLASS**  
+**THE WEBGL, THE SHADER  AND THE TEXTURE CANVAS**  
 
-Garryl used not one but two canvas elements. They were strongly interlinked - we will explain that better later on.
+With his project, Garryl wanted to animate "hairs" located in a circle of radio "r" in the middle of the viewport. Those hairs were canvas' strokes. They all should move based on a noise function which a pattern that changes over time in a rather regular trend. Because the way it changes the noise function is usually referred as a ***flow***, simulating the usual patterns in the movements of substances in either liquid or gas states.
+
+So, the "liquid" pattern should lead the movement of the hairs.
+
+Yes, but... how?
+
+There are several ways to implement this noise function over the hairs of the "context" canvas. One way is to write the code of the noise function directly in javascript and pass its generated values into the canvas API.
+
+Now, we know that the shader function affects the pixels of the rendered image. If we want to capture the flow effect of the noise function, we need to come up with an idea of how to get the values associated with those pixels at any point in time.
+
+However, the noise function was written for the WebGL API, not the canvas API. There is not simple way to extract values from a WebGL shader into a javascript scope.
+
+Unless that... if we could find an interface that capture those values per pixel affected by the noise function in the WebGL scope and bring them to the javascript scope into our "context" canvas, we could translate those values into a movement function...
+
+Well here a popular trick: a usual method consists in extracting values from the WebGL that also relies on the canvas API and that are revealed in this example:
+* With Three.js you can render a WebGL shape over which to run the shader. Three.js is actually WebGL in simpler javascript. It is like the jQuery of WebGL.
+* Then you can use a canvas as a "texture" to "cover" that shape.
+* The canvas texture is then a subject of the changes of the shader. Those changes are in fact numeric values  and those changes translate into values that you can extract from that texture canvas into the Javascript scope.
+
+Garryl Huffman selected the approach of using an interface.
+
+That canvas that acts as texture of the WebGL scope becomes and interface between the WebGL and the javascript. Although not strictly so, this approach is very close to an [Adapter design pattern](https://refactoring.guru/design-patterns/adapter).
+
+With his project, Garryl wanted to move the  used not one but two canvas elements. They were strongly interlinked - we will explain that better later on.
 
 Both of the canvases were made invisible to the observer.
 
@@ -164,9 +191,9 @@ Let's see its functionality.
 <script src="{{ site.baseurl }}{% link src/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/huffman-flow-field-setup.js %}"></script>
-<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/scrollama-setup.js %}"></script>
+<script src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-02.js %}"></script>
+<script src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/scrollama-setup.js %}"></script>
 
 # Tada!
 
