@@ -21,16 +21,6 @@ As a reminder, this is again a link to Darryl's work:
 
 In this post we will have a look at the noise function.
 
-# Quick overview of the noise function used in the example
-
-For this project, Garryl Huffman made use of a *noise function*, which could be quickly derived from the name of the pen. "Perlin" is in fact the surname of [Ken Perlin](https://en.wikipedia.org/wiki/Ken_Perlin), the developer of a [noise function that bears his name](https://en.wikipedia.org/wiki/Perlin_noise) and that has been very influential to the digital graphics industry since its introduction in 1983.
-
-It is worth noting though that Garry Huffman might have used the wrong reference to name his pen. By reading the code in the pen you would notice that the noise function used by Garryl is actually authored by Ian McEwan who refers to it as a ***simplex*** *noise function*. The [simplex noise function](https://en.wikipedia.org/wiki/Simplex_noise) was an improved algorithm made by the same Ken Perlin over its classic Perlin noise. The [simplex noise function by Ian McEwan](https://github.com/ashima/webgl-noise/blob/master/src/noise4D.glsl), in collaboration with [Stefan Gustavson](https://github.com/stegu), is actually one of the several efforts to improve the Perlin's *simplex* noise function.
-
-Now, I won't extend about the noise function here. If you are still looking for a good explanation of noise functions and a clarification of how the Perlin noise differs from the simplex noise I will strongly recommend this [excellent chapter of "The Book of Shaders"](https://thebookofshaders.com/11/). Part of the work made by Ian McEwan and Stefan Gustavson can be found at the (apparently defunt) [Ashima Arts repository](https://github.com/ashima/webgl-noise) or even in recent articles, like [this scientific article dated 2022](https://jcgt.org/published/0011/01/02/paper.pdf).
-
-Let's go back to the Garryl Kuffman's pen...
-
 # The Code
 
 In the previous post we separated Darryl's code into three sections:
@@ -40,6 +30,180 @@ In the previous post we separated Darryl's code into three sections:
 - The interaction between the texture (aka Garryl's "perlinCanvas") and the "context" canvas.
 
 Our focus is the second one.
+
+**THE NOISE FUNCTION**
+
+For this project, Garryl Huffman made use of a *noise function*, which could be quickly derived from the name of the pen. "Perlin" is in fact the surname of [Ken Perlin](https://en.wikipedia.org/wiki/Ken_Perlin), the developer of a [noise function that bears his name](https://en.wikipedia.org/wiki/Perlin_noise) and that has been very influential to the digital graphics industry since its introduction in 1983.
+
+It is worth noting though that Garry Huffman might have used the wrong reference to name his pen. By reading the code in the pen you would notice that the noise function used by Garryl is actually authored by Ian McEwan who refers to it as a ***simplex*** *noise function*. The [simplex noise function](https://en.wikipedia.org/wiki/Simplex_noise) was an improved algorithm made by the same Ken Perlin over its classic Perlin noise. The [simplex noise function by Ian McEwan](https://github.com/ashima/webgl-noise/blob/master/src/noise4D.glsl), in collaboration with [Stefan Gustavson](https://github.com/stegu), is actually one of the several efforts to improve the Perlin's *simplex* noise function.
+
+Now, I won't extend about the noise function here. If you are still looking for a good explanation of noise functions and a clarification of how the Perlin noise differs from the simplex noise I will strongly recommend this [excellent chapter of "The Book of Shaders"](https://thebookofshaders.com/11/). Part of the work made by Ian McEwan and Stefan Gustavson can be found at the (apparently defunt) [Ashima Arts repository](https://github.com/ashima/webgl-noise) or even in recent articles, like [this scientific article dated 2022](https://jcgt.org/published/0011/01/02/paper.pdf).
+
+The noise function is written in [GLSL](https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)), which is the C-style language of the graphics library managed by the WebGL API. In the Darryl's pen the noise function is given as a string, inside a function called ```noiseCanvas```:
+
+```javascript
+let Noise3D = `
+//
+// Description : Array and textureless GLSL 2D/3D/4D simplex 
+//               noise functions.
+...
+
+float snoise(vec3 v)
+{ 
+const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
+...
+
+// Gradients: 7x7 points over a square, mapped onto an octahedron.
+// The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
+float n_ = 0.142857142857; // 1.0/7.0
+vec3  ns = n_ * D.wyz - D.xzx;
+...
+
+//Normalise gradients
+vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+p0 *= norm.x;
+p1 *= norm.y;
+p2 *= norm.z;
+p3 *= norm.w;
+
+// Mix final noise value
+vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+m = m * m;
+return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
+dot(p2,x2), dot(p3,x3) ) );
+}
+`
+```
+
+Here we show just sections of the noise function to highlight the purposed use of gradients. Those gradients are the ones that give the flow behaviour to the noise function.
+
+**THE SHADERS**
+
+Shaders, as you probably know, are functions in WebGL that control the pixel properties. The ***vertex shader*** controls the geometries of the scene, and the ***fragment shader*** control the coloring at each pixel. The shaders are also written in GLSL and therefore are provided as strings, again, inside of the ```noiseCanvas``` function:
+
+```javascript
+...
+
+const shaders = {
+	fragment: `
+            uniform vec2 resolution;
+            uniform float time;
+
+            ${Noise3D}
+
+            void main() {
+            float speed = 16.;
+            float scale = 3.5;
+
+            vec2 st = gl_FragCoord.xy/resolution.xy;
+            st.x *= resolution.x/resolution.y;
+            st *= scale;
+
+            float noise = snoise(vec3(st.x, st.y, time * speed * 0.01));
+            float c = (noise + 1.) / 2.;
+
+            gl_FragColor = vec4(c, c, c, 1.);
+            }
+
+    `,
+    vertex: `
+
+        void main() {
+
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `
+}
+
+```
+
+Notice though that the noise function is inserted within the fragment shader as a string format (```${Noise3D}```), where the noise function (named ```snoise()```) is eventually called.
+
+It is the fragment shader where most of the action would occur. For those who don't know much about shaders, the GLSL used to offer a built-in variable, the ```gl_FragColor```, that acted as the final control of the pixel coloring output.
+
+> NOTE: In more recent versions of GLSL [gl_FragColor became depreated](https://community.khronos.org/t/about-gl-fragcolor-of-fragment-shader/105102), allowing user-defined fragment shader outputs using the **out** variable qualifier
+
+The output of the fragment shader is based on a value "*c*", which is modified based on the noise function.
+
+On the contrary, the code of the vertex shader is quite simple. This is because it relies on global variables that will be passed from Three.js - ```projectionMatrix```, ```modelViewMatrix``` and ```position```. In the way they are set, it is like: "just render the geometry that will be defined later in the Three.js code".
+
+**THREE.JS AND THE PLANE**
+
+In fact, all what Darryl wanted as geometry was a plane. Building a plane with Three.js is quite simple. You just need to instantiate an scene, usually with a camera and possibly some lights, and then define the plane geometry, the material covering that geometry, then create a mesh with both of them and register the mesh into the scene.
+
+In the case of Darryl's project though, the material was *the shader* containing the noise (colouring) function:
+
+```javascript
+...
+
+let width = container.offsetWidth,
+    height = container.offsetHeight,
+    currentTime = 0,
+    timeAddition = Math.random() * 1000
+
+const scene = new THREE.Scene(),
+        camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 0, 100 )
+
+renderer = new THREE.WebGLRenderer({ alpha: true })
+
+renderer.setSize( container.offsetWidth, container.offsetHeight )
+//container.appendChild(renderer.domElement)
+...
+
+//(the shaderMaterial is defined just before the geometry instantiation bellow)
+
+let geometry = new THREE.PlaneGeometry( width, height, 32 );
+let plane = new THREE.Mesh( geometry, shaderMaterial );
+scene.add( plane );
+plane.position.z = 0.5;
+
+
+camera.position.y = 0;
+camera.position.x = 0;
+camera.position.z = 100;
+
+...
+
+```
+
+**THE MATERIAL OF THE PLANE**
+
+There is something important when coding with WebGL - you need some way to pass data from outside the shader to the GLSL shader context. The way that is done is through **uniforms**, which are special GLSL variable qualifiers to identify exactly those variables that could act as inputs.
+
+```javascript
+...
+
+let uniforms = {
+    time: { value: 1 + timeAddition },
+    resolution: { value: new THREE.Vector2(container.offsetWidth, container.offsetHeight) }
+}
+
+...
+```
+
+The uniform that will be important for Darryl's code is the *time* uniform. It will set the pace of the advance of the color of the pixels along the gradient of the noise function. 
+
+Having the corresponding uniforms and the shaders allow for the construction of the *shaderMaterial*. The shader material is defined a few lines before the instantiation of the plane geometry and right after the uniforms. 
+
+```javascript
+...
+
+let shaderMaterial = new THREE.ShaderMaterial( {
+    uniforms:       uniforms,
+    vertexShader:   shaders.vertex,
+    fragmentShader: shaders.fragment,
+    //blending:       THREE.AdditiveBlending,
+    depthTest:      false,
+    transparent:    true,
+    vertexColors:   true
+});
+
+...
+```
+
+The time value is increased for each rendering frame.
+
+
 
 **THE WEBGL, THE SHADER  AND THE TEXTURE CANVAS**  
 
