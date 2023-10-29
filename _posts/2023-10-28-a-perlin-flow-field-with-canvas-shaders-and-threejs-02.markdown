@@ -35,11 +35,11 @@ Our focus is the second one. In the Darryl's pen all the functionalities for the
 
 For this project, Garryl Huffman made use of a *noise function*, which could be quickly derived from the name of the pen. "Perlin" is in fact the surname of [Ken Perlin](https://en.wikipedia.org/wiki/Ken_Perlin), the developer of a [noise function that bears his name](https://en.wikipedia.org/wiki/Perlin_noise) and that has been very influential to the digital graphics industry since its introduction in 1983.
 
-It is worth noting though that Garry Huffman might have used the wrong reference to name his pen. By reading the code in the pen you would notice that the noise function used by Garryl is actually authored by Ian McEwan who refers to it as a ***simplex*** *noise function*. The [simplex noise function](https://en.wikipedia.org/wiki/Simplex_noise) was an improved algorithm made by the same Ken Perlin over its classic Perlin noise. The [simplex noise function by Ian McEwan](https://github.com/ashima/webgl-noise/blob/master/src/noise4D.glsl), in collaboration with [Stefan Gustavson](https://github.com/stegu), is actually one of the several efforts to improve the Perlin's *simplex* noise function.
+It is worth noting though that Garry Huffman might have used the wrong reference to name his pen. By reading the code in the pen you would notice that the noise function used by Garryl is actually authored by Ian McEwan who refers to it as a ***simplex*** noise function. The [simplex noise function](https://en.wikipedia.org/wiki/Simplex_noise) was an improved algorithm made by the same Ken Perlin over its classic Perlin noise. The [simplex noise function by Ian McEwan](https://github.com/ashima/webgl-noise/blob/master/src/noise4D.glsl), in collaboration with [Stefan Gustavson](https://github.com/stegu), is actually one of the several efforts to improve the Perlin's *simplex* noise function.
 
 Now, I won't extend about the noise function here. If you are still looking for a good explanation of noise functions and a clarification of how the Perlin noise differs from the simplex noise I will strongly recommend this [excellent chapter of "The Book of Shaders"](https://thebookofshaders.com/11/). Part of the work made by Ian McEwan and Stefan Gustavson can be found at the (apparently defunt) [Ashima Arts repository](https://github.com/ashima/webgl-noise) or even in recent articles, like [this scientific article dated 2022](https://jcgt.org/published/0011/01/02/paper.pdf).
 
-The noise function is written in [GLSL](https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)), which is the C-style language of the graphics library managed by the WebGL API. In the Darryl's pen the noise function is given as a string:
+The noise function is written in [GLSL](https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)), which is the default C-style language used to communicate with the openGL graphics API, which is the one associated with the WebGL API. In the Darryl's pen the GLSL script of the noise function is given as a string in the Javascript code:
 
 ```javascript
 let Noise3D = `
@@ -117,19 +117,19 @@ const shaders = {
 
 ```
 
-Notice that the noise function is inserted within the fragment shader as a string format (**${Noise3D}**). It is here where the noise function (named **snoise()**) is eventually called.
+Notice that the noise function is inserted within the fragment shader as a string format (**${Noise3D}**). It is here where the noise function (named **snoise**) is eventually called.
 
-It is the fragment shader where most of the action would occur. For those who don't know much about shaders, the GLSL used to offer a built-in variable, the **gl_FragColor**, that acted as the final control of the pixel coloring output.
+It is in the fragment shader where the action is. The final output is collected in (now deprecated) **gl_FragColor**.
 
-> NOTE: In more recent versions of GLSL [gl_FragColor became depreated](https://community.khronos.org/t/about-gl-fragcolor-of-fragment-shader/105102), allowing user-defined fragment shader outputs using the **out** variable qualifier
+> NOTE: For those who don't know much about shaders, the GLSL used to offer a built-in variable, the **gl_FragColor**, that acted as the final control of the pixel coloring output. In more recent versions of GLSL [gl_FragColor became deprecated](https://community.khronos.org/t/about-gl-fragcolor-of-fragment-shader/105102), allowing user-defined fragment shader outputs using the **out** variable qualifier.
 
 The output of the fragment shader is based on a value "*c*", which is modified based on the noise function.
 
-On the contrary, the code of the vertex shader is quite simple. This is because it relies on global variables that will be passed from Three.js - **projectionMatrix**, **modelViewMatrix** and **position**. In the way they are set, it is like: "just render the geometry that will be defined later in the Three.js code".
+On the contrary, the code of the vertex shader is quite simple. This is because it relies on [built-in uniform variables](https://threejs.org/docs/#api/en/renderers/webgl/WebGLProgram) that will be passed from Three.js - **projectionMatrix**, **modelViewMatrix** and **position**. In the way they are set, it is like: "just render the geometry that will be defined later in the Three.js code".
 
 **THREE.JS AND THE PLANE**
 
-In fact, all what Darryl wanted as geometry was a plane. Building a plane with Three.js is quite simple. You just need to instantiate an scene, usually with a camera and possibly some lights, and then define the plane geometry, the material covering that geometry, then create a mesh with both of them and register the mesh into the scene.
+In fact, all what Darryl wanted as geometry was a plane. Building a plane in Three.js is quite simple. You just need to instantiate an scene, usually with a camera and possibly some lights, and then define the plane geometry, the material covering that geometry, then create a mesh with both of them and finally register the mesh into the scene.
 
 In the case of Darryl's project though, the material was *the shader* containing the noise (colouring) function:
 

@@ -128,7 +128,7 @@ timeAddition = Math.random() * 1000
 paramsPlane["uniforms"] = {
 time: { value: 1 + timeAddition },
 resolution: { value: new THREE.Vector2(paramsPlane.width , paramsPlane.height) },
-animationTime : {value : 0.0}
+animationTime : {value : 1.0}
 }
 
 paramsPlane["shaderMaterial"] = new THREE.ShaderMaterial( {
@@ -155,10 +155,10 @@ function renderPlane() {
 var now = new Date().getTime();
 var currentTime = (now - startTime) / 1000;
 testPlane.uniforms.time.value = currentTime + timeAddition;
-//console.log(testPlane.uniforms.time);
-if(testPlane.uniforms.animationTime.value < 1.0){
-	testPlane.uniforms.animationTime.value += .002;
-} 
+
+// if(testPlane.uniforms.animationTime.value < 1.0){
+// 	testPlane.uniforms.animationTime.value += .002;
+// } 
 
 const container = document.querySelector('#threejs-container');
 container.append(testPlane.renderer.domElement);
