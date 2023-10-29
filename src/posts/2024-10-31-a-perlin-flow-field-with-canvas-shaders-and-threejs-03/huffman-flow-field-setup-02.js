@@ -5,14 +5,15 @@ class ThreejsScene{
 		this.renderer = new THREE.WebGLRenderer({ alpha : true });
 		this.scene = new THREE.Scene();
 		//this.setWidthandHeight(width, height);
-		this.width = width;
-		this.height = height;
+		this.width = 200;
+		this.height = 200;
 		this.setSizeRenderer();
 		this.setBasicPerspectiveCamera();
 	}
 
-	setWidth(w){
+	setWidthandHeight(w,h){
 		this.width = w;
+		this.height = h;
 	}
 
 	setBasicPerspectiveCamera(){
@@ -36,8 +37,8 @@ class ThreejsScene{
 
 
 class shadedPlane extends ThreejsScene{
-	constructor(width, height, uniforms, shaders){
-		super(width, height);
+	constructor(scene, uniforms, shaders){
+		super(scene);
 		this.setUniforms(uniforms);
 		this.setShaders(shaders);
 		this.setShadedPlane();
@@ -141,9 +142,11 @@ transparent:    true,
 vertexColors:   true
 });
 
-let container = document.querySelector('#threejs-container');
+let container = document.querySelector('#threejs-container')
 
-let testPlane = new shadedPlane(container.offsetWidth, 200, paramsPlane["uniforms"], paramsPlane["shaders"]);
+let testScene = new ThreejsScene(container.offsetWidth, 200);
+console.log(testScene);
+let testPlane = new shadedPlane(testScene, paramsPlane["uniforms"], paramsPlane["shaders"]);
 
 testPlane.camera.position.set(0,0,10);
 testPlane.plane.position.z = 0.5;

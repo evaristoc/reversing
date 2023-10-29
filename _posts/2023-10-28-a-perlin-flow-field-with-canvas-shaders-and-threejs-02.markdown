@@ -4,7 +4,7 @@ title:  "A Perlin-like flow with canvas, shaders and three.js (Part 2)"
 date:   2023-10-28 12:00:00 +0200
 categories: blog update
 ---
-<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/scrollama-setup-02.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.css %}">
 
 # Revealing the Noise
 
@@ -21,15 +21,15 @@ As a reminder, this is again a link to Darryl's work:
 
 In this post we will have a look at the noise function.
 
-# The Code
+# The Code (the ```noiseCanvas``` function)
 
 In the previous post we separated Darryl's code into three sections:
 
 - The "context" canvas and the Hair class
-- The WebGL (Three.js), the *shader*, and the texture canvas
+- The noise function, the *shader* and the Three.js plane geometry
 - The interaction between the texture (aka Garryl's "perlinCanvas") and the "context" canvas.
 
-Our focus is the second one.
+Our focus is the second one. In the Darryl's pen all the functionalities for the rendering of the GLSL features were enclosed in the ```noiseCanvas``` function.
 
 **THE NOISE FUNCTION**
 
@@ -75,7 +75,7 @@ dot(p2,x2), dot(p3,x3) ) );
 `
 ```
 
-Here we show just sections of the noise function to highlight the purposed use of gradients. Those gradients are the ones that give the flow behaviour to the noise function.
+We showed just sections of the noise function to highlight the purposed use of gradients. Those gradients are the ones that give the flow behaviour to the noise function.
 
 **THE SHADERS**
 
@@ -117,7 +117,7 @@ const shaders = {
 
 ```
 
-Notice though that the noise function is inserted within the fragment shader as a string format (```${Noise3D}```), where the noise function (named ```snoise()```) is eventually called.
+Notice that the noise function is inserted within the fragment shader as a string format (```${Noise3D}```). It is here where the noise function (named ```snoise()```) is eventually called.
 
 It is the fragment shader where most of the action would occur. For those who don't know much about shaders, the GLSL used to offer a built-in variable, the ```gl_FragColor```, that acted as the final control of the pixel coloring output.
 
@@ -201,31 +201,40 @@ let shaderMaterial = new THREE.ShaderMaterial( {
 ...
 ```
 
-The time value is increased for each rendering frame.
+**THE RENDER FUNCTION**
 
+In the Darryl's project, the ```noiseCanvas``` function ended with the ```render``` function. The render function updates the graphics using the ```requestAnimationFrame``` but before the rendering the ```time``` uniform is updated.
 
+```javascript
+...
+    //these variables were instantiated high in the code, under the shaders
+    currentTime = 0,
+    timeAddition = Math.random() * 1000
+...
 
-**THE WEBGL, THE SHADER  AND THE TEXTURE CANVAS**  
+function render() {
+    var now = new Date().getTime();
+    currentTime = (now - startTime) / 1000;
+    uniforms.time.value = currentTime + timeAddition;
 
-As you might have noticed, Darryl's project didn't show any rendering of the simplex function. In this part we want to show you how that function looks like by rendering it, while mentioning some aspects of the code.
+    requestAnimationFrame( render );
+    renderer.render( scene, camera );
+}
+render();
+...
+```
 
-The shader requires the WebGL API, which is the realm of the [Three.js](https://threejs.org/) library. 
+The value of ```time``` is increased at each rendering frame using a simple implemantion that takes different computer times.
 
-> In few words, Three.js is for WebGL what jQuery is for vanilla Javascript. It hides part of the complexity of the language.
+# Revealing the noise function
 
-In his pen, Darryl used a simple shape, a plane, to run the shader on.
+If you reviewed the code you might have notice that the three.js / WebGL features had dimensions but were not add to any HTML element. That was part of the purpose of the author when making this project - the aparent changes of the texture of the Three.js plane should stay invisible to the observer.
+
+If you are interested in seeing how the noise function behaves, I have revealed the function by adding it to a container:
 
 <div id="threejs-container"></div>
 
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.4/TweenLite.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.5/plugins/ColorPropsPlugin.min.js"></script>
 <script src="{{ site.baseurl }}{% link src/vendor/js/threejs/v104/three.v104.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link src/posts/2023-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/2023-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-02.js %}"></script>
 <script type="module" src="{{ site.baseurl }}{% link src/posts/2023-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js %}"></script>
 
@@ -233,27 +242,7 @@ In his pen, Darryl used a simple shape, a plane, to run the shader on.
 
 The last bit of code I want to show you for now is the render of the canvas elements:
 
-```javascript
-function render() {
-    var now = new Date().getTime();
-    currentTime = (now - startTime) / 1000
-    
-    context.clearRect(0,0,width,height)
 
-    perlinContext.clearRect(0, 0, width, height)
-    perlinContext.drawImage(renderer.domElement, 0, 0)
-    perlinImgData = perlinContext.getImageData(0, 0, width, height)
-    
-    context.beginPath()
-    hairs.map(hair => hair.draw())
-    context.stroke()
-    
-    requestAnimationFrame( render );
-}
-render()
-```
-
-What I would like to point out is the `hairs.map(hair => hair.draw())`, which is the draw of each stroke. No less important though is what it goes with the **perlinContext** and the value assignment to the global **perlinImgData** which is parameter of the Hair's **draw method**. For the purpose of this example we left the values of the **perlinImgData** all as zero, but if you check Darryl's code and see carefully you will notice that the perlinImgData is feeding data to the draw function and therefore to the position of the hairs in the circle.
 
 # So... What did we learn from this code?
 
