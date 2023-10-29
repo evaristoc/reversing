@@ -4,7 +4,7 @@ title:  "A Perlin-like flow with canvas, shaders and three.js (Part 2)"
 date:   2023-10-28 12:00:00 +0200
 categories: blog update
 ---
-<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.css %}">
 
 # Revealing the Noise
 
@@ -29,7 +29,7 @@ In the previous post we separated Darryl's code into three sections:
 - The noise function, the *shader* and the Three.js plane geometry
 - The interaction between the texture (aka Garryl's "perlinCanvas") and the "context" canvas.
 
-Our focus is the second one. In the Darryl's pen all the functionalities for the rendering of the GLSL features were enclosed in the ```noiseCanvas``` function.
+Our focus is the second one. In the Darryl's pen all the functionalities for the rendering of the GLSL features were enclosed in the **noiseCanvas** function.
 
 **THE NOISE FUNCTION**
 
@@ -39,7 +39,7 @@ It is worth noting though that Garry Huffman might have used the wrong reference
 
 Now, I won't extend about the noise function here. If you are still looking for a good explanation of noise functions and a clarification of how the Perlin noise differs from the simplex noise I will strongly recommend this [excellent chapter of "The Book of Shaders"](https://thebookofshaders.com/11/). Part of the work made by Ian McEwan and Stefan Gustavson can be found at the (apparently defunt) [Ashima Arts repository](https://github.com/ashima/webgl-noise) or even in recent articles, like [this scientific article dated 2022](https://jcgt.org/published/0011/01/02/paper.pdf).
 
-The noise function is written in [GLSL](https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)), which is the C-style language of the graphics library managed by the WebGL API. In the Darryl's pen the noise function is given as a string, inside a function called ```noiseCanvas```:
+The noise function is written in [GLSL](https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)), which is the C-style language of the graphics library managed by the WebGL API. In the Darryl's pen the noise function is given as a string:
 
 ```javascript
 let Noise3D = `
@@ -79,7 +79,7 @@ We showed just sections of the noise function to highlight the purposed use of g
 
 **THE SHADERS**
 
-Shaders, as you probably know, are functions in WebGL that control the pixel properties. The ***vertex shader*** controls the geometries of the scene, and the ***fragment shader*** control the coloring at each pixel. The shaders are also written in GLSL and therefore are provided as strings, again, inside of the ```noiseCanvas``` function:
+Shaders, as you probably know, are functions in WebGL that control the pixel properties. The ***vertex shader*** controls the geometries of the scene, and the ***fragment shader*** control the coloring at each pixel. The shaders are also written in GLSL and therefore are again provided as string:
 
 ```javascript
 ...
@@ -117,15 +117,15 @@ const shaders = {
 
 ```
 
-Notice that the noise function is inserted within the fragment shader as a string format (```${Noise3D}```). It is here where the noise function (named ```snoise()```) is eventually called.
+Notice that the noise function is inserted within the fragment shader as a string format (**${Noise3D}**). It is here where the noise function (named **snoise()**) is eventually called.
 
-It is the fragment shader where most of the action would occur. For those who don't know much about shaders, the GLSL used to offer a built-in variable, the ```gl_FragColor```, that acted as the final control of the pixel coloring output.
+It is the fragment shader where most of the action would occur. For those who don't know much about shaders, the GLSL used to offer a built-in variable, the **gl_FragColor**, that acted as the final control of the pixel coloring output.
 
 > NOTE: In more recent versions of GLSL [gl_FragColor became depreated](https://community.khronos.org/t/about-gl-fragcolor-of-fragment-shader/105102), allowing user-defined fragment shader outputs using the **out** variable qualifier
 
 The output of the fragment shader is based on a value "*c*", which is modified based on the noise function.
 
-On the contrary, the code of the vertex shader is quite simple. This is because it relies on global variables that will be passed from Three.js - ```projectionMatrix```, ```modelViewMatrix``` and ```position```. In the way they are set, it is like: "just render the geometry that will be defined later in the Three.js code".
+On the contrary, the code of the vertex shader is quite simple. This is because it relies on global variables that will be passed from Three.js - **projectionMatrix**, **modelViewMatrix** and **position**. In the way they are set, it is like: "just render the geometry that will be defined later in the Three.js code".
 
 **THREE.JS AND THE PLANE**
 
@@ -168,7 +168,7 @@ camera.position.z = 100;
 
 **THE MATERIAL OF THE PLANE**
 
-There is something important when coding with WebGL - you need some way to pass data from outside the shader to the GLSL shader context. The way that is done is through **uniforms**, which are special GLSL variable qualifiers to identify exactly those variables that could act as inputs.
+There is something important when coding with WebGL - you need some way to pass data from outside the shader to the GLSL shader context. The way that is done is through ***uniforms***, which are special GLSL variable qualifiers to identify exactly those variables that could act as inputs.
 
 ```javascript
 ...
@@ -181,9 +181,9 @@ let uniforms = {
 ...
 ```
 
-The uniform that will be important for Darryl's code is the *time* uniform. It will set the pace of the advance of the color of the pixels along the gradient of the noise function. 
+The uniform that will be important for Darryl's code is the **time** uniform. It will set the pace of the advance of the color of the pixels along the gradient of the noise function. 
 
-Having the corresponding uniforms and the shaders allow for the construction of the *shaderMaterial*. The shader material is defined a few lines before the instantiation of the plane geometry and right after the uniforms. 
+Having the corresponding uniforms and the shaders allow for the construction of the Three.js's shader Material instance, named **shaderMaterial** in the code. The shader material is defined a few lines before the instantiation of the plane geometry and right after the uniforms. 
 
 ```javascript
 ...
@@ -203,7 +203,7 @@ let shaderMaterial = new THREE.ShaderMaterial( {
 
 **THE RENDER FUNCTION**
 
-In the Darryl's project, the ```noiseCanvas``` function ended with the ```render``` function. The render function updates the graphics using the ```requestAnimationFrame``` but before the rendering the ```time``` uniform is updated.
+In the Darryl's project, the **noiseCanvas** function ended with the **render** function. The render function updates the graphics using the **requestAnimationFrame** but before the rendering the **time** uniform is updated.
 
 ```javascript
 ...
@@ -224,9 +224,9 @@ render();
 ...
 ```
 
-The value of ```time``` is increased at each rendering frame using a simple implemantion that takes different computer times.
+The value of **time** is increased at each rendering frame using a simple implemantion that takes different computer times.
 
-# Revealing the noise function
+# Tada!
 
 If you reviewed the code you might have notice that the three.js / WebGL features had dimensions but were not add to any HTML element. That was part of the purpose of the author when making this project - the aparent changes of the texture of the Three.js plane should stay invisible to the observer.
 
@@ -235,20 +235,16 @@ If you are interested in seeing how the noise function behaves, I have revealed 
 <div id="threejs-container"></div>
 
 <script src="{{ site.baseurl }}{% link src/vendor/js/threejs/v104/three.v104.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/posts/2023-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/2023-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-02.js %}"></script>
-<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js %}"></script>
-
-# Tada!
-
-The last bit of code I want to show you for now is the render of the canvas elements:
-
-
+<script src="{{ site.baseurl }}{% link src/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js %}"></script>
 
 # So... What did we learn from this code?
 
-So far, one of the things that for me was very interesting from Darryl Huffman's example was the simplicity of ideas. I won't say the code is very simple, but some of the design concepts of the exercise, like randomly distributing hairs in a circle, were very nice. The use of the class to even append the instances in a global list were kind of smart.
+In this second part of our analysis of the Darryl Huffman's "Perlin Flow Field" we got the basic ideas of the use of shaders and noise functions in combination with Three.js. We are also unveiling a couple facts, like keeping the noise function invisible to the observer.
 
-Apart of that, there is still much to reveal about this code. What about the noise function? And what is the role of the "perlinContext" canvas? You might ask. Before we move to the next part, I can say that using two canvas elements is a common trick - using one canvas to extract data from an application (eg. a video) and to feed that data into another canvas to affect a visualization.
+In fact, Darryl kept that invisible because his only interest was to extract values from the noise function without showing the graphics, giving this idea of "invisible force" affecting the movement of the "hairs" rendered on the "context" canvas.
+
+However, he needed a way to extract the values from the invisible noise function into the visible canvas. There is a common trick used for that, using again the canvas API as adapter. We will go through it in a third and last post about Darryl's pen.
 
  For now, happy coding!
 
