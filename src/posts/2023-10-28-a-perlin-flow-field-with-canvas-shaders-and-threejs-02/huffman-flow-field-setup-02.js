@@ -4,29 +4,19 @@ class ThreejsScene{
 	constructor(width, height){
 		this.renderer = new THREE.WebGLRenderer({ alpha : true });
 		this.scene = new THREE.Scene();
-		//this.setWidthandHeight(width, height);
 		this.width = width;
 		this.height = height;
 		this.setSizeRenderer();
 		this.setBasicPerspectiveCamera();
 	}
 
-	setWidth(w){
-		this.width = w;
-	}
-
 	setBasicPerspectiveCamera(){
 		this.camera = new THREE.PerspectiveCamera(30, this.width / this.height, 0.1, 100);
 	}
 
-	// getBasicPerspectiveCamera(){
-	// 	console.log(this.camera);
-	// 	return this.camera;
+	// setSceneColorBackground(color){
+	// 	this.scene.background = color; 
 	// }
-
-	setSceneColorBackground(color){
-		this.scene.background = color; 
-	}
 
 	setSizeRenderer(){
 		this.renderer.setSize( this.width, this.height );
@@ -35,12 +25,16 @@ class ThreejsScene{
 }
 
 
-class shadedPlane extends ThreejsScene{
+class shadedPlane{
 	constructor(width, height, uniforms, shaders){
-		super(width, height);
 		this.setUniforms(uniforms);
 		this.setShaders(shaders);
-		this.setShadedPlane();
+		//this.planeGeometry = new THREE.PlaneGeometry( width, height, 32 );
+		//this.shaderMaterial = this.shaderMaterialMethod();
+		//this.plane = new THREE.Mesh( this.planeGeometry, this.shaderMaterial );
+		this.width = width;
+		this.height = height;
+		this.plane = new THREE.Mesh( this.planeGeometry(), this.shaderMaterial() );
 	}
 
 	setUniforms(uniforms){
@@ -67,14 +61,6 @@ class shadedPlane extends ThreejsScene{
 			});
 	}
 
-	setShadedPlane(){
-		this.plane = new THREE.Mesh( this.planeGeometry(), this.shaderMaterial() );
-		this.scene.add(this.plane);
-	}
-	
-	getShadedPlane(){
-		return this.plane;
-	}
 
 	// setUniformsTime(time){
 	// 	this.plane.uniforms.time.value = time;
@@ -82,11 +68,10 @@ class shadedPlane extends ThreejsScene{
 
 }
 
-let paramsPlane = {
-	width: 100,
-	height: 200,
-	startTime : new Date().getTime(),
-}
+
+let currentTime = 0,
+	timeAddition = Math.random() * 1000,
+	paramsPlane = {}
 
 
 paramsPlane["shaders"] = {
@@ -122,15 +107,14 @@ gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 `
 }
 
-let currentTime = 0,
-timeAddition = Math.random() * 1000
+let container = document.querySelector('#threejs-container');
+let testScene = new ThreejsScene(container.offsetWidth, 200); 
 
 paramsPlane["uniforms"] = {
-time: { value: 1 + timeAddition },
-resolution: { value: new THREE.Vector2(paramsPlane.width , paramsPlane.height) },
-animationTime : {value : 1.0}
-}
-
+	time: { value: 1 + timeAddition },
+	resolution: { value: new THREE.Vector2(testScene.width, testScene.height) },
+	animationTime : {value : 1.0}
+	}
 paramsPlane["shaderMaterial"] = new THREE.ShaderMaterial( {
 uniforms:       paramsPlane.uniforms,
 vertexShader:   paramsPlane.shaders.vertex,
@@ -141,29 +125,30 @@ transparent:    true,
 vertexColors:   true
 });
 
-let container = document.querySelector('#threejs-container');
+let testPlane = new shadedPlane(testScene.width, testScene.height, paramsPlane["uniforms"], paramsPlane["shaders"]);
 
-let testPlane = new shadedPlane(container.offsetWidth, 200, paramsPlane["uniforms"], paramsPlane["shaders"]);
-
-testPlane.camera.position.set(0,0,10);
+testScene.camera.position.set(0,0,10);
 testPlane.plane.position.z = 0.5;
+testScene.scene.add(testPlane.plane);
 
 let startTime = new Date().getTime();
 
 
 function renderPlane() {
-var now = new Date().getTime();
-var currentTime = (now - startTime) / 1000;
+let now = new Date().getTime();
+currentTime = (now - startTime) / 1000;
 testPlane.uniforms.time.value = currentTime + timeAddition;
 
 // if(testPlane.uniforms.animationTime.value < 1.0){
 // 	testPlane.uniforms.animationTime.value += .002;
 // } 
 
-const container = document.querySelector('#threejs-container');
-container.append(testPlane.renderer.domElement);
 requestAnimationFrame( renderPlane );
-testPlane.renderer.render(testPlane.scene, testPlane.camera);
+
+const container = document.querySelector('#threejs-container');
+container.append(testScene.renderer.domElement);
+//console.log(testScene);
+testScene.renderer.render(testScene.scene, testScene.camera);
 }
 renderPlane();
 

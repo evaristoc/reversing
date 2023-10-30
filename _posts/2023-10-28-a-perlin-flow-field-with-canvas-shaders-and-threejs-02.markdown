@@ -224,13 +224,13 @@ render();
 ...
 ```
 
-The value of **time** is increased at each rendering frame using a simple implemantion that takes different computer times.
+The value of the **time** uniform is increased at each rendering frame using a simple implemantion based on the system clock.
 
 # Tada!
 
-If you reviewed the code you might have notice that the three.js / WebGL features had dimensions but were not add to any HTML element. That was part of the purpose of the author when making this project - the aparent changes of the texture of the Three.js plane should stay invisible to the observer.
+If you reviewed the code you might have notice that the Three.js renderer and plane had dimensions but that they were not added to any HTML element. That was made on purpose by the author - the apparent changes on the texture of the Three.js plane should stay invisible to the observer.
 
-If you are interested in seeing how the noise function behaves, I have revealed the function by adding it to a container:
+If you are interested in seeing how the noise function behaves, I have revealed the function by adding it to an HTML element:
 
 <div id="threejs-container"></div>
 
