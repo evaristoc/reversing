@@ -4,7 +4,8 @@ title:  "A Perlin-like flow with canvas, shaders and three.js (Part 2)"
 date:   2023-10-28 12:00:00 +0200
 categories: blog update
 ---
-<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
 
 # Revealing the Noise
 
@@ -21,7 +22,7 @@ As a reminder, this is again a link to Darryl's work:
 
 In this post we will have a look at the noise function.
 
-# The Code (the ```noiseCanvas``` function)
+# The Code (the **noiseCanvas** function)
 
 In the previous post we separated Darryl's code into three sections:
 
@@ -41,8 +42,62 @@ Now, I won't extend about the noise function here. If you are still looking for 
 
 The noise function is written in [GLSL](https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)), which is the default C-style language used to communicate with the openGL graphics API, which is the one associated with the WebGL API. In the Darryl's pen the GLSL script of the noise function is given as a string in the Javascript code:
 
-```javascript
-let Noise3D = `
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px">
+<pre class="highlight" style="margin:0px;">
+<code>
+ 84
+ 85
+ 86
+ 87
+...
+
+113
+114
+115
+...
+
+143
+144
+145
+146
+...
+
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight" style="margin:0px;">
+<code>
+	<span class="kd">let</span> <span class="nx">Noise3D</span> <span class="o">=</span> <span class="s2">`
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex 
 //               noise functions.
@@ -72,10 +127,19 @@ m = m * m;
 return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
 dot(p2,x2), dot(p3,x3) ) );
 }
-`
-```
+`</span>
 
-We showed just sections of the noise function to highlight the purposed use of gradients. Those gradients are the ones that give the flow behaviour to the noise function.
+</code>
+</pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+There is a lot a comments here. The idea is to hightlight the **snoise** function (line 113 in original code). I also showed just sections of the noise function to highlight the purposed use of gradients: those gradients are the ones that give the flow behaviour to the noise function.
 
 **THE SHADERS**
 
@@ -234,9 +298,9 @@ If you are interested in seeing how the noise function behaves, I have revealed 
 
 <div id="threejs-container"></div>
 
-<script src="{{ site.baseurl }}{% link src/vendor/js/threejs/v104/three.v104.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02.js %}"></script>
-<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/threejs/v104/three.v104.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js %}"></script>
 
 # So... What did we learn from this code?
 

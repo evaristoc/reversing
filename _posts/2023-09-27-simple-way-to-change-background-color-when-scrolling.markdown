@@ -4,7 +4,7 @@ title:  "Simple way to change the background color when scrolling"
 date:   2023-09-27 12:00:00 +0200
 categories: blog update
 ---
-<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-09-27-simple-way-to-change-background-color-when-scrolling/2023-09-27-how-to-change-background-color-when-scrolling.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-09-27-simple-way-to-change-background-color-when-scrolling/2023-09-27-how-to-change-background-color-when-scrolling.css %}">
 
 # Hello, scrollMagic!
 
@@ -151,5 +151,5 @@ This code worked just fine as first example. However I wonder if there would be 
 
 Ok, this is all for this post! Hope it was helpful. And keep coding!
 
-<script src="{{ site.baseurl }}{% link src/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/posts/2023-09-27-simple-way-to-change-background-color-when-scrolling/2023-09-27-how-to-change-background-color-when-scrolling.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/posts/2023-09-27-simple-way-to-change-background-color-when-scrolling/2023-09-27-how-to-change-background-color-when-scrolling.js %}"></script>

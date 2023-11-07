@@ -5,7 +5,7 @@ date:   2023-09-29 12:00:00 +0200
 categories: blog update
 ---
 
-<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-09-29-sticky-figure-with-scrollama/2023-09-29-sticky-figure-with-scrollama.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-09-29-sticky-figure-with-scrollama/2023-09-29-sticky-figure-with-scrollama.css %}">
 
 # Sticky figure with scrollama
 
@@ -173,8 +173,8 @@ There are many examples out there using **scrollama**. A simple one I came acros
 
 And that's it! I hope you found this post useful for your projects. I think I will be using **scrollama** myself for some of my post in the future. Meanwhile, happy coding! 
 
-<script src="{{ site.baseurl }}{% link src/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
-<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-09-29-sticky-figure-with-scrollama/2023-09-29-sticky-figure-with-scrollama.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2023-09-29-sticky-figure-with-scrollama/2023-09-29-sticky-figure-with-scrollama.js %}"></script>
