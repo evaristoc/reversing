@@ -4,7 +4,8 @@ title:  "A Perlin-like flow with canvas, shaders and three.js (Part 2)"
 date:   2023-10-28 12:00:00 +0200
 categories: blog update
 ---
-<link rel="stylesheet" href="{{ site.baseurl }}{% link src/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
 
 # Revealing the Noise
 
@@ -21,7 +22,7 @@ As a reminder, this is again a link to Darryl's work:
 
 In this post we will have a look at the noise function.
 
-# The Code (the ```noiseCanvas``` function)
+# The Code (the **noiseCanvas** function)
 
 In the previous post we separated Darryl's code into three sections:
 
@@ -41,8 +42,62 @@ Now, I won't extend about the noise function here. If you are still looking for 
 
 The noise function is written in [GLSL](https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)), which is the default C-style language used to communicate with the openGL graphics API, which is the one associated with the WebGL API. In the Darryl's pen the GLSL script of the noise function is given as a string in the Javascript code:
 
-```javascript
-let Noise3D = `
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px">
+<pre class="highlight" style="margin:0px;">
+<code>
+ 84
+ 85
+ 86
+ 87
+...
+
+<span style="color:yellow;">113 </span>
+114
+115
+...
+
+143
+144
+145
+146
+...
+
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight" style="margin:0px;">
+<code>
+	<span class="kd">let</span> <span class="nx">Noise3D</span> <span class="o">=</span> <span class="s2">`
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex 
 //               noise functions.
@@ -72,52 +127,126 @@ m = m * m;
 return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
 dot(p2,x2), dot(p3,x3) ) );
 }
-`
-```
+`</span>
 
-We showed just sections of the noise function to highlight the purposed use of gradients. Those gradients are the ones that give the flow behaviour to the noise function.
+</code>
+</pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+The syntax of the simplex function is around 100 lines long so there is a lot of excluded lines here. I wanted only to hightlight the **snoise** function (line 113 in original code). Notice the purposed use of gradients: those gradients are the ones that give the flow behaviour to the noise function.
 
 **THE SHADERS**
 
 Shaders, as you probably know, are functions in WebGL that control the pixel properties. The ***vertex shader*** controls the geometries of the scene, and the ***fragment shader*** control the coloring at each pixel. The shaders are also written in GLSL and therefore are again provided as string:
 
-```javascript
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px">
+<pre class="highlight" style="margin:0px;">
+<code>
 ...
+190
+191
+192
+193
+194
+195
+<span style="color:yellow;">196 </span>
+197
+198
+199
+200
+201
+202
+203
+204
+205
+<span style="color:yellow;">206 </span>
+207
+208
+<span style="color:yellow;">209 </span>
+210
+211
+212
+213
+214
+215
+216
+<span style="color:yellow;">217 </span>
+218
+219
+220
+221
+...
+</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight" style="margin:0px;">
+<code>
+...
+	<span class="kd">const</span> <span class="nx">shaders</span> <span class="o">=</span> <span class="p">{</span>
+		<span class="na">fragment</span><span class="p">:</span> <span class="s2">`
 
-const shaders = {
-	fragment: `
-            uniform vec2 resolution;
-            uniform float time;
+uniform vec2 resolution;
+uniform float time;
 
-            ${Noise3D}
+</span><span class="p">${</span><span class="nx" >Noise3D</span><span class="p">}</span><span class="s2">
 
-            void main() {
-            float speed = 16.;
-            float scale = 3.5;
+void main() {
+float speed = 16.;
+float scale = 3.5;
 
-            vec2 st = gl_FragCoord.xy/resolution.xy;
-            st.x *= resolution.x/resolution.y;
-            st *= scale;
+vec2 st = gl_FragCoord.xy/resolution.xy;
+st.x *= resolution.x/resolution.y;
+st *= scale;
 
-            float noise = snoise(vec3(st.x, st.y, time * speed * 0.01));
-            float c = (noise + 1.) / 2.;
+float noise = snoise(vec3(st.x, st.y, time * speed * 0.01));
+float c = (noise + 1.) / 2.;
 
-            gl_FragColor = vec4(c, c, c, 1.);
-            }
-
-    `,
-    vertex: `
-
-        void main() {
-
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-    `
+gl_FragColor = vec4(c, c, c, 1.);
 }
 
-```
+`</span><span class="p">,</span>
+		<span class="na">vertex</span><span class="p">:</span> <span class="s2">`
 
-Notice that the noise function is inserted within the fragment shader as a string format (**${Noise3D}**). It is here where the noise function (named **snoise**) is eventually called.
+void main() {
+
+gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
+`</span>
+	<span class="p">}</span>
+
+...
+</code>
+</pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+Notice that the simplex function is inserted within the fragment shader as a string format (**${Noise3D}**). It is here from where its noise function (**snoise**) is eventually called.
 
 It is in the fragment shader where the action is. The final output is collected in (now deprecated) **gl_FragColor**.
 
@@ -133,96 +262,261 @@ In fact, all what Darryl wanted as geometry was a plane. Building a plane in Thr
 
 In the case of Darryl's project though, the material was *the shader* containing the noise (colouring) function:
 
-```javascript
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px">
+<pre class="highlight" style="margin:0px;">
+<code>...
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
 ...
 
-let width = container.offsetWidth,
-    height = container.offsetHeight,
-    currentTime = 0,
-    timeAddition = Math.random() * 1000
-
-const scene = new THREE.Scene(),
-        camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 0, 100 )
-
-renderer = new THREE.WebGLRenderer({ alpha: true })
-
-renderer.setSize( container.offsetWidth, container.offsetHeight )
-//container.appendChild(renderer.domElement)
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
 ...
+</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight" style="margin:0px;">
+<code>    ...
+	<span class="kd">let</span> <span class="nx">width</span> <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">,</span>
+	    <span class="nx">height</span> <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">,</span>
+	    <span class="nx">currentTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+	    <span class="nx">timeAddition</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span>
 
-//(the shaderMaterial is defined just before the geometry instantiation bellow)
+	<span class="kd">const</span> <span class="nx">scene</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">Scene</span><span class="p">(),</span>
+		 <span class="nx">camera</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">OrthographicCamera</span><span class="p">(</span> <span class="nx">width</span> <span class="o">/</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">height</span> <span class="o">/</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span> <span class="p">)</span>
+	
+	<span class="nx">renderer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">WebGLRenderer</span><span class="p">({</span> <span class="na">alpha</span><span class="p">:</span> <span class="kc">true</span> <span class="p">})</span>
 
-let geometry = new THREE.PlaneGeometry( width, height, 32 );
-let plane = new THREE.Mesh( geometry, shaderMaterial );
-scene.add( plane );
-plane.position.z = 0.5;
+	<span class="nx">renderer</span><span class="p">.</span><span class="nx">setSize</span><span class="p">(</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">,</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetHeight</span> <span class="p">)</span>
+	<span class="c1">//container.appendChild(renderer.domElement)</span>
+    ...
 
 
-camera.position.y = 0;
-camera.position.x = 0;
-camera.position.z = 100;
+	<span class="kd">let</span> <span class="nx">geometry</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">PlaneGeometry</span><span class="p">(</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">,</span> <span class="mi">32</span> <span class="p">);</span>
+	<span class="kd">let</span> <span class="nx">plane</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">Mesh</span><span class="p">(</span> <span class="nx">geometry</span><span class="p">,</span> <span class="nx">shaderMaterial</span> <span class="p">);</span>
+	<span class="nx">scene</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span> <span class="nx">plane</span> <span class="p">);</span>
+	<span class="nx">plane</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">z</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>
 
-...
 
-```
+	<span class="nx">camera</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="nx">camera</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="nx">camera</span><span class="p">.</span><span class="nx">position</span><span class="p">.</span><span class="nx">z</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+    ...
+</code>
+</pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 **THE MATERIAL OF THE PLANE**
 
 There is something important when coding with WebGL - you need some way to pass data from outside the shader to the GLSL shader context. The way that is done is through ***uniforms***, which are special GLSL variable qualifiers to identify exactly those variables that could act as inputs.
 
-```javascript
-...
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px">
+<pre class="highlight" style="margin:0px;">
+<code>...
+237
+238
+239
+240
+241
+242
+...</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight" style="margin:0px;">
+<code><span class="p">...</span>
 
-let uniforms = {
-    time: { value: 1 + timeAddition },
-    resolution: { value: new THREE.Vector2(container.offsetWidth, container.offsetHeight) }
-}
+<span class="kd">let</span> <span class="nx">uniforms</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">time</span><span class="p">:</span> <span class="p">{</span> <span class="na">value</span><span class="p">:</span> <span class="mi">1</span> <span class="o">+</span> <span class="nx">timeAddition</span> <span class="p">},</span>
+    <span class="na">resolution</span><span class="p">:</span> <span class="p">{</span> <span class="na">value</span><span class="p">:</span> <span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">Vector2</span><span class="p">(</span><span class="nx">container</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">,</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">)</span> <span class="p">}</span>
+<span class="p">}</span>
 
-...
-```
+<span class="p">...</span></code>
+</pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 The uniform that will be important for Darryl's code is the **time** uniform. It will set the pace of the advance of the color of the pixels along the gradient of the noise function. 
 
 Having the corresponding uniforms and the shaders allow for the construction of the Three.js's shader Material instance, named **shaderMaterial** in the code. The shader material is defined a few lines before the instantiation of the plane geometry and right after the uniforms. 
 
-```javascript
-...
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px">
+<pre class="highlight" style="margin:0px;">
+<code>...
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+...</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight" style="margin:0px;">
+<code><span class="p">...</span>
 
-let shaderMaterial = new THREE.ShaderMaterial( {
-    uniforms:       uniforms,
-    vertexShader:   shaders.vertex,
-    fragmentShader: shaders.fragment,
-    //blending:       THREE.AdditiveBlending,
-    depthTest:      false,
-    transparent:    true,
-    vertexColors:   true
-});
+<span class="kd">let</span> <span class="nx">shaderMaterial</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">ShaderMaterial</span><span class="p">(</span> <span class="p">{</span>
+    <span class="na">uniforms</span><span class="p">:</span>       <span class="nx">uniforms</span><span class="p">,</span>
+    <span class="na">vertexShader</span><span class="p">:</span>   <span class="nx">shaders</span><span class="p">.</span><span class="nx">vertex</span><span class="p">,</span>
+    <span class="na">fragmentShader</span><span class="p">:</span> <span class="nx">shaders</span><span class="p">.</span><span class="nx">fragment</span><span class="p">,</span>
+    <span class="c1">//blending:       THREE.AdditiveBlending,</span>
+    <span class="na">depthTest</span><span class="p">:</span>      <span class="kc">false</span><span class="p">,</span>
+    <span class="na">transparent</span><span class="p">:</span>    <span class="kc">true</span><span class="p">,</span>
+    <span class="na">vertexColors</span><span class="p">:</span>   <span class="kc">true</span>
+<span class="p">});</span>
 
-...
-```
+<span class="p">...</span></code>
+</pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 **THE RENDER FUNCTION**
 
 In the Darryl's project, the **noiseCanvas** function ended with the **render** function. The render function updates the graphics using the **requestAnimationFrame** but before the rendering the **time** uniform is updated.
 
-```javascript
-...
-    //these variables were instantiated high in the code, under the shaders
-    currentTime = 0,
-    timeAddition = Math.random() * 1000
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px">
+<pre class="highlight" style="margin:0px;">
+<code>...
+225
+226
 ...
 
-function render() {
-    var now = new Date().getTime();
-    currentTime = (now - startTime) / 1000;
-    uniforms.time.value = currentTime + timeAddition;
-
-    requestAnimationFrame( render );
-    renderer.render( scene, camera );
-}
-render();
+<span style="color:yellow;">263 </span>
+264
+265
+<span style="color:yellow;">266 </span>
+267
+<span style="color:yellow;">268 </span>
+269
+270
+271
 ...
-```
+</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight" style="margin:0px;">
+<code>    ...
+	    <span class="nx">currentTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+	    <span class="nx">timeAddition</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span>
+    ...
+
+	<span class="kd">function</span> <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+		<span class="nx">currentTime</span> <span class="o">=</span> <span class="p">(</span><span class="nx">now</span> <span class="o">-</span> <span class="nx">startTime</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">;</span>
+		<span class="nx">uniforms</span><span class="p">.</span><span class="nx">time</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">currentTime</span> <span class="o">+</span> <span class="nx">timeAddition</span><span class="p">;</span>
+
+		<span class="nx">requestAnimationFrame</span><span class="p">(</span> <span class="nx">render</span> <span class="p">);</span>
+		<span class="nx">renderer</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span> <span class="nx">scene</span><span class="p">,</span> <span class="nx">camera</span> <span class="p">);</span>
+	<span class="p">}</span>
+	<span class="nx">render</span><span class="p">();</span>
+    ...
+</code>
+</pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 The value of the **time** uniform is increased at each rendering frame using a simple implemantion based on the system clock.
 
@@ -234,9 +528,9 @@ If you are interested in seeing how the noise function behaves, I have revealed 
 
 <div id="threejs-container"></div>
 
-<script src="{{ site.baseurl }}{% link src/vendor/js/threejs/v104/three.v104.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link src/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02.js %}"></script>
-<script type="module" src="{{ site.baseurl }}{% link src/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/threejs/v104/three.v104.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js %}"></script>
 
 # So... What did we learn from this code?
 
