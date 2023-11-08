@@ -4,6 +4,7 @@ title:  "A Perlin-like flow with canvas, shaders and three.js (Part 1)"
 date:   2023-10-07 12:00:00 +0200
 categories: blog update
 ---
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/scrollama-setup.css %}">
 
 # Adding Noise with Shaders is very nice!
@@ -56,9 +57,9 @@ Let's see its functionality.
             <div class="explain">
             <p>Garryl instantiated the two canvas elements with a width and height based on the container's offset. In principle the context canvas was not visible. Here we show a context canvas in grey. He also declares the parameters of a "circle" object and declared an empty array, "hairs".</p>
 
-<div class="language-javascript highlighter-rouge">
-<div class="highlight"><pre class="highlight">
-<code>	
+<div class="language-javascript highlighter-rouge col02">
+<div class="highlight"><pre class="highlight col02">
+<code class="col02 insert">	
 <span class="kd">const</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="dl">'</span><span class="s1">canvas</span><span class="dl">'</span><span class="p">),</span>
         <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">'</span><span class="s1">2d</span><span class="dl">'</span><span class="p">),</span>
         <span class="nx">perlinCanvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="dl">'</span><span class="s1">canvas</span><span class="dl">'</span><span class="p">),</span>
@@ -81,7 +82,7 @@ Let's see its functionality.
         <div class='step' data-step='2'>
             <div class="explain">
             <p>He will eventually instantiate the "perlin" canvas and give the same dimensions as the context canvas, but it won't be appended to any HTML element yet.</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">perlinImgData</span> <span class="o">=</span> <span class="kc">undefined</span>
+<div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert"><span class="kd">let</span> <span class="nx">perlinImgData</span> <span class="o">=</span> <span class="kc">undefined</span>
 
 <span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">width</span>
 <span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">height</span>
@@ -97,7 +98,7 @@ Let's see its functionality.
             <div class="explain">
             <p>Every "hair" is an instance of the <em>Hair</em> class.
             The class takes several parameters. One of them is the <strong>circle</strong> object. Darryl's Hair class gives a position to each line stroke based on randomly generated values of circular nature and transporting those values into the scope of the parameters of his previously defined <strong>circle object</strong>. The class also gives a random length to each stroke.</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert">
 <span class="kd">class</span> <span class="nx">Hair</span> <span class="p">{</span>
     <span class="kd">constructor</span><span class="p">(){</span>
         <span class="kd">let</span> <span class="nx">r</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">(),</span>
@@ -119,7 +120,7 @@ Let's see its functionality.
         <div class='step' data-step='6'>
             <div class="explain">
             <p>Darryl added a method to his Hair class to draw each of the strokes. Notice that there are two elements that will come as very important later: the <strong>perlinImgData</strong> and the context (canvas) <strong>moveTo</strong> and <strong>lineTo</strong> methods.</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert">
     ...
     <span class="nx">draw</span><span class="p">(){</span>
             <span class="kd">let</span> <span class="p">{</span> <span class="nx">position</span><span class="p">,</span> <span class="nx">length</span> <span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span>
@@ -139,7 +140,7 @@ Let's see its functionality.
         <div class='step' data-step='7'>
             <div class="explain">
             <p>Using a for-loop, Darryl instanted 6000 "hairs". But where did the go? Do you remember the empty array called "hairs"? You will find that Darryl made the Hair class to add each new instance to the "hairs" list at the time of the instance construction.</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">6000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+<div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert"><span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">6000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
     <span class="k">new</span> <span class="nx">Hair</span><span class="p">()</span>
 <span class="p">}</span>
 </code></pre></div></div>
@@ -172,25 +173,72 @@ Let's see its functionality.
 
 The last bit of code I want to show you for now is the render of the canvas elements:
 
-```javascript
-function render() {
-    var now = new Date().getTime();
-    currentTime = (now - startTime) / 1000
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge col01">
+<div class="highlight" style="margin:0px">
+<pre class="highlight col01" style="margin:0px;">
+<code class="col01">63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+...
+</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge col02">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight col02" style="margin:0px;">
+<code class="col02"><span class="kd">function</span> <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">();</span>
+    <span class="nx">currentTime</span> <span class="o">=</span> <span class="p">(</span><span class="nx">now</span> <span class="o">-</span> <span class="nx">startTime</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span>
     
-    context.clearRect(0,0,width,height)
+    <span class="nx">context</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="nx">width</span><span class="p">,</span><span class="nx">height</span><span class="p">)</span>
 
-    perlinContext.clearRect(0, 0, width, height)
-    perlinContext.drawImage(renderer.domElement, 0, 0)
-    perlinImgData = perlinContext.getImageData(0, 0, width, height)
+    <span class="nx">perlinContext</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span>
+    <span class="nx">perlinContext</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">renderer</span><span class="p">.</span><span class="nx">domElement</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="nx">perlinImgData</span> <span class="o">=</span> <span class="nx">perlinContext</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span>
     
-    context.beginPath()
-    hairs.map(hair => hair.draw())
-    context.stroke()
+    <span class="nx">context</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">()</span>
+    <span class="nx">hairs</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">hair</span> <span class="o">=&gt;</span> <span class="nx">hair</span><span class="p">.</span><span class="nx">draw</span><span class="p">())</span>
+    <span class="nx">context</span><span class="p">.</span><span class="nx">stroke</span><span class="p">()</span>
     
-    requestAnimationFrame( render );
-}
-render()
-```
+    <span class="nx">requestAnimationFrame</span><span class="p">(</span> <span class="nx">render</span> <span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">render</span><span class="p">()</span>
+...
+</code>
+</pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 What I would like to point out is the `hairs.map(hair => hair.draw())`, which is the draw of each stroke. No less important though is what it goes with the **perlinContext** and the value assignment to the global **perlinImgData** which is parameter of the Hair's **draw method**. For the purpose of this example we left the values of the **perlinImgData** all as zero, but if you check Darryl's code and see carefully you will notice that the perlinImgData is feeding data to the draw function and therefore to the position of the hairs in the circle.
 

@@ -51,10 +51,10 @@ The noise function is written in [GLSL](https://www.khronos.org/opengl/wiki/Core
 <tbody>
 <tr>
 <td style="padding:0px; position:sticky; left:0; opacity:0.70;">
-<div class="language-javascript highlighter-rouge">
+<div class="language-javascript highlighter-rouge col01">
 <div class="highlight" style="margin:0px">
-<pre class="highlight" style="margin:0px;">
-<code>
+<pre class="highlight col01" style="margin:0px;">
+<code class="col01">
  84
  85
  86
@@ -93,10 +93,10 @@ The noise function is written in [GLSL](https://www.khronos.org/opengl/wiki/Core
 </div>
 </td>
 <td style="padding:0px;">
-<div class="language-javascript highlighter-rouge">
+<div class="language-javascript highlighter-rouge col02">
 <div class="highlight" style="margin:0px;">
-<pre class="highlight" style="margin:0px;">
-<code>
+<pre class="highlight col02" style="margin:0px;">
+<code class="col02">
 	<span class="kd">let</span> <span class="nx">Noise3D</span> <span class="o">=</span> <span class="s2">`
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex 
@@ -154,10 +154,10 @@ Shaders, as you probably know, are functions in WebGL that control the pixel pro
 <tbody>
 <tr>
 <td style="padding:0px; position:sticky; left:0; opacity:0.70;">
-<div class="language-javascript highlighter-rouge">
+<div class="language-javascript highlighter-rouge col01">
 <div class="highlight" style="margin:0px">
-<pre class="highlight" style="margin:0px;">
-<code>
+<pre class="highlight col01" style="margin:0px;">
+<code class="col01">
 ...
 190
 191
@@ -198,10 +198,10 @@ Shaders, as you probably know, are functions in WebGL that control the pixel pro
 </div>
 </td>
 <td style="padding:0px;">
-<div class="language-javascript highlighter-rouge">
+<div class="language-javascript highlighter-rouge col02">
 <div class="highlight" style="margin:0px;">
-<pre class="highlight" style="margin:0px;">
-<code>
+<pre class="highlight col02" style="margin:0px;">
+<code class="col02">
 ...
 	<span class="kd">const</span> <span class="nx">shaders</span> <span class="o">=</span> <span class="p">{</span>
 		<span class="na">fragment</span><span class="p">:</span> <span class="s2">`
@@ -258,7 +258,7 @@ On the contrary, the code of the vertex shader is quite simple. This is because 
 
 **THREE.JS AND THE PLANE**
 
-In fact, all what Darryl wanted as geometry was a plane. Building a plane in Three.js is quite simple. You just need to instantiate an scene, usually with a camera and possibly some lights, and then define the plane geometry, the material covering that geometry, then create a mesh with both of them and finally register the mesh into the scene.
+In fact, all what Darryl wanted as geometry was a plane. Building a plane in Three.js is quite simple. You just need to instantiate an scene, usually with a camera and possibly some lights, make a renderer available, and then define the plane geometry, the material covering that geometry, then create a mesh with both of them and finally register the mesh into the scene.
 
 In the case of Darryl's project though, the material was *the shader* containing the noise (colouring) function:
 
@@ -271,28 +271,28 @@ In the case of Darryl's project though, the material was *the shader* containing
 <tbody>
 <tr>
 <td style="padding:0px; position:sticky; left:0; opacity:0.70;">
-<div class="language-javascript highlighter-rouge">
+<div class="language-javascript highlighter-rouge col01">
 <div class="highlight" style="margin:0px">
-<pre class="highlight" style="margin:0px;">
-<code>...
+<pre class="highlight col02" style="margin:0px;">
+<code class="col01">...
 223
 224
 225
 226
 227
-228
-229
+<span style="color:yellow;">228</span>
+<span style="color:yellow;">229</span>
 230
-231
+<span style="color:yellow;">231</span>
 232
 233
 234
 ...
 
 252
-253
-254
-255
+<span style="color:yellow;">253</span>
+<span style="color:yellow;">254</span>
+<span style="color:yellow;">255</span>
 256
 257
 258
@@ -306,10 +306,10 @@ In the case of Darryl's project though, the material was *the shader* containing
 </div>
 </td>
 <td style="padding:0px;">
-<div class="language-javascript highlighter-rouge">
+<div class="language-javascript highlighter-rouge col02">
 <div class="highlight" style="margin:0px;">
-<pre class="highlight" style="margin:0px;">
-<code>    ...
+<pre class="highlight col02" style="margin:0px;">
+<code class="col02">    ...
 	<span class="kd">let</span> <span class="nx">width</span> <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">,</span>
 	    <span class="nx">height</span> <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">,</span>
 	    <span class="nx">currentTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
@@ -358,13 +358,13 @@ There is something important when coding with WebGL - you need some way to pass 
 <tbody>
 <tr>
 <td style="padding:0px; position:sticky; left:0; opacity:0.70;">
-<div class="language-javascript highlighter-rouge">
+<div class="language-javascript highlighter-rouge col01">
 <div class="highlight" style="margin:0px">
-<pre class="highlight" style="margin:0px;">
-<code>...
+<pre class="highlight col01" style="margin:0px;">
+<code class="col01">...
 237
 238
-239
+<span style="color:yellow;">239</span>
 240
 241
 242
@@ -374,10 +374,10 @@ There is something important when coding with WebGL - you need some way to pass 
 </div>
 </td>
 <td style="padding:0px;">
-<div class="language-javascript highlighter-rouge">
+<div class="language-javascript highlighter-rouge col02">
 <div class="highlight" style="margin:0px;">
-<pre class="highlight" style="margin:0px;">
-<code><span class="p">...</span>
+<pre class="highlight col02" style="margin:0px;">
+<code class="col02"><span class="p">...</span>
 
 <span class="kd">let</span> <span class="nx">uniforms</span> <span class="o">=</span> <span class="p">{</span>
     <span class="na">time</span><span class="p">:</span> <span class="p">{</span> <span class="na">value</span><span class="p">:</span> <span class="mi">1</span> <span class="o">+</span> <span class="nx">timeAddition</span> <span class="p">},</span>
@@ -396,7 +396,7 @@ There is something important when coding with WebGL - you need some way to pass 
 
 The uniform that will be important for Darryl's code is the **time** uniform. It will set the pace of the advance of the color of the pixels along the gradient of the noise function. 
 
-Having the corresponding uniforms and the shaders allow for the construction of the Three.js's shader Material instance, named **shaderMaterial** in the code. The shader material is defined a few lines before the instantiation of the plane geometry and right after the uniforms. 
+Having the corresponding uniforms and the shaders allow for the construction of the Three.js's shader Material instance, named **shaderMaterial** in the code. 
 
 <div class="codetable-wrap" style="width:auto; overflow-x: auto;">
 <table>
@@ -407,10 +407,10 @@ Having the corresponding uniforms and the shaders allow for the construction of 
 <tbody>
 <tr>
 <td style="padding:0px; position:sticky; left:0; opacity:0.70;">
-<div class="language-javascript highlighter-rouge">
+<div class="language-javascript highlighter-rouge col01">
 <div class="highlight" style="margin:0px">
-<pre class="highlight" style="margin:0px;">
-<code>...
+<pre class="highlight col01" style="margin:0px;">
+<code class="col01">...
 242
 243
 244
@@ -428,10 +428,10 @@ Having the corresponding uniforms and the shaders allow for the construction of 
 </div>
 </td>
 <td style="padding:0px;">
-<div class="language-javascript highlighter-rouge">
+<div class="language-javascript highlighter-rouge col02">
 <div class="highlight" style="margin:0px;">
-<pre class="highlight" style="margin:0px;">
-<code><span class="p">...</span>
+<pre class="highlight col02" style="margin:0px;">
+<code class="col02"><span class="p">...</span>
 
 <span class="kd">let</span> <span class="nx">shaderMaterial</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">ShaderMaterial</span><span class="p">(</span> <span class="p">{</span>
     <span class="na">uniforms</span><span class="p">:</span>       <span class="nx">uniforms</span><span class="p">,</span>
@@ -466,10 +466,10 @@ In the Darryl's project, the **noiseCanvas** function ended with the **render** 
 <tbody>
 <tr>
 <td style="padding:0px; position:sticky; left:0; opacity:0.70;">
-<div class="language-javascript highlighter-rouge">
+<div class="language-javascript highlighter-rouge col01">
 <div class="highlight" style="margin:0px">
-<pre class="highlight" style="margin:0px;">
-<code>...
+<pre class="highlight col01" style="margin:0px;">
+<code class="col01">...
 225
 226
 ...
@@ -490,10 +490,10 @@ In the Darryl's project, the **noiseCanvas** function ended with the **render** 
 </div>
 </td>
 <td style="padding:0px;">
-<div class="language-javascript highlighter-rouge">
+<div class="language-javascript highlighter-rouge col02">
 <div class="highlight" style="margin:0px;">
-<pre class="highlight" style="margin:0px;">
-<code>    ...
+<pre class="highlight col02" style="margin:0px;">
+<code class="col02">    ...
 	    <span class="nx">currentTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 	    <span class="nx">timeAddition</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span>
     ...
