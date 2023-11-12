@@ -8,17 +8,17 @@ categories: blog update
 
 # Hello, scrollMagic!
 
-Adding animation when scrolling is one of the most popular animations you can ever find. There are many ways of adding those animations but for quite some time one of the most used tools has been [scrollMagic](https://scrollmagic.io/), an original work by Jan Paekpe.
+Adding animation when scrolling is one of the most popular animations you can ever find. There are many ways of adding those animations, but for quite some time, one of the most used tools has been [scrollMagic](https://scrollmagic.io/), an original work by Jan Paekpe.
 
-> **scrollMagic** was still maintained on GitHub by 2023, naming about 35 contributors, with a new version (slowly) on the making.
+> As of 2023, **scrollMagic** was still maintained on GitHub, with about 35 contributors and a new version - slowly - in the making.
 
 Here it is an example of the use of **scrollMagic** by someone who has been learning to use it. The code used for this post is based on a work by Yasser Aziz and can be found at 
-[codepen](https://codepen.io/yasserius/pen/rNmExLN){:target="_blank"}. I advice to open that pen so you can study the scripts along with this post.
+[codepen](https://codepen.io/yasserius/pen/rNmExLN){:target="_blank"}. I advice you to open that pen so you can study the scripts along with this post.
 
 <div class="container">
     <section class="slide" id="first">
         <h3>First Step: Declaring the scrollMagic controller</h3>
-        <p>The scrollMagic controller is the object that supervises the animation. If you have a set of animations that are commonly related, declaring a single controller for all of them might be the right thing to do.</p>
+        <p>The scrollMagic **controller** is the object that supervises the animation. If you have a set of animations that are commonly related, declaring a single controller for all of them might be the right thing to do.</p>
         <p>This is what our coder did first:</p>
             <div class="language-javascript highlighter-rouge centered-content">
             <div class="highlight">
@@ -29,7 +29,7 @@ Here it is an example of the use of **scrollMagic** by someone who has been lear
                 </pre>
             </div>
         </div>
-        <div class="centered-content title"><h1>Now, scroll to see color change...</h1></div>
+        <div class="centered-content title"><h1>Now, scroll to see the color change...</h1></div>
         <br>
         <br>
         <br>
@@ -39,7 +39,7 @@ Here it is an example of the use of **scrollMagic** by someone who has been lear
     </section>
     <section class="slide" id="second">
         <h3>Second Step: Instantiating the Red Scene</h3>
-            <p><strong>scrollMagic</strong> needs an anchor or trigger in the HTML to indicate where the new scene should start and where should end. Some coders might interpret the start and end of a transformation as different <strong>scenes</strong>. The author of this code separated the triggers of the scenes into <em>HTML sections</em>. There are 5 sections in this code, each section identified with an id ('first', 'second', 'third', 'fourth' and 'fifth'). Those ids are used to tell <strong>scrollMagic</strong> "Hey, this is the next scene!".</p>
+            <p>To create an animation using <strong>scrollMagic</strong>, you need a trigger that indicates where the animation should start and end. Some coders might interpret the start and end of a transformation as different <strong>scenes</strong>. In this codem the author separated the triggers into <em>HTML sections</em>. There are 5 sections in this code, each identified with an ID ('first', 'second', 'third', 'fourth' and 'fifth'). Those IDs are used to tell <strong>scrollMagic</strong> "Hey, this is the next scene!".</p>
             <div class="language-javascript highlighter-rouge">
                 <div class="highlight">
                     <pre class="highlight">
@@ -57,10 +57,10 @@ Here it is an example of the use of **scrollMagic** by someone who has been lear
             </div>
             <p>This code reads something like:</p>
             <div class="highlight" style="color: black;">
-            "<em>When finding a trigger with value equal 'second', add to body the red-bg class in an animated way</em>"
+            "<em>When finding a trigger with value equal 'second', add the red-bg class to the body!</em>"
             </div>
             <p>Let's explain in more detail how the <strong>scene</strong> object is instantiated:</p>
-            <p>The very first change should occur when we reach an HTML element, in this case a section, with an id of value equal '<em>second</em>'. The selector was assigned to the <span class='highlight'><strong>triggerElement</strong></span> property of the new <span class='highlight'><strong>ScrollMagic.Scene</strong></span>. Similarly, the element to be affected - in this case the HTML <strong>body</strong> - should be styled based on a class, <strong style='color:brown;'>red-bg</strong>, that <strong>scrollMagic</strong> should add to it. The author defined the new styling in a css file. Then, the <span class='highlight'><strong>setClassToggle</strong></span> property of the <strong>scene</strong> will keep the target HTML element and its new styling.</p>
+            <p>The very first change should occur when we reach an HTML element, in this case a section, with an ID of value equal '<em>second</em>'. The selector was assigned to the <span class='highlight'><strong>triggerElement</strong></span> property of the new <span class='highlight'><strong>ScrollMagic.Scene</strong></span>. Similarly, the element to be affected - in this case the HTML <strong>body</strong> - should be styled based on a class, <strong style='color:brown;'>red-bg</strong>, that <strong>scrollMagic</strong> should add to it. The author defined the new styling in a CSS file. Then, the <span class='highlight'><strong>setClassToggle</strong></span> property of the <strong>scene</strong> will keep the target HTML element and its new styling.</p>
             <p>Notice that the <strong>scene</strong> is added to the <strong>controller</strong> at the end of the code.</p>     
         <br>
         <br>
@@ -71,8 +71,8 @@ Here it is an example of the use of **scrollMagic** by someone who has been lear
     </section>
     <section class="slide" id="third">
         <h3>Third Step: Repeating Code - A Green Scene</h3>
-            <p>Here it is something interesting. Notice that the approach of the author consisted <em>in instantiating a new scene object for each section</em>.</p>
-            <p>To save time, our author just copied and pasted the code to instantiate a new <strong>scene</strong> object modifying only the assigned values of <span class='highlight'><strong>triggerElement</strong></span> and <span class='highlight'><strong>setClassToggle</strong></span> - the last with a different class, <strong style='color:brown;'>green-bg</strong>. The <strong>controller</strong> assumes that this is a different scene, so it removes every styiling of the previous scenes and replace them with the new ones.</p>
+            <p>Here is something interesting. Notice that the author's approach consisted <em>of instantiating a new scene object for each section</em>.</p>
+            <p>To save time, the author just copied and pasted the code to instantiate a new <strong>scene</strong> object, modifying only the assigned values of <span class='highlight'><strong>triggerElement</strong></span> and <span class='highlight'><strong>setClassToggle</strong></span> - the latter with a different class, <strong style='color:brown;'>green-bg</strong>. The <strong>controller</strong> assumes that this is a different scene, so it removes every styiling of the previous scenes and replaces them with the new ones.</p>
             <p>Here it is the third scene, changing the background to green:</p>
             <div class="language-javascript highlighter-rouge">
                 <div class="highlight">
@@ -132,9 +132,9 @@ And that was it.
 
 # So... What did we learn from this code in order to do something similar?
 
-One thing that the coder must do is to find a proper identification of the HTML elements that will hold the triggers of the animation, and pass that identification to **scrollMagic** as property.
+One thing the coder must do is to find a proper identification of the HTML elements that will hold the triggers of the animation, and pass that identification to **scrollMagic** as property.
 
-The other thing is to identify the HTML elements that will be changed. They might be different to those holding the trigger value. In the example above, changes were implemented to the **body** tag. Additionally, it is necessary to define how our target elements should change. Those changes might be set as (css) attributes included in our stylesheet under a single css selector (usually classes, but can be other).
+The other thing is to identify the HTML elements that will be changed. They might be different to those holding the trigger value. In the example above, changes were implemented to the **body** tag. Additionally, it is necessary to define how our target elements should change. Those changes might be set as (CSS) attributes included in our stylesheet under a single CSS selector (usually classes, but can be other).
 
 A couple of other things worth remembering about **scrollMagic** are *scenes and controllers.*
 
@@ -147,7 +147,7 @@ Once you have identified the scenes, you might want to call the ***controller***
 
 ## Final remarks
 
-This code worked just fine as first example. However I wonder if there would be things that could have been done differently? Do you have any ideas? Try to think at different ways to code this project!
+This code worked just fine. However I wonder if there would be things that could have been done differently? Do you have any ideas? Try to think at different ways to code this project!
 
 Ok, this is all for this post! Hope it was helpful. And keep coding!
 
