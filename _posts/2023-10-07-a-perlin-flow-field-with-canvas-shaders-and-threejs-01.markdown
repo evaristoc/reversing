@@ -7,13 +7,7 @@ categories: blog update
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/scrollama-setup.css %}">
 
-# Adding Noise with Shaders is very nice!
-
-Yeah... but let's be honest: unless you really master shaders and understand what those noise functions do, it is truly hard to programmatically get the right effect.
-
-I am myself not an expert in the field. So what do I do...? Exactly: a bit of reverse engineering.
-
-I was looking for a nice candidate for some reverse engineering and recalled one implementation in codepen that I really liked. It is called ["Perlin Flow Field"](https://codepen.io/darrylhuffman/pen/vwmYgz) by [Darryl Huffman](https://darrylhuffman.com/).
+While searching for a suitable example for a post at Re-Versing, I remembered one implementation in CodePen that I really liked. It is called ["Perlin Flow Field"](https://codepen.io/darrylhuffman/pen/vwmYgz) by [Darryl Huffman](https://darrylhuffman.com/).
 
 The pen looks like this:
 
@@ -24,29 +18,25 @@ The pen looks like this:
 </p>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
 
-For this pen Darryl used canvas (the 2D graphics API), three.js (the 3D graphics library) and GLSL shaders. I was primarily interested in that combination of all those graphic functionalities and tools, and how the noise affected the dynamics of the visualization.
+Darryl utilized the 2D graphics canvas API, Three.js (the 3D graphics library), and GLSL shaders, to create this pen. 
 
-So, what sort of effect was the author after by mixing all those graphics?
+The mix of all those graphic features and tools, as well as the use of the noise function to create an flow effect, piqued my curiosity. I made some reverse engineering to find out how Darryl managed to get that effect.
 
 # The Code
 
-We can divide Garryl Kuffman's example in three sections:
+The code by Garryl Kuffman can be divided into three sections:
 
 - The "context" canvas and the Hair class
-- The noise function, the *shader* and the Three.js plane geometry
-- The interaction between the texture (aka Garryl's "perlinCanvas") and the "context" canvas.
+- The noise function, the *shader*, and the Three.js plane geometry
+- The relationship between the texture (the "perlinCanvas") and the "context" canvas
 
-Let's follow Garryl's code for each of those sections, in that order.
+Let's follow Garryl's code for each of those sections in that order.
 
 **THE "context" CANVAS AND THE *Hair* CLASS**  
 
-Garryl used not one but two canvas elements. They were strongly interlinked - we will explain that better later on.
+Garryl made use of two canvas components. They were closely connected; we will explain that better later on.
 
-Both of the canvases were made invisible to the observer.
-
-The first canvas, the "context", contained the line strokes that would be subjected to the animation.
-
-Let's see its functionality.
+the line strokes that would be animated were on the "context" canvas. Let's examine its implementation.
 
 <section id='stickyoverlay'>
     <figure>
@@ -55,7 +45,7 @@ Let's see its functionality.
     <div class="articlepost">
         <div class='step' data-step='1'>
             <div class="explain">
-            <p>Garryl instantiated the two canvas elements with a width and height based on the container's offset. In principle the context canvas was not visible. Here we show a context canvas in grey. He also declares the parameters of a "circle" object and declared an empty array, "hairs".</p>
+            <p>Garryl instantiated the two canvas's width and height based on the container's offset (in his case, the body element). The context canvas was made transparent. Here I show a canvas in grey. In addition, he declared an empty "hairs" array as well as the parameters of an object called "circle" with values corresponding to the context canvas. The context canvas was appended to the container.</p>
 
 <div class="language-javascript highlighter-rouge col02">
 <div class="highlight"><pre class="highlight col02">
@@ -72,6 +62,7 @@ Let's see its functionality.
             <span class="na">r</span><span class="p">:</span> <span class="nx">width</span> <span class="o">*</span> <span class="p">.</span><span class="mi">2</span>
         <span class="p">},</span>
         <span class="nx">hairs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">canvas</span><span class="p">)</span>
         </code>
     </pre>
 </div>
@@ -81,7 +72,7 @@ Let's see its functionality.
         </div>
         <div class='step' data-step='2'>
             <div class="explain">
-            <p>He will eventually instantiate the "perlin" canvas and give the same dimensions as the context canvas, but it won't be appended to any HTML element yet.</p>
+            <p>The "perlin" canvas was eventually instantiated with the same dimensions as the context canvas, but it was not appended to any HTML element.</p>
 <div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert"><span class="kd">let</span> <span class="nx">perlinImgData</span> <span class="o">=</span> <span class="kc">undefined</span>
 
 <span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">width</span>
@@ -91,13 +82,13 @@ Let's see its functionality.
         </div>
         <div class='step' data-step='3'>
             <div class="explain">
-            <p>It is on top of the context canvas that he randomly would draw the strokes.</p>
+            <p>It is on top of the context canvas that Darryl would randomly draw the strokes.</p>
             </div>
         </div>
         <div class='step' data-step='4'>
             <div class="explain">
-            <p>Every "hair" is an instance of the <em>Hair</em> class.
-            The class takes several parameters. One of them is the <strong>circle</strong> object. Darryl's Hair class gives a position to each line stroke based on randomly generated values of circular nature and transporting those values into the scope of the parameters of his previously defined <strong>circle object</strong>. The class also gives a random length to each stroke.</p>
+            <p>All "hair"'s were instances of the class <em>Hair</em>.
+            The class constructor took several inputs. The global <strong>circle</strong> object was one of them. For each instance of Hair, the class constructor generated random values for "r" and "d" of a <a href="https://www.mathsisfun.com/geometry/unit-circle.html" target="_blank">unit circle</a>. These values where then used to calculate random positional (x,y) values enclosed within the global <strong>circle object</strong> by applying the <a href="https://unacademy.com/content/jee/study-material/mathematics/parametric-equations-of-a-circle/" target="_blank">parametric equation of the circle</a>. Addtionally, the class assigned a random length to each stroke.</p>
 <div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert">
 <span class="kd">class</span> <span class="nx">Hair</span> <span class="p">{</span>
     <span class="kd">constructor</span><span class="p">(){</span>
@@ -119,7 +110,7 @@ Let's see its functionality.
         <div class='step' data-step='5'></div>
         <div class='step' data-step='6'>
             <div class="explain">
-            <p>Darryl added a method to his Hair class to draw each of the strokes. Notice that there are two elements that will come as very important later: the <strong>perlinImgData</strong> and the context (canvas) <strong>moveTo</strong> and <strong>lineTo</strong> methods.</p>
+            <p>In Hair class, Darryl included a method to draw each of the strokes. Notice that there are two elements that will come as very important later: the <strong>perlinImgData</strong> and the canvas API <strong>moveTo</strong> and <strong>lineTo</strong> methods.</p>
 <div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert">
     ...
     <span class="nx">draw</span><span class="p">(){</span>
@@ -139,7 +130,7 @@ Let's see its functionality.
         </div>
         <div class='step' data-step='7'>
             <div class="explain">
-            <p>Using a for-loop, Darryl instanted 6000 "hairs". But where did the go? Do you remember the empty array called "hairs"? You will find that Darryl made the Hair class to add each new instance to the "hairs" list at the time of the instance construction.</p>
+            <p>With a for-loop, Darryl instanted 6000 "hairs". The destination of each new instance is not clear by just looking at the loop. By exploring the code of the class Hair you will find that Darryl made it to use the now global hairs list to register each new instance at the time of the instance construction.</p>
 <div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert"><span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">6000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
     <span class="k">new</span> <span class="nx">Hair</span><span class="p">()</span>
 <span class="p">}</span>
@@ -240,7 +231,7 @@ The last bit of code I want to show you for now is the render of the canvas elem
 </table>
 </div>
 
-What I would like to point out is the `hairs.map(hair => hair.draw())`, which is the draw of each stroke. No less important though is what it goes with the **perlinContext** and the value assignment to the global **perlinImgData** which is parameter of the Hair's **draw method**. For the purpose of this example we left the values of the **perlinImgData** all as zero, but if you check Darryl's code and see carefully you will notice that the perlinImgData is feeding data to the draw function and therefore to the position of the hairs in the circle.
+One nice element of the functionality was the way Darryl drew the strokes (`hairs.map(hair => hair.draw())`). Something I also want to bring attention to is what happens with the **perlinContext** as well as the value assignment to the global **perlinImgData** in the Hair's **draw method**. For the sake of this example we left the values of the **perlinImgData** variables at zero. However, close examination of  Darryl's code makes clear that the perlinImgData is feeding data to the **draw** function and therefore affecting the position of the hairs in the circle.
 
 # So... What did we learn from this code?
 

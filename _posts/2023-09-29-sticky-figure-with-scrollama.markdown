@@ -10,11 +10,11 @@ categories: blog update
 
 # Sticky figure with scrollama
 
-This is a dissection of [Russell Samora's scrollama sticky-side example](https://russellsamora.github.io/scrollama/sticky-side/), which is also on [github](https://github.com/russellsamora/scrollama/blob/main/docs/sticky-side/index.html) under the "main" repository (at Sep 2023).
+This is a dissection of [Russell Samora's scrollama sticky-side example](https://russellsamora.github.io/scrollama/sticky-side/), which is also on [github](https://github.com/russellsamora/scrollama/blob/main/docs/sticky-side/index.html) under the "main" repository (as of Sep 2023).
 
 Russell Samora made **scrollama** to use [the intersection observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) in favor of scroll events, with excellent results. As stated in [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API), the API: '... observes changes in the intersection of target elements with an ancestor element or with a top-level document's viewport'.
 
-> By 2023 **scrollama** was still maintained and included other 20 contributors, with version 3 already available.
+> As of 2023, **scrollama** was still maintained and included over 20 contributors, with version 3 already available.
 
 # The code
 
@@ -65,8 +65,8 @@ The first that the original author of the demo did was to instatiate all the lib
 
 With **D3.js** the author selected and named the main HTML elements that will characterize the animation:
 - A ***main*** HTML element enclosing all other elements that will be animated
-- A HTML section with an id with ***scrolly*** as value
-- A HTML ***figure*** tag, having the area that will be sticked
+- A HTML section with an ID with ***scrolly*** as value
+- A HTML ***figure*** tag, having the area that will be "sticked"
 - A *div*, which was an ***article*** tag in the original code
 - A list of divs children of the HTML **article** all of class **step** with a digit from 1 to 4 as value for their corresponding *data-step* attributes
 
@@ -314,7 +314,7 @@ The example by Russell Samora used the *response*'s index property to change col
         </div>
         <div class='step' data-step='2'>
             <div class="explain">
-            <p>This is the second target that cross the offset. Everytime a target crosses the offset, its index is passed as value to be shown in the figure.</p>
+            <p>This is the second target that cross the offset. Everytime a target crosses the offset, its index is passed as value to be shown in the figure container.</p>
             </div>
         </div>
         <div class='step' data-step='3'>
