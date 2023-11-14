@@ -7,7 +7,7 @@ categories: blog update
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.css %}">
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
 
-In a [previous post]({{site.baseurl}}{% link _posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.markdown %}) we discussed how Darryl Huffman created worked the figure on his "Perlin Flow Field" that will be affected by the animation.
+In a [previous post]({{site.baseurl}}{% link _posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.markdown %}) we discussed how Darryl Huffman created the figure on his "Perlin Flow Field" that will be affected by the animation.
 
 This is again a link to Darryl's work:
 
@@ -18,13 +18,13 @@ This is again a link to Darryl's work:
 </p>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
 
+Darryl utilized the 2D graphics canvas API, Three.js (the 3D graphics library), and GLSL shaders. They way all those graphic tools were made to work together was something that piqued my curiosity. In an attemp to determine how Darryl obtained that result, I made some basic reverse engineering.
+
 One thing I found nice from Darryl's project was his use of a **noise function** for the animation. 
 
 Adding noise with shaders is very nice!
 
 Yeah... But let's be honest - unless you truly understand shaders and what those noise functions do, it might be very challenging to programatically get the required effect.
-
-Darryl utilized the 2D graphics canvas API, Three.js (the 3D graphics library), and GLSL shaders. They way all those graphic tools were made to work together was something that piqued my curiosity. In an attemp to determine how Darryl obtained that result, I made some basic reverse engineering.
 
 In this post we will have an helicopter view at the noise function.
 
