@@ -5,12 +5,13 @@ date:   2023-11-10 12:00:00 +0200
 categories: blog update
 ---
 
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
 
 # Putting everything together
 
-In [part I]({{site.baseurl}}{% link _posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.markdown %}) and [part II]({{site.baseurl}}{% link _posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02.markdown %}) we discussed some of the graphic tools that Darryl Huffman used to create his "Perlin Flow Field" on CodePen.
+In [Part 1]({{site.baseurl}}{% link _posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.markdown %}) and [Part 2]({{site.baseurl}}{% link _posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02.markdown %}) we discussed some of the graphic tools that Darryl Huffman used to create his "Perlin Flow Field" on CodePen.
 
-Darryl utilized the 2D graphics canvas API, Three.js (the 3D graphics library), and GLSL shaders. They way all those graphic tools were made to work together was something that piqued my curiosity. In an attemp to determine how Darryl obtained that result, I made some basic reverse engineering.
+Darryl utilized the 2D graphics canvas API, Three.js (the 3D graphics library), and GLSL shaders. The way all those graphic tools were made to work together was something that piqued my curiosity. In an attemp to determine how Darryl obtained that result, I made some basic reverse engineering.
 
 As a reminder, this is again a link to Darryl's work:
 
@@ -20,26 +21,28 @@ As a reminder, this is again a link to Darryl's work:
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 <br/>
-<br/>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
-
-
 
 In this third and last post we will check how Darryl brought together the canvas figure and the noise function.
 
-# The Adapter
+# Trigonometry and The Adapter
 
 We have the canvas strokes and the noise function. Now what?
 
-What Darryl wanted from his project was the strokes to move in angles based on matrix data coming from the noise function, the matrix data representing the color of the pixels resulting from the outputs of the noise function at each time interval.
+~~What Darryl wanted from his project was the strokes to move in angles based on matrix data coming from the noise function, the matrix data representing the color of the pixels resulting from the outputs of the noise function at each time interval.~~
 
-Darryl wanted that data to be used as parameter for a function that gave the illusion of a wave movement of the strokes. In other words, re-render the colored pixels representing the strokes so they gave the illusion of moving like a wave, by re-drawing them at angular gradients not lower than 0 degrees and not more than 90 degrees.
+Darryl wanted the strokes to move in angles based on matrix data coming from the rendering of the noise. The changes in the position of the stroke were driven by changes in the colors of the rendered noise function: Every time a pixel changed color at each time interval, that color value should trigger the change of the stroke position, giving the illusion of moving like a wave by re-drawing them at angular gradients not lower than 0 degrees and not more than 180 degrees.
 
-And which functions are typical to waves and angles? Indeed - sines and cosines.
+And which functions are typical to waves and angles? Indeed - [trigonometic functions](https://www.math.net/trigonometric-functions).
 
-Extracting data directly from the openGL API is not believed to be an easy task. But the WebGL API is very powerful and comes with very useful methods. The canvas API and the WebGL API are strongly related: the WebGL API uses the canvas API for rendering. Therefore, it is possible to render in the form of an openGL and still use the canvas API methods to get two-dimensional information about the openGL rendering.
+<span style="color:red;">CHECK THIS PART!!!!</span>
+Extracting that data directly from the openGL API is not an easy task. But the WebGL API is a powerful one and comes with very useful methods. The canvas API and the WebGL API are strongly related: the WebGL API uses the canvas API for rendering. Therefore, it is possible to render an openGL graphic and still use the canvas API methods to get two-dimensional information about the openGL rendering.
 
-Why did Darryl use another canvas then?
+Darryl used another canvas element, he called the Perlin canvas, to extract the data. Here you might ask: if you can use the canvas API to directly extract data from the openGL rendering, why did Darryl use another canvas?
+
+Darryl didn't want the coloring of the noise function to be seeing - he only wanted the data. If he used the context canvas for directly collecting the noise function output, he also had to show the rendering of the noise function, and that is what he wanted to prevent.
+
+The Perlin canvas, in this case, works more like an adapter.
 
 # The Code
 
@@ -49,9 +52,177 @@ In the previous post we separated Darryl's code into three sections:
 - The WebGL (Three.js), the *shader*, and the texture canvas
 - The interaction between the texture (aka Garryl's "perlinCanvas") and the "context" canvas.
 
-Our focus is the second one.
+Our focus is the third one.
 
-**THE WEBGL, THE SHADER  AND THE TEXTURE CANVAS**  
+**THE DARRYL'S "PERLIN" CANVAS**  
+
+As we previously mentioned in [Part 1]({{site.baseurl}}{% link _posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.markdown %}), the canvas that Darryl would use as an adapter (the "Perlin" canvas) was declared with similar properties to the "context" canvas but not appended to any HTML element:
+
+```javascript
+render()
+```
+
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge col01">
+<div class="highlight" style="margin:0px">
+<pre class="highlight col01" style="margin:0px;">
+<code class="col01">
+  8
+  9
+<span style="color:yellow;"> 10 </span>
+<span style="color:yellow;"> 11 </span>
+ 12
+ 13
+...
+
+ 21
+ 22
+<span style="color:yellow;"> 23 </span>
+ 24
+<span style="color:yellow;"> 25 </span>
+<span style="color:yellow;"> 26 </span>
+</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge col02">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight col02" style="margin:0px;">
+<code class="col02">
+<span class="kd">const</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="dl">'</span><span class="s1">canvas</span><span class="dl">'</span><span class="p">),</span>
+        <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">'</span><span class="s1">2d</span><span class="dl">'</span><span class="p">),</span>
+        <span class="nx">perlinCanvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="dl">'</span><span class="s1">canvas</span><span class="dl">'</span><span class="p">),</span>
+        <span class="nx">perlinContext</span> <span class="o">=</span> <span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">'</span><span class="s1">2d</span><span class="dl">'</span><span class="p">),</span>
+        <span class="nx">width</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">,</span>
+        <span class="nx">height</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">,</span>
+...
+        
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">canvas</span><span class="p">)</span>
+
+<span class="kd">let</span> <span class="nx">perlinImgData</span> <span class="o">=</span> <span class="kc">undefined</span>
+
+<span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">width</span>
+<span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">height</span>
+</code>
+</pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+The "Perlin" canvas (actually, the **perlinContext**) would be later associated to the **renderer** variable (sdeclared in line 5 of the original code) which would be associated to the WebGL renderer (line 231, inside the **noiseCanvas** function):
+
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge col01">
+<div class="highlight" style="margin:0px">
+<pre class="highlight col01" style="margin:0px;">
+<code class="col01">
+  3
+  4
+<span style="color:yellow;">  5 </span>
+  6
+  7
+...
+
+ 63
+...
+
+<span style="color:yellow;"> 69 </span>
+<span style="color:yellow;"> 70 </span>
+<span style="color:yellow;"> 71 </span>
+...
+
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+...
+
+<span style="color:yellow;">231 </span>
+...
+
+272
+</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge col02">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight col02" style="margin:0px;">
+<code class="col02">
+<span class="kd">let</span> <span class="nx">container</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">,</span>
+    <span class="nx">startTime</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">(),</span>
+    <span class="nx">renderer</span>
+
+<span class="kd">function</span> <span class="nx">init</span><span class="p">()</span> <span class="p">{</span> <span class="code-note"> <em>NOTE: This init function sets and renders the context canvas</em> </span>
+...
+
+ <span class="kd">function</span> <span class="nx">render</span><span class="p">()</span> <span class="p">{</span> <span class="code-note"> <em>NOTE: This render function is inside "init" and renders the context canvas</em> </span>
+... 
+
+	<span class="nx">perlinContext</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span>
+	<span class="nx">perlinContext</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">renderer</span><span class="p">.</span><span class="nx">domElement</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+	<span class="nx">perlinImgData</span> <span class="o">=</span> <span class="nx">perlinContext</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span>
+...
+
+ <span class="p">}</span>
+ <span class="nx">render</span><span class="p">()</span>
+
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">noiseCanvas</span><span class="p">()</span> <span class="p">{</span> <span class="code-note"> <em>NOTE: This function focuses on the WebGL graphics and its rendering</em> </span>
+...
+
+	<span class="nx">renderer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">WebGLRenderer</span><span class="p">({</span> <span class="na">alpha</span><span class="p">:</span> <span class="kc">true</span> <span class="p">})</span>
+...
+
+<span class="p">}</span>
+</code>
+</pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+How the WebGL renderer is associated to the **perlinContext** can be seen in the line 70 of the original code, enclosed in the *canvas* **render** function.
+
+> Remember that Darryl defined *another* **render** function inside the **noiseCanvas** function.
+
+It consists of a "photograph", a one-time image of what the WebGL renderer should show at the time of that running frame.
+
+It is that image, that photograph, and not directly the WebGL renderer what it is used to collect the data. The data about the image is then collected in **perlinImgData**.
+
+
+
+~~Why a single image? The renderer might be running the graphics at a different speed as how the canvas can check, and the time to process all the data takes time. This can lead to mistmatches between the collected data~~
 
 With his project, Garryl wanted to animate "hairs" located in a circle of radio "r" in the middle of the viewport. Those hairs were canvas' strokes. They all should move based on a noise function which a pattern that changes over time in a rather regular trend. Because the way it changes the noise function is usually referred as a ***flow***, simulating the usual patterns in the movements of substances in either liquid or gas states.
 
