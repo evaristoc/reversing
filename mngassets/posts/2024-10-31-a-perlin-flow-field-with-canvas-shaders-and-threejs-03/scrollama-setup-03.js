@@ -1,7 +1,7 @@
 //import {hello} from './huffman-flow-field-setup.js';
-import {eventHandlers} from './scrollama-eventhandlers-02.js';
-import {paramsFigure} from './huffman-flow-field-setup-02.js';
-import {Hair} from './huffman-flow-field-setup-02.js';
+import {eventHandlers} from './scrollama-eventhandlers-03.js';
+import {paramsFigure} from './huffman-flow-field-setup-03.js';
+import {Hair} from './huffman-flow-field-setup-03.js';
 //console.log("eventHandlers",eventHandlers);
 //console.log("paramsFigure", paramsFigure);
 
