@@ -6,6 +6,7 @@ categories: blog update
 ---
 
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/scrollama-setup.css %}">
 
 # Putting everything together
 
@@ -59,7 +60,17 @@ Our focus is the third one.
 As we previously mentioned in [Part 1]({{site.baseurl}}{% link _posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.markdown %}), the canvas that Darryl would use as an adapter (the "Perlin" canvas) was declared with similar properties to the "context" canvas but not appended to any HTML element:
 
 ```javascript
-render()
+		draw(){
+    			let { position, length } = this,
+			    { x, y } = position,
+			    i = (y * width + x) * 4,
+			    d = perlinImgData.data,
+			    noise = d[i],
+			    angle = (noise / 255) * Math.PI
+			
+			context.moveTo(x, y)
+			context.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length)
+		}
 ```
 
 <div class="codetable-wrap" style="width:auto; overflow-x: auto;">
@@ -123,7 +134,7 @@ render()
 </table>
 </div>
 
-The "Perlin" canvas (actually, the **perlinContext**) would be later associated to the **renderer** variable (sdeclared in line 5 of the original code) which would be associated to the WebGL renderer (line 231, inside the **noiseCanvas** function):
+The "Perlin" canvas (actually, the **perlinContext**) would be later associated to the **renderer** variable that was declared in line 5 of the original code and which would linked to the WebGL renderer at line 231, inside the **noiseCanvas** function:
 
 <div class="codetable-wrap" style="width:auto; overflow-x: auto;">
 <table>
@@ -179,10 +190,10 @@ The "Perlin" canvas (actually, the **perlinContext**) would be later associated 
     <span class="nx">startTime</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">(),</span>
     <span class="nx">renderer</span>
 
-<span class="kd">function</span> <span class="nx">init</span><span class="p">()</span> <span class="p">{</span> <span class="code-note"> <em>NOTE: This init function sets and renders the context canvas</em> </span>
+<span class="kd">function</span> <span class="nx">init</span><span class="p">()</span> <span class="p">{</span> <span class="code-note"> <em><-- The <code>init</code> function sets the canvas elements and renders the "context" canvas</em> </span>
 ...
 
- <span class="kd">function</span> <span class="nx">render</span><span class="p">()</span> <span class="p">{</span> <span class="code-note"> <em>NOTE: This render function is inside "init" and renders the context canvas</em> </span>
+ <span class="kd">function</span> <span class="nx">render</span><span class="p">()</span> <span class="p">{</span> <span class="code-note"> <em><-- This <code>render</code> function is inside <code>init</code> and renders the "context" canvas</em> </span>
 ... 
 
 	<span class="nx">perlinContext</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span>
@@ -195,7 +206,7 @@ The "Perlin" canvas (actually, the **perlinContext**) would be later associated 
 
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">noiseCanvas</span><span class="p">()</span> <span class="p">{</span> <span class="code-note"> <em>NOTE: This function focuses on the WebGL graphics and its rendering</em> </span>
+<span class="kd">function</span> <span class="nx">noiseCanvas</span><span class="p">()</span> <span class="p">{</span> <span class="code-note"> <em><-- <code>noiseCanvas</code> focuses on the WebGL graphics and its rendering</em> </span>
 ...
 
 	<span class="nx">renderer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">THREE</span><span class="p">.</span><span class="nx">WebGLRenderer</span><span class="p">({</span> <span class="na">alpha</span><span class="p">:</span> <span class="kc">true</span> <span class="p">})</span>
@@ -212,13 +223,212 @@ The "Perlin" canvas (actually, the **perlinContext**) would be later associated 
 </table>
 </div>
 
-How the WebGL renderer is associated to the **perlinContext** can be seen in the line 70 of the original code, enclosed in the *canvas* **render** function.
+How the WebGL renderer is associated to the **perlinContext** can be seen in the line 70 of the original code, enclosed in the *canvas* **render** function. What the **perlinContext** takes from the WebGL renderer is a "screenshot", a one-time image of what the WebGL renderer should show at each rendered frame of the **context** canvas.
 
-> Remember that Darryl defined *another* **render** function inside the **noiseCanvas** function.
+It is that image, that "screenshot", what it is used to collect the data, which is then passed to the **perlinImgData**.
 
-It consists of a "photograph", a one-time image of what the WebGL renderer should show at the time of that running frame.
+**STROKE'S WAVE MOVEMENT AND THE draw METHOD
 
-It is that image, that photograph, and not directly the WebGL renderer what it is used to collect the data. The data about the image is then collected in **perlinImgData**.
+In order to see how the data of the **perlinImgData** was used we have to come back to the **draw** method of each instance of class **Hair**.
+
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge col01">
+<div class="highlight" style="margin:0px">
+<pre class="highlight col01" style="margin:0px;">
+<code class="col01">
+...
+ 44
+ 45
+ 46
+ 47
+<span style="color:yellow;"> 48 </span>
+ 49
+ 50
+ 51
+ 52
+<span style="color:yellow;"> 53 </span>
+ 54
+...
+</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge col02">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight col02" style="margin:0px;">
+<code class="col02">
+...
+		<span class="nx">draw</span><span class="p">(){</span>
+    			<span class="kd">let</span> <span class="p">{</span> <span class="nx">position</span><span class="p">,</span> <span class="nx">length</span> <span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span>
+			    <span class="p">{</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">position</span><span class="p">,</span>
+			    <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">y</span> <span class="o">*</span> <span class="nx">width</span> <span class="o">+</span> <span class="nx">x</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
+			    <span class="nx">d</span> <span class="o">=</span> <span class="nx">perlinImgData</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
+			    <span class="nx">noise</span> <span class="o">=</span> <span class="nx">d</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span>
+			    <span class="nx">angle</span> <span class="o">=</span> <span class="p">(</span><span class="nx">noise</span> <span class="o">/</span> <span class="mi">255</span><span class="p">)</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span>
+			
+			<span class="nx">context</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span>
+			<span class="nx">context</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">angle</span><span class="p">)</span> <span class="o">*</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">y</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">angle</span><span class="p">)</span> <span class="o">*</span> <span class="nx">length</span><span class="p">)</span>
+		<span class="p">}</span>
+...
+</code>
+</pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+**perlinImgData.data** contains the rgb values of the pixel coloring from the "screenshot" arranged in a list. **perlinImgData.data** is the one passed to the the **draw** method of the instance.
+
+Darryl used a variable **i** as index to search the list. The calculation of the index value is still intriguing to me - I must admit I don't know why Darryl used position and width to calculate the index, but it worked.
+
+The fact is that Darryl used that mysterious index to extract just one value from the **perlinImgData.data** list and used another formula to get an angle based on the ratio of the extracted value against its maximum (255).
+
+It is the resulting angle which is used to re-render the stroke in a different angular position using trigonometric formulas.
+
+# In Action
+
+<section id='stickyoverlay'>
+    <figure>
+        <!--<p>0</p>-->
+    </figure>
+    <div class="articlepost">
+        <div class='step' data-step='1'>
+            <div class="explain">
+            <p>Garryl instantiated the two canvas's width and height based on the container's offset (in his case, the body element). The context canvas was made transparent. Here I show a canvas in grey. In addition, he declared an empty "hairs" array as well as the parameters of an object called "circle" with values corresponding to the context canvas. The context canvas was appended to the container.</p>
+
+<div class="language-javascript highlighter-rouge col02">
+<div class="highlight"><pre class="highlight col02">
+<code class="col02 insert">	
+<span class="kd">const</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="dl">'</span><span class="s1">canvas</span><span class="dl">'</span><span class="p">),</span>
+        <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">'</span><span class="s1">2d</span><span class="dl">'</span><span class="p">),</span>
+        <span class="nx">perlinCanvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="dl">'</span><span class="s1">canvas</span><span class="dl">'</span><span class="p">),</span>
+        <span class="nx">perlinContext</span> <span class="o">=</span> <span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">'</span><span class="s1">2d</span><span class="dl">'</span><span class="p">),</span>
+        <span class="nx">width</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">,</span>
+        <span class="nx">height</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">,</span>
+        <span class="nx">circle</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="na">x</span><span class="p">:</span> <span class="nx">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="na">y</span><span class="p">:</span> <span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="na">r</span><span class="p">:</span> <span class="nx">width</span> <span class="o">*</span> <span class="p">.</span><span class="mi">2</span>
+        <span class="p">},</span>
+        <span class="nx">hairs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">canvas</span><span class="p">)</span>
+        </code>
+    </pre>
+</div>
+</div> 
+
+            </div>
+        </div>
+        <div class='step' data-step='2'>
+            <div class="explain">
+            <p>The "perlin" canvas was eventually instantiated with the same dimensions as the context canvas, but it was not appended to any HTML element.</p>
+<div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert"><span class="kd">let</span> <span class="nx">perlinImgData</span> <span class="o">=</span> <span class="kc">undefined</span>
+
+<span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">width</span>
+<span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">height</span>
+</code></pre></div></div>
+            </div>
+        </div>
+        <div class='step' data-step='3'>
+            <div class="explain">
+            <p>It is on top of the context canvas that Darryl would randomly draw the strokes.</p>
+            </div>
+        </div>
+        <div class='step' data-step='4'>
+            <div class="explain">
+            <p>All "hair"'s were instances of the class <em>Hair</em>.
+            The class constructor took several inputs. The global <strong>circle</strong> object was one of them. For each instance of Hair, the class constructor generated random values for "r" and "d" of a <a href="https://www.mathsisfun.com/geometry/unit-circle.html" target="_blank">unit circle</a>. These values where then used to calculate random positional (x,y) values enclosed within the global <strong>circle object</strong> by applying the <a href="https://unacademy.com/content/jee/study-material/mathematics/parametric-equations-of-a-circle/" target="_blank">parametric equation of the circle</a>. Addtionally, the class assigned a random length to each stroke.</p>
+<div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert">
+<span class="kd">class</span> <span class="nx">Hair</span> <span class="p">{</span>
+    <span class="kd">constructor</span><span class="p">(){</span>
+        <span class="kd">let</span> <span class="nx">r</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">(),</span>
+            <span class="nx">d</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">())</span>
+
+        <span class="k">this</span><span class="p">.</span><span class="nx">position</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="na">x</span><span class="p">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">circle</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">r</span><span class="p">)</span> <span class="o">*</span> <span class="nx">d</span> <span class="o">*</span> <span class="nx">circle</span><span class="p">.</span><span class="nx">r</span><span class="p">),</span>
+            <span class="na">y</span><span class="p">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">circle</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">r</span><span class="p">)</span> <span class="o">*</span> <span class="nx">d</span> <span class="o">*</span> <span class="nx">circle</span><span class="p">.</span><span class="nx">r</span><span class="p">)</span>
+        <span class="p">}</span>
+        
+        <span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span>
+        <span class="nx">hairs</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+    <span class="p">}</span>
+    ...
+</code></pre></div></div>
+            </div>
+        </div>
+        <div class='step' data-step='5'></div>
+        <div class='step' data-step='6'>
+            <div class="explain">
+            <p>In Hair class, Darryl included a method to draw each of the strokes. Notice that there are two elements that will come as very important later: the <strong>perlinImgData</strong> and the canvas API <strong>moveTo</strong> and <strong>lineTo</strong> methods.</p>
+<div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert">
+    ...
+    <span class="nx">draw</span><span class="p">(){</span>
+            <span class="kd">let</span> <span class="p">{</span> <span class="nx">position</span><span class="p">,</span> <span class="nx">length</span> <span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">,</span>
+            <span class="p">{</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">position</span><span class="p">,</span>
+            <span class="nx">i</span> <span class="o">=</span> <span class="p">(</span><span class="nx">y</span> <span class="o">*</span> <span class="nx">width</span> <span class="o">+</span> <span class="nx">x</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
+            <span class="nx">d</span> <span class="o">=</span> <span class="nx">perlinImgData</span><span class="p">.</span><span class="nx">data</span><span class="p">,</span>
+            <span class="nx">noise</span> <span class="o">=</span> <span class="nx">d</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span>
+            <span class="nx">angle</span> <span class="o">=</span> <span class="p">(</span><span class="nx">noise</span> <span class="o">/</span> <span class="mi">255</span><span class="p">)</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span>
+        
+        <span class="nx">context</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span>
+        <span class="nx">context</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">angle</span><span class="p">)</span> <span class="o">*</span> <span class="nx">length</span><span class="p">,</span> <span class="nx">y</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">angle</span><span class="p">)</span> <span class="o">*</span> <span class="nx">length</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>            
+            </div>
+        </div>
+        <div class='step' data-step='7'>
+            <div class="explain">
+            <p>With a for-loop, Darryl instanted 6000 "hairs". The destination of each new instance is not clear by just looking at the loop. By exploring the code of the class Hair you will find that Darryl made it to use the now global hairs list to register each new instance at the time of the instance construction.</p>
+<div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert"><span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">6000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="k">new</span> <span class="nx">Hair</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div></div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</section>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.4/TweenLite.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.5/plugins/ColorPropsPlugin.min.js"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/threejs/v104/three.v104.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollmagic/ScrollMagic.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/huffman-flow-field-setup.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/scrollama-setup.js %}"></script>
+
+
+
+
+
+
+> Note: keep in mind that Darryl defined *another* function called **render** inside the **noiseCanvas** function to render the WebGL graphics.
+
 
 
 
