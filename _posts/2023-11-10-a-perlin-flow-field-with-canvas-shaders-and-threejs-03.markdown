@@ -6,7 +6,7 @@ categories: blog update
 ---
 
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
-<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/scrollama-setup.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-03/scrollama-setup-03.css %}">
 
 # Putting everything together
 
@@ -301,36 +301,16 @@ It is the resulting angle which is used to re-render the stroke in a different a
 # In Action
 
 <section id='stickyoverlay'>
-    <figure>
+    <figure id="scrollfig">
         <!--<p>0</p>-->
+        <div id="threejs-container">    </div>
     </figure>
+    <div id="test"></div>
     <div class="articlepost">
         <div class='step' data-step='1'>
             <div class="explain">
-            <p>Garryl instantiated the two canvas's width and height based on the container's offset (in his case, the body element). The context canvas was made transparent. Here I show a canvas in grey. In addition, he declared an empty "hairs" array as well as the parameters of an object called "circle" with values corresponding to the context canvas. The context canvas was appended to the container.</p>
-
-<div class="language-javascript highlighter-rouge col02">
-<div class="highlight"><pre class="highlight col02">
-<code class="col02 insert">	
-<span class="kd">const</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="dl">'</span><span class="s1">canvas</span><span class="dl">'</span><span class="p">),</span>
-        <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">'</span><span class="s1">2d</span><span class="dl">'</span><span class="p">),</span>
-        <span class="nx">perlinCanvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="dl">'</span><span class="s1">canvas</span><span class="dl">'</span><span class="p">),</span>
-        <span class="nx">perlinContext</span> <span class="o">=</span> <span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">'</span><span class="s1">2d</span><span class="dl">'</span><span class="p">),</span>
-        <span class="nx">width</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">,</span>
-        <span class="nx">height</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">container</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">,</span>
-        <span class="nx">circle</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="na">x</span><span class="p">:</span> <span class="nx">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="na">y</span><span class="p">:</span> <span class="nx">height</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="na">r</span><span class="p">:</span> <span class="nx">width</span> <span class="o">*</span> <span class="p">.</span><span class="mi">2</span>
-        <span class="p">},</span>
-        <span class="nx">hairs</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">canvas</span><span class="p">)</span>
-        </code>
-    </pre>
-</div>
-</div> 
-
-            </div>
+            <p>Let's see the two graphics together.</p>
+          </div>
         </div>
         <div class='step' data-step='2'>
             <div class="explain">
@@ -419,8 +399,9 @@ It is the resulting angle which is used to re-render the stroke in a different a
 <script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link mngassets/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link mngassets/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.js %}"></script>
-<script src="{{ site.baseurl }}{% link mngassets/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/huffman-flow-field-setup.js %}"></script>
-<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/scrollama-setup.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/posts/2024-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-03/huffman-flow-field-setup-03.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-03/scrollama-setup-03.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js %}"></script>
 
 
 

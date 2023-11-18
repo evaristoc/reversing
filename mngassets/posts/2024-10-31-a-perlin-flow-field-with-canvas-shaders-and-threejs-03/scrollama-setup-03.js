@@ -2,6 +2,7 @@
 import {eventHandlers} from './scrollama-eventhandlers-03.js';
 import {paramsFigure} from './huffman-flow-field-setup-03.js';
 import {Hair} from './huffman-flow-field-setup-03.js';
+import {canvasScene} from './huffman-flow-field-setup-03.js';
 //console.log("eventHandlers",eventHandlers);
 //console.log("paramsFigure", paramsFigure);
 
@@ -48,25 +49,20 @@ window.onload = (event) => {
   
     const scrolly = getElementD3js(d3, "#stickyoverlay");
     paramsFigure.container = eventHandlers.container = getElementD3js(scrolly, "figure");
-    //const figure = paramsFigure.container;
+    paramsFigure.width = paramsFigure.container.node().offsetWidth;
+    paramsFigure.height = 200;
     const article = getElementD3js(scrolly, "div .articlepost");
     eventHandlers.step = getElementD3js(article, ".step", true);
-    const baseCanvas = document.createElement('canvas');
-    const baseContext = baseCanvas.getContext('2d');
-    const perlinCanvas = document.createElement('canvas');
-    const perlinContext = perlinCanvas.getContext('2d');
-    baseCanvas.setAttribute("id", "context");
-    perlinCanvas.setAttribute("id", "perlinCanvas");
-    paramsFigure.width = paramsFigure.container.node().offsetWidth;
-    paramsFigure.height = baseCanvas.height = 200;
-    paramsFigure.container.node().appendChild(baseCanvas);
-    paramsFigure.baseCanvas = eventHandlers.baseCanvas = getElementById(document, "context");
-    paramsFigure.baseContext = eventHandlers.baseContext = baseContext;
-    paramsFigure.perlinCanvas = getElementById(document, "perlinCanvas");
-    paramsFigure.perlinContext = perlinContext;
-    //paramsFigure.renderer.setSize( 300, 200 );
+    const baseCanvasInst = new canvasScene(paramsFigure.container, "context");
+    baseCanvasInst.setDimensionsD3(paramsFigure.width, paramsFigure.height);
+    baseCanvasInst.appendCanvasD3();
+    const perlinCanvasInst = new canvasScene(paramsFigure.container, "perlin");
+    perlinCanvasInst.setDimensionsD3(paramsFigure.width, paramsFigure.height);
 
-    //paramsFigure.renderingFunc.startTime = paramsFigure.startTime;
+    paramsFigure.baseCanvas = eventHandlers.baseCanvas = getElementById(document, "context");
+    paramsFigure.baseContext = eventHandlers.baseContext = baseCanvasInst.scene;
+    paramsFigure.perlinCanvas = getElementById(document, "perlinCanvas");
+    paramsFigure.perlinContext = perlinCanvasInst.scene;
 
     paramsFigure.circle = {
         x: paramsFigure.container.node().offsetWidth / 2,
@@ -123,7 +119,7 @@ window.onload = (event) => {
         
         //E: instantiate all the hairs and save them in the hairs container
         // but don't draw them yet... 
-        for(var i = 0; i < 6000; i++){
+        for(var i = 0; i < 3000; i++){
             new Hair();
         }
 

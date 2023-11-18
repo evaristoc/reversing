@@ -33,7 +33,7 @@ class canvasScene {
 		if(w){
 			this.width = w;
 		}else{
-			this.width = this.container.node().offsetWidth();
+			this.width = this.container.node().offsetWidth;
 		}
 		if(h){
 			this.height = h;
@@ -75,4 +75,5 @@ class Hair {
 }
 
 export {paramsFigure}
+export {canvasScene}
 export {Hair}

@@ -92,8 +92,13 @@ export let eventHandlers = {
         //E - from https://codepen.io/GreenSock/pen/bGbQwo
         //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
         if(response.index === 0){
+            
+            const scrollfigure = document.getElementById("scrollfig");
             this.baseContext.clearRect(0,0,this.width,this.height);
             function tweenToRandomColor() {
+                let test = TweenLite.to("#scrollfig", 0.3, 
+                    { opacity: 1 });
+                console.log(test);
                 TweenLite.to(
                         baseContext, 
                         1, 
@@ -111,43 +116,13 @@ export let eventHandlers = {
 
         }
         if(response.index === 1){
-            //this.baseContext.rect(0,0,500,200);
-            //this.baseContext.fillStyle = "#404040";
-            //this.baseContext.fill();
-            //this.baseContext.strokeStyle = "#0000aa";
-            function tweenToRandomColor02() {
-                TweenLite.to(
-                        baseContext, 
-                        1, 
-                        {
-                            colorProps:{
-                                //fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
-                                //strokeStyle: "#AAAAFF",
-                            }, 
-                            onUpdate: updateCanvasBackground, 
-                        //onComplete:tweenToRandomColor
-                        });
-            }
-            this.baseContext.strokeStyle = "#fff";
-            tweenToRandomColor02(); 
-        }
-        if(response.index === 2){
-            this.baseContext.beginPath();
-            //console.log("hair", this.hairs[0].draw());
-            //this.hairs.map(hair => hair.draw());
-            let first10Hairs = this.hairs.slice(0, 10);
-            first10Hairs.map(hair => hair.draw());
-            this.baseContext.strokeStyle = "#AAAAFF";
-            //this.baseContext.stroke();
-        }
-        if(response.index === 4){
-            let remainingHairs = this.hairs.slice(9);
+            let hairs = this.hairs;
             //remainingHairs.map(hair => hair.draw());
             function delay(i){
-                setTimeout(()=>{remainingHairs[i].draw()}, i/2.);
+                setTimeout(()=>{hairs[i].draw()}, i/2.);
             }
             this.passed = true;
-            for(let i = 0; i < remainingHairs.length; i++){
+            for(let i = 0; i < hairs.length; i++){
                 delay(i);
             }
             this.baseContext.strokeStyle = "#AAAAFF";
