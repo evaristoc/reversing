@@ -320,11 +320,13 @@ It is the resulting angle which is used to re-render the stroke in a different a
 <span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">width</span>
 <span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">height</span>
 </code></pre></div></div>
+<div class="explain">
+<p>We haven't used the data so far. Let's do it.</p>
+</div>
             </div>
         </div>
         <div class='step' data-step='3'>
             <div class="explain">
-            <p>It is on top of the context canvas that Darryl would randomly draw the strokes.</p>
             </div>
         </div>
         <div class='step' data-step='4'>

@@ -152,5 +152,6 @@ testScene.renderer.render(testScene.scene, testScene.camera);
 }
 renderPlane();
 
+paramsPlane["renderer"] = testScene.renderer;
 
 export {paramsPlane}

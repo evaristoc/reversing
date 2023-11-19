@@ -1,6 +1,6 @@
+import {paramsPlane} from '../2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js';
 
 //REMEMBER we are using d3.js to handle the DOM
-
 //TODO:
 //- make this an exportable object so it can be updated in scrollama-setup or any other script as required
 
@@ -44,6 +44,8 @@ export let eventHandlers = {
     height : null,
     baseCanvas: null,
     baseContext: null,
+    //perlinCanvas: null,
+    //perlinContext: null,
     hairs: null,
     passed: false,
     updateSizeCanvas : function(){
@@ -86,7 +88,7 @@ export let eventHandlers = {
 
         const baseContext = this.baseContext;
         const updateCanvasBackground = this.updateCanvasBackground.bind(this, this.baseContext);
-        
+        let perlinImgData = undefined;
         
         
         //E - from https://codepen.io/GreenSock/pen/bGbQwo
@@ -100,31 +102,13 @@ export let eventHandlers = {
             function tweener() {
                 const scrollfigure = document.getElementById("scrollfig");
                 const charTl = gsap.timeline();
-                //gsap.set(scrollfigure, {opacity: 1});
                 charTl.to(scrollfigure, { opacity: 1, duration: 3 });
-                //scrollfigure.style.opacity = 1;
-                //TweenLite.fromTo("#threejs-container", {opacity:0.0}, 
-                //    { opacity: 1.0, duration:1 });
-                //console.log(test);
-                // TweenLite.to(
-                //         baseContext, 
-                //         1, 
-                //         {
-                //             colorProps:{
-                //                 //fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
-                //                 fillStyle: "#404040",
-                //                 strokeStyle: "#404040"
-                //             }, 
-                //             onUpdate: updateCanvasBackground, 
-                //         //onComplete:tweenToRandomColor
-                //         });
-            }        
+              }        
             tweener();
 
         }
         if(response.index === 1 && this.passed == false){
             let hairs = this.hairs;
-            //remainingHairs.map(hair => hair.draw());
             function delay(i){
                 setTimeout(()=>{hairs[i].draw()}, i/2.);
             }
@@ -133,6 +117,27 @@ export let eventHandlers = {
             }
             this.passed = true;
             this.baseContext.strokeStyle = "#AAAAFF";
+        }
+        if(response.index === 3){
+            this.renderer = paramsPlane.renderer;
+            // let perlinContext = this.perlinContext;
+            // let baseContext = this.baseContext;
+            // let width = this.width;
+            // let height = this.height;
+            // let hairs = this.hairs;
+            // let renderer = paramsPlane.renderer.domElement;
+            // function renderWaves(){
+            //     //console.log(paramsPlane.renderer.domElement);
+            //     this.perlinContext.drawImage(renderer, 0,0);
+            //     perlinImgData = this.perlinContext.getImageData(0, 0, 200, 200);             
+            //     this.baseContext.beginPath();
+            //     this.hairs.map(hair => hair.draw());
+            //     this.baseContext.stroke();
+            //     requestAnimationFrame(renderWaves);
+            // }
+
+            // renderWaves.call(this, this.perlinContext, this.baseContext, this.hairs);
+            
         }
     }
 }

@@ -38,6 +38,10 @@ class canvasScene {
 		if(h){
 			this.height = h;
 		}
+		this.canvasElem.width = this.width;
+		this.canvasElem.height = this.height;
+
+
 	}
 
 	appendCanvasD3(){
