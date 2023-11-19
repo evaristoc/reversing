@@ -34,12 +34,12 @@ figure {
     /*background-color: #8a8a8a;*/
     background-color: #f3f3f3;
     z-index: 0;
-    opacity: 0%;
+    opacity: 0;
 }
 
 div #threejs-container{
-  position:relative;
-  top: 400px;
+  position: relative;
+  top: 360px;
 }
 
 /*
@@ -119,4 +119,7 @@ figure p {
 
 canvas {
     width : 100%;
+    /*position:absolute;*/
+    position:relative;
+    top: -200px;
 }

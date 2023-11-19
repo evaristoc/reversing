@@ -119,7 +119,7 @@ window.onload = (event) => {
         
         //E: instantiate all the hairs and save them in the hairs container
         // but don't draw them yet... 
-        for(var i = 0; i < 3000; i++){
+        for(var i = 0; i < 700; i++){
             new Hair();
         }
 
@@ -130,7 +130,8 @@ window.onload = (event) => {
         
         handleResize();
 
-        paramsFigure.baseContext.fillStyle = "#f3f3f3";
+        //paramsFigure.baseContext.fillStyle = "#f3f3f3";
+        paramsFigure.baseContext.fillStyle = "#404040";
         //paramsFigure.baseContext.strokeStyle = "#f3f3f3";
 
         //paramsFigure.renderFunc.renderer = paramsFigure.renderer;

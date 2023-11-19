@@ -93,38 +93,45 @@ export let eventHandlers = {
         //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
         if(response.index === 0){
             
-            const scrollfigure = document.getElementById("scrollfig");
             this.baseContext.clearRect(0,0,this.width,this.height);
-            function tweenToRandomColor() {
-                let test = TweenLite.to("#scrollfig", 0.3, 
-                    { opacity: 1 });
-                console.log(test);
-                TweenLite.to(
-                        baseContext, 
-                        1, 
-                        {
-                            colorProps:{
-                                //fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
-                                fillStyle: "#404040",
-                                strokeStyle: "#404040"
-                            }, 
-                            onUpdate: updateCanvasBackground, 
-                        //onComplete:tweenToRandomColor
-                        });
+            //const scrollfigure = document.getElementById("scrollfig");
+            //gsap.to(scrollfigure, { x: 400, duration:.3 });
+            
+            function tweener() {
+                const scrollfigure = document.getElementById("scrollfig");
+                const charTl = gsap.timeline();
+                //gsap.set(scrollfigure, {opacity: 1});
+                charTl.to(scrollfigure, { opacity: 1, duration: 3 });
+                //scrollfigure.style.opacity = 1;
+                //TweenLite.fromTo("#threejs-container", {opacity:0.0}, 
+                //    { opacity: 1.0, duration:1 });
+                //console.log(test);
+                // TweenLite.to(
+                //         baseContext, 
+                //         1, 
+                //         {
+                //             colorProps:{
+                //                 //fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
+                //                 fillStyle: "#404040",
+                //                 strokeStyle: "#404040"
+                //             }, 
+                //             onUpdate: updateCanvasBackground, 
+                //         //onComplete:tweenToRandomColor
+                //         });
             }        
-            tweenToRandomColor();
+            tweener();
 
         }
-        if(response.index === 1){
+        if(response.index === 1 && this.passed == false){
             let hairs = this.hairs;
             //remainingHairs.map(hair => hair.draw());
             function delay(i){
                 setTimeout(()=>{hairs[i].draw()}, i/2.);
             }
-            this.passed = true;
             for(let i = 0; i < hairs.length; i++){
                 delay(i);
             }
+            this.passed = true;
             this.baseContext.strokeStyle = "#AAAAFF";
         }
     }
