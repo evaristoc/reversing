@@ -526,7 +526,7 @@ The value of the **time** uniform is increased at each rendering frame using a s
 
 # Tada!
 
-If you reviewed the code you might have notice that the Three.js renderer and plane had dimensions but that they were not added to any HTML element. That was made on purpose by the author - the apparent changes on the texture of the Three.js plane should stay invisible to the observer.
+If you reviewed the code you might have notice that the Three.js renderer and plane had dimensions but that they were not added to any HTML element. That was made on purpose by the author - the apparent changes on the texture of the Three.js plane should stay invisible to the viewer.
 
 If you are interested in seeing how the noise function behaves, I have revealed the function by adding it to an HTML element:
 
@@ -538,7 +538,7 @@ If you are interested in seeing how the noise function behaves, I have revealed 
 
 # So... What did we learn from this code?
 
-In this second part of our analysis of the Darryl Huffman's "Perlin Flow Field" we got the basic ideas of the use of shaders and noise functions in combination with Three.js. We are also unveiling a couple facts, like keeping the noise function invisible to the observer.
+In this second part of our analysis of the Darryl Huffman's "Perlin Flow Field" we got the basic ideas of the use of shaders and noise functions in combination with Three.js. We are also unveiling a couple facts, like keeping the noise function invisible to the viewer.
 
 In fact, Darryl kept that invisible because his only interest was to extract values from the noise function without showing the graphics, giving this idea of "invisible force" affecting the movement of the "hairs" rendered on the "context" canvas.
 

@@ -10,9 +10,9 @@ categories: blog update
 
 # Putting everything together
 
-In [Part 1]({{site.baseurl}}{% link _posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.markdown %}) and [Part 2]({{site.baseurl}}{% link _posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02.markdown %}), we discussed some of the graphic tools that Darryl Huffman used to create his "Perlin Flow Field" on CodePen.
+In [Part 1]({{site.baseurl}}{% link _posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.markdown %}) and [Part 2]({{site.baseurl}}{% link _posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02.markdown %}) we discussed some of the graphic tools that Darryl Huffman used to create his "Perlin Flow Field" on CodePen.
 
-Darryl utilized the 2D graphics canvas API, Three.js (the 3D graphics library), and GLSL shaders. The way all those graphic tools were made to work together was something that piqued my curiosity. In an attempt to determine how Darryl obtained that result, I did some basic reverse engineering.
+Darryl utilized the 2D graphics canvas API, Three.js (the 3D graphics library), and GLSL shaders. The way all those graphic tools were made to work together was something that piqued my curiosity. In an attemp to determine how Darryl obtained that result, I made some basic reverse engineering.
 
 As a reminder, this is again a link to Darryl's work:
 
@@ -24,37 +24,51 @@ As a reminder, this is again a link to Darryl's work:
 <br/>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
 
-In this third and last post, we will check how Darryl brought together the canvas figure and the noise function.
+In this third and last post we will check how Darryl brought together the canvas figure and the noise function.
 
-# Trigonometry and the Adapter
+# Trigonometry and The Adapter
 
 We have the canvas strokes and the noise function. Now what?
 
-Darryl wanted the strokes to oscillate based on data coming from the WebGL renderer. More specifically, variations in the rendered noise function's color at specific pixels should drive changes in the rotation of the stroke. Every time a pixel changes color at each time frame interval, that color value should trigger the change of the stroke position, giving the illusion of moving like a wave by re-drawing them as rotating at angles not lower than 0 degrees and not more than 180 degrees with their points opposite to their origins as the center of rotation.
+Darryl wanted the strokes to move in angles based on data coming from the WebGL renderer. The changes in the position of the stroke were driven by changes in the colors of the rendered noise function: Every time a pixel changed color at each time frame interval, that color value should trigger the change of the stroke position, giving the illusion of moving like a wave by re-drawing them as rotating in angles not lower than 0 degrees and not more than 180 degrees with their origins as center of rotation.
 
-And which functions are common to waves, rotations, and angles? Indeed, [trigonometic functions](https://www.math.net/trigonometric-functions).
+And which functions are typical to waves, rotations and angles? Indeed - [trigonometic functions](https://www.math.net/trigonometric-functions).
 
-Extracting that data directly from the openGL API is not an easy task. However, the WebGL API is a robust one and includes many helpful methods. The canvas API and the WebGL API are strongly related; the WebGL API uses the canvas API for rendering. Consequently, there are ways to render an openGL graphic and still use the canvas API methods to get two-dimensional information about the openGL rendering.
+Extracting that data directly from the openGL API is not an easy task. But the WebGL API is a powerful one and comes with very useful methods. The canvas API and the WebGL API are strongly related: the WebGL API uses the canvas API for rendering. Therefore, it is possible to render an openGL graphic and still use the canvas API methods to get two-dimensional information about the openGL rendering.
 
-A typical way to extract data into canvas from another rendering API (e.g., videos) is by using another canvas element. Darryl made use of this popular trick. 
+A typical way to extract data into canvas from another rendering API (eg. videos) is by using another canvas element. Darryl made use of this popular trick. 
 
-Considering the effect that effect was Darryl looking for, the trick makes even more sense. Darryl didn't want the coloring of the noise function to be visible - he only wanted the coloring data. If he used the context canvas for directly collecting the noise function output, he also might have to show the rendering of the noise function, and that is what he wanted to prevent.
+The trick is even more appropriate given the effect that Darryl was after. Darryl didn't want the coloring of the noise function to be seeing - he only wanted the data. If he used the context canvas for directly collecting the noise function output, he also had to show the rendering of the noise function, and that is what he wanted to prevent.
 
-He then kept his noise function rendering invisible to viewers and use another canvas as an adapter to extract data from it.
+The Perlin canvas, in this case, works more like an adapter.
 
 # The Code
 
-In the previous post, we separated Darryl's code into three sections:
+In the previous post we separated Darryl's code into three sections:
 
 - The "context" canvas and the Hair class
 - The WebGL (Three.js), the *shader*, and the texture canvas
-- The interaction between the texture (aka Garryl's **perlinCanvas**) and the "context" canvas
+- The interaction between the texture (aka Garryl's "perlinCanvas") and the "context" canvas.
 
 Our focus is the third one.
 
 **THE DARRYL'S "PERLIN" CANVAS**  
 
 As we previously mentioned in [Part 1]({{site.baseurl}}{% link _posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.markdown %}), the canvas that Darryl would use as an adapter (the "Perlin" canvas) was declared with similar properties to the "context" canvas but not appended to any HTML element:
+
+```javascript
+		draw(){
+    			let { position, length } = this,
+			    { x, y } = position,
+			    i = (y * width + x) * 4,
+			    d = perlinImgData.data,
+			    noise = d[i],
+			    angle = (noise / 255) * Math.PI
+			
+			context.moveTo(x, y)
+			context.lineTo(x + Math.cos(angle) * length, y + Math.sin(angle) * length)
+		}
+```
 
 <div class="codetable-wrap" style="width:auto; overflow-x: auto;">
 <table>
@@ -117,7 +131,7 @@ As we previously mentioned in [Part 1]({{site.baseurl}}{% link _posts/2023-10-07
 </table>
 </div>
 
-The "Perlin" canvas (actually, the **perlinContext**) would be later associated with the **renderer** variable that was declared in line 5 of the original code and which would be linked to the WebGL renderer at line 231, inside the **noiseCanvas** function:
+The "Perlin" canvas (actually, the **perlinContext**) would be later associated to the **renderer** variable that was declared in line 5 of the original code and which would linked to the WebGL renderer at line 231, inside the **noiseCanvas** function:
 
 <div class="codetable-wrap" style="width:auto; overflow-x: auto;">
 <table>
@@ -206,13 +220,13 @@ The "Perlin" canvas (actually, the **perlinContext**) would be later associated 
 </table>
 </div>
 
-How the WebGL renderer is associated with the **perlinContext** can be seen in line 70 of the original code, enclosed in the *canvas* **render** function. What the **perlinContext** takes from the WebGL renderer is a "screenshot", a one-time image of what the WebGL renderer should show at each rendered frame of the **context** canvas.
+How the WebGL renderer is associated to the **perlinContext** can be seen in the line 70 of the original code, enclosed in the *canvas* **render** function. What the **perlinContext** takes from the WebGL renderer is a "screenshot", a one-time image of what the WebGL renderer should show at each rendered frame of the **context** canvas.
 
-It is that image, that "screenshot", that is used to collect the data, which is then passed to the **perlinImgData**.
+It is that image, that "screenshot", what it is used to collect the data, which is then passed to the **perlinImgData**.
 
-**STROKE'S WAVE MOVEMENT AND THE draw METHOD**
+**STROKE'S WAVE MOVEMENT AND THE draw METHOD
 
-In order to see how the data of the **perlinImgData** was used, we have to come back to the **draw** method of each instance of class **Hair**.
+In order to see how the data of the **perlinImgData** was used we have to come back to the **draw** method of each instance of class **Hair**.
 
 <div class="codetable-wrap" style="width:auto; overflow-x: auto;">
 <table>
@@ -273,13 +287,13 @@ In order to see how the data of the **perlinImgData** was used, we have to come 
 </table>
 </div>
 
-**perlinImgData.data** is the one passed to the **draw** method of the instance. The rgba values of every pixel in the "screenshot" would be listed in **perlinImgData.data**. Actually, **perlinImgData.data** is more an [array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
+**perlinImgData.data** contains the rgb values of the pixel coloring from the "screenshot" arranged in a list. Actually, it works more like an [array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array). **perlinImgData.data** is the one passed to the the **draw** method of the instance.
 
-The values required to calculate the rotation of the stroke were found using a calculated index, **i**. The calculation of **i** gives an idea of how the color data is arranged in the array. If a pixel were located at position ```(x,y)```, one of its rgba-coded color values would be located at ```(x * width + y) * 4``` in the array.
+Darryl used an index **i** to search into the array. The calculation of **i** gives already an idea how the color data is arranged in the array. For a pixel located in (x,y), one of the values of its full color rgba coding is located at ```(x * width + y) * 4```.
 
-From the **perlinImgData.data** array, Darryl extracted a single value per pixel using that "mysterious" index. He then entered the value from the array into the ratio of a formula to obtain an angle's output in radians.
+The fact is that Darryl used that mysterious index to extract just one value from the **perlinImgData.data** list and used another formula to get an angle based on the ratio of the extracted value against its maximum (255).
 
-The resulting angle was used to calculate the rotation of the stroke using trigonometric formulas.
+It is the resulting angle which is used to re-render the stroke in a different angular position using trigonometric formulas.
 
 # In Action
 
@@ -297,7 +311,7 @@ The resulting angle was used to calculate the rotation of the stroke using trigo
         </div>
         <div class='step' data-step='2'>
             <div class="explain">
-            <p>Here we draw 700 "hairs" as an example. Remember that the "perlin" canvas was eventually instantiated with the same dimensions as the context canvas, but it was not appended to any HTML element. <strong>perlinImgData</strong> was declared at a higher scope and set to "undefined".</p>
+            <p>Here we draw 700 "hairs" as an example. Remember that the "perlin" canvas was eventually instantiated with the same dimensions as the context canvas, but it was not appended to any HTML element. <strong>perlinImgData</strong> was declared at a high scope and undefined.</p>
 <div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert"><span class="kd">let</span> <span class="nx">perlinImgData</span> <span class="o">=</span> <span class="kc">undefined</span>
 
 <span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">width</span>
@@ -315,12 +329,12 @@ The resulting angle was used to calculate the rotation of the stroke using trigo
         </div>
 <div class='step' data-step='4'>
             <div class="explain">
-            <p>The <strong>perlinCanvas</strong> collects a screenshot of the noise flow at each animation frame. The data from the image is then passed to <strong>perlinImgData</strong>.</p>
+            <p>The <strong>perlinCanvas</strong> collects an screenshot of the noise flow at each animation frame. The data of the image is then collected in <strong>perlinImgData</strong>.</p>
             </div>
 </div>
         <div class='step' data-step='5'>
             <div class="explain">
-            <p>You have seen this already! The draw method in class Hair. Notice the <strong>perlinImgData.data</strong>, the index <strong>i</strong> and the canvas API methods, <strong>moveTo</strong> and <strong>lineTo</strong>.</p>
+            <p>You have seen this one already! The draw method in class Hair. Notice the <strong>perlinImgData.data</strong>, the index <strong>i</strong> and the canvas API methods, <strong>moveTo</strong> and <strong>lineTo</strong>.</p>
 <div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert">
     ...
     <span class="nx">draw</span><span class="p">(){</span>
@@ -340,8 +354,8 @@ The resulting angle was used to calculate the rotation of the stroke using trigo
         </div>
         <div class='step' data-step='6'>
             <div class="explain">
-            <p>The index is used to look for one of the rgba (0-255) encoded coloring values for the pixel in the data array <strong>perlinImgData.data</strong>. Both canvas are of the same dimension, and the extracted values correspond to pixels on the <strong>perlinContext</strong> screenshot that match <em>exactly the same</em> position as "hair" origin in the <strong>context</strong> canvas. The array's value is entered into a formula to get an "angle" value between 0 and PI.</p>
-            <p>This angle would be used to rotate the origin point of the hair.</p>
+            <p>The index is used to search in the data array <strong>perlinImgData.data</strong> one of the pixel's coloring values encoded as rgba (0-255). Both canvas are of same dimension, and the extracted values correspond to pixels on the <strong>perlinContext</strong> screenshot that are in <em>exactly the same</em> position as the origin of every hair in the <strong>context</strong> canvas. The found value is inserted in a formula to get an angle value between 0 and PI.</p>
+            <p>This angle would be used to rotate the origin of the hair.</p>
             </div>
         </div>        
         <div class='step' data-step='7'>
@@ -374,28 +388,79 @@ The resulting angle was used to calculate the rotation of the stroke using trigo
 
 # Tada!
 
-If you look closely at the last image, you might notice that the "hairs" move to the right and left based on how light or dark the the passing noise flow is.
+If you watch closely the last image, you might notice that the "hairs" would bounce right and left depending of if the passing noise flow is darker or lighter. 
 
-This passing noise flow is kept away from the viewer, giving the illusion of an invisible force flowing through the hairs.
+
+> Note: keep in mind that Darryl defined *another* function called **render** inside the **noiseCanvas** function to render the WebGL graphics.
+
+
+
+
+~~Why a single image? The renderer might be running the graphics at a different speed as how the canvas can check, and the time to process all the data takes time. This can lead to mistmatches between the collected data~~
+
+With his project, Garryl wanted to animate "hairs" located in a circle of radio "r" in the middle of the viewport. Those hairs were canvas' strokes. They all should move based on a noise function which a pattern that changes over time in a rather regular trend. Because the way it changes the noise function is usually referred as a ***flow***, simulating the usual patterns in the movements of substances in either liquid or gas states.
+
+So, the "liquid" pattern should lead the movement of the hairs.
+
+Yes, but... how?
+
+There are several ways to implement this noise function over the hairs of the "context" canvas. One way is to write the code of the noise function directly in javascript and pass its generated values into the canvas API.
+
+Now, we know that the shader function affects the pixels of the rendered image. If we want to capture the flow effect of the noise function, we need to come up with an idea of how to get the values associated with those pixels at any point in time.
+
+However, the noise function was written for the WebGL API, not the canvas API. There is not simple way to extract values from a WebGL shader into a javascript scope.
+
+Unless that... if we could find an interface that capture those values per pixel affected by the noise function in the WebGL scope and bring them to the javascript scope into our "context" canvas, we could translate those values into a movement function...
+
+Well here a popular trick: a usual method consists in extracting values from the WebGL that also relies on the canvas API and that are revealed in this example:
+* With Three.js you can render a WebGL shape over which to run the shader. Three.js is actually WebGL in simpler javascript. It is like the jQuery of WebGL.
+* Then you can use a canvas as a "texture" to "cover" that shape.
+* The canvas texture is then a subject of the changes of the shader. Those changes are in fact numeric values  and those changes translate into values that you can extract from that texture canvas into the Javascript scope.
+
+Garryl Huffman selected the approach of using an interface.
+
+That canvas that acts as texture of the WebGL scope becomes and interface between the WebGL and the javascript. Although not strictly so, this approach is very close to an [Adapter design pattern](https://refactoring.guru/design-patterns/adapter).
+
+With his project, Garryl wanted to move the  used not one but two canvas elements. They were strongly interlinked - we will explain that better later on.
+
+Both of the canvases were made invisible to the observer.
+
+The first canvas, the "context", contained the line strokes that would be subjected to the animation.
+
+Let's see its functionality.
+
+
+# Tada!
+
+The last bit of code I want to show you for now is the render of the canvas elements:
+
+```javascript
+function render() {
+    var now = new Date().getTime();
+    currentTime = (now - startTime) / 1000
+    
+    context.clearRect(0,0,width,height)
+
+    perlinContext.clearRect(0, 0, width, height)
+    perlinContext.drawImage(renderer.domElement, 0, 0)
+    perlinImgData = perlinContext.getImageData(0, 0, width, height)
+    
+    context.beginPath()
+    hairs.map(hair => hair.draw())
+    context.stroke()
+    
+    requestAnimationFrame( render );
+}
+render()
+```
+
+What I would like to point out is the `hairs.map(hair => hair.draw())`, which is the draw of each stroke. No less important though is what it goes with the **perlinContext** and the value assignment to the global **perlinImgData** which is parameter of the Hair's **draw method**. For the purpose of this example we left the values of the **perlinImgData** all as zero, but if you check Darryl's code and see carefully you will notice that the perlinImgData is feeding data to the draw function and therefore to the position of the hairs in the circle.
 
 # So... What did we learn from this code?
 
-There are few things I learned from this single project:
+So far, one of the things that for me was very interesting from Darryl Huffman's example was the simplicity of ideas. I won't say the code is very simple, but some of the design concepts of the exercise, like randomly distributing hairs in a circle, were very nice. The use of the class to even append the instances in a global list were kind of smart.
 
-* the use of flowing noise functions to get effects on canvas-based graphics
-* a revision of the power of the canvas API as intermediate to get data between graphical APIs
-* a refreshing of rotation programming techniques
-* ... and more
+Apart of that, there is still much to reveal about this code. What about the noise function? And what is the role of the "perlinContext" canvas? You might ask. Before we move to the next part, I can say that using two canvas elements is a common trick - using one canvas to extract data from an application (eg. a video) and to feed that data into another canvas to affect a visualization.
 
-In fact, there are still things we can get deeper into by just using this example, but I think we could stop now.
-
-It also like the challenge of getting nice effects with some kind of minimal effort. In the case of the implementation we have just seen, it is fair to say that only when you have at least a basic understanding of all those technologies and techniques is the effort of putting them together  a "minimal" one. But if you notice the few elements used between all those technologies to generate the final effect, then you might agree how the use of few values where enough to make this project a nice to "re-verse".
-
-# Final Remarks
-
-I still find myself ripping at the Darryl's pen as I watch the hairs move as mimicking a natural phenomenon, like a soft water stream passing accross floating grass.
-
-Now, what are your thoughts? Was there anything Darryl Huffman could have done differently? Is this pen one that could work for some of your projects? Is there any other effect that you would like to try using similar techniques?
-
- I hope that all three of these posts were helpful for you. With this we have completed our analysis of this implementation. Time for something new. Meanwhile, I wish you happy coding!
+ For now, happy coding!
 
