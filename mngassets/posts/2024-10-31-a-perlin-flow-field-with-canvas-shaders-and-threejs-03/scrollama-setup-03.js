@@ -1,9 +1,8 @@
 //import {hello} from './huffman-flow-field-setup.js';
-import {eventHandlers} from './scrollama-eventhandlers-02.js';
-import {paramsFigure} from './huffman-flow-field-setup-02.js';
-import {Hair} from './huffman-flow-field-setup-02.js';
-//console.log("eventHandlers",eventHandlers);
-//console.log("paramsFigure", paramsFigure);
+import {eventHandlers} from './scrollama-eventhandlers-03.js';
+import {paramsFigure} from './huffman-flow-field-setup-03.js';
+import {Hair} from './huffman-flow-field-setup-03.js';
+import {canvasScene} from './huffman-flow-field-setup-03.js';
 
 window.onload = (event) => {
     // using d3 for convenience
@@ -48,25 +47,20 @@ window.onload = (event) => {
   
     const scrolly = getElementD3js(d3, "#stickyoverlay");
     paramsFigure.container = eventHandlers.container = getElementD3js(scrolly, "figure");
-    //const figure = paramsFigure.container;
+    paramsFigure.width = paramsFigure.container.node().offsetWidth;
+    paramsFigure.height = 200;
     const article = getElementD3js(scrolly, "div .articlepost");
     eventHandlers.step = getElementD3js(article, ".step", true);
-    const baseCanvas = document.createElement('canvas');
-    const baseContext = baseCanvas.getContext('2d');
-    const perlinCanvas = document.createElement('canvas');
-    const perlinContext = perlinCanvas.getContext('2d');
-    baseCanvas.setAttribute("id", "context");
-    perlinCanvas.setAttribute("id", "perlinCanvas");
-    paramsFigure.width = paramsFigure.container.node().offsetWidth;
-    paramsFigure.height = baseCanvas.height = 200;
-    paramsFigure.container.node().appendChild(baseCanvas);
-    paramsFigure.baseCanvas = eventHandlers.baseCanvas = getElementById(document, "context");
-    paramsFigure.baseContext = eventHandlers.baseContext = baseContext;
-    paramsFigure.perlinCanvas = getElementById(document, "perlinCanvas");
-    paramsFigure.perlinContext = perlinContext;
-    //paramsFigure.renderer.setSize( 300, 200 );
+    const baseCanvasInst = new canvasScene(paramsFigure.container, "context");
+    baseCanvasInst.setDimensionsD3(paramsFigure.width, paramsFigure.height);
+    baseCanvasInst.appendCanvasD3();
+    const perlinCanvasInst = new canvasScene(paramsFigure.container, "noiseAdapt");
+    perlinCanvasInst.setDimensionsD3(paramsFigure.width, paramsFigure.height);
 
-    //paramsFigure.renderingFunc.startTime = paramsFigure.startTime;
+    eventHandlers.baseCanvas = getElementById(document, "context");
+    paramsFigure.baseContext = eventHandlers.baseContext = baseCanvasInst.scene;
+    eventHandlers.perlinCanvas = getElementById(document, "noiseAdapt");
+    eventHandlers.perlinContext = perlinCanvasInst.scene;
 
     paramsFigure.circle = {
         x: paramsFigure.container.node().offsetWidth / 2,
@@ -74,8 +68,8 @@ window.onload = (event) => {
         r: paramsFigure.container.node().offsetWidth / 2. / 2. / 2.
     }
 
-    paramsFigure["renderer"] = paramsFigure.rendererFunc();
-    paramsFigure.renderer.setSize(paramsFigure.width, paramsFigure.height);
+    eventHandlers["renderer"] = paramsFigure.rendererFunc();
+    eventHandlers.renderer.setSize(paramsFigure.width, paramsFigure.height);
 
     //console.log(paramsFigure.hairs.length)
     //console.log(paramsFigure.hairs[0])
@@ -103,43 +97,24 @@ window.onload = (event) => {
         eventHandlers.handleStepEnter01(response);
     }
 
-    //E: RELEVANT - it is a different library to stick the menu; scrollama doesn't handle this!
-    function setupStickyfill() {
-        d3.selectAll('.sticky').each(function () {
-            //Stickyfill.add(this);
-        });
-    }
-
-    function setupCharts(){
-        return svg, chart, item = d3setup.chart("figure");
-    }
 
     function init() {
  
-        function start(){
-            return setTimeout(new Hair(), 10);
-        }
-
-        
+       
         //E: instantiate all the hairs and save them in the hairs container
         // but don't draw them yet... 
-        for(var i = 0; i < 6000; i++){
+        for(var i = 0; i < 700; i++){
             new Hair();
         }
 
-        setupStickyfill();
-        // 1. force a resize on load to ensure proper dimensions are sent to scrollama
-        //console.log("initFigure", initFigure);
-        //hello();
-        
+        //eventHandlers.hairs = [];
+        eventHandlers.hairs = [];
+
         handleResize();
 
-        paramsFigure.baseContext.fillStyle = "#f3f3f3";
-        //paramsFigure.baseContext.strokeStyle = "#f3f3f3";
+        //eventHandlers.baseContext.fillStyle = "#404040";
+        //eventHandlers.baseContext.fillStyle = "#004040";
 
-        //paramsFigure.renderFunc.renderer = paramsFigure.renderer;
-        //requestAnimationFrame(paramsFigure.render);
-        //paramsFigure.renderingFunc.render();
         function figRender(){
             let now = new Date().getTime();
             let startTime = paramsFigure.startTime;
@@ -148,21 +123,26 @@ window.onload = (event) => {
             let width = paramsFigure.width;
             let height = paramsFigure.height;
             //console.log(width, height);
-            paramsFigure.baseContext.clearRect(0,0,width,height);
-            paramsFigure.perlinContext.clearRect(0, 0, width, height);
-            paramsFigure.perlinImgData = paramsFigure.perlinContext.getImageData(0, 0, width, height);
-            //paramsFigure.baseContext.beginPath();
-            //paramsFigure.hairs.map(hair => hair.draw());
-            paramsFigure.baseContext.fillRect(0, 0, width, height);
-            paramsFigure.baseContext.stroke();
+            eventHandlers.baseContext.clearRect(0,0,width,height);
+            eventHandlers.perlinContext.clearRect(0, 0, width, height);
+            eventHandlers.perlinContext.drawImage(eventHandlers.renderer.domElement, 0, 0)
+            paramsFigure.perlinImgData = eventHandlers.perlinContext.getImageData(0, 0, width, height);
+            eventHandlers.baseContext.beginPath();
+            if(eventHandlers.hairs.length > 0){
+                eventHandlers.hairs.map(hair => hair.draw());
+            }
+            eventHandlers.baseContext.fillRect(0, 0, width, height);
+            eventHandlers.baseContext.stroke();
             requestAnimationFrame( figRender );
         }
-        
+
         figRender();
 
         //E: order of the functions is important!
         //After rendering the canvas and before running the handler
-        eventHandlers.hairs = paramsFigure.hairs;
+        
+       
+        
 
         // 2. setup the scroller passing options
             // 		this will also initialize trigger observations
@@ -171,7 +151,7 @@ window.onload = (event) => {
         
         scroller.setup({
                 step: '#stickyoverlay div.articlepost .step',
-                offset: .33,
+                offset: .39,
                 debug: false,
             })
                 .onStepEnter(handleStepEnter);

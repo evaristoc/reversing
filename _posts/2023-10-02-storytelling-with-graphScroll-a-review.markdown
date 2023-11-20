@@ -22,5 +22,3 @@ And here the one to **stack.js** demo: https://mbostock.github.io/stack/
 I would keep short this post because the **graph-scroll.js** demo is very good at indicating how to use the tool, so I wouldn't try to re-invent the Adam Pierce's 1-Wheel.
 
 Check this project if you are looking for a scrolling event handler specifically for D3.js! Happy coding!
-
-Evaristo

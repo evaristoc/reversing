@@ -1,6 +1,7 @@
+import {paramsPlane} from '../2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js';
+import {paramsFigure} from './huffman-flow-field-setup-03.js';
 
 //REMEMBER we are using d3.js to handle the DOM
-
 //TODO:
 //- make this an exportable object so it can be updated in scrollama-setup or any other script as required
 
@@ -44,6 +45,8 @@ export let eventHandlers = {
     height : null,
     baseCanvas: null,
     baseContext: null,
+    //perlinCanvas: null,
+    //perlinContext: null,
     hairs: null,
     passed: false,
     updateSizeCanvas : function(){
@@ -86,71 +89,61 @@ export let eventHandlers = {
 
         const baseContext = this.baseContext;
         const updateCanvasBackground = this.updateCanvasBackground.bind(this, this.baseContext);
-        
+        let perlinImgData = undefined;
         
         
         //E - from https://codepen.io/GreenSock/pen/bGbQwo
         //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
         if(response.index === 0){
+            
             this.baseContext.clearRect(0,0,this.width,this.height);
-            function tweenToRandomColor() {
-                TweenLite.to(
-                        baseContext, 
-                        1, 
-                        {
-                            colorProps:{
-                                //fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
-                                fillStyle: "#404040",
-                                strokeStyle: "#404040"
-                            }, 
-                            onUpdate: updateCanvasBackground, 
-                        //onComplete:tweenToRandomColor
-                        });
-            }        
-            tweenToRandomColor();
+            //const scrollfigure = document.getElementById("scrollfig");
+            //gsap.to(scrollfigure, { x: 400, duration:.3 });
+            
+            function tweener() {
+                const scrollfigure = document.getElementById("scrollfig");
+                const charTl = gsap.timeline();
+                charTl.to(scrollfigure, { opacity: 1, duration: 3 });
+              }        
+            tweener();
 
         }
         if(response.index === 1){
-            //this.baseContext.rect(0,0,500,200);
-            //this.baseContext.fillStyle = "#404040";
-            //this.baseContext.fill();
-            //this.baseContext.strokeStyle = "#0000aa";
-            function tweenToRandomColor02() {
-                TweenLite.to(
-                        baseContext, 
-                        1, 
-                        {
-                            colorProps:{
-                                //fillStyle: `#${response.index}0${response.index*2}0${response.index*2}0`,
-                                //strokeStyle: "#AAAAFF",
-                            }, 
-                            onUpdate: updateCanvasBackground, 
-                        //onComplete:tweenToRandomColor
-                        });
+            function strokes(hairs, otherHairs){
+                baseContext.beginPath();
+                function delay(i){
+                    setTimeout(()=>{hairs[i].draw(); otherHairs.push(hairs[i])}, i/1.);
+                }
+                for(let i = 0; i < hairs.length; i++){
+                    delay(i);
+                    baseContext.stroke();
+                }
             }
-            this.baseContext.strokeStyle = "#fff";
-            tweenToRandomColor02(); 
+            strokes(paramsFigure.hairs, this.hairs);
+            baseContext.strokeStyle = "#AAAAFF";
+            this.passed = response.index;
+            //this.baseContext.strokeStyle = "#AAAAFF";
         }
-        if(response.index === 2){
-            this.baseContext.beginPath();
-            //console.log("hair", this.hairs[0].draw());
-            //this.hairs.map(hair => hair.draw());
-            let first10Hairs = this.hairs.slice(0, 10);
-            first10Hairs.map(hair => hair.draw());
-            this.baseContext.strokeStyle = "#AAAAFF";
-            //this.baseContext.stroke();
+        if(response.index === 3){
+            this.renderer = paramsPlane.renderer;
+            this.passed = response.index;
         }
-        if(response.index === 4){
-            let remainingHairs = this.hairs.slice(9);
-            //remainingHairs.map(hair => hair.draw());
-            function delay(i){
-                setTimeout(()=>{remainingHairs[i].draw()}, i/2.);
-            }
-            this.passed = true;
-            for(let i = 0; i < remainingHairs.length; i++){
-                delay(i);
-            }
-            this.baseContext.strokeStyle = "#AAAAFF";
+        if(response.index === 7){
+            //this.baseContext.fillStyle = "#ffffff00";
+            gsap.to(baseContext,
+                {
+                    fillStyle:"rgba(255,255,255,0)",
+                    duration:3
+                }
+            );
+            this.passed = response.index;
+        }
+        if(response.index === 8){
+            let noiseContainer = document.getElementById("threejs-container");
+            const charT2 = gsap.timeline();
+            charT2.to(noiseContainer, { y: -200, duration: 3 });
+            //noiseContainer.style.top = "200px";
+            this.passed = response.index;
         }
     }
 }

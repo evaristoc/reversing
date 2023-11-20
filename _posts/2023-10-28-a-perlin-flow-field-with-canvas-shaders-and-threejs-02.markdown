@@ -7,7 +7,7 @@ categories: blog update
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.css %}">
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
 
-In a [previous post]({{site.baseurl}}{% link _posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.markdown %}) we discussed how Darryl Huffman created worked the figure on his "Perlin Flow Field" that will be affected by the animation.
+In a [previous post]({{site.baseurl}}{% link _posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.markdown %}) we discussed how Darryl Huffman created the figure on his "Perlin Flow Field" that will be affected by the animation.
 
 This is again a link to Darryl's work:
 
@@ -18,13 +18,13 @@ This is again a link to Darryl's work:
 </p>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
 
+Darryl utilized the 2D graphics canvas API, Three.js (the 3D graphics library), and GLSL shaders. The way all those graphic tools were made to work together was something that piqued my curiosity. In an attemp to determine how Darryl obtained that result, I made some basic reverse engineering.
+
 One thing I found nice from Darryl's project was his use of a **noise function** for the animation. 
 
 Adding noise with shaders is very nice!
 
 Yeah... But let's be honest - unless you truly understand shaders and what those noise functions do, it might be very challenging to programatically get the required effect.
-
-Darryl utilized the 2D graphics canvas API, Three.js (the 3D graphics library), and GLSL shaders. They way all those graphic tools were made to work together was something that piqued my curiosity. In an attemp to determine how Darryl obtained that result, I made some basic reverse engineering.
 
 In this post we will have an helicopter view at the noise function.
 
@@ -526,7 +526,7 @@ The value of the **time** uniform is increased at each rendering frame using a s
 
 # Tada!
 
-If you reviewed the code you might have notice that the Three.js renderer and plane had dimensions but that they were not added to any HTML element. That was made on purpose by the author - the apparent changes on the texture of the Three.js plane should stay invisible to the observer.
+If you reviewed the code you might have notice that the Three.js renderer and plane had dimensions but that they were not added to any HTML element. That was made on purpose by the author - the apparent changes on the texture of the Three.js plane should stay invisible to the viewer.
 
 If you are interested in seeing how the noise function behaves, I have revealed the function by adding it to an HTML element:
 
@@ -538,7 +538,7 @@ If you are interested in seeing how the noise function behaves, I have revealed 
 
 # So... What did we learn from this code?
 
-In this second part of our analysis of the Darryl Huffman's "Perlin Flow Field" we got the basic ideas of the use of shaders and noise functions in combination with Three.js. We are also unveiling a couple facts, like keeping the noise function invisible to the observer.
+In this second part of our analysis of the Darryl Huffman's "Perlin Flow Field" we got the basic ideas of the use of shaders and noise functions in combination with Three.js. We are also unveiling a couple facts, like keeping the noise function invisible to the viewer.
 
 In fact, Darryl kept that invisible because his only interest was to extract values from the noise function without showing the graphics, giving this idea of "invisible force" affecting the movement of the "hairs" rendered on the "context" canvas.
 
