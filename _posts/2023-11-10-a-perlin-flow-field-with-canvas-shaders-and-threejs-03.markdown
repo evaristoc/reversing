@@ -314,47 +314,30 @@ It is the resulting angle which is used to re-render the stroke in a different a
         </div>
         <div class='step' data-step='2'>
             <div class="explain">
-            <p>The "perlin" canvas was eventually instantiated with the same dimensions as the context canvas, but it was not appended to any HTML element.</p>
+            <p>Here we draw 700 "hairs" as an example. Remember that the "perlin" canvas was eventually instantiated with the same dimensions as the context canvas, but it was not appended to any HTML element. <strong>perlinImgData</strong> was declared at a high scope and undefined.</p>
 <div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert"><span class="kd">let</span> <span class="nx">perlinImgData</span> <span class="o">=</span> <span class="kc">undefined</span>
 
 <span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">width</span>
 <span class="nx">perlinCanvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">height</span>
 </code></pre></div></div>
 <div class="explain">
-<p>We haven't used the data so far. Let's do it.</p>
 </div>
             </div>
         </div>
         <div class='step' data-step='3'>
             <div class="explain">
+            <p>So far we haven't used the data coming from the <strong>perlinCanvas</strong>.</p>
+            <p>Let's do it!</p>
             </div>
         </div>
-        <div class='step' data-step='4'>
+<div class='step' data-step='4'>
             <div class="explain">
-            <p>All "hair"'s were instances of the class <em>Hair</em>.
-            The class constructor took several inputs. The global <strong>circle</strong> object was one of them. For each instance of Hair, the class constructor generated random values for "r" and "d" of a <a href="https://www.mathsisfun.com/geometry/unit-circle.html" target="_blank">unit circle</a>. These values where then used to calculate random positional (x,y) values enclosed within the global <strong>circle object</strong> by applying the <a href="https://unacademy.com/content/jee/study-material/mathematics/parametric-equations-of-a-circle/" target="_blank">parametric equation of the circle</a>. Addtionally, the class assigned a random length to each stroke.</p>
-<div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert">
-<span class="kd">class</span> <span class="nx">Hair</span> <span class="p">{</span>
-    <span class="kd">constructor</span><span class="p">(){</span>
-        <span class="kd">let</span> <span class="nx">r</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">(),</span>
-            <span class="nx">d</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">())</span>
-
-        <span class="k">this</span><span class="p">.</span><span class="nx">position</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="na">x</span><span class="p">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">circle</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">r</span><span class="p">)</span> <span class="o">*</span> <span class="nx">d</span> <span class="o">*</span> <span class="nx">circle</span><span class="p">.</span><span class="nx">r</span><span class="p">),</span>
-            <span class="na">y</span><span class="p">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">circle</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">r</span><span class="p">)</span> <span class="o">*</span> <span class="nx">d</span> <span class="o">*</span> <span class="nx">circle</span><span class="p">.</span><span class="nx">r</span><span class="p">)</span>
-        <span class="p">}</span>
-        
-        <span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span>
-        <span class="nx">hairs</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
-    <span class="p">}</span>
-    ...
-</code></pre></div></div>
+            <p>The <strong>perlinCanvas</strong> collects an screenshot of the noise flow at each animation frame. The data of the image is then collected in <strong>perlinImgData</strong>.</p>
             </div>
-        </div>
-        <div class='step' data-step='5'></div>
-        <div class='step' data-step='6'>
+</div>
+        <div class='step' data-step='5'>
             <div class="explain">
-            <p>In Hair class, Darryl included a method to draw each of the strokes. Notice that there are two elements that will come as very important later: the <strong>perlinImgData</strong> and the canvas API <strong>moveTo</strong> and <strong>lineTo</strong> methods.</p>
+            <p>You have seen this one already! The draw method in class Hair. Notice the <strong>perlinImgData.data</strong>, the index <strong>i</strong> and the canvas API methods, <strong>moveTo</strong> and <strong>lineTo</strong>.</p>
 <div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert">
     ...
     <span class="nx">draw</span><span class="p">(){</span>
@@ -372,18 +355,22 @@ It is the resulting angle which is used to re-render the stroke in a different a
 </code></pre></div></div>            
             </div>
         </div>
+        <div class='step' data-step='6'>
+            <div class="explain">
+            <p>The index is used to search in the data array <strong>perlinImgData.data</strong> one of the pixel's coloring values encoded as rgba (0-255). Both canvas are of same dimension, and the extracted values correspond to pixels on the <strong>perlinContext</strong> screenshot that are in <em>exactly the same</em> position as the origin of every hair in the <strong>context</strong> canvas. The found value is inserted in a formula to get an angle value between 0 and PI.</p>
+            <p>This angle would be used to rotate the origin of the hair.</p>
+            </div>
+        </div>        
         <div class='step' data-step='7'>
             <div class="explain">
-            <p>With a for-loop, Darryl instanted 6000 "hairs". The destination of each new instance is not clear by just looking at the loop. By exploring the code of the class Hair you will find that Darryl made it to use the now global hairs list to register each new instance at the time of the instance construction.</p>
-<div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert"><span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">6000</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-    <span class="k">new</span> <span class="nx">Hair</span><span class="p">()</span>
-<span class="p">}</span>
-</code></pre></div></div>
+            <p>Now let's overlap both graphics.</p>
             </div>
         </div>
+        <div class='step' data-step='8'>
+        </div>
+        <div class='step' data-step='9'>
+        </div>
     </div>
-    <br>
-    <br>
     <br>
     <br>
     <br>
@@ -402,8 +389,9 @@ It is the resulting angle which is used to re-render the stroke in a different a
 <script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js %}"></script>
 
 
+# Tada!
 
-
+If you watch closely the last image, you might notice that the "hairs" would bounce right and left depending of if the passing noise flow is darker or lighter. 
 
 
 > Note: keep in mind that Darryl defined *another* function called **render** inside the **noiseCanvas** function to render the WebGL graphics.

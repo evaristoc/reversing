@@ -103,7 +103,7 @@ window.onload = (event) => {
        
         //E: instantiate all the hairs and save them in the hairs container
         // but don't draw them yet... 
-        for(var i = 0; i < 1700; i++){
+        for(var i = 0; i < 700; i++){
             new Hair();
         }
 
@@ -151,7 +151,7 @@ window.onload = (event) => {
         
         scroller.setup({
                 step: '#stickyoverlay div.articlepost .step',
-                offset: .33,
+                offset: .39,
                 debug: false,
             })
                 .onStepEnter(handleStepEnter);

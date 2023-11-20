@@ -128,7 +128,7 @@ export let eventHandlers = {
             this.renderer = paramsPlane.renderer;
             this.passed = response.index;
         }
-        if(response.index === 4){
+        if(response.index === 7){
             //this.baseContext.fillStyle = "#ffffff00";
             gsap.to(baseContext,
                 {
@@ -138,7 +138,7 @@ export let eventHandlers = {
             );
             this.passed = response.index;
         }
-        if(response.index === 5){
+        if(response.index === 8){
             let noiseContainer = document.getElementById("threejs-container");
             const charT2 = gsap.timeline();
             charT2.to(noiseContainer, { y: -200, duration: 3 });
