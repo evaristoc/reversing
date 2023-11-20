@@ -1,4 +1,5 @@
 import {paramsPlane} from '../2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js';
+import {paramsFigure} from './huffman-flow-field-setup-03.js';
 
 //REMEMBER we are using d3.js to handle the DOM
 //TODO:
@@ -107,37 +108,42 @@ export let eventHandlers = {
             tweener();
 
         }
-        if(response.index === 1 && this.passed == false){
-            let hairs = this.hairs;
-            function delay(i){
-                setTimeout(()=>{hairs[i].draw()}, i/2.);
+        if(response.index === 1){
+            function strokes(hairs, otherHairs){
+                baseContext.beginPath();
+                function delay(i){
+                    setTimeout(()=>{hairs[i].draw(); otherHairs.push(hairs[i])}, i/1.);
+                }
+                for(let i = 0; i < hairs.length; i++){
+                    delay(i);
+                    baseContext.stroke();
+                }
             }
-            for(let i = 0; i < hairs.length; i++){
-                delay(i);
-            }
-            this.passed = true;
-            this.baseContext.strokeStyle = "#AAAAFF";
+            strokes(paramsFigure.hairs, this.hairs);
+            baseContext.strokeStyle = "#AAAAFF";
+            this.passed = response.index;
+            //this.baseContext.strokeStyle = "#AAAAFF";
         }
         if(response.index === 3){
             this.renderer = paramsPlane.renderer;
-            // let perlinContext = this.perlinContext;
-            // let baseContext = this.baseContext;
-            // let width = this.width;
-            // let height = this.height;
-            // let hairs = this.hairs;
-            // let renderer = paramsPlane.renderer.domElement;
-            // function renderWaves(){
-            //     //console.log(paramsPlane.renderer.domElement);
-            //     this.perlinContext.drawImage(renderer, 0,0);
-            //     perlinImgData = this.perlinContext.getImageData(0, 0, 200, 200);             
-            //     this.baseContext.beginPath();
-            //     this.hairs.map(hair => hair.draw());
-            //     this.baseContext.stroke();
-            //     requestAnimationFrame(renderWaves);
-            // }
-
-            // renderWaves.call(this, this.perlinContext, this.baseContext, this.hairs);
-            
+            this.passed = response.index;
+        }
+        if(response.index === 4){
+            //this.baseContext.fillStyle = "#ffffff00";
+            gsap.to(baseContext,
+                {
+                    fillStyle:"rgba(255,255,255,0)",
+                    duration:3
+                }
+            );
+            this.passed = response.index;
+        }
+        if(response.index === 5){
+            let noiseContainer = document.getElementById("threejs-container");
+            const charT2 = gsap.timeline();
+            charT2.to(noiseContainer, { y: -200, duration: 3 });
+            //noiseContainer.style.top = "200px";
+            this.passed = response.index;
         }
     }
 }

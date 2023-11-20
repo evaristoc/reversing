@@ -57,14 +57,10 @@ window.onload = (event) => {
     const perlinCanvasInst = new canvasScene(paramsFigure.container, "noiseAdapt");
     perlinCanvasInst.setDimensionsD3(paramsFigure.width, paramsFigure.height);
 
-    paramsFigure.baseCanvas = getElementById(document, "context");
-    eventHandlers.baseCanvas = paramsFigure.baseCanvas;
-    paramsFigure.baseContext = baseCanvasInst.scene;
-    eventHandlers.baseContext = paramsFigure.baseContext;
-    paramsFigure.perlinCanvas = getElementById(document, "noiseAdapt");
-    eventHandlers.perlinCanvas = paramsFigure.perlinCanvas;
-    paramsFigure.perlinContext = perlinCanvasInst.scene;
-    eventHandlers.perlinContext = paramsFigure.perlinContext;
+    eventHandlers.baseCanvas = getElementById(document, "context");
+    paramsFigure.baseContext = eventHandlers.baseContext = baseCanvasInst.scene;
+    eventHandlers.perlinCanvas = getElementById(document, "noiseAdapt");
+    eventHandlers.perlinContext = perlinCanvasInst.scene;
 
     paramsFigure.circle = {
         x: paramsFigure.container.node().offsetWidth / 2,
@@ -107,15 +103,17 @@ window.onload = (event) => {
        
         //E: instantiate all the hairs and save them in the hairs container
         // but don't draw them yet... 
-        for(var i = 0; i < 700; i++){
+        for(var i = 0; i < 1700; i++){
             new Hair();
         }
 
-        eventHandlers.hairs = paramsFigure.hairs;
-        
+        //eventHandlers.hairs = [];
+        eventHandlers.hairs = [];
+
         handleResize();
 
-        eventHandlers.baseContext.fillStyle = "#404040";
+        //eventHandlers.baseContext.fillStyle = "#404040";
+        //eventHandlers.baseContext.fillStyle = "#004040";
 
         function figRender(){
             let now = new Date().getTime();
@@ -125,12 +123,14 @@ window.onload = (event) => {
             let width = paramsFigure.width;
             let height = paramsFigure.height;
             //console.log(width, height);
-            //eventHandlers.baseContext.clearRect(0,0,width,height);
+            eventHandlers.baseContext.clearRect(0,0,width,height);
             eventHandlers.perlinContext.clearRect(0, 0, width, height);
             eventHandlers.perlinContext.drawImage(eventHandlers.renderer.domElement, 0, 0)
             paramsFigure.perlinImgData = eventHandlers.perlinContext.getImageData(0, 0, width, height);
             eventHandlers.baseContext.beginPath();
-            eventHandlers.hairs.map(hair => hair.draw());
+            if(eventHandlers.hairs.length > 0){
+                eventHandlers.hairs.map(hair => hair.draw());
+            }
             eventHandlers.baseContext.fillRect(0, 0, width, height);
             eventHandlers.baseContext.stroke();
             requestAnimationFrame( figRender );
@@ -142,7 +142,7 @@ window.onload = (event) => {
         //After rendering the canvas and before running the handler
         
        
-        eventHandlers.hairs = paramsFigure.hairs;
+        
 
         // 2. setup the scroller passing options
             // 		this will also initialize trigger observations
