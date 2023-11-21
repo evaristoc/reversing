@@ -30,38 +30,33 @@ In the previous post, we separated Darryl's code into three sections:
 - The WebGL (Three.js), the *shader*, and the texture canvas
 - The interaction between the texture (aka Garryl's **perlinCanvas**) and the "context" canvas
 
-In this third and last post, we will check how Darryl brought together the canvas figure and the noise function, as well as having a quick look at the oscillation effect of the "hairs".
+In this third and last post, we will check how Darryl brought together the canvas figure and the noise function.
 
-**The "Screenshots"**
+# "Screenshots"
 
 We have the canvas strokes and the noise function. Now what?
 
-Extracting that data directly from the WebGL API is not always an easy task. However, the canvas API is a robust one and includes many helpful methods that may help to overcome those difficulties. In particular, the [image-related methods](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Using_images) are very powerful.
+Extracting that data directly from the openGL API is not an easy task. However, the canvas API is a robust one and includes many helpful methods. In particular, the [image-related methods](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Using_images) are very powerful.
 
-A common trick to extract data from a graphic APIs such as the WebGL API or the [video API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Manipulating_video_using_canvas) API to be later used for 2D animation on canvas element is the "screenshot" method. 
+A common trick to extract data from a graphic API, e.g. WebGL or the [video API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Manipulating_video_using_canvas), to be later used for 2D animation with canvas is the "screenshot" method. The canvas API is a robust one and accepts frames of other APIs as images. Those images are translated into canvas data.
 
-The approach consists of taking images of each frame of the source graphic API. Those images are translated into canvas data. Then, if you can take screenshots of every animation frame, much like a GIF or a [stop-motion film](https://en.wikipedia.org/wiki/Stop_motion), you can simulate what is happening in the source graphic API.
+Then, if you can take screenshots of every animation frame, much like a GIF or a [stop-motion film](https://en.wikipedia.org/wiki/Stop_motion), you can simulate what it is happening in the target graphic API. 
 
-Now, this seems an overkill, specially because WebGL renders over the canvas API. The main reason to use this trick is that even if you can overlap elements of both APIs, trying to extract data directly from the source to the target would bring some delays in the calculations, leading to discrepancies. Better to work with a static representation instead.
+Darryl wanted the strokes to oscillate based on data coming from the WebGL renderer. More specifically, variations in the rendered noise function's color at specific pixels should drive changes in the rotation of the stroke. Every time a pixel changes color at each time frame interval, that color value should trigger the change of the stroke position, giving the illusion of moving like a wave by re-drawing them as rotating at angles not lower than 0 degrees and not more than 180 degrees with their points opposite to their origins as the center of rotation.
 
-This is the trick that Darryl used, where the **perlinCanvas** was the intermediate between both APIs.
+And which functions are common to waves, rotations, and angles? Indeed, [trigonometic functions](https://www.math.net/trigonometric-functions).
 
-Considering the effect that effect was Darryl looking for, the trick makes even more sense, as Darryl didn't want the coloring of the noise function to be visible.
 
-**Waves and Trigonometry**
 
-Another interesting aspect of the project is the one used to create the effect of waves passing through the "hairs".
+A typical way to extract data into canvas from another rendering API (e.g., videos) is by using another canvas element. Darryl made use of this popular trick. 
 
-Darryl wanted the strokes to oscillate right and left based on data coming from the WebGL renderer. More specifically, variations in the coloring of the pixels of each "screenshot" should drive changes in the rotation of the stroke, giving the illusion of balancing or waving.
+Considering the effect that effect was Darryl looking for, the trick makes even more sense. Darryl didn't want the coloring of the noise function to be visible - he only wanted the coloring data. If he used the context canvas for directly collecting the noise function output, he also might have to show the rendering of the noise function, and that is what he wanted to prevent.
 
-We are talking about rotating formulas here. And which functions are common to waves, rotations, and angles? Indeed, [trigonometic functions](https://www.math.net/trigonometric-functions).
-
-Darryl used one of the values of rgba-encoded colors to calculate the angles of rotation. Remember that rgb-encoded colors are represented by a vector of values ranging from 0 to 255. He needed only one of those three coordinates because in his project all the coordinates had the same value per pixel (grey-scale).
-
+He then kept his noise function rendering invisible to viewers and use another canvas as an adapter to extract data from it.
 
 # The Code
 
-Let's see first the use of the canvas interface and then let's explore the balancing movement of the strokes.
+Let's have a look at the techniques that Darryl used to couple a canvas image with a noise function.
 
 **THE DARRYL'S "PERLIN" CANVAS**  
 
@@ -217,7 +212,9 @@ The "Perlin" canvas (actually, the **perlinContext**) would be later associated 
 </table>
 </div>
 
-How the WebGL renderer is associated with the **perlinContext** can be seen in line 70 of the original code, enclosed in the *canvas* **render** function. Here the **perlinContext** takes a "screenshot" of the WebGL renderer. The data of the "screenshot" is then passed to the **perlinImgData** using the [**getImageData** method](https://developer.mozilla.org/en-US/docs/Web/API/ImageData).
+How the WebGL renderer is associated with the **perlinContext** can be seen in line 70 of the original code, enclosed in the *canvas* **render** function. What the **perlinContext** takes from the WebGL renderer is a "screenshot", a one-time image of what the WebGL renderer should show at each rendered frame of the **context** canvas.
+
+It is that image, that "screenshot", that is used to collect the data, which is then passed to the **perlinImgData**.
 
 **STROKE'S WAVE MOVEMENT AND THE draw METHOD**
 
@@ -282,13 +279,13 @@ In order to see how the data of the **perlinImgData** was used, we have to come 
 </table>
 </div>
 
-**perlinImgData** is the one passed to the **draw** method of the instance. The rgba values of every pixel in the "screenshot" would be listed in **perlinImgData.data**. Actually, **perlinImgData.data** is more an [array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
+**perlinImgData.data** is the one passed to the **draw** method of the instance. The rgba values of every pixel in the "screenshot" would be listed in **perlinImgData.data**. Actually, **perlinImgData.data** is more an [array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array).
 
-Searching the array was done using an index **i**. The calculation of **i** gives a glance of how the color data is arranged in the array. If a pixel were located at position ```(x,y)``` of the image, one of its rgba-coded color values would be located at ```(y * width + x) * 4``` in the array.
+The values required to calculate the rotation of the stroke were found using a calculated index, **i**. The calculation of **i** gives an idea of how the color data is arranged in the array. If a pixel were located at position ```(x,y)```, one of its rgba-coded color values would be located at ```(x * width + y) * 4``` in the array.
 
-From the **perlinImgData.data** array, Darryl extracted a single value per pixel using that "mysterious" index. He then entered the value from the array into the ratio of a formula to obtain an angle's output in radians within a range between 0 (array's value = 0) and PI (array's value = 255).
+From the **perlinImgData.data** array, Darryl extracted a single value per pixel using that "mysterious" index. He then entered the value from the array into the ratio of a formula to obtain an angle's output in radians.
 
-The resulting **angle** was used to calculate the rotation of the stroke using trigonometric formulas.
+The resulting angle was used to calculate the rotation of the stroke using trigonometric formulas.
 
 # In Action
 
@@ -329,7 +326,7 @@ The resulting **angle** was used to calculate the rotation of the stroke using t
 </div>
         <div class='step' data-step='5'>
             <div class="explain">
-            <p>You have seen this before! The draw method in class Hair. Notice the <strong>perlinImgData.data</strong>, the index <strong>i</strong> and the canvas API methods, <strong>moveTo</strong> and <strong>lineTo</strong>.</p>
+            <p>You have seen this already! The draw method in class Hair. Notice the <strong>perlinImgData.data</strong>, the index <strong>i</strong> and the canvas API methods, <strong>moveTo</strong> and <strong>lineTo</strong>.</p>
 <div class="language-javascript highlighter-rouge col02"><div class="highlight"><pre class="highlight col02"><code class="col02 insert">
     ...
     <span class="nx">draw</span><span class="p">(){</span>
@@ -349,7 +346,7 @@ The resulting **angle** was used to calculate the rotation of the stroke using t
         </div>
         <div class='step' data-step='6'>
             <div class="explain">
-            <p>The index is used to look for one of the rgba (0-255) encoded coloring values for the pixel in the data array <strong>perlinImgData.data</strong>. Both canvas are of the same dimension, and the extracted values correspond to pixels on the <strong>perlinContext</strong> screenshot that match <em>exactly the same</em> position of the "hair" origins in the <strong>context</strong> canvas. The array's value is entered into a formula to get an "angle" value between 0 and PI.</p>
+            <p>The index is used to look for one of the rgba (0-255) encoded coloring values for the pixel in the data array <strong>perlinImgData.data</strong>. Both canvas are of the same dimension, and the extracted values correspond to pixels on the <strong>perlinContext</strong> screenshot that match <em>exactly the same</em> position as "hair" origin in the <strong>context</strong> canvas. The array's value is entered into a formula to get an "angle" value between 0 and PI.</p>
             <p>This angle would be used to rotate the origin point of the hair.</p>
             </div>
         </div>        
@@ -398,11 +395,11 @@ There are few things I learned from this single project:
 
 In fact, there are still things we can get deeper into by just using this example, but I think we could stop now.
 
-It also like the challenge of getting nice effects with some kind of minimal effort. It is fair to say that only when you have at least a basic understanding of all those technologies and techniques the effort of putting them together becomes closer to "minimal". But for this project in particular is more about the few elements used between all those technologies to generate the final effect. How a single value is required from the WebGL to be passed to the context canvas to create a nice visual effect. 
+It also like the challenge of getting nice effects with some kind of minimal effort. In the case of the implementation we have just seen, it is fair to say that only when you have at least a basic understanding of all those technologies and techniques is the effort of putting them together  a "minimal" one. But if you notice the few elements used between all those technologies to generate the final effect, then you might agree how the use of few values where enough to make this project a nice to "re-verse".
 
 # Final Remarks
 
-I still find myself ripping at the Darryl's pen as I watch the hairs move mimicking the passing of a soft water stream accross floating grass.
+I still find myself ripping at the Darryl's pen as I watch the hairs move as mimicking a natural phenomenon, like a soft water stream passing accross floating grass.
 
 Now, what are your thoughts? Was there anything Darryl Huffman could have done differently? Is this pen one that could work for some of your projects? Is there any other effect that you would like to try using similar techniques?
 
