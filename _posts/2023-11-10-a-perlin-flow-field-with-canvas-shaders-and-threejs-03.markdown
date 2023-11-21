@@ -52,7 +52,13 @@ Another interesting aspect of the project is the one used to create the effect o
 
 Darryl wanted the strokes to oscillate right and left based on data coming from the WebGL renderer. More specifically, variations in the coloring of the pixels of each "screenshot" should drive changes in the rotation of the stroke, giving the illusion of balancing or waving.
 
-We are talking about rotating formulas here. And which functions are common to waves, rotations, and angles? Indeed, [trigonometic functions](https://www.math.net/trigonometric-functions).
+The canvas API offers different solutions for rotating drawings. Examples are:
+- an ```arc``` method
+- a ```rotate``` method
+
+Darryl used a different approach. He calculated the angle of rotation, positioned the pen in the origin point of the stroke (```(x,y)```) and redraw the stroke using the canvas' [**lineTo**](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo) method based on the angle of rotation.
+
+For that he needed to use some formulas. And which functions are common to waves, rotations, and angles? Indeed, [trigonometic functions](https://www.math.net/trigonometric-functions).
 
 Darryl used one of the values of rgba-encoded colors to calculate the angles of rotation. Remember that rgb-encoded colors are represented by a vector of values ranging from 0 to 255. He needed only one of those three coordinates because in his project all the coordinates had the same value per pixel (grey-scale).
 
@@ -348,7 +354,7 @@ The resulting **angle** was used to calculate the rotation of the stroke using t
         <div class='step' data-step='6'>
             <div class="explain">
             <p>The index is used to look for one of the rgba (0-255) encoded coloring values for the pixel in the data array <strong>perlinImgData.data</strong>. Both canvas are of the same dimension, and the extracted values correspond to pixels on the <strong>perlinContext</strong> screenshot that match <em>exactly the same</em> position of the "hair" origins in the <strong>context</strong> canvas. The array's value is entered into a formula to get an "angle" value between 0 and PI.</p>
-            <p>This angle would be used to rotate the origin point of the hair.</p>
+            <p>This angle would be used to re-draw the line as rotated from the origin point of the hair using the **lineTo** method.</p>
             </div>
         </div>        
         <div class='step' data-step='7'>
