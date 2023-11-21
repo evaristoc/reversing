@@ -254,9 +254,9 @@ gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 
 Notice that the simplex function is inserted within the fragment shader as a string format (**${Noise3D}**). It is here, in the fragment shader, where the noise function (**snoise**) would be eventually used.
 
-In fact, it is in the fragment shader where the action takes place. Large part of that action is finally collected in a variable "c" as a single value, which is then used to set the final output collected as **gl_FragColor**. (*OBSERVATION: recent versions of GLSL are not forcing the use of the **gl_FragColor** as fragment shader output, but rather [allowing user-defined fragment shader outputs](https://community.khronos.org/t/about-gl-fragcolor-of-fragment-shader/105102))
+In fact, it is in the fragment shader where the action takes place. Large part of that action is finally collected in a variable "c" as a single value, which is then used to set the final output collected as **gl_FragColor**. (*OBSERVATION: recent versions of GLSL are not forcing anymore the use of the **gl_FragColor** as fragment shader output, but rather allowing [user-defined fragment shader outputs](https://community.khronos.org/t/about-gl-fragcolor-of-fragment-shader/105102)*)
 
-On the contrary, the code of the vertex shader is rather less "turbulent". It relies fully on [built-in uniform variables](https://threejs.org/docs/#api/en/renderers/webgl/WebGLProgram) that will be passed from Three.js - **projectionMatrix**, **modelViewMatrix** and **position**. In the way they are set in Darryl's code it is like saying: "just render as it is the geometry that will be defined in the Three.js code".
+On the contrary, the code of the vertex shader is rather less "turbulent". It relies fully on [built-in uniform variables](https://threejs.org/docs/#api/en/renderers/webgl/WebGLProgram) that will be passed from Three.js - **projectionMatrix**, **modelViewMatrix** and **position**. In the way they are set in Darryl's code it is like saying: "just render the geometry that will be defined in the Three.js code as it is".
 
 **THREE.JS AND THE PLANE**
 
