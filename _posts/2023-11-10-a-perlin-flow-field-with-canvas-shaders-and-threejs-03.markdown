@@ -40,13 +40,11 @@ Extracting that data directly from the WebGL API is not always an easy task. How
 
 A common trick to extract data from a graphic APIs such as the WebGL API or the [video API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Manipulating_video_using_canvas) API to be later used for 2D animation on canvas element is the "screenshot" method. 
 
-The approach consists of taking images of each frame of the source graphic API. Those images are translated into canvas data. Then, if you can take screenshots of every animation frame, much like a GIF or a [stop-motion film](https://en.wikipedia.org/wiki/Stop_motion), you can simulate what is happening in the source graphic API.
-
-Now, this seems an overkill, specially because WebGL renders over the canvas API. The main reason to use this trick is that even if you can overlap elements of both APIs, trying to extract data directly from the source to the target would bring some delays in the calculations, leading to discrepancies. Better to work with a static representation instead.
+The approach consists in taking images of the source's graphics that can be eventually translated into canvas API data. If you can take screenshots at every animation frame, you can simulate the graphics at the source much like a GIF or a [stop-motion film](https://en.wikipedia.org/wiki/Stop_motion).
 
 This is the trick that Darryl used, where the **perlinCanvas** was the intermediate between both APIs.
 
-Considering the effect that effect was Darryl looking for, the trick makes even more sense, as Darryl didn't want the coloring of the noise function to be visible.
+Now, you might think that this trick seemed an overkill, specially because the WebGL API renders over the canvas API. The main reason to use this trick is that even if you can overlap elements of both APIs, trying to extract data directly from the source into the target might bring some disruption of execution of the source graphics, leading to data discrepancies and performance issues. Better to work with a static representation at every frame instead.
 
 **Waves and Trigonometry**
 
@@ -396,13 +394,15 @@ There are few things I learned from this single project:
 * a refreshing of rotation programming techniques
 * ... and more
 
-In fact, there are still things we can get deeper into by just using this example, but I think we could stop now.
-
-It also like the challenge of getting nice effects with some kind of minimal effort. It is fair to say that only when you have at least a basic understanding of all those technologies and techniques the effort of putting them together becomes closer to "minimal". But for this project in particular is more about the few elements used between all those technologies to generate the final effect. How a single value is required from the WebGL to be passed to the context canvas to create a nice visual effect. 
+In fact, there are still things we can get deeper into by just using this example, but I think we could stop here.
 
 # Final Remarks
 
-I still find myself ripping at the Darryl's pen as I watch the hairs move mimicking the passing of a soft water stream accross floating grass.
+I still find myself ripping at the Darryl's pen as I watch the moving of the hairs mimicking the passing of a soft water stream accross floating grass.
+
+From this project I liked the way some nice effects were obtained with a minimal effort. If you consider all the tools and technology involved you might wonder what I mean with "minimal effort".
+
+It is fair to say that only when you have at least a basic understanding of all those technologies and techniques the effort of putting them together becomes closer to "minimal". And I would not disagree. But for this project in particular is more about the few elements used between all those technologies to generate the final effect. For example, how a single value from the WebGL rendering was enough to create a nice visual effect in the context canvas. 
 
 Now, what are your thoughts? Was there anything Darryl Huffman could have done differently? Is this pen one that could work for some of your projects? Is there any other effect that you would like to try using similar techniques?
 
