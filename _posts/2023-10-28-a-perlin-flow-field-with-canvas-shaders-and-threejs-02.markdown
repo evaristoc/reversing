@@ -145,7 +145,7 @@ dot(p2,x2), dot(p3,x3) ) );
 </table>
 </div>
 
-The syntax of the simplex function is around 100 lines long so there is a lot of excluded lines here. I wanted only to hightlight the **snoise** function (line 113 in original code). Notice the purposed use of gradients: those gradients are the ones that give the flow behaviour to the noise function.
+The syntax of the simplex function is around 100 lines long so there is a lot of excluded lines here. I wanted only to hightlight the **snoise** function (line 113 in Darryl's code). Notice the purposed use of gradients: those gradients are the ones that give the flow behaviour to the noise function.
 
 **THE SHADERS**
 
@@ -254,11 +254,9 @@ gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 
 Notice that the simplex function is inserted within the fragment shader as a string format (**${Noise3D}**). It is here, in the fragment shader, where the noise function (**snoise**) would be eventually used.
 
-In fact, it is in the fragment shader where the action takes place. Large part of that action is finally collected in a variable "c" as a single value, which is then used to set the final output collected as (the now deprecated) **gl_FragColor**.
+In fact, it is in the fragment shader where the action takes place. Large part of that action is finally collected in a variable "c" as a single value, which is then used to set the final output collected as (the now deprecated) **gl_FragColor**. (*OBSERVATION: recent versions of GLSL are not forcing the use of the gl_FragColor as fragment shader output, but rather [allowing user-defined fragment shader outputs](https://community.khronos.org/t/about-gl-fragcolor-of-fragment-shader/105102))
 
-> NOTE: For those who don't know much about shaders, the GLSL used to offer a built-in variable, the **gl_FragColor**, that acted as the final control of the pixel coloring output. In more recent versions of GLSL [gl_FragColor became deprecated](https://community.khronos.org/t/about-gl-fragcolor-of-fragment-shader/105102), allowing user-defined fragment shader outputs using the **out** variable qualifier.
-
-On the contrary, the code of the vertex shader is rather less "turbulent". It relies on [built-in uniform variables](https://threejs.org/docs/#api/en/renderers/webgl/WebGLProgram) that will be passed from Three.js - **projectionMatrix**, **modelViewMatrix** and **position**. In the way they are set in the code it is like saying: "just render the geometry that will be defined later in the Three.js code".
+On the contrary, the code of the vertex shader is rather less "turbulent". It relies on [built-in uniform variables](https://threejs.org/docs/#api/en/renderers/webgl/WebGLProgram) that will be passed from Three.js - **projectionMatrix**, **modelViewMatrix** and **position**. In the way they are set in Darryl's code it is like saying: "just render as it is the geometry that will be defined in the Three.js code".
 
 **THREE.JS AND THE PLANE**
 
@@ -347,11 +345,13 @@ And all what Darryl wanted as geometry was just a simple plane. Building a plane
 </table>
 </div>
 
-Until here all very simple. In the case of Darryl's project though, the material of the plane was *the shader*.
+Until here all very simple. In the case of Darryl's project though, the material of the plane was the shader. Furthermore, a *dynamically* changing shader material.
 
 **THE MATERIAL OF THE PLANE**
 
-There is something important when coding with WebGL - you need some way to pass data from outside the shader to the GLSL shader context. The way that is done is through ***uniforms***, which are special GLSL variable qualifiers to identify exactly those variables that could act as inputs.
+If you see how Darryl added the shader material to the plane using Three.js, you might agree that adding a shader material to a Three.js mesh is fairly simple. This is simpler if the shader material doesn't involve any dynamic changes, i.e. it is a static material. But what if you would like the material to change based on values that change in your javascript code?
+
+For that, you need some way to pass data from outside the shader to the GLSL shader context. The way that is done is through ***uniforms***, which are special GLSL variable qualifiers to identify exactly those variables that could act as inputs external to GLSL.
 
 <div class="codetable-wrap" style="width:auto; overflow-x: auto;">
 <table>
