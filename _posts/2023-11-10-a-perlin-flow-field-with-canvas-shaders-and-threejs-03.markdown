@@ -286,7 +286,7 @@ In order to see how the data of the **perlinImgData** was used, we have to come 
 
 Searching the array was done using an index **i**. The calculation of **i** gives a glance of how the color data is arranged in the array. If a pixel were located at position ```(x,y)``` of the image, one of its rgba-coded color values would be located at ```(y * width + x) * 4``` in the array.
 
-From the **perlinImgData.data** array, Darryl extracted a single value per pixel using that "mysterious" index. He then entered the value from the array into the ratio of a formula to obtain an angle's output in radians.
+From the **perlinImgData.data** array, Darryl extracted a single value per pixel using that "mysterious" index. He then entered the value from the array into the ratio of a formula to obtain an angle's output in radians within a range between 0 (array's value = 0) and PI (array's value = 255).
 
 The resulting **angle** was used to calculate the rotation of the stroke using trigonometric formulas.
 
@@ -349,7 +349,7 @@ The resulting **angle** was used to calculate the rotation of the stroke using t
         </div>
         <div class='step' data-step='6'>
             <div class="explain">
-            <p>The index is used to look for one of the rgba (0-255) encoded coloring values for the pixel in the data array <strong>perlinImgData.data</strong>. Both canvas are of the same dimension, and the extracted values correspond to pixels on the <strong>perlinContext</strong> screenshot that match <em>exactly the same</em> position as "hair" origin in the <strong>context</strong> canvas. The array's value is entered into a formula to get an "angle" value between 0 and PI.</p>
+            <p>The index is used to look for one of the rgba (0-255) encoded coloring values for the pixel in the data array <strong>perlinImgData.data</strong>. Both canvas are of the same dimension, and the extracted values correspond to pixels on the <strong>perlinContext</strong> screenshot that match <em>exactly the same</em> position of the "hair" origins in the <strong>context</strong> canvas. The array's value is entered into a formula to get an "angle" value between 0 and PI.</p>
             <p>This angle would be used to rotate the origin point of the hair.</p>
             </div>
         </div>        
