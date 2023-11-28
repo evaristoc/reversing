@@ -2,7 +2,7 @@
 layout: post
 title:  "Storytelling with graph-scroll.js : a quick review"
 date:   2023-10-02 12:00:00 +0200
-categories: blog update
+categories: blog review
 ---
 
 # graph-scroll.js is a good storytelling tool for D3.js projects

@@ -6,7 +6,7 @@ categories: blog update
 ---
 
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
-<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-03/scrollama-setup-03.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-11-10-a-perlin-flow-field-with-canvas-shaders-and-threejs-03/scrollama-setup-03.css %}">
 
 # Putting everything together
 
@@ -379,9 +379,8 @@ The resulting **angle** was used to calculate the rotation of the stroke using t
 <script src="{{ site.baseurl }}{% link mngassets/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link mngassets/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link mngassets/posts/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01/2023-10-07-a-perlin-flow-field-with-canvas-shaders-and-threejs-01.js %}"></script>
-<script src="{{ site.baseurl }}{% link mngassets/posts/2024-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-03/huffman-flow-field-setup-03.js %}"></script>
-<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-10-31-a-perlin-flow-field-with-canvas-shaders-and-threejs-03/scrollama-setup-03.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/posts/2023-11-10-a-perlin-flow-field-with-canvas-shaders-and-threejs-03/huffman-flow-field-setup-03.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2023-11-10-a-perlin-flow-field-with-canvas-shaders-and-threejs-03/scrollama-setup-03.js %}"></script>
 <script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2023-10-28-a-perlin-flow-field-with-canvas-shaders-and-threejs-02/huffman-flow-field-setup-02.js %}"></script>
 
 
