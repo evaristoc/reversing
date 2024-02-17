@@ -1,0 +1,10 @@
+link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-02-27-how-tls-ssl-handshake-works/2024-02-27-how-tls-ssl-handshake-works.css %}"
+
+img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/TLS-client2server.png %}"
+
+div class="title-img"
+style='background-image: url('+"{{site.baseurl}} {% /foto.png %}"+');'
+/div
+
+<div style='width:100%;'></div>
+background-image: url("{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/TLS-client2server.png %}");
