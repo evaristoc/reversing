@@ -1,53 +1,103 @@
 ---
 layout: post
-title:  "How TLS/SSL handshake works"
+title:  "How TLS/SSL handshake works (Part 1)"
 date:   2023-02-27 12:00:00 +0200
 categories: blog series security-and-access
 ---
 
 <img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/TLS-client2server.png %}" style="width:100%;">
 
-Topics that I still find fascinating are how clever software people have taken care of our security and data governance on Internet and on the cloud applications.
+Topics that I still find fascinating are how clever software people have taken care of our security and data governance on Internet applications.
 
-A clear example of a solution to a security problem is the TLS/SSL protocol. The details of the protocol are well known and there is plenty of information out there. However, I // DESCRIBE AN APPROACH HERE //have always found those explanations hard to understand, especially for those without previous technical backgrounds.
+A clear example of a solution to a security problem is the **TLS/SSL protocol**. The details of the protocol are well known and there is plenty of information out there. However, I have always struggled in trying to understand the usual explanations: they are usually either too technical or too shallow for me. And by working as trainer for people new to programming, with a poor technical background, I realized how hard would be for them not to be able to visualize the process.
 
-This is one in a series of post where I will be concentrating on security and access. Laer on I will be also using a cloud solution, Salesforce, to provide a cloud application example of how security and access could be handled and configured.
+Therefore, I decided to work on a more visual and playful description. That approach worked better for me, and I hope it could help some of you too.
 
-So if you are interested in having a first idea of security and or want to see how that it is generally implemented in other tools such as Salesforce, this might be a good place.
+This is one in a series of posts where I will comment on security and access. My background is mostly Javascript and also Salesforce, so I will emphasize those two, but I will signal other tools as well.
 
 Let's get it started!
 
-# The TLS/SSL handshake
+### Why do we need a Security Protocol for the Internet?
 
- TLS is the acronym for **Transport Layer Security** and it is applicable to everything that runs under  **communication protocols**, or protocols that rule the communication between parties, such as HTTP, FTP, TCP/IP, or SMTP protocols.
- 
- TLS is the improved protocol of the **Secure Sockets Layer**, better known as SSL. Although they are not exactly the same, they are also not that different. Both were outlined for a similar purpose and TLS took all the best practices and implementations of the SSL. They were considered synonyms as both were alternative security protocols for long time, but nowadays the SSL protocol is being rapidly faced out after some vulnerabilities were found.
+You might know by now that the Internet is not a secure place. Although the Internet was originally a military-funded project it eventually became an academic one. By that time, the academy defended the public rationale of the Internet as a way to facilitate the divulgation of the scientific researches.
 
-Still, we will continue that tradition of keeping those two acronyms together and talk about one sub-protocol that it is described for both: the Handshake protocol. 
+Everything changed when the Internet was make available for a wider public use back in the 80's. By then there was poor progress on data protection. Although the risks of data lekage were very low (no many people knew how to hack it), there were activities that were too risky to do through the Internet. You could set a website, probably a form to get some data was also ok. But what about passwords, credit cards, confidential documents, etc?
+
+And those risks became higher with the professionalization of [crackers](https://testbook.com/gate/difference-between-hackers-and-crackers#:~:text=Hackers%20use%20legal%20tools%20to,illegal%20activities%20and%20compromise%20systems.).
+
+/////
+Now, the lying design of the Internet could not be changed - it was to big and already used by too many. So a security protocol on top of the existing design was required in order to extend the use of the network.
+////
+
+| Remember that engineers prefer to keep things within protocols |
+|-----------------------------------------------------------------|
+|Protocols are conventional norms to standardize the engineering designs. That helps to prevent unreconciliable mistmatches when creating new products or services. Just imagine someone making a car that it is wider that every road existing in your country and then think how to overtake it when the traffic goes slow.|
+
+# The TLS/SSL and the TLS/SSL Handshake
+
+TLS is the acronym for **Transport Layer Security** and it is applicable to everything that runs under  **communication protocols**, or protocols that rule the communication between parties, such as HTTP, FTP, TCP/IP, or SMTP protocols.
+
+TLS is a improved protocol intended to replace the **Secure Sockets Layer** protocol, better known as SSL. Although they are not exactly the same, they are also not that different. Both were outlined for a similar purpose and TLS took all the best practices and implementations of the SSL. They were considered synonyms as both were alternative security protocols for long time, but nowadays the SSL protocol is being rapidly faced out after some vulnerabilities were found.
+
+///
+
+We will continue that tradition of keeping those two acronyms together and talk about one sub-protocol that it is described for both: the Handshake protocol. 
 
 Here a note: I can imagine that protocols are one of the most confusing things if you are new to the technical world. In fact, there are protocols and frameworks everywhere.
 
-| Remember that engineers want to keep things within a protocol |
-|-----------------------------------------------------------------|
-|They are just norms required to standardize the compatibility of the engineering designs. That helps to prevent unreconciliable mismatches when creating new products. Just imagine someone making a car that it is wider that every road existing in your country and then think how to overtake it when it goes slow.|
+///
 
-That it is what TLS/SSL and the handshake are: they are not implementations but protocols, a standard to be followed for things to work.
+We are going to examinate the **Handshake protocol** from one of its variants: the TLS 1.2 variant. The variant is still widely used, although bear in mind that the newest version of the TLS protocol, version 1.3, considers that variant already outdated.
 
-We are going to examinate the handshake protocol from one *implementation*, the TLS v1.2 RSA variant. The variant is still one of the most popular, although bear in mind that for the newest version of the TLS protocol, version 1.3, considers that variant already outdated.
+But we cannot talk about the steps and reasoning of the protocol before explaining who the parties are.
 
 ### The Parties
 
-So let's introduce our participants: **Client** and **Sever**.
+<img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/TLS - parties.png %}" style="width:100%;">
 
-// IMAGES AND SOME COMMENTS ABOUT THEM //
+The whole Handshake protocol focus on three participants: the Server, the Client, and the Certificate Authority.
 
-There is a third participant that it is required for this to work: the **Certificate Authority**. Although we are not going to talk much about that participant bear in mind that it is a fundamental figure for the whole thing to work.
+The concept of **Server** might not be that ambiguous for someone without previous technical knowledge: it is easy to relate that to a machine.
 
-// THINK A WAY TO SUGGEST AN INVISIBLE CHARACTER THAT IS VERY IMPORTANT FOR THE STORY //
+The concept of **Client** could be less clear for the initiated, but the whole protocol doesn't give room for doubt: like the Server, the Client is a machine. A program, to be more precise. A program that resides in a computer that would make the first contact with the Server, usually on behalf of someone else, like a user (you, for example).
+
+So both, the Server and the Client are *machine applications designed for the exchange of data on Internet*. The Client is the one who would start that communication because it is looking for a service (eg. data resources) that the Server could provide.
+
+The only actual entity is the **Certificate Authority**. Although we are not going to talk much about the Certificate Authority, keep in mind that it is a fundamental figure for the whole thing to work. The Certificate Authority is a truthworthy organisation that acreditate the legitimacy of other organizations by providing a (virtual) certificate.
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/Let’s_Encrypt_example_certificate_on_Firefox_94_screenshot.png %}" style="width:100%;">
+(*An example of a Certificate, source: [Wikipedia](https://en.wikipedia.org/wiki/Communication_protocol)*)
+
+
+Now, keeping in mind that we are talking about machines, let me introduce some of the main charaters of this story: the Client and the Server.
+
+They both want to communicate confidential data through a very public space. It is like shouting the username and password of your email address in a commercial mall a busy Saturday.
+
+///
+They must find a way **to agree how they are going to protect their communication without no-one else knowing some critical terms of that agreement**.
+///
+
+Sharing those first xxxx is what the Handshake does.
+
+### Handshake Rationale and Steps
+
+The usual diagram of the TLS / SSL Handshake protocol (TLS 1.2) is like the following:
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/Full_TLS_1.2_Handshake.png %}" style="width:100%;">
+(*source: [Wikipedia](https://en.wikipedia.org/wiki/Communication_protocol)*)
+
+
+Notice that there are 4 relevant exchanges on that diagram:
+1. When the connection is requested
+2. The Hellos
+3. The Client Key Exchange
+4. The first test for data transfer
+
+In this and following posts I will concentrate on steps 2, The Hellos, and 3, the Client Key Exchange. But first, let me introduce the main parties.
 
 The whole point of the story is that our Client wants to communicate with our Server.
 
-However, the Internet is a public space and everyone can access other's messages. So how to communicate things like passwords, credit cards, confidential documents, etc without someone being able to see them or modify them?
+However, the Internet is a public space and everyone can access other's messages. 
 
 The TLS / SSL Handshake protocol was an answer to start that communication and exchange the required means to secure the confidentiality of the data. Essentially, it is about:
 * that the Client can verify the identity of the corresponding Server and viceversa (**Authentication**),
@@ -95,21 +145,19 @@ So, our Client sends that Hello letter with the client random and waits.
 
 #### Server Hello
 
-Now let's assume that the "client hello" reaches its destination, which is our certified Server.
+Let's assume that the "client hello" reaches its destination, which is our certified Server. Now on the desk of our Server are the details of the Client including the client random. It is time for the Server to contact the Client.
 
 <img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/TLS - serverHELLOrecords.png %}" style="width:100%;">
-
-Our Server has now the details of the Client including the client random. Now is time for the Server to contact the Client.
 
 Some of things the Server wants to share with the Client coincide with the "client hello" details. Between other things, the Server also wants to share a list of the used ciphers and a random number, the **server random**.
 
 But first of all, the Server:
-* must notify that the Client is talking to the right server, and
-* must provide for the client to send the last part of the common key, this time in a way that no-one could get its content
+* must porve that the Client is talking to the right server, and
+* must provide something that helps the client to send back something secret this time
 
 Things that the Server will use are already on the Server desk.
 
-First, the Server would like to grant its identity through the Certificate Authority.
+First, the Server would like to prove its identity to the Client through a Certificate Authority.
 
 <div style="text-align:center;"><img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/certificate.png %}" style="width:30%;"></div>
 
