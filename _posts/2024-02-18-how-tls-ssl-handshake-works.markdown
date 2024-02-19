@@ -1,11 +1,11 @@
 ---
 layout: post
 title:  "How TLS/SSL handshake works (Part 1)"
-date:   2024-02-20 00:00:00 +0200
+date:   2024-02-18 00:00:00 +0200
 categories: blog security-and-access
 ---
 
-<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-20-how-tls-ssl-handshake-works/TLS-client2server.png %}" style="width:100%;">
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-how-tls-ssl-handshake-works/TLS-client2server.png %}" style="width:100%;">
 
  Something I find fascinating is the many clever software solutions that people have fashioned to protect us from the numerous security threats faced by Internet users.
 
@@ -55,9 +55,7 @@ But before that tunnel is created, the parties must agree on how the data going 
 
 > Data exchange on the public Internet is like throwing a piece of paper with your private bank details from one point to another in a shopping mall on a busy Black Friday 
 
-The  **Handshake protocol** is a sub-protocol of he TLS/SSL to formalize that agreement. In other words:
-
-> It is the protocol where the parties agree upon the same rules of confidentiality between the both, while preventing others to know the terms of that agreement.
+The  **Handshake protocol** is a sub-protocol of he TLS/SSL to formalize that agreement. In other words, it is the protocol where the parties agree upon the same rules of confidentiality between the both, while preventing others to know the terms of that agreement.
 
 We are going to broadly examine the Handshake protocol from one of its variants, the TLS 1.2 version. The 1.2 version is still widely used, although bear in mind that the newest version of the TLS protocol, version 1.3, considers that variant already outdated.
 
@@ -65,7 +63,7 @@ Let's start by describing the main characters.
 
 ### The Parties
 
-<img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/TLS - parties.png %}" style="width:100%;">
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-how-tls-ssl-handshake-works/TLS - parties.png %}" style="width:100%;">
 
 The whole Handshake protocol focus on three participants: the Server, the Client, and the Certificate Authority.
 
@@ -73,11 +71,13 @@ The concept of **Server** might not be that ambiguous for someone without previo
 
 The concept of **Client** could be less clear for the initiated, but the whole protocol doesn't give room for doubt: like the Server, the Client is a machine. A program, to be more precise. A program that resides on a computer that would make the first contact with the Server, usually on behalf of someone else, like a user (you, for example).
 
-So both, the Server and the Client are *machine applications designed for the exchange of data on the Internet*. The Client is the one who would start that communication because it is looking for a service (e.g., data resources) that the Server could provide.
+> So both, the Server and the Client are *machine/software applications*, not people.
+
+The Client is the one who would start that communication because it is looking for a service (e.g., data resources) that the Server could provide.
 
 The only actual entity is the **Certificate Authority**. Although we are not going to talk much about the Certificate Authority, keep in mind that it is a fundamental figure for the whole thing to work. The Certificate Authority is a truthworthy organization that acreditate the legitimacy of other organizations by providing a virtual certificate.
 
-<img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/Let’s_Encrypt_example_certificate_on_Firefox_94_screenshot.png %}" style="width:100%;">
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-how-tls-ssl-handshake-works/Let’s_Encrypt_example_certificate_on_Firefox_94_screenshot.png %}" style="width:100%;">
 (*An example of a Certificate, source: [Wikipedia](https://en.wikipedia.org/wiki/Communication_protocol)*)
 
 Now, keeping in mind that we are talking about machines, let's turn our focus on to the steps they have to follow in order to reach data security.
@@ -86,7 +86,7 @@ Now, keeping in mind that we are talking about machines, let's turn our focus on
 
 The usual diagram of the TLS / SSL Handshake protocol (TLS 1.2) is like following:
 
-<img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/Full_TLS_1.2_Handshake.png %}" style="width:100%;">
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-how-tls-ssl-handshake-works/Full_TLS_1.2_Handshake.png %}" style="width:100%;">
 (*source: [Wikipedia](https://en.wikipedia.org/wiki/Communication_protocol)*)
 
 
@@ -113,7 +113,7 @@ To start the Handshake, our Client sends some information into the public Intern
 
 In general, the "letter" sent to the Server is very basic, and of no harm for the concerned parties:
 
-<img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/TLS - clientHELLOrecords.jpg %}" style="width:100%;">
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-how-tls-ssl-handshake-works/TLS - clientHELLOrecords.jpg %}" style="width:100%;">
 
 However, even if it is still publicly accessible, all the data is relevant. In particular, the ones that will play an important role later to ensure confidentiality are the ciphers and the client random.
 
@@ -129,7 +129,7 @@ So, our Client sends that Hello letter with the client random and waits.
 
 <br/>
 <br/>
-<img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/TLS - clientHELLO2server airplane.png %}" style="width:100%;">
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-how-tls-ssl-handshake-works/TLS - clientHELLO2server airplane.png %}" style="width:100%;">
 <br/>
 <br/>
 <br/>
@@ -140,7 +140,7 @@ So, our Client sends that Hello letter with the client random and waits.
 
 Let's assume that the "client hello" reaches its destination, which is our certified Server. Now on the desk of our Server are the details of the Client including the client random. It is time for the Server to contact the Client.
 
-<img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/TLS - serverHELLOrecords.png %}" style="width:100%;">
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-how-tls-ssl-handshake-works/TLS - serverHELLOrecords.png %}" style="width:100%;">
 
 Some of things the Server wants to share with the Client coincide with the "client hello" details. Between other things, the Server also wants to share a list of the used ciphers as well as a random number, the **server random**.
 
@@ -150,29 +150,29 @@ But first of all, the Server:
 
 To prove its identity to the Client, the Server will rely on the *Certificate Authority*. Yes, the other party we haven't mentioned that much is now becoming relevant by proving that the Server is who it is.
 
-<div style="text-align:center;"><img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/certificate.png %}" style="width:30%;"></div>
+<div style="text-align:center;"><img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-how-tls-ssl-handshake-works/certificate.png %}" style="width:30%;"></div>
 
 The Client would like to see a copy of that certificate for a first scan of the truthworthiness of the Server.
 
+> In the typical configuration, it is only the Server who has to authenticate during the TLS/SSL procedure.
+
 Now, if it is the right Server, the Client would like to send the third and last piece of information required to create a common mechanism of data protection. 
 
-> The first two pieces that the Server and the Client require for further data protection and that will be publicly shared are the **client - and the server random**.
+The first two pieces that the Server and the Client require for further data protection and that will be publicly shared are the **client - and the server random**. The last missing piece should be made unaccessible to external observers, even if it should be sent *through the same public space*. The solution to this challenge is a clever one: the Server will use **asymetric keys** for encryption/decryption. 
 
-The last. missing piece should be made unaccessible to external observers, even if it should be sent *through the same public space*. The solution to this challenge is a clever one: the Server will use **asymetric keys** for encryption/decryption. 
-
-<div style="text-align:center;"><img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/asymetrickeys.png %}" style="width:40%;"></div>
+<div style="text-align:center;"><img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-how-tls-ssl-handshake-works/asymetrickeys.png %}" style="width:40%;"></div>
 
 There are encryption machines that require two different keys for the process; when one is used for encryption, the only way to decrypt the same message is *by using the other key*.
 
 The Server has a pair of that kind of keys. One of those keys can be copied, made **public**, and used to encrypt messages by whoever wants. Meanwhile, the other one stays **private**, safely guarded by the Server. In that way, the only entity able to decrypt all those messages will be our Server.
 
-Now the Server is ready to reply to the Client: some similar data to the "client hello", including its own server random, plus a copy of the certificate as well as one copy of a *public key*.
+Now the Server is ready to reply to the Client. The Server prepares some similar data to the "client hello", including its own server random, plus a copy of the certificate as well as one copy of a *public key*.
 
-<img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/TLS - serverHELLOrecords02.png %}" style="width:100%;">
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-how-tls-ssl-handshake-works/TLS - serverHELLOrecords02.png %}" style="width:100%;">
 
 So, our Server sends back a Hello letter to the Client. Immediately after it sends a message indicating that this is all to be shared in the Server Hello, and waits.
 
-<img src="{{site.baseurl}}{% link /mngassets/posts/2023-02-27-how-tls-ssl-handshake-works/TLS - serverHELLO2client airplane.png %}" style="width:100%;">
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-how-tls-ssl-handshake-works/TLS - serverHELLO2client airplane.png %}" style="width:100%;">
 
 
 
