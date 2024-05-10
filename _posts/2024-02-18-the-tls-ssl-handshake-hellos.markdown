@@ -215,7 +215,7 @@ Practical Networking is a project by Ed Harmoush and it is not only a good youtu
 
 **Find more at** [Practical Networking youtube channel](https://www.youtube.com/@PracticalNetworking)
 
-**Or visit the Ed Harmoush'S course**, [Practical Networking course - About -](https://www.practicalnetworking.net/about/)
+**Or visit the Ed Harmoush'Sf course**, [Practical Networking course - About -](https://www.practicalnetworking.net/about/)
 
 
 ----
