@@ -1,0 +1,136 @@
+---
+layout: post
+title:  "The TLS/SSL v1.2 handshake made simple: session keys generation"
+date:   2024-05-27 00:00:00 +0200
+categories: blog security-and-access
+---
+
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS-client2server02.png %}" style="width:100%;">
+
+
+# The TLS/SSL and the TLS/SSL Handshake: Quick Review
+
+In a [previous post]({{site.baseurl}}{% link _posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos.markdown %}) we made a general introduction of the TLS/SSL protocol in general, and its role in the security of the internet communications to prevent eavesdropping and tampering.
+
+We also concentrated on the handshake section, specifically the one concerning to the version 1.2 of the protocol.
+
+Here below you can find a usual diagram describing the steps of the protocol.
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos/img/Full_TLS_1.2_Handshake.png %}" style="width:100%;">
+(*source: [Wikipedia](https://en.wikipedia.org/wiki/Communication_protocol)*)
+
+We listed the main concerned parties: the Client, the Server and the Certificate Authority.
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos/img/TLS - parties.png %}" style="width:100%;">
+
+The whole Handshake protocol focus on three participants: the Server, the Client, and the Certificate Authority.
+
+We identified 4 relevant exchanges:
+
+1. When the connection is requested (the TCP/IP connection)
+2. The Hellos
+3. The Client Key Exchange (generation of session keys)
+4. The Application Data
+
+We mentioned that we wanted to discuss some aspects of steps 2 and 3.
+
+In the steps following the Hellos, the Certificate Authority has completed its task and it is now up to the Client and the Server to define how to continue with the following steps. Just remember that the Client and the Server are *application softwares*, not real people :) .
+
+We left our [previous post]({{site.baseurl}}{% link _posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos.markdown %}) at the point where the Server sent some information that will be required to create the session keys.
+
+So far, we have also clarified that the data exchange has been public and that they required a way to make that communication secret. And that is what this post will try to explain.
+
+### The Client Key Exchange
+
+xxxxxxxxx
+
+xxxxxx
+
+* The Client Pre-Master Secret Generation and the Asymmetric Encrytion
+* The Session Key for Symmetric Encription
+
+
+#### Client Hello
+
+To start the Handshake, our Client sends some information into the public Internet hoping that it will reach the intended Server.
+
+In general, the "letter" sent to the Server is very basic, and of no harm for the concerned parties:
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - client asymmetric encryption.svg %}" style="width:100%;">
+
+
+So, our Client sends that Hello letter with the client random and waits.
+
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - clientPREMASTER2server airplane.png %}" style="width:100%;">
+
+
+
+#### Server Hello
+
+That was the client hello but what happens on the other side? The server also responds with a "hello" letter.
+
+Let's see what it contains:
+
+
+  <img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - server asymmetric decryption.svg %}" style="width:100%;">
+
+
+
+Now both the Server and the Client have a set of keys one of which is a secret shared only between them (the pre-master).
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - symmetric keys.png %}" style="width:100%;">
+
+So, our Server sends back a Hello letter to the Client. 
+
+  <img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - server symmetric encryption.svg %}" style="width:100%;">
+
+
+
+Immediately after it sends a message indicating that this is all to be shared in the Server Hello, and waits.
+
+<br/>
+<br/>
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - serverMESSAGE2client airplane.png %}" style="width:100%;">
+<br/>
+<br/>
+
+
+# Tada!
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - client symmetric decryption.svg %}" style="width:100%;">
+
+
+# Final Remarks
+
+The TLS / SSL handshake is a very fascinating solution to the security on the web. The procedure last just miliseconds, but there are a lot of things going on. That is why this procedure is sometimes difficult to understand.
+
+Here in this post I just focused on a very specific section of the TLS handshake in its more popular version to date. Bear in mind that there is already a new version of the TLS that it is meant to replace the existing one. But this might take a few years from the time of this writing before it is completed faced out.
+
+If you want to know more about the TLS, there is a lot of material you can find online. However, there are two that have impressed me the most:
+
+##### KHAN ACADEMY
+
+An excellent material, with exercises you can do on the fly, and a detailed discussion of the many aspects around the TLS handshake. No many can rival that quality of the material prepared by the Khan Academy team. The material goes beyond the TLS handshake by keeping this topic as a subtitle of Internet Security. Highly recommended.
+
+**Find more at** [Online Data Security in Khan Academy](https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:online-data-security)
+
+
+##### PRACTICAL NETWORKING
+
+If what you want is to get a deep knowledge of the TLS itself, have a look at the cyphers used in the procedure, and many other details, including the new versions of TLS, you might find Practical Networking channel and courses probably a better choice. 
+
+Practical Networking is a project by Ed Harmoush and it is not only a good youtube channel but also a very good course. Go for this one if you are into nets. Very clear and detailed.
+
+**Find more at** [Practical Networking youtube channel](https://www.youtube.com/@PracticalNetworking)
+
+**Or visit the Ed Harmoush'Sf course**, [Practical Networking course - About -](https://www.practicalnetworking.net/about/)
+
+
+----
+
+For the rest, I just hope you enjoyed this reading. Meanwhile, happy coding!
+
+
+
