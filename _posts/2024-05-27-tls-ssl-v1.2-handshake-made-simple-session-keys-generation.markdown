@@ -11,47 +11,97 @@ categories: blog security-and-access
 
 # The TLS/SSL and the TLS/SSL Handshake: Quick Review
 
-In a [previous post]({{site.baseurl}}{% link _posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos.markdown %}) we made a general introduction of the TLS/SSL protocol in general, and its role in the security of the internet communications to prevent eavesdropping and tampering.
+In a [previous post]({{site.baseurl}}{% link _posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos.markdown %}) we made a general introduction of the TLS/SSL protocol, and its role in the security of the internet communications to prevent eavesdropping and tampering.
 
-We also concentrated on the handshake section, specifically the one concerning to the version 1.2 of the protocol.
-
-Here below you can find a usual diagram describing the steps of the protocol.
+We also concentrated on the handshake section, specifically the one concerning to the version 1.2 of the protocol, which is described in the following diagram:
 
 <img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos/img/Full_TLS_1.2_Handshake.png %}" style="width:100%;">
 (*source: [Wikipedia](https://en.wikipedia.org/wiki/Communication_protocol)*)
-
-We listed the main concerned parties: the Client, the Server and the Certificate Authority.
-
-<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos/img/TLS - parties.png %}" style="width:100%;">
-
-The whole Handshake protocol focus on three participants: the Server, the Client, and the Certificate Authority.
 
 We identified 4 relevant exchanges:
 
 1. When the connection is requested (the TCP/IP connection)
 2. The Hellos
-3. The Client Key Exchange (generation of session keys)
+3. Client Key Exchange (generation of session keys)
 4. The Application Data
 
 We mentioned that we wanted to discuss some aspects of steps 2 and 3.
 
-In the steps following the Hellos, the Certificate Authority has completed its task and it is now up to the Client and the Server to define how to continue with the following steps. Just remember that the Client and the Server are *application softwares*, not real people :) .
+We listed the main concerned parties: the Client, the Server and the Certificate Authority.
 
-We left our [previous post]({{site.baseurl}}{% link _posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos.markdown %}) at the point where the Server sent some information that will be required to create the session keys.
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos/img/TLS - parties.png %}" style="width:100%;">
 
-So far, we have also clarified that the data exchange has been public and that they required a way to make that communication secret. And that is what this post will try to explain.
+The whole Handshake protocol focus on those three "participants". In the steps following the Hellos, the Certificate Authority has completed its task and it is now up to the Client and the Server to define how to continue with the following steps.
 
-### The Client Key Exchange
+> Remember that the Client and the Server are **application software**, not real people :) .
+
+# How to keep the communication private inside a public channel?
+
+We left our [previous post]({{site.baseurl}}{% link _posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos.markdown %}) at the end of the Server hello, where the Server sent some information to the Client that will be required to create the session keys. All those previous exchanges have been made through public channels, and the content of the information of those exchanges hasn't been a secret to anyone. Someone who captures the messages between those two will get the exactly same copy that the Client and the Server have.
+
+One way to privately communicate through a channel vulnerable to eavesdropping and tampering would be to "hide" the content of the communications by chaging it in a way that make the content impossible to understand. The only ones who have the capabilities to restore that "rubish" message into the original one should be our main parties, in this case the Client and the Server. The task of making the information looks like "rubish" is called **encryption**, while restoring it is what is called **decrpyption**. In order to encrypt and decrypt a message, the parties use functions called **ciphers** which could be based on **keys** to complete the task.
+
+Let's try to understand the encryption / decryption process and the ciphers by using a very simple example. Just look at the following message. This is my "encrypted" message for you:
+
+#### kutypakutynakutyma
+
+Can you get what it is in my message? It is very easy: just get rid of the fragments that read "kuty" and now it would read "panama".
+
+My cipher function was indeed that easy: inserting the word "kuty" between the syllables of the actual message. Decrypting was made possible by inverting that operation.
+
+But notice something: for you to get the message you had to understand the pattern I applied to encrypt it. That means, you have to know the function I used to encrypt my message. In other words, **we both must have the same cipher**. Furthermore: **we both must share some usable keys**, a sort of pattern, or a combination of patterns, that the cipher will use as a base to restore or hide the message.
+
+In this simple example, the word "kuty" was the key. But notice that we can say that "ku" is one part of the key and "ty" is the other one.
+
+Now, you have to believe that:
+
+> As long as both parties share the keys between them and with no-one else, the encryption procedure will stay safe
+
+This means that you might still have to make some effort if I change the word "kuty" for another key, and encrypt a different message. However, this simple encryption procedure will still be beatable all day.
+
+Therefore, if someone was able to get the pattern (the key) just by reading the encrypted word, then my message lost its secrecy and then my message passed unsafe through the channel.
+
+The TLS makes use of more powerful procedures which are based on random numbers as keys, and apply more complex mathematical operations over the message that simply inserting a word.
+
+So, this is easy: Client and Server can share which cipher they want to use, and then create random numbers as keys and share them through... Ooeps...
+
+Not on the public domain! So even if they can share the cipher on the public space, how they are going to agree over the keys?
+
+Ok, here a hint:
+
+> They will end up using a composite key, and one part of it will be secret to everyone but the Client and the Server. That will be enough to make the whole key secret.
+
+Just for you to understand what I mean, try to get the third element of the following pattern based on **what I am thinking**:
+
+#### A, B, and ...
+
+Are you sure that you got it correctly? You even don't know if I am thinking on an animal, or a city, or anything else. Now, try to XXXXXXXXXXX that in the context of two parties for which everyone got two parts of their key set, but only the two parties know the last one.
+
+but...
+
+> ... in order to share that secret part of the key, they need to share it in an encrypted way
+
+Whaaaaaaaaaaaaaaaaaat?
+
+So how are they going to share that secret section of a key in a way that no-one can read it?
+
+![alt text](image.png)
+
+### Client Key Exchange and Generation of Session Keys
 
 xxxxxxxxx
 
 xxxxxx
 
 * The Client Pre-Master Secret Generation and the Asymmetric Encrytion
-* The Session Key for Symmetric Encription
+* The Session Key for Symmetric Encryption
 
 
-#### Client Hello
+#### Asymmetric Phase
+
+
+
+#### *Client-side Pre-Master Secret Asymmetric Encryption*
 
 To start the Handshake, our Client sends some information into the public Internet hoping that it will reach the intended Server.
 
@@ -67,7 +117,7 @@ So, our Client sends that Hello letter with the client random and waits.
 
 
 
-#### Server Hello
+#### *Server-side Pre-Master Secret Assymetric Decryption*
 
 That was the client hello but what happens on the other side? The server also responds with a "hello" letter.
 
@@ -75,12 +125,24 @@ Let's see what it contains:
 
 
   <img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - server asymmetric decryption.svg %}" style="width:100%;">
+<br/>
+<br/>
+<br/>
+<br/>
 
 
+
+#### Symmetric Phase
 
 Now both the Server and the Client have a set of keys one of which is a secret shared only between them (the pre-master).
 
 <img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - symmetric keys.png %}" style="width:100%;">
+<br/>
+<br/>
+<br/>
+
+#### *Server-side First Message Symetric Encryption*
+
 
 So, our Server sends back a Hello letter to the Client. 
 
@@ -95,11 +157,15 @@ Immediately after it sends a message indicating that this is all to be shared in
 <img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - serverMESSAGE2client airplane.png %}" style="width:100%;">
 <br/>
 <br/>
+<br/>
 
+#### *Client-side First Message: Symetric Decryption*
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - client symmetric decryption.svg %}" style="width:100%;">
 
 # Tada!
 
-<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - client symmetric decryption.svg %}" style="width:100%;">
+The "tada" moment consists in the beginning and completion of the fourth type of exchange between the parties, the Application Data, with fully encrypted information across a public domain, with no-one able to understand what it reads. Great, eh? 
 
 
 # Final Remarks
