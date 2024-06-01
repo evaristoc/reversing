@@ -4,7 +4,10 @@ title:  "The TLS/SSL v1.2 handshake made simple: session keys generation"
 date:   2024-05-27 00:00:00 +0200
 categories: blog security-and-access
 ---
-<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-09-29-sticky-figure-with-scrollama/2023-09-29-sticky-figure-with-scrollama.css %}">
+<!--<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-09-29-sticky-figure-with-scrollama/2023-09-29-sticky-figure-with-scrollama.css %}">-->
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/style/scrollama-sidetext.css %}">
+
+
 
 <img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS-client2server02.png %}" style="width:100%;">
 
@@ -149,9 +152,7 @@ Now both the Server and the Client have a set of keys one of which is a secret s
 # In Action
 
 <section id='scrolly'>
-    <figure id="scrollfig">
-    </figure>
-    <div id="test"></div>
+    <figure id="scrollfig"></figure>
     <div class="articlepost">
         <div class='step' data-step='1'>
             <div class="explain">
@@ -166,36 +167,36 @@ Now both the Server and the Client have a set of keys one of which is a secret s
         <div class='step' data-step='3'>
             <div class="explain">
             <p>The Client uses the server public key and with a already negotiated asymmetric cipher encrypt the <strong>Pre-Master secret</strong>, which is another random number, and sends that to the Server.</p>
-<div class="explain">
-</div>
-            </div>
         </div>
-        <div class='step' data-step='4'>
+        </div>
+          <div class='step' data-step='4'>
+        </div>
+        <div class='step' data-step='5'>
             <div class="explain">
             <p>Now the Server uses the private key to decrypt the Pre-Master secret from the Client. The Pre-Master secret was safely passed through the public domain and now they both finally share their first secret. The asymmetric phase is completed.</p>
             </div>
         </div>
-        <div class='step' data-step='5'>
+        <div class='step' data-step='6'>
             <div class="explain">
             <p><strong>The PRF Phase</strong></p>
             </div>
         </div>
-        <div class='step' data-step='6'>
+        <div class='step' data-step='7'>
             <div class="explain">
             <p>Now both the Client and the Server have a key set, one of them totally secret to anyone else, that they can use in a symmetric procedure. All that can be encrypted with that set of values can be decrypted with the same set by reversing the encrypting operation.</p>
             </div>
         </div>        
-        <div class='step' data-step='7'>
+        <div class='step' data-step='8'>
             <div class="explain">
             <p>The Server and the Client create and share a Master secret. The Master secret is the last key that they will use to create the session keys.</p>
             </div>
         </div>
-        <div class='step' data-step='8'>
+        <div class='step' data-step='9'>
             <div class="explain">
             <p>The Server and the Client create and share Master secret. The Master secret is the last key that they will use to create the session keys.</p>
             </div>
         </div>
-        <div class='step' data-step='9'>
+        <div class='step' data-step='10'>
             <div class="explain">
             <p>The Server and the Client create and share Master secret. The Master secret is the last key that they will use to create the session keys.</p>
             </div> 

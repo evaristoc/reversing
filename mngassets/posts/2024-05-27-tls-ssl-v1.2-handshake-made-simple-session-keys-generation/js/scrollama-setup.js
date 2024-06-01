@@ -19,15 +19,31 @@ window.onload = (event) => {
     // 1. update height of step elements
         var stepH = Math.floor(window.innerHeight * 0.75);
         step.style('height', stepH + 'px');
-        var figureHeight = window.innerHeight / 2
-        var figureMarginTop = (window.innerHeight - figureHeight) / 2  
+
+        let figureHeight = window.innerHeight / 2;
+        let figureWidth = window.innerWidth / 2;
+        let figureMarginTop = (window.innerHeight - figureHeight) / 2;  
         figure
             .style('height', figureHeight + 'px')
+            .style('width', figureWidth + 'px')
             .style('top', figureMarginTop + 'px');
         
     // 3. tell scrollama to update new element dimensions
         scroller.resize();
     }
+    
+    /* E: the following for another day... */
+    // const isActiveFigure = document.querySelector("#scrollfig.is-active");
+    
+    // function isFigActiveEvent(resource){
+    //     isActiveFigure.addEventListener("animationended", () => {
+    //         figElem.innerHTML = "";
+    //         let img = document.createElement("img");
+    //         img.src = resourcesImgs + resource;
+    //         figElem.classList.add('is-active');
+    //         figElem.appendChild(img);
+    //     })
+    // }
 
     // scrollama event handlers
     function handleStepEnter(response) {
@@ -37,7 +53,6 @@ window.onload = (event) => {
         step.classed('is-active', function (d, i) { return i === response.index; });
             //console.log('response', response);
             //response.element.querySelector('.explain').style.display = 'inline';
-        
     // update graphic based on step
         //figure.select('p').text(response.index + 1);
         let figElem = document.getElementById('scrollfig');
@@ -46,13 +61,14 @@ window.onload = (event) => {
 
            
 
-        if(response.index == 0 || response.index == 4){
+        if(response.index == 0 || response.index == 5){
             figElem.innerHTML = "";
         }
         else if(response.index == 1){
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - asymmetric keys.png';
+            img.classList.add('is-active');
             figElem.appendChild(img);
 
         }
@@ -60,24 +76,35 @@ window.onload = (event) => {
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - client asymmetric encryption.svg';
+            img.classList.add('is-active');
             figElem.appendChild(img);            
         }
         else if(response.index == 3){
             figElem.innerHTML = "";
             let img = document.createElement("img");
-            img.src = resourcesImgs + 'TLS - server asymmetric decryption.svg';
+            img.src = resourcesImgs + 'TLS - clientPREMASTER2server airplane.png';
+            img.classList.add('is-active');
             figElem.appendChild(img);            
         }
-        else if(response.index == 5){
+        else if(response.index == 4){
             figElem.innerHTML = "";
             let img = document.createElement("img");
-            img.src = resourcesImgs + 'TLS - symmetric keys.png';
+            img.src = resourcesImgs + 'TLS - server asymmetric decryption.svg';
+            img.classList.add('is-active');
             figElem.appendChild(img);            
         }
         else if(response.index == 6){
             figElem.innerHTML = "";
             let img = document.createElement("img");
+            img.src = resourcesImgs + 'TLS - symmetric keys.png';
+            img.classList.add('is-active');
+            figElem.appendChild(img);            
+        }
+        else if(response.index == 7){
+            figElem.innerHTML = "";
+            let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - server symmetric encryption.svg';
+            img.classList.add('is-active');
             figElem.appendChild(img);            
         }
     }

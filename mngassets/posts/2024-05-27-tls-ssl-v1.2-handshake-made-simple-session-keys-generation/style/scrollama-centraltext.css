@@ -37,7 +37,7 @@ figure {
     opacity: 0;
 }
 
-div #fig-container{
+div #threejs-container{
   position: relative;
   top: 405px;
 }
