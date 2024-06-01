@@ -68,8 +68,38 @@ xmlns:svg="http://www.w3.org/2000/svg">
     inkscape:transform-center-y="1.6037814"
     inkscape:label="SERVER CERT" />
     <g
+    id="g24-3"
+    transform="matrix(2.3951627,0.01267695,-0.00287672,2.807441,-4.393052,-27.580499)"
+    style="fill:#d3bc5f"
+    inkscape:label="SERVER RANDOM">
+    <rect
+        style="fill:#d3bc5f;stroke:#000000;stroke-width:0.486588;stroke-dasharray:none;stroke-opacity:1"
+        id="rect22-7-0"
+        width="17.859852"
+        height="13.982568"
+        x="2.5276074"
+        y="31.09413" />
+    <text
+        xml:space="preserve"
+        style="font-size:3.175px;white-space:pre;inline-size:19.0777;display:inline;fill:#000000;stroke:#000080;stroke-width:0.1;stroke-dasharray:none;stroke-opacity:1"
+        x="7.7348914"
+        y="39.799362"
+        id="text21-5-4-8"
+        transform="translate(-3.8617047,-4.6616471)"><tspan
+        x="7.7348914"
+        y="39.799362"
+        id="tspan19"><tspan
+            style="font-family:Arial;-inkscape-font-specification:Arial"
+            id="tspan18">Server </tspan></tspan><tspan
+        x="7.7348914"
+        y="43.804867"
+        id="tspan21"><tspan
+            style="font-family:Arial;-inkscape-font-specification:Arial"
+            id="tspan20">Random</tspan></tspan></text>
+    </g>
+    <g
     id="g24"
-    transform="matrix(2.3841943,-0.01499629,0.0126002,2.8375798,48.901004,-18.29622)"
+    transform="matrix(2.3841943,-0.01499629,0.0126002,2.8375798,28.901004,-28.29622)"
     inkscape:label="CLIENT RANDOM">
     <rect
         style="fill:#ff7f2a;stroke:#000000;stroke-width:0.486588;stroke-dasharray:none;stroke-opacity:1"
@@ -151,36 +181,6 @@ xmlns:svg="http://www.w3.org/2000/svg">
        style="font-family:Arial;-inkscape-font-specification:Arial"
        id="tspan10">Pre-Master</tspan></tspan></text>
 </g>
-    <g
-    id="g24-3"
-    transform="matrix(2.3951627,0.01267695,-0.00287672,2.807441,94.393052,-17.580499)"
-    style="fill:#d3bc5f"
-    inkscape:label="SERVER RANDOM">
-    <rect
-        style="fill:#d3bc5f;stroke:#000000;stroke-width:0.486588;stroke-dasharray:none;stroke-opacity:1"
-        id="rect22-7-0"
-        width="17.859852"
-        height="13.982568"
-        x="2.5276074"
-        y="31.09413" />
-    <text
-        xml:space="preserve"
-        style="font-size:3.175px;white-space:pre;inline-size:19.0777;display:inline;fill:#000000;stroke:#000080;stroke-width:0.1;stroke-dasharray:none;stroke-opacity:1"
-        x="7.7348914"
-        y="39.799362"
-        id="text21-5-4-8"
-        transform="translate(-3.8617047,-4.6616471)"><tspan
-        x="7.7348914"
-        y="39.799362"
-        id="tspan19"><tspan
-            style="font-family:Arial;-inkscape-font-specification:Arial"
-            id="tspan18">Server </tspan></tspan><tspan
-        x="7.7348914"
-        y="43.804867"
-        id="tspan21"><tspan
-            style="font-family:Arial;-inkscape-font-specification:Arial"
-            id="tspan20">Random</tspan></tspan></text>
-    </g>
     <g
     id="g23-1"
     transform="matrix(2.7909089,-0.21163685,-0.35820902,3.3936785,-16.645781,-18.145546)"
@@ -478,32 +478,6 @@ xmlns:svg="http://www.w3.org/2000/svg">
 
 
 <style>
-    @keyframes insertclientrandom {
-        0% {
-          transform: matrix(2.3841943,-0.01499629,0.0126002,2.8375798,48.901004,-18.29622);
-        }
-        60% {
-         transform: matrix(2.3841943,-0.01499629,0.0126002,2.8375798,49.901004,0.99729924);
-       }
-        100% {
-         transform: matrix(2.3841943,-0.01499629,0.0126002,2.8375798,49.901004,0.99729924);
-        }
-      }
-
-      @keyframes insertserverrandom {
-        0% {
-          transform: matrix(2.3951627,0.01267695,-0.00287672,2.807441,94.393052,-17.580499);
-        }
-        5% {
-         transform: matrix(2.3951627,0.01267695,-0.00287672,2.807441,94.393052,-17.580499);
-       }
-        65% {
-         transform: matrix(2.3951627,0.01267695,-0.00287672,2.807441,94.685378,2.0053463);
-       }
-        100% {
-         transform: matrix(2.3951627,0.01267695,-0.00287672,2.807441,94.685378,2.0053463);
-        }
-      }
 
       @keyframes insertpublickey {
         0% {
@@ -551,21 +525,6 @@ xmlns:svg="http://www.w3.org/2000/svg">
         }
       }
 
-      #g24{ /*client random*/
-        animation-name:insertclientrandom;
-        animation-duration: 10s;
-        animation-direction:normal;
-        animation-fill-mode: forwards;
-        animation-iteration-count: infinite;
-      }
-
-      #g24-3{ /*server random*/
-        animation-name:insertserverrandom;
-        animation-duration: 10s;
-        animation-direction:normal;
-        animation-fill-mode: forwards;
-        animation-iteration-count: infinite;
-      }
 
       #g179sk{ /*secret key*/
         animation-name:insertpublickey;

@@ -4,7 +4,7 @@ title:  "The TLS/SSL v1.2 handshake made simple: session keys generation"
 date:   2024-05-27 00:00:00 +0200
 categories: blog security-and-access
 ---
-
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-09-29-sticky-figure-with-scrollama/2023-09-29-sticky-figure-with-scrollama.css %}">
 
 <img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS-client2server02.png %}" style="width:100%;">
 
@@ -49,7 +49,7 @@ Can you get what it is in my message? It is very easy: just get rid of the fragm
 
 My cipher function was indeed that easy: inserting the word "kuty" between the syllables of the actual message. Decrypting was made possible by inverting that operation.
 
-But notice something: for you to get the message you had to understand the pattern I applied to encrypt it. That means, you have to know the function I used to encrypt my message. In other words, **we both must have the same cipher**. Furthermore: **we both must share some usable keys**, a sort of pattern, or a combination of patterns, that the cipher will use as a base to restore or hide the message.
+But notice something: for you to get the message you had to understand the pattern I applied to encrypt it. That means, you have to know the function I used to encrypt my message. In other words, **we both must have the same cipher**. Furthermore: **we both must share some usable keys**, i.e. a sort of pattern, or a combination of patterns, that the cipher will use as a base to restore or hide the message.
 
 In this simple example, the word "kuty" was the key. But notice that we can say that "ku" is one part of the key and "ty" is the other one.
 
@@ -57,13 +57,13 @@ Now, you have to believe that:
 
 > As long as both parties share the keys between them and with no-one else, the encryption procedure will stay safe
 
-This means that you might still have to make some effort if I change the word "kuty" for another key, and encrypt a different message. However, this simple encryption procedure will still be beatable all day.
+This means that you might still have to make some effort to decrypt a new message if I change the word "kuty" for another key. It would be easier if I provide you my key in advance, so we both have it.
 
-Therefore, if someone was able to get the pattern (the key) just by reading the encrypted word, then my message lost its secrecy and then my message passed unsafe through the channel.
+However, this simple encryption procedure will still be beatable all day. Therefore, if someone was able to get the pattern (the key) just by reading the encrypted word, then my message lost its secrecy and then my message passed unsafe through the channel.
 
 The TLS makes use of more powerful procedures which are based on random numbers as keys, and apply more complex mathematical operations over the message that simply inserting a word.
 
-So, this is easy: Client and Server can share which cipher they want to use, and then create random numbers as keys and share them through... Ooeps...
+So, Client and Server can now agree on what cipher they want to use, and then create random numbers as keys and share them through... Ooeps...
 
 Not on the public domain! So even if they can share the cipher on the public space, how they are going to agree over the keys?
 
@@ -85,19 +85,135 @@ Whaaaaaaaaaaaaaaaaaat?
 
 So how are they going to share that secret section of a key in a way that no-one can read it?
 
-![alt text](image.png)
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/1f914.jpg %}" style="width:100%;">
 
 ### Client Key Exchange and Generation of Session Keys
 
-xxxxxxxxx
+Part of the purpose of the hellos was to exchange initial information about which encryption procedures both, the Client and the Server, would like to use.
 
-xxxxxx
+They also shared some keys that could be exposed to the public domain, but haven't been used yet.
+
+In version 1.2, the generation of the session keys is the step where the Client and the Server begin to share "secrets" and it consists in two phases of encryption.
+
+In the first phase, once the legitimacy of the Server was confirmed, the Client will use a public key to encrypt a secret to the Server, the **Pre-Master secret**. To send that pre-master secret encrypted, the Client will rely on an **asymmetric procedure**.
+
+The Server will get that new key reverting the encryption, and continue with a second phase where the new key together the public ones will be used for a **symmetric encryption / decryption procedure**, which will be the encrypting mechanism for the rest of the communications.
+
+You might ask: Why two phases? Wouldn't the asymmetric phase be enough? Some of the issues here are performance and complexity of the implementation.
+
+The asymmetric mechanism, although very safe, is slow. It would substantially delay the communications when involving large amount of data. It would also be harder for all systems to create and set certified private and public keys for every possible communication.
+
+> In practice, a two-way asymmetric procedure has been used for some special cases, like Intranet or IoT
+
+However, if we assume that just one of the parties is certified for every ocassion, and that we transfer a small amount of data like a random number, than the asymmetric procedure could be a good option.
+
+But for larger data transfers, the parties might prefer a safe encryption / decryption operation that doesn't take that long, and that is something that the symmetric procedure does better than the asymmetric one. It doesn't require certification and can be changed for every new session.
+
+There are three phases during the session keys generation step: 
 
 * The Client Pre-Master Secret Generation and the Asymmetric Encrytion
-* The Session Key for Symmetric Encryption
+* The Generation of the Master Secret using a Pseudo-Random Number Generator
+* The Generation of the Session Keys for Symmetric Encryption
+
+Let's see some details of how the work.
 
 
-#### Asymmetric Phase
+#### The Asymmetric Phase
+
+It is called asymmetric because after an encryption operation, the other side will need a *different but related key* to decrypt the message.
+
+Do you remember that on the [previous post]({{site.baseurl}}{% link _posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos.markdown %}) we mentioned the Server public and private keys?
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - asymmetric keys.png %}" style="width:50%;">
+<br/>
+<br/>
+<br/>
+
+So, everyone, including our Client, has a copy of the public key, but *only the Server (should) know the private one*. And that is the base of the success of the decryption procedure: only the Server will be able to decrypt the message of the Client when both using the same encryption / decryption procedure.
+
+> Notice that for version 1.2 the asymmetric procedure is based on **static keys**; in this case, it will be enough to decrypt the messages. For this reason, and for other ones, the version 1.3 get rid of this step using a different cryptographic procedure 
+
+#### The Pseudo Random Function (PRF) for the Master Secret generation
+
+
+
+#### The Symmetric Phase
+
+Now both the Server and the Client have a set of keys one of which is a secret shared only between them (the pre-master).
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - symmetric keys.png %}" style="width:100%;">
+<br/>
+<br/>
+<br/>
+
+# In Action
+
+<section id='scrolly'>
+    <figure id="scrollfig">
+    </figure>
+    <div id="test"></div>
+    <div class="articlepost">
+        <div class='step' data-step='1'>
+            <div class="explain">
+            <p><strong>The Asymmetric Phase</strong></p>
+          </div>
+        </div>
+        <div class='step' data-step='2'>
+            <div class="explain">
+            <p>During the asymmetric phase, the parties will make use of the server keys. The Client has a copy of the public one (as possibly everyone else) for encryption, but it is expected that only the Server knows the private key for decryption.</p>
+          </div>
+        </div>
+        <div class='step' data-step='3'>
+            <div class="explain">
+            <p>The Client uses the server public key and with a already negotiated asymmetric cipher encrypt the <strong>Pre-Master secret</strong>, which is another random number, and sends that to the Server.</p>
+<div class="explain">
+</div>
+            </div>
+        </div>
+        <div class='step' data-step='4'>
+            <div class="explain">
+            <p>Now the Server uses the private key to decrypt the Pre-Master secret from the Client. The Pre-Master secret was safely passed through the public domain and now they both finally share their first secret. The asymmetric phase is completed.</p>
+            </div>
+        </div>
+        <div class='step' data-step='5'>
+            <div class="explain">
+            <p><strong>The PRF Phase</strong></p>
+            </div>
+        </div>
+        <div class='step' data-step='6'>
+            <div class="explain">
+            <p>Now both the Client and the Server have a key set, one of them totally secret to anyone else, that they can use in a symmetric procedure. All that can be encrypted with that set of values can be decrypted with the same set by reversing the encrypting operation.</p>
+            </div>
+        </div>        
+        <div class='step' data-step='7'>
+            <div class="explain">
+            <p>The Server and the Client create and share a Master secret. The Master secret is the last key that they will use to create the session keys.</p>
+            </div>
+        </div>
+        <div class='step' data-step='8'>
+            <div class="explain">
+            <p>The Server and the Client create and share Master secret. The Master secret is the last key that they will use to create the session keys.</p>
+            </div>
+        </div>
+        <div class='step' data-step='9'>
+            <div class="explain">
+            <p>The Server and the Client create and share Master secret. The Master secret is the last key that they will use to create the session keys.</p>
+            </div> 
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/threejs/v104/three.v104.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
+<script type="module"  src="{{ site.baseurl }}{% link mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/js/scrollama-setup.js %}"></script>
 
 
 
@@ -130,16 +246,6 @@ Let's see what it contains:
 <br/>
 <br/>
 
-
-
-#### Symmetric Phase
-
-Now both the Server and the Client have a set of keys one of which is a secret shared only between them (the pre-master).
-
-<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - symmetric keys.png %}" style="width:100%;">
-<br/>
-<br/>
-<br/>
 
 #### *Server-side First Message Symetric Encryption*
 
