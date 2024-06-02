@@ -6,7 +6,7 @@ categories: blog security-and-access
 ---
 <!--<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-09-29-sticky-figure-with-scrollama/2023-09-29-sticky-figure-with-scrollama.css %}">-->
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/style/scrollama-sidetext.css %}">
-
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/style/scrollama-thispost.css %}">
 
 
 <img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS-client2server02.png %}" style="width:100%;">
@@ -154,9 +154,10 @@ Now both the Server and the Client have a set of keys one of which is a secret s
 <section id='scrolly'>
     <figure id="scrollfig"></figure>
     <div class="articlepost">
-        <div class='step' data-step='1'>
-            <div class="explain">
-            <p><strong>The Asymmetric Phase</strong></p>
+        <div class='step title' data-step='1'>
+            <p class='title'>The Asymmetric Phase</p>
+            <div class='subtitle'>
+            <p>It is called asymmetric because after an encryption operation, the other side will need a different but related key to decrypt the message.</p>
           </div>
         </div>
         <div class='step' data-step='2'>
@@ -176,10 +177,8 @@ Now both the Server and the Client have a set of keys one of which is a secret s
             <p>Now the Server uses the private key to decrypt the Pre-Master secret from the Client. The Pre-Master secret was safely passed through the public domain and now they both finally share their first secret. The asymmetric phase is completed.</p>
             </div>
         </div>
-        <div class='step' data-step='6'>
-            <div class="explain">
-            <p><strong>The PRF Phase</strong></p>
-            </div>
+        <div class='step title' data-step='6'>
+         <p class='title'>The PRF Phase</p>
         </div>
         <div class='step' data-step='7'>
             <div class="explain">

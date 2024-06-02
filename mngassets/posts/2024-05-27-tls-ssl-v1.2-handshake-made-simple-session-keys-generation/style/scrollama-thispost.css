@@ -1,0 +1,27 @@
+img{
+    display:block;
+    margin: auto;
+  }
+
+.step div, #scrollfig img {
+    animation-name: myAnimation01;
+    animation-duration: 1000ms;
+    animation-fill-mode: forwards;
+    /*z-index: 10;*/
+}
+
+.step.is-active div, #scrollfig img.is-active {
+    animation-name: myAnimation02;
+    animation-duration: 1000ms;
+    animation-fill-mode: forwards;
+  }
+
+.step[data-step="4"], .step.is-active[data-step="4"]  {
+    background-color: #f3f3f3;
+}
+
+
+div .subtitle p {
+    font-size: 1rem;
+} 
+  

@@ -17,15 +17,16 @@ window.onload = (event) => {
     function handleResize() {
         
     // 1. update height of step elements
+    // E: I removed a div element from the figure element and now it fits all the space
         var stepH = Math.floor(window.innerHeight * 0.75);
         step.style('height', stepH + 'px');
 
         let figureHeight = window.innerHeight / 2;
-        let figureWidth = window.innerWidth / 2;
+        //let figureWidth = window.innerWidth / 2;
         let figureMarginTop = (window.innerHeight - figureHeight) / 2;  
         figure
             .style('height', figureHeight + 'px')
-            .style('width', figureWidth + 'px')
+            //.style('width', figureWidth + 'px')
             .style('top', figureMarginTop + 'px');
         
     // 3. tell scrollama to update new element dimensions
@@ -73,6 +74,9 @@ window.onload = (event) => {
 
         }
         else if(response.index == 2){
+            //let scrolly = document.querySelector('#scrolly');
+            //let a = scrolly.querySelector('figure');
+            //a.style.flexBasis = '0%';
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - client asymmetric encryption.svg';
@@ -81,12 +85,23 @@ window.onload = (event) => {
         }
         else if(response.index == 3){
             figElem.innerHTML = "";
+            //let step4Elem = document.querySelector(".step[data-step='4']");
+            //step4Elem.style.width = '1px';
+            //step4Elem.parentNode.style.width = '0px';
+            //let scrolly = document.querySelector('#scrolly');
+            //let a = scrolly.querySelector('figure');
+            //a.style.flexBasis = '80%';
+            //let b = scrolly.querySelector('articlepost');
+            //b.style.flexBasis = '20%';
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - clientPREMASTER2server airplane.png';
             img.classList.add('is-active');
             figElem.appendChild(img);            
         }
         else if(response.index == 4){
+            //let scrolly = document.querySelector('#scrolly');
+            //let a = scrolly.querySelector('figure');
+            //a.style.flexBasis = '0%';
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - server asymmetric decryption.svg';

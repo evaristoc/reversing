@@ -9,11 +9,11 @@
     padding: 1rem;
 }
 
-#stickyoverlay >* {
+/*#stickyoverlay >* {
     -webkit-box-flex: 1;
     -ms-flex: 1;
     flex: 1;
-}
+}*/
 
 div .articlepost {
     position: relative;
