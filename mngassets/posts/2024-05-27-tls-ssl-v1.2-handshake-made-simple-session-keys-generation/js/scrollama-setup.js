@@ -60,7 +60,7 @@ window.onload = (event) => {
 
         const resourcesImgs = '../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/';
 
-        let skipExplain = [0,5,8,10,11]
+        let skipExplain = [0,5,11]
 
         if(skipExplain.includes(response.index)){
             figElem.innerHTML = "";
@@ -111,7 +111,7 @@ window.onload = (event) => {
         else if(response.index == 6){
             figElem.innerHTML = "";
             let img = document.createElement("img");
-            img.src = resourcesImgs + 'TLS - symmetric keys.png';
+            img.src = resourcesImgs + 'TLS - randoms and pre-master.png';
             img.classList.add('is-active');
             figElem.appendChild(img);            
         }
@@ -122,10 +122,24 @@ window.onload = (event) => {
             img.classList.add('is-active');
             figElem.appendChild(img);            
         }
+        else if(response.index == 8){
+            figElem.innerHTML = "";
+            let img = document.createElement("img");
+            img.src = resourcesImgs + 'TLS - randoms and master.png';
+            img.classList.add('is-active');
+            figElem.appendChild(img);            
+        }
         else if(response.index == 9){
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - PRF Session Keys.svg';
+            img.classList.add('is-active');
+            figElem.appendChild(img);            
+        }
+        else if(response.index == 10){
+            figElem.innerHTML = "";
+            let img = document.createElement("img");
+            img.src = resourcesImgs + 'TLS - master and session keys.png';
             img.classList.add('is-active');
             figElem.appendChild(img);            
         }
