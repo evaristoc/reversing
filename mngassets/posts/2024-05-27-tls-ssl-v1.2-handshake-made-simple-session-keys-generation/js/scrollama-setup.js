@@ -94,7 +94,7 @@ window.onload = (event) => {
             //let b = scrolly.querySelector('articlepost');
             //b.style.flexBasis = '20%';
             let img = document.createElement("img");
-            img.src = resourcesImgs + 'TLS - clientPREMASTER2server airplane.png';
+            img.src = resourcesImgs + 'TLS - clientPREMASTER2server airplane.svg';
             img.classList.add('is-active');
             figElem.appendChild(img);            
         }
@@ -118,7 +118,7 @@ window.onload = (event) => {
         else if(response.index == 7){
             figElem.innerHTML = "";
             let img = document.createElement("img");
-            img.src = resourcesImgs + 'TLS - server symmetric encryption.svg';
+            img.src = resourcesImgs + 'TLS - PRF.svg';
             img.classList.add('is-active');
             figElem.appendChild(img);            
         }
