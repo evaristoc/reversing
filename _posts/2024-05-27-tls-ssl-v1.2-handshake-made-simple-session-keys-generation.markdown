@@ -152,18 +152,28 @@ In case you are still not completely getting a picture of the session key genera
             <div class="explain">
             <p>Inputs for the function will be the client random and the server random (both shared unencrypted during the hello step), and the pre-master (which is ideally only known to the Server and the Client). The fact that one of the inputs is a secret to everyone else makes the output of the function unkown to others. Eg. you can not figure out the output of this function:  <code>5 + ... = ?</code></p>
            </div>
-        </div>        
-        <div class='step' data-step='8'>
+        </div>
+                <div class='step' data-step='8'>
             <div class="explain">
             <p>The processing function is usually a <strong><a href='https://csrc.nist.gov/glossary/term/pseudorandom_function#:~:text=Definitions%3A,indistinguishable%20from%20truly%20random%20output'>Pseudo Random Function (PRF)</a></strong>, which is a procedure that will result in the same pseudo-random value on the side of the Client as well as the Server, as long as they both apply the same procedure and use the same inputs. The most important here is that <a href='https://stackoverflow.com/a/15413799'>no-one won't be able to infer the exact values of the inputs reversibly by obtaining the output of the function</a>, guaranting certain level of safety.</p>
             </div>
-        </div>
+        </div>        
         <div class='step' data-step='9'>
             <div class="explain">
-            <p>Now both, the Client and the Server have a copy of the Master Secret and <strong>they can go to then next step</strong> which is...</p>
+            <p>//SHOW RANDOMS AND MASTER AND EXPLAIN THE MASTER//</p>
             </div>
         </div>
         <div class='step' data-step='10'>
+            <div class="explain">
+            <p>//EXPLAIN THE CREATION OF SESSION KEYS//</p>
+            </div>
+        </div>
+        <div class='step' data-step='11'>
+            <div class="explain">
+            <p>//EXPLAIN THE USE OF SESSION KEYS// Now both, the Client and the Server have a copy of the Master Secret and <strong>they can go to then next step</strong> which is...</p>
+            </div>
+        </div>
+        <div class='step' data-step='12'>
             <p class="title">The Symmetric Phase</p>
             <div class="subtitle">
             <p>The Server and the Client create and share Master secret. The Master secret is the last key that they will use to create the session keys. Now both the Client and the Server have a key set, one of them totally secret to anyone else, that they can use in a symmetric procedure. All that can be encrypted with that set of values can be decrypted with the same set by reversing the encrypting operation.</p>
@@ -227,12 +237,5 @@ For the rest, I just hope you enjoyed this reading. Meanwhile, happy coding!
 
 # Dumped
 
-#### The Pseudo Random Function (PRF) for the Master Secret generation
-
-The processing function is usually a [**Pseudo Random Function** (PRF)](https://csrc.nist.gov/glossary/term/pseudorandom_function#:~:text=Definitions%3A,indistinguishable%20from%20truly%20random%20output.), which is a procedure that will result in the same pseudo-random value on the side of the Client as well as the Server, as long as they both apply the same procedure and use the same inputs. The most important here is that [no-one won't be able to infer the exact values of the inputs reversibly by obtaining the output of the function](https://stackoverflow.com/a/15413799), guaranting certain level of safety.
-
-#### The Symmetric Phase
-
-Now both the Server and the Client have a set of keys one of which is a secret shared only between them (the pre-master).
 
 

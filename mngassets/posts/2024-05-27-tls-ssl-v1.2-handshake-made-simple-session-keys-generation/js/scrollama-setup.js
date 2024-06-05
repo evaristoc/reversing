@@ -60,9 +60,9 @@ window.onload = (event) => {
 
         const resourcesImgs = '../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/';
 
-           
+        let skipExplain = [0,5,8,10,11]
 
-        if(response.index == 0 || response.index == 5){
+        if(skipExplain.includes(response.index)){
             figElem.innerHTML = "";
         }
         else if(response.index == 1){
@@ -118,7 +118,14 @@ window.onload = (event) => {
         else if(response.index == 7){
             figElem.innerHTML = "";
             let img = document.createElement("img");
-            img.src = resourcesImgs + 'TLS - PRF.svg';
+            img.src = resourcesImgs + 'TLS - PRF Master Secret.svg';
+            img.classList.add('is-active');
+            figElem.appendChild(img);            
+        }
+        else if(response.index == 9){
+            figElem.innerHTML = "";
+            let img = document.createElement("img");
+            img.src = resourcesImgs + 'TLS - PRF Session Keys.svg';
             img.classList.add('is-active');
             figElem.appendChild(img);            
         }
