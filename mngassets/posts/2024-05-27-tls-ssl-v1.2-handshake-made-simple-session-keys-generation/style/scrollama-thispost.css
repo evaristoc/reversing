@@ -16,7 +16,7 @@ img{
     animation-fill-mode: forwards;
   }
 
-.step[data-step="4"], .step.is-active[data-step="4"]  {
+.step[data-step="4"], .step.is-active[data-step="4"],.step[data-step="14"], .step.is-active[data-step="14"] ,.step[data-step="16"], .step.is-active[data-step="16"]  {
     background-color: #f3f3f3;
 }
 

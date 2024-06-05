@@ -135,7 +135,7 @@ In case you are still not completely getting a picture of the session key genera
             <p>The Client uses the server public key and with an already negotiated asymmetric cipher encrypt the <strong>Pre-Master secret</strong>, which is another random number, and sends that to the Server.</p>
         </div>
         </div>
-          <div class='step' data-step='4'>
+        <div class='step' data-step='4'>
         </div>
         <div class='step' data-step='5'>
             <div class="explain">
@@ -155,30 +155,49 @@ In case you are still not completely getting a picture of the session key genera
         </div>
                 <div class='step' data-step='8'>
             <div class="explain">
-            <p>The processing function is usually a <strong><a href='https://csrc.nist.gov/glossary/term/pseudorandom_function#:~:text=Definitions%3A,indistinguishable%20from%20truly%20random%20output'>Pseudo Random Function (PRF)</a></strong>, which is a procedure that will result in the same pseudo-random value on the side of the Client as well as the Server, as long as they both apply the same procedure and use the same inputs. The most important here is that <a href='https://stackoverflow.com/a/15413799'>no-one won't be able to infer the exact values of the inputs reversibly by obtaining the output of the function</a>, guaranting certain level of safety.</p>
+            <p>The processing function is usually a <strong><a href='https://csrc.nist.gov/glossary/term/pseudorandom_function#:~:text=Definitions%3A,indistinguishable%20from%20truly%20random%20output'>Pseudo Random Function (PRF)</a></strong>, which is a procedure that will result in the same pseudo-random value on the side of the Client as well as the Server, as long as they both apply the same procedure and use the same inputs. The most important here is that <a href='https://stackoverflow.com/a/15413799'>no-one will be able to infer the exact values of the inputs reversibly by obtaining the output of the function</a>, guaranting certain level of safety.</p>
             </div>
         </div>        
         <div class='step' data-step='9'>
             <div class="explain">
-            <p>//SHOW RANDOMS AND MASTER AND EXPLAIN THE MASTER//</p>
+            <p>The Server and the Client create and share an identical master secret. //WHY A MASTER//</p>
             </div>
         </div>
         <div class='step' data-step='10'>
             <div class="explain">
-            <p>//EXPLAIN THE CREATION OF SESSION KEYS//</p>
+            <p>The master secret and the randoms will be used to create the session keys using a similar procedure as for the creation of the master secret. Both parties produce <i>more than one key</i> in a single <strong>key block</strong> that is eventually "sliced" up to the right sizes. The resulting session keys would fit the symmetric cipher previously negotiated between the parties. The keys are ready: <strong>we can move to the next phase</strong>.</p>
             </div>
         </div>
-        <div class='step' data-step='11'>
-            <div class="explain">
-            <p>//EXPLAIN THE USE OF SESSION KEYS// Now both, the Client and the Server have a copy of the Master Secret and <strong>they can go to then next step</strong> which is...</p>
-            </div>
-        </div>
-        <div class='step' data-step='12'>
+        <div class='step title' data-step='11'>
             <p class="title">The Symmetric Phase</p>
             <div class="subtitle">
-            <p>The Server and the Client create and share Master secret. The Master secret is the last key that they will use to create the session keys. Now both the Client and the Server have a key set, one of them totally secret to anyone else, that they can use in a symmetric procedure. All that can be encrypted with that set of values can be decrypted with the same set by reversing the encrypting operation.</p>
+            <p>During the symmetric procedure, all that can be encrypted with a encryption key can be decrypted with the same key by reversing the encrypting operation.</p>
             </div> 
         </div>
+        <div class='step' data-step='12'>
+            <div class="explain">
+            <p>The reason why several session keys instead of one is because in reality there are more than one type of communication during a single session. Encrypting each type of communication with a different key adds a higher level of security.</p>
+            </div>
+        </div>
+        <div class='step' data-step='13'>
+            <div class="explain">
+            <p>The expected outcome of the symmetric encryption is not different to the one previously described for assymetric encryption: using a cipher function with a key to produce a ciphertext from a plaintext. In order to test that everything is correct, the Client encrypt a convined message ("finished") and sends it to the server...</p>
+            </div> 
+        </div>
+        <div class='step' data-step='14'>
+        </div>
+        <div class='step' data-step='15'>
+            <div class="explain">
+            <p>If after receiving the ciphertext and decrypting it with the corresponding copy of the session key, </p><p>if the message is as expected, the Server responds to the Client with a similar message... </p>
+            </div> 
+        </div> 
+        <div class='step' data-step='16'>
+        </div> 
+        <div class='step' data-step='15'>
+            <div class="explain">
+            <p>If the Client gets the message, then <strong>the handshake is finished</strong>. </p>
+            </div> 
+        </div>            
     </div>
     <br>
     <br>
@@ -196,6 +215,8 @@ In case you are still not completely getting a picture of the session key genera
 <br/>
 <br/>
 <br/>
+
+
 
 # Tada!
 
