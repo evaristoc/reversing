@@ -10,6 +10,7 @@
   display: flex;
   background-color: #f3f3f3;
   padding: 1rem;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
     
 /* E: on this way means that ALL the elements under #scrolly are of flex 1 (grow = 1, shrink = 1, basis = 0, see https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */ 
@@ -71,7 +72,8 @@ figure {
 
 
 .step.is-active:not(.title) {
-  background-color: goldenrod;
+  /*background-color: goldenrod;*/
+  background-color: #ffbb11;
   color: #3b3b3b;
 }
 

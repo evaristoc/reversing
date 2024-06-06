@@ -83,11 +83,11 @@ They also shared some keys that could be exposed to the public domain, but haven
 
 In version 1.2, the generation of the session keys is the step where the Client and the Server begin to share "secrets" and it consists in three phases of encryption.
 
-#### The pre-master exchange
+#### The Assymetric Phase: The Pre-Master Exchange 
 
 In the first phase, once the legitimacy of the Server was confirmed, the Client will encrypt a secret for the Server, the **pre-master secret**. To send that pre-master secret encrypted, the Client will rely on an **asymmetric encryption** procedure.
 
-#### The master secret generation
+#### The PRF Phase: The Master Secret and Session Key Generation
 
 The pre-master, even if now only known to Client and Server, might not be totally safe as well as not complying with the requirements for a proper key. Furthermore, the Client as well as the Server would like to get the same key on their corresponding sides.
 
@@ -95,7 +95,7 @@ So they input the pre-master secret through a processing function that will resu
 
 Usually after the master secret is obtained, the pre-master is thrown away and it is that master secret that is used in the following step.
 
-#### The session key generation
+#### The Symmetric Phase: The Finished Exchange
 
 The final goal of this procedure is for both, the Client and the Server, to be able to engage in what is called **symmetric encryption**, which is a procedure where *the same* key can be used to reverse the current cryptographic operation over a message.
 
@@ -132,25 +132,25 @@ In case you are still not completely getting a picture of the session key genera
         </div>
         <div class='step' data-step='3'>
             <div class="explain">
-            <p>The Client uses the server public key and with an already negotiated asymmetric cipher encrypt the <strong>Pre-Master secret</strong>, which is another random number, and sends that to the Server.</p>
+            <p>The Client uses the server public key and with an already negotiated asymmetric cipher encrypt the <strong>pre-master secret</strong>, which is another random number, and sends that to the Server.</p>
         </div>
         </div>
         <div class='step' data-step='4'>
         </div>
         <div class='step' data-step='5'>
             <div class="explain">
-            <p>Now the Server uses the private key to decrypt the Pre-Master secret from the Client. The Pre-Master secret was safely passed through the public domain and now they both finally share their first secret. <strong>The asymmetric phase is completed.</strong></p>
+            <p>Now the Server uses the private key to decrypt the pre-master secret from the Client. The pre-master secret was safely passed through the public domain and now they both finally share their first secret. <strong>The asymmetric phase is completed.</strong></p>
             </div>
         </div>
         <div class='step title' data-step='6'>
          <p class='title'>The PRF Phase</p>
          <div class='subtitle'>
-       <p>Both the Server <i>and</i> the Client have the pre-master secret. They want to obtain the <i>master</i>  secret, which will be a <i>pseudo</i>  random number. But they should ensure that <i>both of them  will arrive to the same pseudo random number</i>. For that they will use a function that will get as input some of the data they already share between them...</p>
+       <p>//DESCRIBE THIS PART AS OCURRING SIMULTANOUESLY ON BOTH SIDES// Both the Server <i>and</i> the Client have the pre-master secret. They want to obtain the <strong>master secret</strong>, which will be a <i>pseudo</i>  random number. But they should ensure that <i>both of them  will arrive to the same pseudo random number</i>. For that they will use a function that will get as input some of the data they already share between them...</p>
          </div>
           </div>
         <div class='step' data-step='7'>
             <div class="explain">
-            <p>Inputs for the function will be the client random and the server random (both shared unencrypted during the hello step), and the pre-master (which is ideally only known to the Server and the Client). The fact that one of the inputs is a secret to everyone else makes the output of the function unkown to others. Eg. you can not figure out the output of this function:  <code>5 + ... = ?</code></p>
+            <p>Inputs for the function will be the client random and the server random (both shared unencrypted during the hello step), and the pre-master secret (which is ideally only known to the Server and the Client). The fact that one of the inputs is a secret to everyone else makes the output of the function unkown to others. Eg. you can not figure out the output of this function:  <code>5 + ... = ?</code></p>
            </div>
         </div>
                 <div class='step' data-step='8'>
@@ -176,26 +176,27 @@ In case you are still not completely getting a picture of the session key genera
         </div>
         <div class='step' data-step='12'>
             <div class="explain">
-            <p>The reason why several session keys instead of one is because in reality there are more than one type of communication during a single session. Encrypting each type of communication with a different key adds a higher level of security.</p>
+            <p>The reason why several session keys instead of one is because in practice there are more than one type of communication and more than one communication channel during a single session. Encrypting each type of communication for each channel using different keys adds a higher level of security.</p>
             </div>
         </div>
         <div class='step' data-step='13'>
             <div class="explain">
-            <p>The expected outcome of the symmetric encryption is not different to the one previously described for assymetric encryption: using a cipher function with a key to produce a ciphertext from a plaintext. In order to test that everything is correct, the Client encrypt a convined message ("finished") and sends it to the server...</p>
+            <p>Both the Client and the Server will use an agreed symmetric cipher function now with a similar key on each side.</p>
+            <p>The Client is the first to test the resulting procedure. The Client encrypts a message ("finished") with test data which would revail if the handshake was tampered, and sends it to the server...</p>
             </div> 
         </div>
         <div class='step' data-step='14'>
         </div>
         <div class='step' data-step='15'>
             <div class="explain">
-            <p>If after receiving the ciphertext and decrypting it with the corresponding copy of the session key, </p><p>if the message is as expected, the Server responds to the Client with a similar message... </p>
+            <p>If, after receiving and decrypting the ciphertext the Client message was as expected, the Server will respond to the Client with a similar message... </p>
             </div> 
         </div> 
         <div class='step' data-step='16'>
         </div> 
         <div class='step' data-step='15'>
             <div class="explain">
-            <p>If the Client gets the message, then <strong>the handshake is finished</strong>. </p>
+            <p>If the Client gets the message from the Server as expected, then <strong>the handshake is finished</strong>. </p>
             </div> 
         </div>            
     </div>

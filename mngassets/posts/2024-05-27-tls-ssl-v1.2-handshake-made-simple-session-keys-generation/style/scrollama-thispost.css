@@ -28,3 +28,9 @@ div .subtitle p {
 img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Master Secret.svg'], img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Session Keys.svg']{
  max-height: 500px;
 }
+
+@media only screen and (max-width: 600px) {
+  img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Master Secret.svg'], img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Session Keys.svg']{
+    max-height: 250px;
+   }
+}
