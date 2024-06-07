@@ -1,3 +1,10 @@
+/*modal*/
+
+
+
+
+/* scrollama */
+
 img{
     display:block;
     margin: auto;
@@ -16,7 +23,7 @@ img{
     animation-fill-mode: forwards;
   }
 
-.step[data-step="4"], .step.is-active[data-step="4"],.step[data-step="14"], .step.is-active[data-step="14"] ,.step[data-step="16"], .step.is-active[data-step="16"]  {
+.step[data-step="4"], .step.is-active[data-step="4"],.step[data-step="15"], .step.is-active[data-step="15"] ,.step[data-step="16"], .step.is-active[data-step="16"]  {
     background-color: #f3f3f3;
 }
 
@@ -33,4 +40,13 @@ img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-s
   img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Master Secret.svg'], img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Session Keys.svg']{
     max-height: 250px;
    }
-}
+
+   .step div{
+    height: 100%;
+    overflow-y: scroll;
+   }
+
+   .step.title div{
+    height: 70%;
+   }
+  }

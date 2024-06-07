@@ -12,7 +12,7 @@ categories: blog security-and-access
 <img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS-client2server02.png %}" style="width:100%;">
 
 
-# The TLS/SSL and the TLS/SSL Handshake: Quick Review
+# Quick Review of the Handshake
 
 In a [previous post]({{site.baseurl}}{% link _posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos.markdown %}) we made a general introduction of the TLS/SSL protocol, and its role in the security of the internet communications to prevent eavesdropping and tampering.
 
@@ -30,13 +30,228 @@ We identified 4 relevant exchanges:
 
 We mentioned that we wanted to discuss some aspects of steps 2 and 3.
 
-We listed the main concerned parties: the Client, the Server and the Certificate Authority.
-
-<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos/img/TLS - parties.png %}" style="width:100%;">
-
-The whole Handshake protocol focus on those three "participants". In the steps following the Hellos, the Certificate Authority has completed its task and it is now up to the Client and the Server to define how to continue with the following steps.
+We listed the main concerned parties: the Client, the Server and the Certificate Authority. At the end of the Hellos exchange, the Certificate Authority has completed its task and it is now up to the Client and the Server to define how to continue with the following steps.
 
 > Remember that the Client and the Server are **application software**, not real people :) .
+
+# Encryption: "Key" Concepts
+
+Concepts that we should keep by hand are:
+
+* **encryption**: which is the action to transform a message in something indistinguishable from the original, but that can be subjected to a reversible action allowing the recovery of the message
+* **ciphertext**: an encrypted message
+* **plaintext**: the original text or data
+* **decryption**: the action of recovering the plaintext out of a ciphertext
+* **cryptography**: the science that study the encrypting and decrypting operations
+* **cipher function**: the function or procedure that will be used to encrypt and decrypt a message
+* **key**: a sort of "template" or "pattern" containing values acting as the "guide" for the cipher function to change the original content
+* **seed**: xxxx
+
+Let's try a very simple example to see if we can get the importance of a secret key. Try to decrypt my ciphertext below:
+
+#### qbobnb
+
+(*NOTE*: I give you the plaintext at the end of this post)
+
+The decryption procedure of this message is simple: just use a modern Latin alphabet and substitute each character of the ciphertext by the character that it comes before in the alphabet. 
+
+> This example is one of a [Ceasar cipher](https://en.wikipedia.org/wiki/Caesar_cipher), which is also a **symmetric cipher** (more about that later...).
+
+In other words, in order to decrypt the ciphertext you have to know the following:
+
+* the cipher function ("substitute the letters of the -text..."),
+* probably a seed ("... by the one either next or previous to the current one...") and
+* the key ("... using the modern Latin alphabet as template")
+
+This takes us to the following problem.
+
+> Before using any cryptographic procedure the Client and the Server *must agree about all the criptographic tools* they want to use. However, during the TLS handshake *the terms of that agreement should be communicated through a public space*.
+
+However, you still have to believe that by not knowing *at least one* of those criptographic elements, you will not be able to decrypt the message.
+
+To protect the encryption from others to read the actual message, *at least one* of those criptographic elements should be kept secret. The best secret should also be *unique* or very hard to replicate.
+
+Which is the best candidate to keep as secret?
+
+* the available cipher functions that our Client and Server could use for encrypting data efficiently and securely are not that many, making the implemented cipher functions very common and not a real secret
+* the seed might be, but it is a single number that indicates an start point and it can be deduced from the ciphertext; even if random and big, that single number could be found with powerful computation, which is widespread nowadays (in my example, it will be easy for you to find a new seed by knowing the other two criptographic elements)
+
+That leaves us only the key. Back to our example, we could think of a case in which I keep the same Ceasar cipher function, with the same seed, but I *re-order the Latin alphabet completely at random*, and I don't share that new key but only with another party.
+
+That is why in TLS 1.2 the information about that agreement is shared publicly without encryption *but the keys*. The keys should be unique to that transaction and known only to the incumbent parties. But if they both also need the information about the key, *how do they share that information without exposing it on a public domain*?
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/1f914.jpg %}" style="width:100%;">
+
+
+# The Pre-Master Exchange In Action
+
+Part of the purpose of the hellos was to exchange initial information about which encryption procedures both, the Client and the Server, would like to use.
+
+They also shared some keys that could be exposed to the public domain, but haven't been used yet.
+
+In version 1.2, the generation of the session keys is the step where the Client and the Server begin to share "secrets".
+
+In order to facilitate the explanation I have identified 3 phases to complete the exchange:
+
+* The **Asymmetric Phase**, which is about the pre-master secret
+* The **PRF Phase**, where the master secret and subsequent session keys are generated
+* The **Symmetric Phase**, that during the handshake consists in a single test to check the correctness of the final cryptographic implementation
+
+<section id='scrolly'>
+    <figure id="scrollfig"></figure>
+    <div class="articlepost">
+        <div class='step title' data-step='1'>
+            <p class='title'>The Asymmetric Phase</p>
+            <div class='subtitle'>
+            <p>Once the legitimacy of the Server was confirmed, the Client will encrypt a secret for the Server. It is called asymmetric because after an encryption operation, the other side will need a different but related key to decrypt the message.</p>
+          </div>
+        </div>
+        <div class='step' data-step='2'>
+            <div class="explain">
+            <p>During the asymmetric phase, the parties will make use of the server keys. The Client has a copy of the public one (as possibly everyone else) for encryption, but it is expected that only the Server knows the private key for decryption. The Server is the one who choose the cipher to use.</p>
+          </div>
+        </div>
+        <div class='step' data-step='3'>
+            <div class="explain">
+            <p>The Client uses the server public key and with an already negotiated asymmetric cipher encrypt the <strong>pre-master secret</strong>, which is another random number, and sends that to the Server. Be aware that the Client <i>don't wait for the message to be received by the Server</i> to go to the next step.</p>
+        </div>
+        </div>
+        <div class='step' data-step='4'>
+        </div>
+        <div class='step' data-step='5'>
+            <div class="explain">
+            <p>Now the Server uses the private key to decrypt the Client's pre-master secret. The pre-master secret was safely passed through the public domain and now they both finally share their first secret. <strong>The asymmetric phase is completed.</strong></p>
+            </div>
+        </div>
+        <div class='step title' data-step='6'>
+         <p class='title'>The PRF Phase</p>
+         <div class='subtitle'>
+       <p>Both the Server <i>and</i> the Client have the pre-master secret. They want to obtain the <strong>master secret</strong>, which will be a <i>pseudo</i>  random number. But they should ensure that <i>both of them  will arrive to the same pseudo random number</i>. For that they will use a function that will get as input some of the data they already share between them...</p>
+         </div>
+          </div>
+        <div class='step' data-step='7'>
+            <div class="explain">
+            <p>Inputs for the function will be the client random and the server random (both shared unencrypted during the hello step), and the pre-master secret (which is ideally only known to the Server and the Client). The fact that one of the inputs is a secret to everyone else makes the output of the function unkown to others.</p>
+           </div>
+        </div>
+                <div class='step' data-step='8'>
+            <div class="explain">
+            <p>The processing function is usually a <strong><a href='https://csrc.nist.gov/glossary/term/pseudorandom_function#:~:text=Definitions%3A,indistinguishable%20from%20truly%20random%20output'>Pseudo Random Function (PRF)</a></strong>, which is a procedure that will result in the same pseudo-random value on the side of the Client as well as the Server, as long as they both apply the same procedure and use the same inputs. The most important here is that <a href='https://stackoverflow.com/a/15413799'>no-one will be able to infer the exact values of the inputs reversibly by obtaining the output of the function</a>, guaranting certain level of safety.</p>
+            </div>
+        </div>
+         <div class='step' data-step='9'>
+            <div class="explain">
+            <p>The Server and the Client create and share an identical master secret.</p>
+            </div>
+        </div>
+         <div class='step' data-step='10'>
+            <div class="explain">
+            <p> <strong>Why not simply using the pre-master secret instead?</strong> Let's use our previous example to understand why. Try to imagine the pre-master as a random mix of <i>hundreds of characters</i> from <i>several alphabets</i>. But to decrypt a message written with the Latin alphabet, we just need 26 of those characters. The master secret is a random selection of <i>a fixed amount (in this case 26) of those characters</i>. This is more or less the idea that justify the construction of the master secret from a pre-master.</p>
+            </div>
+        </div>
+        <div class='step' data-step='11'>
+            <div class="explain">
+            <p>The master secret and the randoms will be used to create the <strong>session keys</strong> using a similar procedure as for the creation of the master secret. Both parties produce <i>more than one key</i> in a single <strong>key block</strong> that is eventually "sliced" up to the right sizes. The resulting session keys would fit the symmetric cipher previously negotiated between the parties. The keys are ready: <strong>we can move to the next phase</strong>.</p>
+            </div>
+        </div>
+        <div class='step title' data-step='12'>
+            <p class="title">The Symmetric Phase</p>
+            <div class="subtitle">
+            <p>During the symmetric procedure, all that can be encrypted with a encryption key can be decrypted with the same key by reversing the encrypting operation.</p>
+            </div> 
+        </div>
+        <div class='step' data-step='13'>
+            <div class="explain">
+            <p>The reason why several session keys instead of one is because in practice there are more than one type of communication going through more than one communication channel during a single session. Encrypting each type of communication for each channel using different keys adds a higher level of security.</p>
+            </div>
+        </div>
+        <div class='step' data-step='14'>
+            <div class="explain">
+            <p>Both the Client and the Server will use an agreed symmetric cipher function now with a similar key on each side.</p>
+            <p>Even before the Server gets the encrypted pre-master the Client might already have the session keys ready, so it is the Client the first to test the resulting procedure. The Client encrypts a message ("finished") with test data which would revail if the handshake was tampered, and sends it to the server...</p>
+            </div> 
+        </div>
+        <div class='step' data-step='15'>
+        </div>
+        <div class='step' data-step='16'>
+            <div class="explain">
+            <p>If, after receiving and decrypting the ciphertext the Client message was as expected, the Server will respond to the Client with a similar message... </p>
+            </div> 
+        </div> 
+        <div class='step' data-step='17'>
+        </div> 
+        <div class='step' data-step='18'>
+            <div class="explain">
+            <p>If the Client gets the message from the Server as expected, then <strong>the handshake is finished</strong>. </p>
+            </div> 
+        </div>            
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/threejs/v104/three.v104.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
+<script type="module"  src="{{ site.baseurl }}{% link mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/js/scrollama-setup.js %}"></script>
+<br/>
+<br/>
+<br/>
+
+
+
+# Tada!
+
+The "tada" moment consists in the beginning and completion of the fourth type of exchange between the parties, the Application Data, with fully encrypted information across a public domain, with no-one able to understand what it reads. Great, eh?
+
+Why would they both want to get symmetric? Because the symmetric cryptography is known to be a very fast way to encrypt and decrypt large bulks of data, as well as being more dynamic, not having to rely on the intervention of a third party, like the certificate authority, to validate the keys.
+
+> In practice, a two-way asymmetric procedure has been used for some special cases, like Intranet or IoT
+
+The keys used during the symmetric encryption are popularly known as **session keys**, which are derivates of a single, secret key kept by both parties (guess: *the master secret*). 
+
+
+# Final Remarks
+
+> Notice that for version 1.2 the asymmetric procedure is based on **static keys**; in this case, it will be enough to decrypt the messages. For this reason, and for other ones, the version 1.3 get rid of this step using a different cryptographic procedure
+
+The TLS / SSL handshake is a very fascinating solution to the security on the web. The procedure last just miliseconds, but there are a lot of things going on. That is why this procedure is sometimes difficult to understand.
+
+Here in this post I just focused on a very specific section of the TLS handshake in its more popular version to date. Bear in mind that there is already a new version of the TLS that it is meant to replace the existing one. But this might take a few years from the time of this writing before it is completed faced out.
+
+If you want to know more about the TLS, there is a lot of material you can find online. However, there are two that have impressed me the most:
+
+##### KHAN ACADEMY
+
+An excellent material, with exercises you can do on the fly, and a detailed discussion of the many aspects around the TLS handshake. No many can rival that quality of the material prepared by the Khan Academy team. The material goes beyond the TLS handshake by keeping this topic as a subtitle of Internet Security. Highly recommended.
+
+**Find more at** [Online Data Security in Khan Academy](https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:online-data-security)
+
+
+##### PRACTICAL NETWORKING
+
+If what you want is to get a deep knowledge of the TLS itself, have a look at the cyphers used in the procedure, and many other details, including the new versions of TLS, you might find Practical Networking channel and courses probably a better choice. 
+
+Practical Networking is a project by Ed Harmoush and it is not only a good youtube channel but also a very good course. Go for this one if you are into nets. Very clear and detailed.
+
+**Find more at** [Practical Networking youtube channel](https://www.youtube.com/@PracticalNetworking)
+
+**Or visit the Ed Harmoush'Sf course**, [Practical Networking course - About -](https://www.practicalnetworking.net/about/)
+
+
+----
+
+For the rest, I just hope you enjoyed this reading. Meanwhile, happy coding!
+
+The resulting word is "panama".
+
+
+# Dumped
 
 # How to keep the communication private across a public channel?
 
@@ -75,6 +290,7 @@ So how are they going to share that secret section of a key in a way that no-one
 
 <img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/1f914.jpg %}" style="width:100%;">
 
+
 ### Client Key Exchange and Generation of Session Keys
 
 Part of the purpose of the hellos was to exchange initial information about which encryption procedures both, the Client and the Server, would like to use.
@@ -106,158 +322,12 @@ Why would they both want to get symmetric? Because the symmetric cryptography is
 The keys used during the symmetric encryption are popularly known as **session keys**, which are derivates of a single, secret key kept by both parties (guess: *the master secret*). 
 
 
-# In Action
-
 So you can see now why the asymmetric procedure was used on the first place: it was only to encrypt the (pre) key that will be used for the symmetric procedure, as well as giving some guarantee of identity through a certificate authority.
 
 In case you are still not completely getting a picture of the session key generation, I have prepared a visual step-by-step explanation. For the sake of simplicity I am not focusing on the technical details, which are much more complicated. But once you understand the whole exchange is trying to achieve, then the complex part becomes more accessible.
 
+The concept of key (in some parts referred as *secret*) is relevant. It is like a "map" of the operation. For some procedures, even with the same cipher function over the same plaintext the resulting ciphertext might look totally different after using different keys. So:
 
+> keeping the key secret (or at least part of it) could be enough to protect the content of the message 
 
-
-
-<section id='scrolly'>
-    <figure id="scrollfig"></figure>
-    <div class="articlepost">
-        <div class='step title' data-step='1'>
-            <p class='title'>The Asymmetric Phase</p>
-            <div class='subtitle'>
-            <p>It is called asymmetric because after an encryption operation, the other side will need a different but related key to decrypt the message.</p>
-          </div>
-        </div>
-        <div class='step' data-step='2'>
-            <div class="explain">
-            <p>During the asymmetric phase, the parties will make use of the server keys. The Client has a copy of the public one (as possibly everyone else) for encryption, but it is expected that only the Server knows the private key for decryption. The Server is the one who choose the cipher to use.</p>
-          </div>
-        </div>
-        <div class='step' data-step='3'>
-            <div class="explain">
-            <p>The Client uses the server public key and with an already negotiated asymmetric cipher encrypt the <strong>pre-master secret</strong>, which is another random number, and sends that to the Server.</p>
-        </div>
-        </div>
-        <div class='step' data-step='4'>
-        </div>
-        <div class='step' data-step='5'>
-            <div class="explain">
-            <p>Now the Server uses the private key to decrypt the pre-master secret from the Client. The pre-master secret was safely passed through the public domain and now they both finally share their first secret. <strong>The asymmetric phase is completed.</strong></p>
-            </div>
-        </div>
-        <div class='step title' data-step='6'>
-         <p class='title'>The PRF Phase</p>
-         <div class='subtitle'>
-       <p>//DESCRIBE THIS PART AS OCURRING SIMULTANOUESLY ON BOTH SIDES// Both the Server <i>and</i> the Client have the pre-master secret. They want to obtain the <strong>master secret</strong>, which will be a <i>pseudo</i>  random number. But they should ensure that <i>both of them  will arrive to the same pseudo random number</i>. For that they will use a function that will get as input some of the data they already share between them...</p>
-         </div>
-          </div>
-        <div class='step' data-step='7'>
-            <div class="explain">
-            <p>Inputs for the function will be the client random and the server random (both shared unencrypted during the hello step), and the pre-master secret (which is ideally only known to the Server and the Client). The fact that one of the inputs is a secret to everyone else makes the output of the function unkown to others. Eg. you can not figure out the output of this function:  <code>5 + ... = ?</code></p>
-           </div>
-        </div>
-                <div class='step' data-step='8'>
-            <div class="explain">
-            <p>The processing function is usually a <strong><a href='https://csrc.nist.gov/glossary/term/pseudorandom_function#:~:text=Definitions%3A,indistinguishable%20from%20truly%20random%20output'>Pseudo Random Function (PRF)</a></strong>, which is a procedure that will result in the same pseudo-random value on the side of the Client as well as the Server, as long as they both apply the same procedure and use the same inputs. The most important here is that <a href='https://stackoverflow.com/a/15413799'>no-one will be able to infer the exact values of the inputs reversibly by obtaining the output of the function</a>, guaranting certain level of safety.</p>
-            </div>
-        </div>        
-        <div class='step' data-step='9'>
-            <div class="explain">
-            <p>The Server and the Client create and share an identical master secret. //WHY A MASTER//</p>
-            </div>
-        </div>
-        <div class='step' data-step='10'>
-            <div class="explain">
-            <p>The master secret and the randoms will be used to create the session keys using a similar procedure as for the creation of the master secret. Both parties produce <i>more than one key</i> in a single <strong>key block</strong> that is eventually "sliced" up to the right sizes. The resulting session keys would fit the symmetric cipher previously negotiated between the parties. The keys are ready: <strong>we can move to the next phase</strong>.</p>
-            </div>
-        </div>
-        <div class='step title' data-step='11'>
-            <p class="title">The Symmetric Phase</p>
-            <div class="subtitle">
-            <p>During the symmetric procedure, all that can be encrypted with a encryption key can be decrypted with the same key by reversing the encrypting operation.</p>
-            </div> 
-        </div>
-        <div class='step' data-step='12'>
-            <div class="explain">
-            <p>The reason why several session keys instead of one is because in practice there are more than one type of communication and more than one communication channel during a single session. Encrypting each type of communication for each channel using different keys adds a higher level of security.</p>
-            </div>
-        </div>
-        <div class='step' data-step='13'>
-            <div class="explain">
-            <p>Both the Client and the Server will use an agreed symmetric cipher function now with a similar key on each side.</p>
-            <p>The Client is the first to test the resulting procedure. The Client encrypts a message ("finished") with test data which would revail if the handshake was tampered, and sends it to the server...</p>
-            </div> 
-        </div>
-        <div class='step' data-step='14'>
-        </div>
-        <div class='step' data-step='15'>
-            <div class="explain">
-            <p>If, after receiving and decrypting the ciphertext the Client message was as expected, the Server will respond to the Client with a similar message... </p>
-            </div> 
-        </div> 
-        <div class='step' data-step='16'>
-        </div> 
-        <div class='step' data-step='15'>
-            <div class="explain">
-            <p>If the Client gets the message from the Server as expected, then <strong>the handshake is finished</strong>. </p>
-            </div> 
-        </div>            
-    </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-</section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="{{ site.baseurl }}{% link mngassets/vendor/js/threejs/v104/three.v104.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link mngassets/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
-<script src="{{ site.baseurl }}{% link mngassets/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
-<script type="module"  src="{{ site.baseurl }}{% link mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/js/scrollama-setup.js %}"></script>
-<br/>
-<br/>
-<br/>
-
-
-
-# Tada!
-
-The "tada" moment consists in the beginning and completion of the fourth type of exchange between the parties, the Application Data, with fully encrypted information across a public domain, with no-one able to understand what it reads. Great, eh? 
-
-
-# Final Remarks
-
-> Notice that for version 1.2 the asymmetric procedure is based on **static keys**; in this case, it will be enough to decrypt the messages. For this reason, and for other ones, the version 1.3 get rid of this step using a different cryptographic procedure
-
-The TLS / SSL handshake is a very fascinating solution to the security on the web. The procedure last just miliseconds, but there are a lot of things going on. That is why this procedure is sometimes difficult to understand.
-
-Here in this post I just focused on a very specific section of the TLS handshake in its more popular version to date. Bear in mind that there is already a new version of the TLS that it is meant to replace the existing one. But this might take a few years from the time of this writing before it is completed faced out.
-
-If you want to know more about the TLS, there is a lot of material you can find online. However, there are two that have impressed me the most:
-
-##### KHAN ACADEMY
-
-An excellent material, with exercises you can do on the fly, and a detailed discussion of the many aspects around the TLS handshake. No many can rival that quality of the material prepared by the Khan Academy team. The material goes beyond the TLS handshake by keeping this topic as a subtitle of Internet Security. Highly recommended.
-
-**Find more at** [Online Data Security in Khan Academy](https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:online-data-security)
-
-
-##### PRACTICAL NETWORKING
-
-If what you want is to get a deep knowledge of the TLS itself, have a look at the cyphers used in the procedure, and many other details, including the new versions of TLS, you might find Practical Networking channel and courses probably a better choice. 
-
-Practical Networking is a project by Ed Harmoush and it is not only a good youtube channel but also a very good course. Go for this one if you are into nets. Very clear and detailed.
-
-**Find more at** [Practical Networking youtube channel](https://www.youtube.com/@PracticalNetworking)
-
-**Or visit the Ed Harmoush'Sf course**, [Practical Networking course - About -](https://www.practicalnetworking.net/about/)
-
-
-----
-
-For the rest, I just hope you enjoyed this reading. Meanwhile, happy coding!
-
-
-# Dumped
-
-
-
+(*Observation*: this is only possible if the resulting ciphertext don't show any reversible pattern that allows finding the key)
