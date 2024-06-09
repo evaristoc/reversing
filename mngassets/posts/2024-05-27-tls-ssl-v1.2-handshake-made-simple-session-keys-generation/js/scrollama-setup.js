@@ -34,17 +34,61 @@ window.onload = (event) => {
     }
     
     /* E: the following for another day... */
-    // const isActiveFigure = document.querySelector("#scrollfig.is-active");
+    // const isActiveFigure = document.querySelector("#scrollfig.scrollamaImg");
     
     // function isFigActiveEvent(resource){
     //     isActiveFigure.addEventListener("animationended", () => {
     //         figElem.innerHTML = "";
     //         let img = document.createElement("img");
     //         img.src = resourcesImgs + resource;
-    //         figElem.classList.add('is-active');
+    //         figElem.classList.add('scrollamaImg');
     //         figElem.appendChild(img);
     //     })
     // }
+
+    // (function(scroll){
+    //     scroll.onscroll = function(){
+    //         let sibling = scroll.parentNode.querySelector('.arrow');
+    //         //console.log(sibling.style.opacity);
+    //         //console.log(scroll.parentNode.style.height, scroll.parentNode.getBoundingClientRect(), scroll.scrollTop, scroll.clientHeight, scroll.scrollHeight);  
+    //         //sibling.style.opacity = 1 - (scroll.scrollTop + scroll.clientHeight)/scroll.scrollHeight;
+    //         //console.log(scroll.scrollTop, scroll.clientHeight, scroll.scrollHeight);
+    //         sibling.style.opacity = 1 - scroll.scrollTop/(scroll.scrollHeight - scroll.clientHeight)             
+    //         if (scroll.scrollTop + scroll.clientHeight == scroll.scrollHeight) {
+    //             //console.log('hither!');
+    //         }
+    //         }
+    //   })(document.getElementById('scroll'));
+
+    //console.log(document.querySelectorAll('div.step'))
+    (function(divsteps){
+        console.log(divsteps);
+        for(let i = 0; i < divsteps.length; i++){
+            if(divsteps.classList?.contains('is-active')){
+                console.log(divsteps.classList[i]);
+                break;
+            }
+        }
+    })(document.querySelectorAll('div.step'))
+
+
+    //   (function(scroll){
+    //     scroll.onscroll = function(){
+    //         let sibling = scroll.parentNode.querySelector('.arrow');
+    //         //console.log(sibling.style.opacity);
+    //         //console.log(scroll.parentNode.style.height, scroll.parentNode.getBoundingClientRect(), scroll.scrollTop, scroll.clientHeight, scroll.scrollHeight);  
+    //         //sibling.style.opacity = 1 - (scroll.scrollTop + scroll.clientHeight)/scroll.scrollHeight;
+    //         //console.log(scroll.scrollTop, scroll.clientHeight, scroll.scrollHeight);
+    //         sibling.style.opacity = 1 - scroll.scrollTop/(scroll.scrollHeight - scroll.clientHeight)             
+    //         if (scroll.scrollTop + scroll.clientHeight == scroll.scrollHeight) {
+    //             //console.log('hither!');
+    //         }
+    //         }
+    //   })(document.querySelector('div.step'));
+
+    //   (function(smoothScroll){
+    //     console.log(smoothScroll);
+    //   })(document.getElementsByClassName('is-active'));
 
     // scrollama event handlers
     function handleStepEnter(response) {
@@ -60,7 +104,7 @@ window.onload = (event) => {
 
         const resourcesImgs = '../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/';
 
-        let skipExplain = [0,5,11,14]
+        let skipExplain = [0,5,11,15,17];
 
         if(skipExplain.includes(response.index)){
             figElem.innerHTML = "";
@@ -69,7 +113,7 @@ window.onload = (event) => {
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - asymmetric keys.png';
-            img.classList.add('is-active');
+            img.classList.add('scrollamaImg');
             figElem.appendChild(img);
 
         }
@@ -80,7 +124,7 @@ window.onload = (event) => {
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - client asymmetric encryption.svg';
-            img.classList.add('is-active');
+            img.classList.add('scrollamaImg');
             figElem.appendChild(img);            
         }
         else if(response.index == 3){
@@ -95,7 +139,7 @@ window.onload = (event) => {
             //b.style.flexBasis = '20%';
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - clientPREMASTER2server airplane.svg';
-            img.classList.add('is-active');
+            img.classList.add('scrollamaImg');
             figElem.appendChild(img);            
         }
         else if(response.index == 4){
@@ -105,56 +149,108 @@ window.onload = (event) => {
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - server asymmetric decryption.svg';
-            img.classList.add('is-active');
+            img.classList.add('scrollamaImg');
             figElem.appendChild(img);            
         }
         else if(response.index == 6){
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - randoms and pre-master.png';
-            img.classList.add('is-active');
+            img.classList.add('scrollamaImg');
             figElem.appendChild(img);            
         }
         else if(response.index == 7){
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - PRF Master Secret.svg';
-            img.classList.add('is-active');
+            img.classList.add('scrollamaImg');
             figElem.appendChild(img);            
         }
         else if(response.index == 8){
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - randoms and master.png';
-            img.classList.add('is-active');
+            img.classList.add('scrollamaImg');
             figElem.appendChild(img);            
         }
         else if(response.index == 9){
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - pre-master or master.png';
-            img.classList.add('is-active');
+            img.classList.add('scrollamaImg');
             figElem.appendChild(img);            
         }
         else if(response.index == 10){
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - PRF Session Keys.svg';
-            img.classList.add('is-active');
+            img.classList.add('scrollamaImg');
             figElem.appendChild(img);            
         }
-        else if((response.index == 12 && figElem.getElementsByTagName('img')[0] == null) || (response.index == 13 && figElem.getElementsByTagName('img')[0].src != resourcesImgs + 'TLS - session keys.png')){
+        else if(response.index == 12 && figElem.getElementsByClassName('scrollamaImg')[0] == null){
             figElem.innerHTML = "";
             let img = document.createElement("img");
             img.src = resourcesImgs + 'TLS - session keys.png';
-            img.classList.add('is-active');
+            img.classList.add('scrollamaImg');
             figElem.appendChild(img);
         }
+        else if(response.index == 13){
+            console.log(response.element.querySelector('.explain'));
+            (function(scroll){
+                scroll.onscroll = function(){
+                    let sibling = scroll.parentNode.querySelector('.arrow');
+                    sibling.style.opacity = 1 - scroll.scrollTop/(scroll.scrollHeight - scroll.clientHeight);
+                }
+            })(response.element.querySelector('.explain'));
+            
+            response.element.querySelector('.arrow')
+
+            response.element.querySelector('.arrow').onclick = function(){
+                let sibling = response.element.querySelector('.explain');
+                console.log(response.element);
+                sibling.scrollBy({
+                    top:10,
+                    left:0,
+                    behaviour:'smooth'
+                });
+            };
+            
+            if(!figElem.getElementsByClassName('scrollamaImg')[0].src.includes('TLS%20-%20session%20keys.png')){
+                //response.index == 13 && figElem.getElementsByClassName('scrollamaImg')[0] == null
+                //console.log(figElem.getElementsByClassName('scrollamaImg')[0].src);
+                figElem.innerHTML = "";
+                let img = document.createElement("img");
+                img.src = resourcesImgs + 'TLS - session keys.png';
+                img.classList.add('scrollamaImg');
+                figElem.appendChild(img);
+            }
+        } 
+
+    // (function(scroll){
+    //     scroll.onscroll = function(){
+    //         let sibling = scroll.parentNode.querySelector('.arrow');
+    //         //console.log(sibling.style.opacity);
+    //         //console.log(scroll.parentNode.style.height, scroll.parentNode.getBoundingClientRect(), scroll.scrollTop, scroll.clientHeight, scroll.scrollHeight);  
+    //         //sibling.style.opacity = 1 - (scroll.scrollTop + scroll.clientHeight)/scroll.scrollHeight;
+    //         //console.log(scroll.scrollTop, scroll.clientHeight, scroll.scrollHeight);
+    //         sibling.style.opacity = 1 - scroll.scrollTop/(scroll.scrollHeight - scroll.clientHeight)             
+    //         if (scroll.scrollTop + scroll.clientHeight == scroll.scrollHeight) {
+    //             //console.log('hither!');
+    //         }
+    //         }
+    //   })(document.getElementById('scroll'));
         else if(response.index == 14){
             figElem.innerHTML = "";
             let img = document.createElement("img");
-            img.src = resourcesImgs + 'TLS - clientPREMASTER2server airplane.svg';
-            img.classList.add('is-active');
+            img.src = resourcesImgs + 'TLS - clientFINISHED2server airplane.svg';
+            img.classList.add('scrollamaImg');
+            figElem.appendChild(img);                
+        }
+        else if(response.index == 16){
+            figElem.innerHTML = "";
+            let img = document.createElement("img");
+            img.src = resourcesImgs + 'TLS - serverFINISHED2client airplane.svg';
+            img.classList.add('scrollamaImg');
             figElem.appendChild(img);                
         }
     }

@@ -36,7 +36,7 @@ figure {
   /*background-color: #8a8a8a;*/
 }
 
-@keyframes myAnimation01{
+@keyframes myAnimation01{ /*leaving*/
   0%{
     opacity: 1;
   }
@@ -48,7 +48,7 @@ figure {
   }
 }
 
-@keyframes myAnimation02{
+@keyframes myAnimation02{ /*entering*/
   0%{
     opacity: 0;
   }

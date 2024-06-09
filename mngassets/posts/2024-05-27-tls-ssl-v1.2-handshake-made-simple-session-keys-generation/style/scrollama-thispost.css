@@ -5,25 +5,25 @@
 
 /* scrollama */
 
-img{
+img.scrollamaImg{
     display:block;
     margin: auto;
   }
 
-.step div, #scrollfig img {
+.step div {
     animation-name: myAnimation01;
     animation-duration: 1000ms;
     animation-fill-mode: forwards;
     /*z-index: 10;*/
 }
 
-.step.is-active div, #scrollfig img.is-active {
+.step.is-active div, #scrollfig img.scrollamaImg {
     animation-name: myAnimation02;
     animation-duration: 1000ms;
     animation-fill-mode: forwards;
   }
 
-.step[data-step="4"], .step.is-active[data-step="4"],.step[data-step="15"], .step.is-active[data-step="15"] ,.step[data-step="16"], .step.is-active[data-step="16"]  {
+.step[data-step="4"], .step.is-active[data-step="4"],.step[data-step="15"], .step.is-active[data-step="15"] ,.step[data-step="17"], .step.is-active[data-step="17"]  {
     background-color: #f3f3f3;
 }
 
@@ -32,13 +32,23 @@ div .subtitle p {
     font-size: 1rem;
 } 
   
-img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Master Secret.svg'], img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Session Keys.svg']{
+img.scrollamaImg[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Master Secret.svg'], img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Session Keys.svg']{
  max-height: 500px;
 }
 
-@media only screen and (max-width: 600px) {
-  img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Master Secret.svg'], img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Session Keys.svg']{
+div.arrow-wrap{
+  display:none;
+}
+
+@media only screen and (max-width: 600px){
+  
+  
+  img.scrollamaImg[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Master Secret.svg'], img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Session Keys.svg']{
     max-height: 250px;
+   }
+
+   .step{
+    position:relative;
    }
 
    .step div{
@@ -46,7 +56,42 @@ img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-s
     overflow-y: scroll;
    }
 
+   div.arrow-wrap{
+    display:block;
+    position:absolute;
+    right: 40%;
+    top: 85%;
+  }
+
    .step.title div{
     height: 70%;
    }
   }
+
+  @media only screen and (max-height: 600px){
+  
+  
+    img.scrollamaImg[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Master Secret.svg'], img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Session Keys.svg']{
+      max-height: 250px;
+     }
+  
+     .step{
+      position:relative;
+     }
+  
+     .step div{
+      height: 100%;
+      overflow-y: scroll;
+     }
+  
+     div.arrow-wrap{
+      display:block;
+      position:absolute;
+      right: 40%;
+      top: 85%;
+    }
+  
+     .step.title div{
+      height: 70%;
+     }
+    }
