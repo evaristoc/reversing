@@ -88,11 +88,11 @@ They also shared some parameters to be used in a cipher function (the randoms), 
 
 In version 1.2, the session keys generation is part of the Pre-Master Exchange and it is the last goal of the handshake. We are about to get an overview on how that happens.
 
-> Why would they both want to get symmetric? One of the main reasons is because the symmetric cryptography is known to be a very fast way to encrypt and decrypt large bulks of data. The idendity of the submitter is also easier to validate than for asymmetric procedures.
+> **Why would they both want to go symmetric?** One of the main reasons is because the symmetric cryptography is known to be a very fast way to encrypt and decrypt large bulks of data. The idendity of the submitter is also easier to validate than for asymmetric procedures.
 
 In order to facilitate the explanation I have identified 3 phases within the Pre-Master Exchange:
 
-* The **Asymmetric Phase**, which is about the pre-master secret
+* The **Asymmetric Phase (RSA)**, which is about the pre-master secret
 * The **PRF Phase**, where the master secret and subsequent session keys are generated
 * The **Symmetric Phase**, that during the handshake consists in a single test to check the correctness of the final cryptographic implementation
 
@@ -100,7 +100,7 @@ In order to facilitate the explanation I have identified 3 phases within the Pre
     <figure id="scrollfig"></figure>
     <div class="articlepost">
         <div class='step title' data-step='1'>
-            <p class='title'>The Asymmetric Phase</p>
+            <p class='title'>The Asymmetric Phase (RSA)</p>
             <div class='subtitle'>
                 <p>Once the legitimacy of the Server was confirmed, the Client will encrypt a secret for the Server. It is called asymmetric because after an encryption operation, the other side will need a different but related key to decrypt the message.</p>
           </div>
@@ -286,17 +286,19 @@ Now, bear in mind that this procedure of getting symmetric session keys is not e
 
 The TLS / SSL handshake 1.2 is a very fascinating solution to the security on the web. The procedure last just miliseconds, but there are a lot of things going on. That is why this procedure is sometimes difficult to understand.
 
-The current version 1.2 exists since 2008 but there is a new version, the 1.3, that was available since 2018. In the 1.3 version the asymmetric encryption is replaced by a different encryption algorithm. Notice that for version 1.2 the asymmetric procedure is based on **static keys**; in this case, it will be enough to decrypt the messages. For this reason, and for other ones, the version 1.3 get rid of this step using a different cryptographic procedure. Version 1.3 is considered much more secure than version 1.2.
+The current version 1.2 exists since 2008 but there is a new version, the 1.3, that is available since 2018. In the 1.3 version the RSA asymmetric encryption is replaced by a different encryption algorithm but the final symmetric encryption algorithm is still the goal.
 
-It is expected that version 1.3 will be the preferred choice for TLS security at some point. However, at least [by 2020 the version 1.3 was still not fully adopted](https://blog.gigamon.com/2020/04/15/how-do-you-run-cryptography-faster-and-stay-secure-without-tripping-over-hackers/). And it is still expected that the 1.2 version will still be in use in the foreseen future, similar to what happened with other previous versions. In fact, version 1.2 could still provide enough security for certain cases, and it could be preferred to other versions.
+Why a new version? Notice that for version 1.2 the asymmetric procedure is based on **static keys**; in this case, it will be enough to decrypt the messages, putting the procedure on risk. For this reason, and for other ones, the version 1.3 get rid of this step using a different cryptographic procedure. Version 1.3 is considered much more secure than version 1.2.
 
-If you want to know more about the TLS, there is a lot of material you can find online. However, there are two that have impressed me the most:
+It is expected that version 1.3 will be the preferred choice for TLS security at some point. However, at least [by 2023 the version 1.3 was still not fully supported](https://www.linkedin.com/pulse/evolution-web-security-unpacking-tls-12-13-greg-de-chasteauneuf/). And it is still expected that the 1.2 version will still be in use in the foreseen future, similar to what happened with other previous versions. In fact, version 1.2 could still provide enough security for certain cases, being the preferred version for those cases.
+
+This series about TLS has been more an introduction rather than a complete and deep view of the TLS. If you want to know more about the TLS, there is a lot of material you can find online. However, there are two that have impressed me the most:
 
 ##### KHAN ACADEMY
 
 An excellent material, with exercises you can do on the fly, and a detailed discussion of the many aspects around the TLS handshake. No many can rival that quality of the material prepared by the Khan Academy team. The material goes beyond the TLS handshake by keeping this topic as a subtitle of Internet Security. Highly recommended.
 
-**Find more at** [Online Data Security in Khan Academy](https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:online-data-security)
+Find more at [Online Data Security in Khan Academy](https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:online-data-security)
 
 
 ##### PRACTICAL NETWORKING
@@ -305,9 +307,7 @@ If what you want is to get a deep knowledge of the TLS itself, have a look at th
 
 Practical Networking is a project by Ed Harmoush and it is not only a good youtube channel but also a very good course. Go for this one if you are into nets. Very clear and detailed.
 
-**Find more at** [Practical Networking youtube channel](https://www.youtube.com/@PracticalNetworking)
-
-**Or visit the Ed Harmoush'Sf course**, [Practical Networking course - About -](https://www.practicalnetworking.net/about/)
+Find more at [Practical Networking youtube channel](https://www.youtube.com/@PracticalNetworking) or visit the Ed Harmoush'Sf course, [Practical Networking course - About -](https://www.practicalnetworking.net/about/)
 
 
 ----
