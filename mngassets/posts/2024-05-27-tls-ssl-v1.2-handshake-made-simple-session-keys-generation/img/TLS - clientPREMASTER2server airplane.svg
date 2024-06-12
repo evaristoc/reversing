@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="74mm"
+   height="52mm"
+   viewBox="0 0 73.999999 52"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="TLS - clientPREMASTER2server airplane.svg"
+   inkscape:export-filename="TLS - clientPREMASTER2server airplane.png"
+   inkscape:export-xdpi="169.74001"
+   inkscape:export-ydpi="169.74001"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showguides="true"
+     inkscape:zoom="1.9301"
+     inkscape:cx="189.62748"
+     inkscape:cy="99.476711"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g1">
+    <sodipodi:guide
+       position="0,52.000001"
+       orientation="0,279.68504"
+       id="guide1"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="74.000001,52.000001"
+       orientation="196.53543,0"
+       id="guide2"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="74.000001,0"
+       orientation="0,-279.68504"
+       id="guide3"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="0,0"
+       orientation="-196.53543,0"
+       id="guide4"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="9.5562065,26.919104"
+       orientation="0,-1"
+       id="guide5"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+<g id="airplane">
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:#f2f2f2;stroke:#1a1a1a;stroke-width:0.1;stroke-dasharray:none;stroke-opacity:1"
+       id="path13"
+       d="m 18.407319,22.801464 c -0.498425,0.07047 -0.994527,0.155081 -1.493195,0.224 -0.913005,0.126729 -1.834366,0.138863 -2.7541,0.120827 -1.101469,-0.173584 -0.513094,-0.120973 -1.767676,-0.126109 0,0 0.06474,-0.047 0.06474,-0.047 v 0 c 1.374528,0.0055 0.664686,0.04507 2.128361,-0.138035 0.962382,-0.0733 1.925264,-0.141926 2.886773,-0.225717 0.494501,-0.05308 0.989439,-0.112429 1.476277,-0.216314 z" />
+    <path
+       style="fill:#f2f2f2;stroke:#1a1a1a;stroke-width:0.1;stroke-dasharray:none;stroke-opacity:1"
+       id="path14"
+       d="m 19.082197,27.956224 c -0.797079,0.02117 -1.593384,0.05565 -2.389849,0.09572 -1.128355,0.07238 -2.25942,-0.0096 -3.386447,-0.06213 0,0 0.06479,-0.04693 0.06479,-0.04693 v 0 c 0.515885,-0.0076 1.032243,5.29e-4 1.547654,-0.02278 0.263554,-0.01196 1.829462,-0.155864 2.210515,-0.190305 1.040114,-0.101089 0.397187,-0.03972 1.341953,-0.127624 0.265221,-0.02469 0.582049,-0.05966 0.854265,-0.06923 0.08162,-0.0029 0.237459,0.0057 0.325658,0.0098 z" />
+    <path
+       style="fill:#f2f2f2;stroke:#1a1a1a;stroke-width:0.1;stroke-dasharray:none;stroke-opacity:1"
+       id="path15"
+       d="m 8.8700989,26.544701 c -0.6114147,-0.01691 -1.2238245,-0.01053 -1.8344615,-0.05117 -0.283321,-0.01887 -0.565798,-0.04873 -0.848699,-0.0731 -0.319873,-0.06328 -0.639749,-0.126551 -0.959625,-0.189827 0,0 0.0649,-0.04678 0.0649,-0.04678 v 0 c 0.453385,-0.03369 0.906772,-0.06737 1.36016,-0.10106 1.032758,-0.06011 2.0660585,-0.108383 3.0979889,-0.181586 z" />
+    <path
+       style="fill:#f2f2f2;stroke:#1a1a1a;stroke-width:0.1;stroke-dasharray:none;stroke-opacity:1"
+       id="path16"
+       d="m 5.5991504,21.461402 c 0.633381,0.0733 1.271691,0.01326 1.906154,0.0087 1.5826442,-0.01146 0.253346,0.07013 1.9322592,-0.07592 0,0 -0.06398,0.04803 -0.06398,0.04803 v 0 c -0.195855,0.04224 -2.4043392,0.52037 -2.5747582,0.549468 -0.746371,0.12744 -1.508511,0.15425 -2.260176,0.237128 z" />
+    <path
+       style="fill:#f2f2f2;stroke:#1a1a1a;stroke-width:0.1;stroke-dasharray:none;stroke-opacity:1"
+       id="path20"
+       d="m 19.750714,30.005416 c -0.993492,0.185312 -2.003906,0.28221 -3.01458,0.297215 -0.450035,0.0067 -0.900118,-0.0095 -1.350177,-0.01426 -2.256546,-0.08067 -1.090808,-0.05009 -3.497334,-0.08723 0,0 0.06479,-0.04692 0.06479,-0.04692 v 0 c 2.460498,0.03784 1.24069,0.04941 3.659452,-0.03174 1.636538,-0.107542 3.285226,-0.207031 4.869095,-0.66825 z" />
+    <path
+       sodipodi:type="star"
+       style="fill:#ffffff;stroke:#000000;stroke-width:0.218"
+       id="path1-0-9"
+       inkscape:flatsided="true"
+       sodipodi:sides="3"
+       sodipodi:cx="37.069244"
+       sodipodi:cy="33.853752"
+       sodipodi:r1="17.535988"
+       sodipodi:r2="2.5207009"
+       sodipodi:arg1="-0.54264799"
+       sodipodi:arg2="0.50454961"
+       inkscape:rounded="0"
+       inkscape:randomized="0.014093148"
+       d="M 52.023805,24.703712 37.211403,51.286512 21.648064,25.28994 Z"
+       inkscape:transform-center-x="-1.3649145"
+       inkscape:transform-center-y="-0.34900867"
+       transform="matrix(1.3389744,-0.00304078,-0.81148351,-0.19110945,14.225276,29.83702)" />
+    <g
+       id="g1"
+       style="fill:#ffffff">
+      <g
+         id="g24-5"
+         transform="matrix(0.69386886,-0.16490706,0.20291016,0.86043181,17.864596,-6.3329551)"
+         inkscape:label="ENCRYPTEDPREMASTER"
+         style="fill:#000000">
+        <rect
+           style="fill:#000000;stroke:#000000;stroke-width:0.486588;stroke-dasharray:none;stroke-opacity:1"
+           id="rect22-7-8"
+           width="17.859852"
+           height="13.982568"
+           x="2.5248108"
+           y="31.623287" />
+        <text
+           xml:space="preserve"
+           style="font-size:3.175px;white-space:pre;inline-size:19.0777;display:inline;fill:#f2f2f2;stroke:#000080;stroke-width:0.1;stroke-dasharray:none;stroke-opacity:1"
+           x="7.7348914"
+           y="39.799362"
+           id="text21-5-4-2"
+           transform="translate(-4.390864,-4.6644436)"><tspan
+             x="7.7348914"
+             y="39.799362"
+             id="tspan2"><tspan
+               style="font-family:Arial;-inkscape-font-specification:Arial"
+               id="tspan1">Encrypted
+</tspan></tspan><tspan
+             x="7.7348914"
+             y="43.804867"
+             id="tspan4"><tspan
+               style="font-family:Arial;-inkscape-font-specification:Arial"
+               id="tspan3">Pre-Master</tspan></tspan></text>
+      </g>
+      <path
+         sodipodi:type="star"
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.218"
+         id="path1"
+         inkscape:flatsided="true"
+         sodipodi:sides="3"
+         sodipodi:cx="37.069244"
+         sodipodi:cy="33.853752"
+         sodipodi:r1="17.535988"
+         sodipodi:r2="2.5207009"
+         sodipodi:arg1="-0.54264799"
+         sodipodi:arg2="0.50454961"
+         inkscape:rounded="0"
+         inkscape:randomized="0.014093148"
+         d="M 52.023805,24.703712 37.211403,51.286512 21.648064,25.28994 Z"
+         inkscape:transform-center-x="-0.032479681"
+         inkscape:transform-center-y="0.57750231"
+         transform="matrix(1.3380389,0.00237784,-0.68063952,0.31934543,11.087558,16.949572)" />
+      <path
+         sodipodi:type="star"
+         style="fill:#ffffff;stroke:#000000;stroke-width:0.218"
+         id="path1-0"
+         inkscape:flatsided="true"
+         sodipodi:sides="3"
+         sodipodi:cx="37.069244"
+         sodipodi:cy="33.853752"
+         sodipodi:r1="17.535988"
+         sodipodi:r2="2.5207009"
+         sodipodi:arg1="-0.54264799"
+         sodipodi:arg2="0.50454961"
+         inkscape:rounded="0"
+         inkscape:randomized="0.014093148"
+         d="M 52.023805,24.703712 37.211403,51.286512 21.648064,25.28994 Z"
+         inkscape:transform-center-x="-1.3137381"
+         inkscape:transform-center-y="0.34912951"
+         transform="matrix(1.3385363,0.00316677,-0.83951339,0.19102929,14.952174,20.055948)" />
+    </g>
+  </g>
+</g>
+  <style>
+   @keyframes floatingeffect {
+      0% {
+         box-shadow: 0 5px 15px 0px rgba(0,0,0,0.6);
+         transform: translatey(0px);
+      }
+      50% {
+         box-shadow: 0 25px 15px 0px rgba(0,0,0,0.2);
+         transform: translatey(-15px);
+      }
+      100% {
+         box-shadow: 0 5px 15px 0px rgba(0,0,0,0.6);
+         transform: translatey(0px);
+      }
+   }
+
+   #airplane{
+      background-color: blue;
+      animation: floatingeffect 6s ease-in-out infinite;
+   }
+  </style>
+</svg>

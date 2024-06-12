@@ -1,0 +1,96 @@
+#outro {
+  height: 640px;
+}
+
+
+#scrolly {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #f3f3f3;
+  padding: 1rem;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+    
+/* E: on this way means that ALL the elements under #scrolly are of flex 1 (grow = 1, shrink = 1, basis = 0, see https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */ 
+#scrolly > * { 
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+div .articlepost {
+  position: relative;
+  padding: 0 1rem 0 0;
+  max-width: 20rem;
+}
+    
+figure {
+  position: -webkit-sticky;
+  position: sticky;
+  margin: 0;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  /*background-color: #8a8a8a;*/
+}
+
+@keyframes myAnimation01{ /*leaving*/
+  0%{
+    opacity: 1;
+  }
+  50%{
+    opacity: 0.5;
+  }
+  100%{
+    opacity: 0;
+  }
+}
+
+@keyframes myAnimation02{ /*entering*/
+  0%{
+    opacity: 0;
+  }
+  50%{
+    opacity: 0.5;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+.step {
+  margin: 0 auto 2rem auto;
+  background-color: #3b3b3b;
+  color: #fff;
+}
+
+.step:last-child {
+  margin-bottom: 0;
+}
+
+
+.step.is-active:not(.title) {
+  /*background-color: goldenrod;*/
+  background-color: #ffbb11;
+  color: #3b3b3b;
+}
+
+
+.step p {
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 1.5rem;
+} 
+
+.step p .title {
+  color: #3b3b3b;
+} 
+
+
+div .explain p {
+  color: #3b3b3b;
+  text-align: start;
+  font-size: 1rem;
+}

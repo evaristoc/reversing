@@ -1,0 +1,319 @@
+---
+layout: post
+title:  "The TLS/SSL v1.2 handshake made simple: session keys generation"
+date:   2024-05-27 00:00:00 +0200
+categories: blog security-and-access
+---
+<!--<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-09-29-sticky-figure-with-scrollama/2023-09-29-sticky-figure-with-scrollama.css %}">-->
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/style/scrollama-sidetext.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/style/scrollama-thispost.css %}">
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS-client2server02.png %}" style="width:100%;">
+<div id="error" style="color:red;"></div>
+
+# Quick Review of the Handshake
+
+In a [previous post]({{site.baseurl}}{% link _posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos.markdown %}) we made a general introduction of the TLS/SSL protocol, and its role in the security of the internet communications to prevent eavesdropping and tampering.
+
+We also concentrated on the handshake section, specifically the one concerning to the version 1.2 of the protocol, which is described in the following diagram:
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos/img/Full_TLS_1.2_Handshake.png %}" style="width:100%;">
+(*source: [Wikipedia](https://en.wikipedia.org/wiki/Communication_protocol)*)
+
+We identified 4 relevant exchanges:
+
+1. When the connection is requested (the TCP/IP connection)
+2. The Hellos
+3. Client Key Exchange (generation of session keys)
+4. The Application Data
+
+We would like to keep our attention to some aspects of steps 2 and 3.
+
+Also remember the main concerned parties: the Client, the Server and the Certificate Authority. At the end of the Hellos exchange, the Certificate Authority has completed its task and it is now up to the Client and the Server to define how to continue with the following steps.
+
+> Keep in mind that the Client and the Server are **software applications**, not real people :) .
+
+# Encryption: "Key" Concepts
+
+Concepts that we should keep by hand are:
+
+* **encryption**: which is the action to transform a message in something indistinguishable from the original, but that can be subjected to a reversible action allowing the recovery of the message
+* **ciphertext**: an encrypted message
+* **plaintext**: the original text or data
+* **decryption**: the action of recovering the plaintext out of a ciphertext
+* **cryptography**: the science that study the encrypting and decrypting operations
+* **cipher function**: the function or procedure that will be used to encrypt and decrypt a message
+* **key**: a sort of "template" or "pattern" containing values acting as the "guide" for the cipher function to change the original content
+* **seed**: a pivot value that a (pseudo) random number function would use as the start value of its calculations
+
+Let's try a very simple example to see if we can get the importance of a secret key. Try to decrypt my ciphertext below:
+
+#### qbobnb
+
+(*NOTE*: I give you the plaintext at the end of this post)
+
+The decryption procedure of this message is simple: just use a modern Latin alphabet *of 26 characters* and substitute each character of the ciphertext by the previous character according to that alphabet. 
+
+> This example is one of a [Ceasar cipher](https://en.wikipedia.org/wiki/Caesar_cipher), which is also a **symmetric cipher** (more about that later...).
+
+In other words, in order to decrypt the ciphertext you have to know the following:
+
+* the cipher function ("substitute the letters of the -text..."),
+* probably a seed ("... by the one either next or previous to the current one...") and
+* the key ("... using the modern Latin alphabet as template")
+
+This takes us to the following problem.
+
+> Before using any cryptographic procedure the Client and the Server *must agree about all the cryptographic tools* they want to use. However, during the TLS handshake *the terms of that agreement should be communicated through a public space*.
+
+However, you still have to believe that by not knowing *at least one* of those cryptographic elements, you will not be able or at least find difficult to decrypt the message. Therefore, to protect the encryption from others to decrypt it, *at least one* of those cryptographic elements should be kept secret. The best secret should also be *unique* or very hard to replicate.
+
+Which is the best candidate to keep as secret?
+
+* the available cipher functions that our Client and Server could use for encrypting data efficiently and securely are not that many, making the implemented cipher functions very common and not a real secret
+* the seed might be, but it is a single number that indicates an start point and it may be deduced from the ciphertext; even if random and big, that single number could be found with powerful computation, which is widespread nowadays (in my example, it will be easy for you to find a new seed by knowing the other two cryptographic elements)
+
+That leaves us only the key. Back to our example, we could think of a case in which I keep the same Ceasar cipher function, with the same seed, but I *re-order the Latin alphabet completely at random*, and I don't share that new key but only with another party.
+
+That is why in TLS 1.2 the information about that agreement is shared publicly without encryption *but the keys*. The keys should be unique to that transaction and known only to the incumbent parties. But if they both also need the information about the key, *how do they share that information without exposing it on a public domain*?
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/1f914.jpg %}" style="width:100%;">
+
+
+# The Pre-Master Exchange In Action
+
+In version 1.2, the session keys generation is part of the Pre-Master Exchange and it is the last goal of the handshake. We are about to get an overview on how that happens. The idea is to make use of a **symmetric cipher** as a mean to encrypt/decrypt all the exchanges.
+
+> **Why would they both want to go symmetric?** One of the main reasons is because the symmetric cryptography is known to be a very fast way to encrypt and decrypt large bulks of data. The idendity of the submitter is also easier to validate than for asymmetric procedures.
+
+Part of the purpose of the hellos was to exchange initial information about which encryption procedures both, the Client and the Server, would like to use.
+
+They also shared some parameters to be used for the creation of keys for the symmetric cipher function (the randoms), but haven't been used yet.
+
+In order to facilitate the explanation I have identified 3 phases within the Pre-Master Exchange:
+
+* The **Asymmetric Phase (RSA)**, which is about the pre-master secret
+* The **PRF Phase**, where the master secret and subsequent session keys are generated
+* The **Symmetric Phase**, that during the handshake consists in a single test to check the correctness of the final cryptographic implementation
+
+<section id='scrolly'>
+    <figure id="scrollfig"></figure>
+    <div class="articlepost">
+        <div class='step title' data-step='1'>
+            <p class='title'>The Asymmetric Phase (RSA)</p>
+            <div class='subtitle'>
+                <p>Once the legitimacy of the Server was confirmed, the Client will encrypt a secret for the Server. It is called asymmetric because after an encryption operation, the other side will need a different but related key to decrypt the message.</p>
+          </div>
+        </div>
+        <div class='step' data-step='2'>
+            <div class="explain">
+                <p>During the asymmetric phase the parties will use an asymmetric algorithm known as <a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)">RSA</a>. The parties will make use of the server keys (see <a href="{site.baseurl}}{% link _posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos.markdown %}" target="_blank">previous post</a>). The Client has a copy of the public one (as possibly everyone else) for encryption, but it is expected that only the Server knows the private key for decryption. The Server is the one who choose the cipher to use.</p>
+          </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+        </div>
+        <div class='step' data-step='3'>
+            <div class="explain">
+                <p>The Client uses the server public key and with an already negotiated asymmetric cipher encrypt the <strong>pre-master secret</strong>, which is another random number, and sends that to the Server. Be aware that the Client <i>don't wait for the Server to receive the encrypted message</i> in order to go to the next step.</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+        </div>
+        <div class='step' data-step='4'>
+        </div>
+        <div class='step' data-step='5'>
+            <div class="explain">
+                <p>Now the Server uses the private key to decrypt the Client's pre-master secret. The pre-master secret was safely passed through the public domain and now they both finally share their first secret. <strong>The asymmetric phase is completed.</strong></p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+        </div>
+        <div class='step title' data-step='6'>
+            <p class='title'>The PRF Phase</p>
+            <div class='subtitle'>
+                <p>Both the Server <i>and</i> the Client have the pre-master secret. They want to obtain the <strong>master secret</strong>, which will be a <i>pseudo</i>  random number. But they should ensure that <i>both of them  will arrive to the same pseudo random number</i>. For that they will use a function that will get as input some of the data they already share between them...</p>
+            </div>
+        </div>
+        <div class='step' data-step='7'>
+            <div class="explain">
+                <p>Inputs for the function will be the client random and the server random (both shared unencrypted during the hello step), and the pre-master secret (which is ideally only known to the Server and the Client). The fact that one of the inputs is a secret to everyone else (ie. the pre-master) makes the output of the function unkown to others.</p>
+           </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+        </div>
+        <div class='step' data-step='8'>
+            <div class="explain">
+                <p>The processing function is usually a <strong><a href='https://csrc.nist.gov/glossary/term/pseudorandom_function#:~:text=Definitions%3A,indistinguishable%20from%20truly%20random%20output'>Pseudo Random Function (PRF)</a></strong>, which is a procedure that will result in the same pseudo-random value on the side of the Client as well as the Server, as long as they both apply the same procedure and use the same inputs. The most important here is that <a href='https://stackoverflow.com/a/15413799'>no-one will be able to infer the exact values of the inputs reversibly by obtaining the output of the function</a>, guaranting certain level of safety.</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+        </div>
+         <div class='step' data-step='9'>
+            <div class="explain">
+                <p>By using the same procedures and parameters the Server and the Client create identical master secrets.</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+        </div>
+         <div class='step' data-step='10'>
+            <div class="explain">
+                <p> <strong>Why not simply using the pre-master secret instead?</strong> Let's use our previous example to understand why. Try to imagine the pre-master as a random mix of <i>hundreds of characters</i> from <i>several different alphabets</i>. But to encrypt and decrypt a message written with a Latin alphabet of only 26 characters, we don't need them all. The master secret is a random selection of <i>a fixed amount (in this case 26) of those characters</i>. This is more or less the idea that justify the construction of the master secret from a pre-master.</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+        </div>
+        <div class='step' data-step='11'>
+            <div class="explain">
+                <p>The master secret and the randoms will be used to create the <strong>session keys</strong> using a similar procedure as for the creation of the master secret. Both parties produce <i>more than one key</i> in a single <strong>key block</strong> that is eventually "sliced" up to the right sizes. The resulting session keys would fit the symmetric cipher previously negotiated between the parties. The keys are ready: <strong>we can move to the next phase</strong>.</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+        </div>
+        <div class='step title' data-step='12'>
+            <p class="title">The Symmetric Phase</p>
+            <div class="subtitle">
+                <p>During the symmetric procedure, all that can be encrypted with a encryption key can be decrypted with the same key by reversing the encrypting operation.</p>
+            </div> 
+        </div>
+        <div class='step' data-step='13'>
+            <div class="explain">
+                <p>The reason why several session keys instead of one is because in practice there are more than one type of communication going through more than one communication channel during a single session. Encrypting each type of communication for each channel using different keys adds a higher level of security.</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+        </div>
+        <div class='step' data-step='14'>
+            <div class="explain">
+                <p>Both the Client and the Server will use an agreed symmetric cipher function now with a similar key on each side.</p>
+                <p>Even before the Server gets the encrypted pre-master the Client might already have the session keys, so it is the Client the first to test the resulting procedure. The Client encrypts a message ("finished") with test data which would revail if the handshake was tampered or not, and sends it to the Server...</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+        </div>
+        <div class='step' data-step='15'>
+        </div>
+        <div class='step' data-step='16'>
+            <div class="explain">
+                <p>If, after receiving and decrypting the ciphertext the Client message was as expected, the Server will respond to the Client with a similar message... </p>
+            </div> 
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>      
+        </div> 
+        <div class='step' data-step='17'>
+        </div> 
+        <div class='step' data-step='18'>
+            <div class="explain">
+                <p>If the Client gets the message from the Server as expected, then <strong>the handshake is finished</strong>. </p>
+            </div> 
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+        </div>            
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/threejs/v104/three.v104.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
+<script type="module"  src="{{ site.baseurl }}{% link mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/js/scrollama-setup.js %}"></script>
+<br/>
+<br/>
+<br/>
+
+
+
+# Tada!
+
+The "tada" moment consists in the beginning and completion of the Application Data exchange, with fully encrypted information across a public domain, with no-one able to understand what it reads. Great, eh?
+
+Now, bear in mind that this procedure of getting symmetric session keys is not exclusive. For example, in practice a two-way asymmetric procedure has been used for some special cases, like Intranet or IoT. But this is the most common and accepted one for the TLS 1.2.
+
+# Final Remarks
+
+The TLS / SSL handshake 1.2 is a very fascinating solution to the security on the web. The procedure last just miliseconds, but there are a lot of things going on. That is why this procedure is sometimes difficult to understand.
+
+The current version 1.2 exists since 2008 but there is a new version, the 1.3, that is available since 2018. In the 1.3 version the RSA asymmetric encryption is replaced by a different encryption algorithm but the final symmetric encryption algorithm is still the goal.
+
+Why a new version? Notice that for version 1.2 the asymmetric procedure is based on **static keys**; in this case, it will be enough to decrypt the messages, putting the procedure on risk. For this reason, and for other ones, the version 1.3 get rid of this step using a different cryptographic procedure. Version 1.3 is considered much more secure than version 1.2.
+
+It is expected that version 1.3 will be the preferred choice for TLS security at some point. However, at least [by 2023 the version 1.3 was still not fully supported](https://www.linkedin.com/pulse/evolution-web-security-unpacking-tls-12-13-greg-de-chasteauneuf/). And it is still expected that the 1.2 version will still be in use in the foreseen future, similar to what happened with other previous versions. In fact, version 1.2 could still provide enough security for certain cases, being the preferred version for those cases.
+
+This series about TLS has been more an introduction rather than a complete and deep view of the TLS. If you want to know more about the TLS, there is a lot of material you can find online. However, there are two that have impressed me the most:
+
+##### KHAN ACADEMY
+
+An excellent material, with exercises you can do on the fly, and a detailed discussion of the many aspects around the TLS handshake. No many can rival that quality of the material prepared by the Khan Academy team. The material goes beyond the TLS handshake by keeping this topic as a subtitle of Internet Security. Highly recommended.
+
+Find more at [Online Data Security in Khan Academy](https://www.khanacademy.org/computing/computers-and-internet/xcae6f4a7ff015e7d:online-data-security)
+
+
+##### PRACTICAL NETWORKING
+
+If what you want is to get a deep knowledge of the TLS itself, have a look at the cyphers used in the procedure, and many other details, including the new versions of TLS, you might find Practical Networking channel and courses probably a better choice. 
+
+Practical Networking is a project by Ed Harmoush and it is not only a good youtube channel but also a very good course. Go for this one if you are into nets. Very clear and detailed.
+
+Find more at [Practical Networking youtube channel](https://www.youtube.com/@PracticalNetworking) or visit the Ed Harmoush'Sf course, [Practical Networking course - About -](https://www.practicalnetworking.net/about/)
+
+
+----
+
+For the preparation of this post I made use of several tools, but mostly [Scrollama](https://github.com/russellsamora/scrollama) and Inkscape.
+
+For the rest, I just hope you enjoyed this reading. Meanwhile, happy coding!
+
+Ah! And the ciphertext was "panama" :).
