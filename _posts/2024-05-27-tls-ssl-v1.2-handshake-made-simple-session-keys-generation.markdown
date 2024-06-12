@@ -9,7 +9,7 @@ categories: blog security-and-access
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/style/scrollama-thispost.css %}">
 
 <img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS-client2server02.png %}" style="width:100%;">
-<div id="error"></div>
+<div id="error" style="color:red;"></div>
 
 # Quick Review of the Handshake
 
@@ -27,11 +27,11 @@ We identified 4 relevant exchanges:
 3. Client Key Exchange (generation of session keys)
 4. The Application Data
 
-We mentioned that we wanted to discuss some aspects of steps 2 and 3.
+We would like to keep our attention to some aspects of steps 2 and 3.
 
-We listed the main concerned parties: the Client, the Server and the Certificate Authority. At the end of the Hellos exchange, the Certificate Authority has completed its task and it is now up to the Client and the Server to define how to continue with the following steps.
+Also remember the main concerned parties: the Client, the Server and the Certificate Authority. At the end of the Hellos exchange, the Certificate Authority has completed its task and it is now up to the Client and the Server to define how to continue with the following steps.
 
-> Remember that the Client and the Server are **application software**, not real people :) .
+> Keep in mind that the Client and the Server are **application software**, not real people :) .
 
 # Encryption: "Key" Concepts
 
@@ -44,7 +44,7 @@ Concepts that we should keep by hand are:
 * **cryptography**: the science that study the encrypting and decrypting operations
 * **cipher function**: the function or procedure that will be used to encrypt and decrypt a message
 * **key**: a sort of "template" or "pattern" containing values acting as the "guide" for the cipher function to change the original content
-* **seed**: xxxx
+* **seed**: an pivot value a (pseudo) random number function would use to begin the calculation
 
 Let's try a very simple example to see if we can get the importance of a secret key. Try to decrypt my ciphertext below:
 
@@ -52,7 +52,7 @@ Let's try a very simple example to see if we can get the importance of a secret 
 
 (*NOTE*: I give you the plaintext at the end of this post)
 
-The decryption procedure of this message is simple: just use a modern Latin alphabet and substitute each character of the ciphertext by the character that it comes before in the alphabet. 
+The decryption procedure of this message is simple: just use a modern Latin alphabet *of 26 characters* and substitute each character of the ciphertext by the previous character according to that alphabet. 
 
 > This example is one of a [Ceasar cipher](https://en.wikipedia.org/wiki/Caesar_cipher), which is also a **symmetric cipher** (more about that later...).
 
@@ -64,16 +64,14 @@ In other words, in order to decrypt the ciphertext you have to know the followin
 
 This takes us to the following problem.
 
-> Before using any cryptographic procedure the Client and the Server *must agree about all the criptographic tools* they want to use. However, during the TLS handshake *the terms of that agreement should be communicated through a public space*.
+> Before using any cryptographic procedure the Client and the Server *must agree about all the cryptographic tools* they want to use. However, during the TLS handshake *the terms of that agreement should be communicated through a public space*.
 
-However, you still have to believe that by not knowing *at least one* of those criptographic elements, you will not be able to decrypt the message.
-
-To protect the encryption from others to read the actual message, *at least one* of those criptographic elements should be kept secret. The best secret should also be *unique* or very hard to replicate.
+However, you still have to believe that by not knowing *at least one* of those cryptographic elements, you will not be able or at least find difficult to decrypt the message. Therefore, to protect the encryption from others to decrypt it, *at least one* of those cryptographic elements should be kept secret. The best secret should also be *unique* or very hard to replicate.
 
 Which is the best candidate to keep as secret?
 
 * the available cipher functions that our Client and Server could use for encrypting data efficiently and securely are not that many, making the implemented cipher functions very common and not a real secret
-* the seed might be, but it is a single number that indicates an start point and it can be deduced from the ciphertext; even if random and big, that single number could be found with powerful computation, which is widespread nowadays (in my example, it will be easy for you to find a new seed by knowing the other two criptographic elements)
+* the seed might be, but it is a single number that indicates an start point and it may be deduced from the ciphertext; even if random and big, that single number could be found with powerful computation, which is widespread nowadays (in my example, it will be easy for you to find a new seed by knowing the other two cryptographic elements)
 
 That leaves us only the key. Back to our example, we could think of a case in which I keep the same Ceasar cipher function, with the same seed, but I *re-order the Latin alphabet completely at random*, and I don't share that new key but only with another party.
 
@@ -86,11 +84,13 @@ That is why in TLS 1.2 the information about that agreement is shared publicly w
 
 Part of the purpose of the hellos was to exchange initial information about which encryption procedures both, the Client and the Server, would like to use.
 
-They also shared some keys that could be exposed to the public domain, but haven't been used yet.
+They also shared some parameters to be used in a cipher function (the randoms), but haven't been used yet.
 
-In version 1.2, the generation of the session keys is the step where the Client and the Server begin to share "secrets".
+In version 1.2, the session keys generation is part of the Pre-Master Exchange and it is the last goal of the handshake. We are about to get an overview on how that happens.
 
-In order to facilitate the explanation I have identified 3 phases to complete the exchange:
+> Why would they both want to get symmetric? One of the main reasons is because the symmetric cryptography is known to be a very fast way to encrypt and decrypt large bulks of data. The idendity of the submitter is also easier to validate than for asymmetric procedures.
+
+In order to facilitate the explanation I have identified 3 phases within the Pre-Master Exchange:
 
 * The **Asymmetric Phase**, which is about the pre-master secret
 * The **PRF Phase**, where the master secret and subsequent session keys are generated
@@ -107,7 +107,7 @@ In order to facilitate the explanation I have identified 3 phases to complete th
         </div>
         <div class='step' data-step='2'>
             <div class="explain">
-                <p>During the asymmetric phase, the parties will make use of the server keys. The Client has a copy of the public one (as possibly everyone else) for encryption, but it is expected that only the Server knows the private key for decryption. The Server is the one who choose the cipher to use.</p>
+                <p>During the asymmetric phase the parties will use an asymmetric algorithm known as <a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)">RSA</a>. The parties will make use of the server keys (see <a href="{site.baseurl}}{% link _posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos.markdown %}" target="_blank">previous post</a>). The Client has a copy of the public one (as possibly everyone else) for encryption, but it is expected that only the Server knows the private key for decryption. The Server is the one who choose the cipher to use.</p>
           </div>
              <div class="arrow-wrap top" style="width:50px">
                 <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
@@ -118,7 +118,7 @@ In order to facilitate the explanation I have identified 3 phases to complete th
         </div>
         <div class='step' data-step='3'>
             <div class="explain">
-                <p>The Client uses the server public key and with an already negotiated asymmetric cipher encrypt the <strong>pre-master secret</strong>, which is another random number, and sends that to the Server. Be aware that the Client <i>don't wait for the message to be received by the Server</i> to go to the next step.</p>
+                <p>The Client uses the server public key and with an already negotiated asymmetric cipher encrypt the <strong>pre-master secret</strong>, which is another random number, and sends that to the Server. Be aware that the Client <i>don't wait for the Server to receive the encrypted message</i> and go to the next step.</p>
             </div>
              <div class="arrow-wrap top" style="width:50px">
                 <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
@@ -148,7 +148,7 @@ In order to facilitate the explanation I have identified 3 phases to complete th
         </div>
         <div class='step' data-step='7'>
             <div class="explain">
-                <p>Inputs for the function will be the client random and the server random (both shared unencrypted during the hello step), and the pre-master secret (which is ideally only known to the Server and the Client). The fact that one of the inputs is a secret to everyone else makes the output of the function unkown to others.</p>
+                <p>Inputs for the function will be the client random and the server random (both shared unencrypted during the hello step), and the pre-master secret (which is ideally only known to the Server and the Client). The fact that one of the inputs is a secret to everyone else (ie. the pre-master) makes the output of the function unkown to others.</p>
            </div>
              <div class="arrow-wrap top" style="width:50px">
                 <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
@@ -170,7 +170,7 @@ In order to facilitate the explanation I have identified 3 phases to complete th
         </div>
          <div class='step' data-step='9'>
             <div class="explain">
-                <p>The Server and the Client create and share an identical master secret.</p>
+                <p>By using the same procedures and parameters the Server and the Client create identical master secrets.</p>
             </div>
              <div class="arrow-wrap top" style="width:50px">
                 <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
@@ -181,7 +181,7 @@ In order to facilitate the explanation I have identified 3 phases to complete th
         </div>
          <div class='step' data-step='10'>
             <div class="explain">
-                <p> <strong>Why not simply using the pre-master secret instead?</strong> Let's use our previous example to understand why. Try to imagine the pre-master as a random mix of <i>hundreds of characters</i> from <i>several alphabets</i>. But to decrypt a message written with the Latin alphabet, we just need 26 of those characters. The master secret is a random selection of <i>a fixed amount (in this case 26) of those characters</i>. This is more or less the idea that justify the construction of the master secret from a pre-master.</p>
+                <p> <strong>Why not simply using the pre-master secret instead?</strong> Let's use our previous example to understand why. Try to imagine the pre-master as a random mix of <i>hundreds of characters</i> from <i>several different alphabets</i>. But to encrypt and decrypt a message written with a Latin alphabet of only 26 characters, we don't need them all. The master secret is a random selection of <i>a fixed amount (in this case 26) of those characters</i>. This is more or less the idea that justify the construction of the master secret from a pre-master.</p>
             </div>
              <div class="arrow-wrap top" style="width:50px">
                 <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
@@ -221,7 +221,7 @@ In order to facilitate the explanation I have identified 3 phases to complete th
         <div class='step' data-step='14'>
             <div class="explain">
                 <p>Both the Client and the Server will use an agreed symmetric cipher function now with a similar key on each side.</p>
-                <p>Even before the Server gets the encrypted pre-master the Client might already have the session keys ready, so it is the Client the first to test the resulting procedure. The Client encrypts a message ("finished") with test data which would revail if the handshake was tampered, and sends it to the server...</p>
+                <p>Even before the Server gets the encrypted pre-master the Client might already have the session keys, so it is the Client the first to test the resulting procedure. The Client encrypts a message ("finished") with test data which would revail if the handshake was tampered or not, and sends it to the Server...</p>
             </div>
              <div class="arrow-wrap top" style="width:50px">
                 <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
@@ -280,20 +280,15 @@ In order to facilitate the explanation I have identified 3 phases to complete th
 
 The "tada" moment consists in the beginning and completion of the fourth type of exchange between the parties, the Application Data, with fully encrypted information across a public domain, with no-one able to understand what it reads. Great, eh?
 
-Why would they both want to get symmetric? Because the symmetric cryptography is known to be a very fast way to encrypt and decrypt large bulks of data, as well as being more dynamic, not having to rely on the intervention of a third party, like the certificate authority, to validate the keys.
-
-> In practice, a two-way asymmetric procedure has been used for some special cases, like Intranet or IoT
-
-The keys used during the symmetric encryption are popularly known as **session keys**, which are derivates of a single, secret key kept by both parties (guess: *the master secret*). 
-
+Now, bear in mind that this procedure is not exclusive. For example, in practice a two-way asymmetric procedure has been used for some special cases, like Intranet or IoT. But this is the most common and accepted one for the TLS 1.2.
 
 # Final Remarks
 
-> Notice that for version 1.2 the asymmetric procedure is based on **static keys**; in this case, it will be enough to decrypt the messages. For this reason, and for other ones, the version 1.3 get rid of this step using a different cryptographic procedure
+The current version 1.2 exists since 2008 but there is a new version, the 1.3, that was available since 2018. In the 1.3 version the asymmetric encryption is replaced by a different encryption algorithm. Notice that for version 1.2 the asymmetric procedure is based on **static keys**; in this case, it will be enough to decrypt the messages. For this reason, and for other ones, the version 1.3 get rid of this step using a different cryptographic procedure. Version 1.3 is considered much more secure than version 1.2.
 
-The TLS / SSL handshake is a very fascinating solution to the security on the web. The procedure last just miliseconds, but there are a lot of things going on. That is why this procedure is sometimes difficult to understand.
+It is expected that version 1.3 will be the preferred choice for TLS security at some point. However, at least [by 2020 the version 1.3 was still not fully adopted](https://blog.gigamon.com/2020/04/15/how-do-you-run-cryptography-faster-and-stay-secure-without-tripping-over-hackers/). And it is still expected that the 1.2 version will still be optionally use, as it still offers enough security for certain cases.
 
-Here in this post I just focused on a very specific section of the TLS handshake in its more popular version to date. Bear in mind that there is already a new version of the TLS that it is meant to replace the existing one. But this might take a few years from the time of this writing before it is completed faced out.
+The TLS / SSL handshake 1.2 is a very fascinating solution to the security on the web. The procedure last just miliseconds, but there are a lot of things going on. That is why this procedure is sometimes difficult to understand.
 
 If you want to know more about the TLS, there is a lot of material you can find online. However, there are two that have impressed me the most:
 
