@@ -60,7 +60,22 @@ div.arrow-wrap{
     display:block;
     position:absolute;
     right: 40%;
-    top: 85%;
+    height:50px;
+    width:50px;
+   }
+   
+
+   div.arrow-wrap.top{
+    top: 5%;
+    transform: rotate(180deg);
+  }
+
+  div.arrow-wrap.top .arrow.top{
+    opacity:0;
+  }
+
+   div.arrow-wrap.down{
+    top: 75%;
   }
 
    .step.title div{
@@ -88,10 +103,25 @@ div.arrow-wrap{
       display:block;
       position:absolute;
       right: 40%;
-      top: 85%;
-    }
+      height:50px;
+      width:50px;
+     }
+     
   
-     .step.title div{
+     div.arrow-wrap.top{
+      top: 5%;
+      transform: rotate(180deg);
+    }
+
+    div.arrow-wrap.top .arrow.top{
+      opacity:0;
+    }
+
+     div.arrow-wrap.down{
+      top: 75%;
+    }
+
+    .step.title div{
       height: 70%;
      }
     }

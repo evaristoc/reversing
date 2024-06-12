@@ -8,9 +8,8 @@ categories: blog security-and-access
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/style/scrollama-sidetext.css %}">
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/style/scrollama-thispost.css %}">
 
-
 <img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS-client2server02.png %}" style="width:100%;">
-
+<div id="error"></div>
 
 # Quick Review of the Handshake
 
@@ -103,55 +102,103 @@ In order to facilitate the explanation I have identified 3 phases to complete th
         <div class='step title' data-step='1'>
             <p class='title'>The Asymmetric Phase</p>
             <div class='subtitle'>
-            <p>Once the legitimacy of the Server was confirmed, the Client will encrypt a secret for the Server. It is called asymmetric because after an encryption operation, the other side will need a different but related key to decrypt the message.</p>
+                <p>Once the legitimacy of the Server was confirmed, the Client will encrypt a secret for the Server. It is called asymmetric because after an encryption operation, the other side will need a different but related key to decrypt the message.</p>
           </div>
         </div>
         <div class='step' data-step='2'>
             <div class="explain">
-            <p>During the asymmetric phase, the parties will make use of the server keys. The Client has a copy of the public one (as possibly everyone else) for encryption, but it is expected that only the Server knows the private key for decryption. The Server is the one who choose the cipher to use.</p>
+                <p>During the asymmetric phase, the parties will make use of the server keys. The Client has a copy of the public one (as possibly everyone else) for encryption, but it is expected that only the Server knows the private key for decryption. The Server is the one who choose the cipher to use.</p>
           </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
         </div>
         <div class='step' data-step='3'>
             <div class="explain">
-            <p>The Client uses the server public key and with an already negotiated asymmetric cipher encrypt the <strong>pre-master secret</strong>, which is another random number, and sends that to the Server. Be aware that the Client <i>don't wait for the message to be received by the Server</i> to go to the next step.</p>
-        </div>
+                <p>The Client uses the server public key and with an already negotiated asymmetric cipher encrypt the <strong>pre-master secret</strong>, which is another random number, and sends that to the Server. Be aware that the Client <i>don't wait for the message to be received by the Server</i> to go to the next step.</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
         </div>
         <div class='step' data-step='4'>
         </div>
         <div class='step' data-step='5'>
             <div class="explain">
-            <p>Now the Server uses the private key to decrypt the Client's pre-master secret. The pre-master secret was safely passed through the public domain and now they both finally share their first secret. <strong>The asymmetric phase is completed.</strong></p>
+                <p>Now the Server uses the private key to decrypt the Client's pre-master secret. The pre-master secret was safely passed through the public domain and now they both finally share their first secret. <strong>The asymmetric phase is completed.</strong></p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
             </div>
         </div>
         <div class='step title' data-step='6'>
-         <p class='title'>The PRF Phase</p>
-         <div class='subtitle'>
-       <p>Both the Server <i>and</i> the Client have the pre-master secret. They want to obtain the <strong>master secret</strong>, which will be a <i>pseudo</i>  random number. But they should ensure that <i>both of them  will arrive to the same pseudo random number</i>. For that they will use a function that will get as input some of the data they already share between them...</p>
-         </div>
-          </div>
+            <p class='title'>The PRF Phase</p>
+            <div class='subtitle'>
+                <p>Both the Server <i>and</i> the Client have the pre-master secret. They want to obtain the <strong>master secret</strong>, which will be a <i>pseudo</i>  random number. But they should ensure that <i>both of them  will arrive to the same pseudo random number</i>. For that they will use a function that will get as input some of the data they already share between them...</p>
+            </div>
+        </div>
         <div class='step' data-step='7'>
             <div class="explain">
-            <p>Inputs for the function will be the client random and the server random (both shared unencrypted during the hello step), and the pre-master secret (which is ideally only known to the Server and the Client). The fact that one of the inputs is a secret to everyone else makes the output of the function unkown to others.</p>
+                <p>Inputs for the function will be the client random and the server random (both shared unencrypted during the hello step), and the pre-master secret (which is ideally only known to the Server and the Client). The fact that one of the inputs is a secret to everyone else makes the output of the function unkown to others.</p>
            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
         </div>
-                <div class='step' data-step='8'>
+        <div class='step' data-step='8'>
             <div class="explain">
-            <p>The processing function is usually a <strong><a href='https://csrc.nist.gov/glossary/term/pseudorandom_function#:~:text=Definitions%3A,indistinguishable%20from%20truly%20random%20output'>Pseudo Random Function (PRF)</a></strong>, which is a procedure that will result in the same pseudo-random value on the side of the Client as well as the Server, as long as they both apply the same procedure and use the same inputs. The most important here is that <a href='https://stackoverflow.com/a/15413799'>no-one will be able to infer the exact values of the inputs reversibly by obtaining the output of the function</a>, guaranting certain level of safety.</p>
+                <p>The processing function is usually a <strong><a href='https://csrc.nist.gov/glossary/term/pseudorandom_function#:~:text=Definitions%3A,indistinguishable%20from%20truly%20random%20output'>Pseudo Random Function (PRF)</a></strong>, which is a procedure that will result in the same pseudo-random value on the side of the Client as well as the Server, as long as they both apply the same procedure and use the same inputs. The most important here is that <a href='https://stackoverflow.com/a/15413799'>no-one will be able to infer the exact values of the inputs reversibly by obtaining the output of the function</a>, guaranting certain level of safety.</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
             </div>
         </div>
          <div class='step' data-step='9'>
             <div class="explain">
-            <p>The Server and the Client create and share an identical master secret.</p>
+                <p>The Server and the Client create and share an identical master secret.</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
             </div>
         </div>
          <div class='step' data-step='10'>
             <div class="explain">
-            <p> <strong>Why not simply using the pre-master secret instead?</strong> Let's use our previous example to understand why. Try to imagine the pre-master as a random mix of <i>hundreds of characters</i> from <i>several alphabets</i>. But to decrypt a message written with the Latin alphabet, we just need 26 of those characters. The master secret is a random selection of <i>a fixed amount (in this case 26) of those characters</i>. This is more or less the idea that justify the construction of the master secret from a pre-master.</p>
+                <p> <strong>Why not simply using the pre-master secret instead?</strong> Let's use our previous example to understand why. Try to imagine the pre-master as a random mix of <i>hundreds of characters</i> from <i>several alphabets</i>. But to decrypt a message written with the Latin alphabet, we just need 26 of those characters. The master secret is a random selection of <i>a fixed amount (in this case 26) of those characters</i>. This is more or less the idea that justify the construction of the master secret from a pre-master.</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
             </div>
         </div>
         <div class='step' data-step='11'>
             <div class="explain">
-            <p>The master secret and the randoms will be used to create the <strong>session keys</strong> using a similar procedure as for the creation of the master secret. Both parties produce <i>more than one key</i> in a single <strong>key block</strong> that is eventually "sliced" up to the right sizes. The resulting session keys would fit the symmetric cipher previously negotiated between the parties. The keys are ready: <strong>we can move to the next phase</strong>.</p>
+                <p>The master secret and the randoms will be used to create the <strong>session keys</strong> using a similar procedure as for the creation of the master secret. Both parties produce <i>more than one key</i> in a single <strong>key block</strong> that is eventually "sliced" up to the right sizes. The resulting session keys would fit the symmetric cipher previously negotiated between the parties. The keys are ready: <strong>we can move to the next phase</strong>.</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
             </div>
         </div>
         <div class='step title' data-step='12'>
@@ -164,14 +211,23 @@ In order to facilitate the explanation I have identified 3 phases to complete th
             <div class="explain">
                 <p>The reason why several session keys instead of one is because in practice there are more than one type of communication going through more than one communication channel during a single session. Encrypting each type of communication for each channel using different keys adds a higher level of security.</p>
             </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
         </div>
         <div class='step' data-step='14'>
-            <div id="scroll" class="explain">
+            <div class="explain">
                 <p>Both the Client and the Server will use an agreed symmetric cipher function now with a similar key on each side.</p>
                 <p>Even before the Server gets the encrypted pre-master the Client might already have the session keys ready, so it is the Client the first to test the resulting procedure. The Client encrypts a message ("finished") with test data which would revail if the handshake was tampered, and sends it to the server...</p>
-                <div class="arrow-wrap" style="width:50px">
-                    <img class="arrow" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
-                </div>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
             </div>
         </div>
         <div class='step' data-step='15'>
@@ -180,13 +236,25 @@ In order to facilitate the explanation I have identified 3 phases to complete th
             <div class="explain">
                 <p>If, after receiving and decrypting the ciphertext the Client message was as expected, the Server will respond to the Client with a similar message... </p>
             </div> 
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>      
         </div> 
         <div class='step' data-step='17'>
         </div> 
         <div class='step' data-step='18'>
             <div class="explain">
-            <p>If the Client gets the message from the Server as expected, then <strong>the handshake is finished</strong>. </p>
+                <p>If the Client gets the message from the Server as expected, then <strong>the handshake is finished</strong>. </p>
             </div> 
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
         </div>            
     </div>
     <br>
