@@ -25,7 +25,7 @@ var scene = {
     {
       "id":"g9",
       "title":"(1)",
-      "desc":"<h1>Client Details</h1><br/> <br/> Now on the desk of our Server are the details of the Client including the client random.<br/> <br/> This information is far from enough to start an encrypted communication. There are things that the Client must know about the Server before they both can encrypt and decrypt the messages between them.<br/> <br/> What do the Server need to share with the Client in order to start a encrypted communication?",
+      "desc":"<h1 class='xiatitle' style='font-size:1.3rem;'>Client Details</h1><br/> <br/> Now on the desk of our Server are the details of the Client including the client random.<br/> <br/> This information is far from enough to start an protected communication. There are things that the Client must know about the Server before they both can encrypt and decrypt the messages between them.<br/> <br/> What do the Server need to share with the Client in order to start a encrypted communication?",
       "options":"",
       "group": [
       {
@@ -67,7 +67,7 @@ var scene = {
       "fill":"#aa8800",
           "id":"rect1",
       "style":"display:none;opacity:0.85;fill:#aa8800;stroke:#000000;stroke-width:0.378279",
-          "desc":"<h1>Client Details</h1><br/> <br/> Now on the desk of our Server are the details of the Client including the client random.<br/> <br/> This information is far from enough to start an encrypted communication. There are things that the Client must know about the Server before they both can encrypt and decrypt the messages between them.<br/> <br/> What do the Server need to share with the Client in order to start a encrypted communication?",
+          "desc":"<h1 class='xiatitle' style='font-size:1.3rem;'>Client Details</h1><br/> <br/> Now on the desk of our Server are the details of the Client including the client random.<br/> <br/> This information is far from enough to start a protected data exchange. There are things that the Client must know about the Server before they both can start messaging between them safely.<br/> <br/> But what are those things..?",
       "title":"(1)",
           "x":"0",
           "y":"0",
@@ -88,7 +88,7 @@ var scene = {
     {
       "id":"g10",
       "title":"(2)",
-      "desc":"<h1>Randoms</h1><br/> <br/> Two pieces that the Server and the Client require for further data protection and that will be publicly shared are the client - and the server random. <br/> <br/> Not only the Client produces a random:  also the Server must produce one. The server random will be sent with the rest of the Server details through the 'server hello'.<br/> <br/> But both of those random have been made public through out the communication. They both need to share something 'secret' between them, something that only the Client and Server could understand.<br/> <br/> They need something else...<br/> <br/> ",
+      "desc":"<h1 class='xiatitle' style='font-size:1.3rem;'>Randoms</h1><br/> <br/> Not only the client random will be required for the creation of the inputs of the ciphers. The Server should provide a random number too (the <b>server random</b>). <br/> <br/>The server random will be sent with the rest of the Server details through the 'server hello'.<br/> <br/> But both of those random have been made public through out the communication. They both need to share something 'secret' between them, something that only the Client and Server could understand.<br/> <br/> And to share that secret they need something else...<br/> <br/> ",
       "options":"",
       "group": [
       {
@@ -129,7 +129,7 @@ var scene = {
           "id":"rect5",
           "width":"91.33326",
           "height":"57.407021",
-          "desc":"<h1>Randoms</h1><br/> <br/> Two pieces that the Server and the Client require for further data protection and that will be publicly shared are the client - and the server random. <br/> <br/> Not only the Client produces a random:  also the Server must produce one. The server random will be sent with the rest of the Server details through the 'server hello'.<br/> <br/> But both of those random have been made public through out the communication. They both need to share something 'secret' between them, something that only the Client and Server could understand.<br/> <br/> They need something else...<br/> <br/> ",
+          "desc":"<h1 class='xiatitle' style='font-size:1.3rem;'>Randoms</h1><br/> <br/> Not only the client random will be required for the creation of the inputs of the ciphers. The Server should provide a random number too (the <b>server random</b>). <br/> <br/>The server random will be sent with the rest of the Server details through the 'server hello'.<br/> <br/> But both of those random have been made public through out the communication. They both need to share something 'secret' between them, something that only the Client and Server could understand.<br/> <br/> And to share that secret they need something else...<br/> <br/>",
       "title":"(2)",
           "x":"0",
           "y":"0",
@@ -154,7 +154,7 @@ var scene = {
     {
       "id":"g12",
       "title":"(3)",
-      "desc":"<h1>Server Private and Public Keys</h1><br/> <br/> There are few ways to encrypt information, but here there is a clever one: the Server will use <b>asymmetric keys</b> for encryption/decryption. <br/> <br/> There are encryption/decryption machines that require <b>two different keys</b> for the process; when one is used to encrypt a message, the only way to decrypt that message is by using <em>the other key</em>.<br/> <br/> The Server has a pair of that kind of keys. One of those keys can be copied, made public, and used to encrypt messages by whoever wants. This would be called the <b>public key</b>. Meanwhile the other one - the <b>private key</b> - will stay private, safely guarded by the Server. <br/> <br/>  <hr size=3/> <b>In that way, only the Server will be the one capable  to decrypt the messages encrypted with the Server's public key.</b><br/>  <hr size=3/> <br/> <br/> Clever, ah?<br/> <br/> But the Client needs a guarantee that the keys and details been sent to the Client's desk are genuine. The Client would also ask for a Certificate.",
+      "desc":"<h1 class='xiatitle' style='font-size:1.3rem;'>Server Private and Public Keys</h1><br/> <br/> There are few ways to 'hide' the information, and the Server has a trick: <b>asymmetric keys</b>.<br/> <br/> As the randoms, keys are specially prepared random numbers that will be used as inputs for the ciphers. When we talk about assymetric keys, we are likely referring to a process of 'hiding / showing' information where one key is used to hide the information while the other is used to expose the hidden information.<br/> <br/> The Server has a pair of that kind of keys. One of those keys can be copied and made public, and used to 'hide' the content of the messages. This would be called the <b>public key</b>. Meanwhile the other one - the <b>private key</b> - will stay private, safely guarded by the Server. <br/> <br/>  <hr size=3/> <b>In that way, only the Server will be the one capable  to expose the messages hidden with the Server's public key.</b><br/>  <hr size=3/> <br/> <br/> Clever, ah?<br/> <br/> But the Client needs a guarantee that the keys and details been sent to the Client's desk are genuine. The Client would also ask for a Certificate.",
       "options":"",
       "group": [
       {
@@ -195,7 +195,7 @@ var scene = {
           "id":"rect3",
           "width":"65.875832",
           "height":"41.255077",
-          "desc":"<h1>Server Private and Public Keys</h1><br/> <br/> There are few ways to encrypt information, but here there is a clever one: the Server will use <b>asymmetric keys</b> for encryption/decryption. <br/> <br/> There are encryption/decryption machines that require <b>two different keys</b> for the process; when one is used to encrypt a message, the only way to decrypt that message is by using <em>the other key</em>.<br/> <br/> The Server has a pair of that kind of keys. One of those keys can be copied, made public, and used to encrypt messages by whoever wants. This would be called the <b>public key</b>. Meanwhile the other one - the <b>private key</b> - will stay private, safely guarded by the Server. <br/> <br/>  <hr size=3/> <b>In that way, only the Server will be the one capable  to decrypt the messages encrypted with the Server's public key.</b><br/>  <hr size=3/> <br/> <br/> Clever, ah?<br/> <br/> But the Client needs a guarantee that the keys and details been sent to the Client's desk are genuine. The Client would also ask for a Certificate.",
+          "desc":"<h1 class='xiatitle' style='font-size:1.3rem;'>Server Private and Public Keys</h1><br/> <br/> There are few ways to 'hide' the information, and the Server has a trick: <b>asymmetric keys</b>.<br/> <br/> As the randoms, keys are specially prepared random numbers that will be used as inputs for the ciphers. When we talk about assymetric keys, we are likely referring to a process of 'hiding / showing' information where one key is used to hide the information while the other is used to expose the hidden information.<br/> <br/> The Server has a pair of that kind of keys. One of those keys can be copied and made public, and used to 'hide' the content of the messages. This would be called the <b>public key</b>. Meanwhile the other one - the <b>private key</b> - will stay private, safely guarded by the Server. <br/> <br/>  <hr size=3/> <b>In that way, only the Server will be the one capable  to expose the messages hidden with the Server's public key.</b><br/>  <hr size=3/> <br/> <br/> Clever, ah?<br/> <br/> But the Client needs a guarantee that the keys and details been sent to the Client's desk are genuine. The Client would also ask for a Certificate.",
       "title":"(3)",
           "x":"0",
           "y":"0",
@@ -220,7 +220,7 @@ var scene = {
     {
       "id":"g11",
       "title":"(4)",
-      "desc":"<h1>Certificate</h1><br/> <br/> To prove its identity to the Client, the Server will rely on the Certificate Authority. Yes, the other party we haven’t mentioned that much is now becoming relevant by proving that the Server is who it is.<br/> <br/> The Client would like to see a copy of that certificate for a first scan of the truthworthiness of the Server.<br/> <br/>  <hr/> <b>In the typical configuration, it is only the Server who has to authenticate during the TLS/SSL procedure.</b> <hr/> ",
+      "desc":"<h1 class='xiatitle' style='font-size:1.3rem;'>Certificate</h1><br/> <br/> To prove its identity to the Client, the Server will rely on the Certificate Authority. Yes, the other party we haven’t mentioned that much is now becoming relevant by proving that the Server is who it is.<br/> <br/> The Client would like to see a copy of that certificate for a first scan of the truthworthiness of the Server.<br/> <br/>  <hr/> <b>In the typical configuration, it is only the Server who has to authenticate during the TLS/SSL procedure.</b> <hr/> ",
       "options":"",
       "group": [
       {
@@ -261,7 +261,7 @@ var scene = {
           "id":"rect2",
           "width":"32.375328",
           "height":"30.048952",
-          "desc":"<h1>Certificate</h1><br/> <br/> To prove its identity to the Client, the Server will rely on the Certificate Authority. Yes, the other party we haven’t mentioned that much is now becoming relevant by proving that the Server is who it is.<br/> <br/> The Client would like to see a copy of that certificate for a first scan of the truthworthiness of the Server.<br/> <br/>  <hr/> <b>In the typical configuration, it is only the Server who has to authenticate during the TLS/SSL procedure.</b> <hr/> ",
+          "desc":"<h1 class='xiatitle' style='font-size:1.3rem;'>Certificate</h1><br/> <br/> To prove its identity to the Client, the Server will rely on the Certificate Authority. Yes, the other party we haven’t mentioned that much is now becoming relevant by proving that the Server is who it is.<br/> <br/> The Client would like to see a copy of that certificate for a first scan of the truthworthiness of the Server.<br/> <br/>  <hr/> <b>In the typical configuration, it is only the Server who has to authenticate during the TLS/SSL procedure.</b> <hr/> ",
       "title":"(4)",
           "x":"0",
           "y":"0",
@@ -327,7 +327,7 @@ var scene = {
           "id":"rect4",
           "width":"82.586166",
           "height":"97.125977",
-          "desc":"<h1>Server Hello</h1><br/> <br/> The Server prepares some similar data to the “client hello”, including its own server random, plus a copy of the certificate as well as one copy of a public key.<br/> <br/> The Server is ready to reply to the Client. The data, as we said, will be still visible to everyone, but so far no harmful data is shared between them.<br/> <br/> Here we go!",
+          "desc":"<h1 class='xiatitle' style='font-size:1.3rem;'>Server Hello</h1><br/> <br/> The Server prepares some similar data to the “client hello”, including its own server random, plus a copy of the certificate as well as one copy of a public key.<br/> <br/> The Server is ready to reply to the Client. The data, as we said, will be still visible to everyone, but so far no harmful data is shared between them.<br/> <br/> Here we go!",
       "title":"(5)",
           "x":"0",
           "y":"0",

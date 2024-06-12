@@ -31,7 +31,7 @@ We would like to keep our attention to some aspects of steps 2 and 3.
 
 Also remember the main concerned parties: the Client, the Server and the Certificate Authority. At the end of the Hellos exchange, the Certificate Authority has completed its task and it is now up to the Client and the Server to define how to continue with the following steps.
 
-> Keep in mind that the Client and the Server are **application software**, not real people :) .
+> Keep in mind that the Client and the Server are **software applications**, not real people :) .
 
 # Encryption: "Key" Concepts
 
@@ -44,7 +44,7 @@ Concepts that we should keep by hand are:
 * **cryptography**: the science that study the encrypting and decrypting operations
 * **cipher function**: the function or procedure that will be used to encrypt and decrypt a message
 * **key**: a sort of "template" or "pattern" containing values acting as the "guide" for the cipher function to change the original content
-* **seed**: an pivot value a (pseudo) random number function would use to begin the calculation
+* **seed**: a pivot value that a (pseudo) random number function would use as the start value of its calculations
 
 Let's try a very simple example to see if we can get the importance of a secret key. Try to decrypt my ciphertext below:
 
@@ -82,13 +82,13 @@ That is why in TLS 1.2 the information about that agreement is shared publicly w
 
 # The Pre-Master Exchange In Action
 
-Part of the purpose of the hellos was to exchange initial information about which encryption procedures both, the Client and the Server, would like to use.
-
-They also shared some parameters to be used in a cipher function (the randoms), but haven't been used yet.
-
-In version 1.2, the session keys generation is part of the Pre-Master Exchange and it is the last goal of the handshake. We are about to get an overview on how that happens.
+In version 1.2, the session keys generation is part of the Pre-Master Exchange and it is the last goal of the handshake. We are about to get an overview on how that happens. The idea is to make use of a **symmetric cipher** as a mean to encrypt/decrypt all the exchanges.
 
 > **Why would they both want to go symmetric?** One of the main reasons is because the symmetric cryptography is known to be a very fast way to encrypt and decrypt large bulks of data. The idendity of the submitter is also easier to validate than for asymmetric procedures.
+
+Part of the purpose of the hellos was to exchange initial information about which encryption procedures both, the Client and the Server, would like to use.
+
+They also shared some parameters to be used for the creation of keys for the symmetric cipher function (the randoms), but haven't been used yet.
 
 In order to facilitate the explanation I have identified 3 phases within the Pre-Master Exchange:
 
@@ -118,7 +118,7 @@ In order to facilitate the explanation I have identified 3 phases within the Pre
         </div>
         <div class='step' data-step='3'>
             <div class="explain">
-                <p>The Client uses the server public key and with an already negotiated asymmetric cipher encrypt the <strong>pre-master secret</strong>, which is another random number, and sends that to the Server. Be aware that the Client <i>don't wait for the Server to receive the encrypted message</i> and go to the next step.</p>
+                <p>The Client uses the server public key and with an already negotiated asymmetric cipher encrypt the <strong>pre-master secret</strong>, which is another random number, and sends that to the Server. Be aware that the Client <i>don't wait for the Server to receive the encrypted message</i> in order to go to the next step.</p>
             </div>
              <div class="arrow-wrap top" style="width:50px">
                 <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
@@ -311,6 +311,8 @@ Find more at [Practical Networking youtube channel](https://www.youtube.com/@Pra
 
 
 ----
+
+For the preparation of this post I made use of several tools, but mostly [Scrollama](https://github.com/russellsamora/scrollama) and Inkscape.
 
 For the rest, I just hope you enjoyed this reading. Meanwhile, happy coding!
 
