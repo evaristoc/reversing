@@ -278,17 +278,17 @@ In order to facilitate the explanation I have identified 3 phases within the Pre
 
 # Tada!
 
-The "tada" moment consists in the beginning and completion of the fourth type of exchange between the parties, the Application Data, with fully encrypted information across a public domain, with no-one able to understand what it reads. Great, eh?
+The "tada" moment consists in the beginning and completion of the Application Data exchange, with fully encrypted information across a public domain, with no-one able to understand what it reads. Great, eh?
 
-Now, bear in mind that this procedure is not exclusive. For example, in practice a two-way asymmetric procedure has been used for some special cases, like Intranet or IoT. But this is the most common and accepted one for the TLS 1.2.
+Now, bear in mind that this procedure of getting symmetric session keys is not exclusive. For example, in practice a two-way asymmetric procedure has been used for some special cases, like Intranet or IoT. But this is the most common and accepted one for the TLS 1.2.
 
 # Final Remarks
 
+The TLS / SSL handshake 1.2 is a very fascinating solution to the security on the web. The procedure last just miliseconds, but there are a lot of things going on. That is why this procedure is sometimes difficult to understand.
+
 The current version 1.2 exists since 2008 but there is a new version, the 1.3, that was available since 2018. In the 1.3 version the asymmetric encryption is replaced by a different encryption algorithm. Notice that for version 1.2 the asymmetric procedure is based on **static keys**; in this case, it will be enough to decrypt the messages. For this reason, and for other ones, the version 1.3 get rid of this step using a different cryptographic procedure. Version 1.3 is considered much more secure than version 1.2.
 
-It is expected that version 1.3 will be the preferred choice for TLS security at some point. However, at least [by 2020 the version 1.3 was still not fully adopted](https://blog.gigamon.com/2020/04/15/how-do-you-run-cryptography-faster-and-stay-secure-without-tripping-over-hackers/). And it is still expected that the 1.2 version will still be optionally use, as it still offers enough security for certain cases.
-
-The TLS / SSL handshake 1.2 is a very fascinating solution to the security on the web. The procedure last just miliseconds, but there are a lot of things going on. That is why this procedure is sometimes difficult to understand.
+It is expected that version 1.3 will be the preferred choice for TLS security at some point. However, at least [by 2020 the version 1.3 was still not fully adopted](https://blog.gigamon.com/2020/04/15/how-do-you-run-cryptography-faster-and-stay-secure-without-tripping-over-hackers/). And it is still expected that the 1.2 version will still be in use in the foreseen future, similar to what happened with other previous versions. In fact, version 1.2 could still provide enough security for certain cases, and it could be preferred to other versions.
 
 If you want to know more about the TLS, there is a lot of material you can find online. However, there are two that have impressed me the most:
 
@@ -314,86 +314,4 @@ Practical Networking is a project by Ed Harmoush and it is not only a good youtu
 
 For the rest, I just hope you enjoyed this reading. Meanwhile, happy coding!
 
-The resulting word is "panama".
-
-
-# Dumped
-
-# How to keep the communication private across a public channel?
-
-We left our [previous post]({{site.baseurl}}{% link _posts/2024-02-18-tls-ssl-v1.2-handshake-made-simple-hellos.markdown %}) at the end of the Server hello, where the Server sent some information to the Client that will be required to create the session keys. All those previous exchanges have been made through public channels, and the content of the information of those exchanges hasn't been a secret to anyone. Someone who captures the messages between those two will get the exactly same copy that the Client and the Server have.
-
-One way to privately communicate through a channel vulnerable to eavesdropping and tampering would be to "hide" the content of the communications by chaging it in a way that make the content impossible to understand but by the involved parties - in our case the Client and the Server. The task of making the information looks like "rubish" is called **encryption**, while restoring it is what is called **decrpyption**, and the same dedicated to the study of those tools is called **cryptography**.
-
-In general, the involved parties would make use of functions called **ciphers** which could be based on **keys** to complete the task.
-
-Let's try to understand the encryption / decryption process and the ciphers by using a very simple example. Just look at the following message. This is my "encrypted" message for you:
-
-#### kutypakutynakutyma
-
-An encrypted message is known as **chiphertext**. Can you get what it is in my ciphertext? It is very easy: just get rid of the fragments that read "kuty" and now it would read "panama". The original message is known as **plaintext**. My ciphertext was the result of inserting the word "kuty" before every syllable of the original plaintext. Decrypting was made possible by inverting that operation.
-
-Now notice that for you to get the plaintext out of my ciphertext you had to know those two things:
-
-* the cipher function ("inserting the word ..."), and
-* the key, in this case the word "kuty"
-
-Now, you have to believe that:
-
-> The encryption procedure will stay safe even if the parties have shared full information information about the cipher with third-parites, as long as they are the only ones who know the keys 
-
-Looking at my simple example, this means that you might still have to make some effort to decrypt a new message if I change the word "kuty" for another very difficult word if I don't tell you what the new word is.
-
-However, my simple encryption procedure will still be beatable all day. A more powerful procedure prevents you to infer the cipher function and / or the key by only looking at the ciphertext. The TLS makes use of those more powerful procedures which are based on keys resembling random numbers, and apply more complex mathematical operations over the plaintext that inserting characters in between.
-
-That means that Client and Server can now agree on what cipher they want to use, and then create random numbers as keys and share them through... Ooeps...
-
-What???? Not on the public domain! So even if they can share the cipher on the public space, how they are going to agree over the keys? A phone call? The Post Office? ...?
-
-> ... in order to share that secret part of the key, they need to share it in an encrypted way across a public domain
-
-So how are they going to share that secret section of a key in a way that no-one can read it?
-
-<img src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/1f914.jpg %}" style="width:100%;">
-
-
-### Client Key Exchange and Generation of Session Keys
-
-Part of the purpose of the hellos was to exchange initial information about which encryption procedures both, the Client and the Server, would like to use.
-
-They also shared some keys that could be exposed to the public domain, but haven't been used yet.
-
-In version 1.2, the generation of the session keys is the step where the Client and the Server begin to share "secrets" and it consists in three phases of encryption.
-
-#### The Assymetric Phase: The Pre-Master Exchange 
-
-In the first phase, once the legitimacy of the Server was confirmed, the Client will encrypt a secret for the Server, the **pre-master secret**. To send that pre-master secret encrypted, the Client will rely on an **asymmetric encryption** procedure.
-
-#### The PRF Phase: The Master Secret and Session Key Generation
-
-The pre-master, even if now only known to Client and Server, might not be totally safe as well as not complying with the requirements for a proper key. Furthermore, the Client as well as the Server would like to get the same key on their corresponding sides.
-
-So they input the pre-master secret through a processing function that will result in an improved key, which will become the **master secret**.
-
-Usually after the master secret is obtained, the pre-master is thrown away and it is that master secret that is used in the following step.
-
-#### The Symmetric Phase: The Finished Exchange
-
-The final goal of this procedure is for both, the Client and the Server, to be able to engage in what is called **symmetric encryption**, which is a procedure where *the same* key can be used to reverse the current cryptographic operation over a message.
-
-Why would they both want to get symmetric? Because the symmetric cryptography is known to be a very fast way to encrypt and decrypt large bulks of data, as well as being more dynamic, not having to rely on the intervention of a third party, like the certificate authority, to validate the keys.
-
-> In practice, a two-way asymmetric procedure has been used for some special cases, like Intranet or IoT
-
-The keys used during the symmetric encryption are popularly known as **session keys**, which are derivates of a single, secret key kept by both parties (guess: *the master secret*). 
-
-
-So you can see now why the asymmetric procedure was used on the first place: it was only to encrypt the (pre) key that will be used for the symmetric procedure, as well as giving some guarantee of identity through a certificate authority.
-
-In case you are still not completely getting a picture of the session key generation, I have prepared a visual step-by-step explanation. For the sake of simplicity I am not focusing on the technical details, which are much more complicated. But once you understand the whole exchange is trying to achieve, then the complex part becomes more accessible.
-
-The concept of key (in some parts referred as *secret*) is relevant. It is like a "map" of the operation. For some procedures, even with the same cipher function over the same plaintext the resulting ciphertext might look totally different after using different keys. So:
-
-> keeping the key secret (or at least part of it) could be enough to protect the content of the message 
-
-(*Observation*: this is only possible if the resulting ciphertext don't show any reversible pattern that allows finding the key)
+Ah! And the ciphertext was "panama" :).
