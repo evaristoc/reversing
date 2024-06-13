@@ -103,6 +103,7 @@ In order to facilitate the explanation I have identified 3 phases within the Pre
             <p class='title'>The Asymmetric Phase (RSA)</p>
             <div class='subtitle'>
                 <p>Once the legitimacy of the Server was confirmed, the Client will encrypt a secret for the Server. It is called asymmetric because after an encryption operation, the other side will need a different but related key to decrypt the message.</p>
+                <br/>
           </div>
         </div>
         <div class='step' data-step='2'>

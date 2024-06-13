@@ -85,7 +85,11 @@ div.arrow-wrap{
 
   @media only screen and (max-height: 600px){
   
-  
+    #scrollfig{
+      top: 50px !important;
+      margin-right: 10px;
+    }
+
     img.scrollamaImg[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Master Secret.svg'], img[src='../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/TLS - PRF Session Keys.svg']{
       max-height: 250px;
      }
