@@ -182,7 +182,7 @@ In order to facilitate the explanation I have identified 3 phases within the Pre
         </div>
          <div class='step' data-step='10'>
             <div class="explain">
-                <p> <strong>Why not simply using the pre-master secret instead?</strong> Let's use our previous example to understand why. Try to imagine the pre-master as a random mix of <i>hundreds of characters</i> from <i>several different alphabets</i>. But to encrypt and decrypt a message written with a Latin alphabet of only 26 characters, we don't need them all. The master secret is a random selection of <i>a fixed amount (in this case 26) of those characters</i>. This is more or less the idea that justify the construction of the master secret from a pre-master.</p>
+                <p> <strong>Why not simply using the pre-master secret instead?</strong> Let's use our early example to understand why. Try to imagine the pre-master as a random mix of <i>hundreds of characters</i> from <i>several different alphabets</i>. But to encrypt and decrypt a message written with a Latin alphabet of only 26 characters, we don't need them all. A random selection of <i>a fixed amount (in this case 26) of those characters</i> would be our master secret. This is more or less the idea that justify the construction of the master secret from a pre-master.</p>
             </div>
              <div class="arrow-wrap top" style="width:50px">
                 <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
@@ -317,4 +317,4 @@ For the preparation of this post I made use of several tools, but mostly [Scroll
 
 For the rest, I just hope you enjoyed this reading. Meanwhile, happy coding!
 
-Ah! And the ciphertext was "panama" :).
+Ah! And the plaintext was "panama" :).

@@ -53,8 +53,11 @@ div.arrow-wrap{
 
    .step div{
     height: 100%;
-    overflow-y: scroll;
    }
+
+  .step.is-active div{
+    overflow-y: scroll;
+  }
 
    div.arrow-wrap{
     display:block;
@@ -100,8 +103,11 @@ div.arrow-wrap{
   
      .step div{
       height: 100%;
-      overflow-y: scroll;
      }
+
+     .step.is-active div{
+      overflow-y: scroll;
+    }
   
      div.arrow-wrap{
       display:block;
