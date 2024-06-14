@@ -210,7 +210,7 @@ In order to facilitate the explanation I have identified 3 phases within the Pre
         </div>
         <div class='step' data-step='13'>
             <div class="explain">
-                <p>The reason why several session keys instead of one is because in practice there are more than one type of communication going through more than one communication channel during a single session. Encrypting each type of communication for each channel using different keys adds a higher level of security.</p>
+                <p>Both the Client and the Server will use an agreed symmetric cipher function now with a similar key on each side.</p>
             </div>
              <div class="arrow-wrap top" style="width:50px">
                 <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
@@ -221,8 +221,7 @@ In order to facilitate the explanation I have identified 3 phases within the Pre
         </div>
         <div class='step' data-step='14'>
             <div class="explain">
-                <p>Both the Client and the Server will use an agreed symmetric cipher function now with a similar key on each side.</p>
-                <p>Even before the Server gets the encrypted pre-master the Client might already have the session keys, so it is the Client the first to test the resulting procedure. The Client encrypts a message ("finished") with test data which would revail if the handshake was tampered or not, and sends it to the Server...</p>
+                <p>The reason why several session keys instead of one is because in practice there are more than one type of communication going through more than one communication channel during a single session. Encrypting each type of communication for each channel using different keys adds a higher level of security.</p>
             </div>
              <div class="arrow-wrap top" style="width:50px">
                 <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
@@ -232,8 +231,19 @@ In order to facilitate the explanation I have identified 3 phases within the Pre
             </div>
         </div>
         <div class='step' data-step='15'>
+            <div class="explain">
+                <p>Even before the Server gets the encrypted pre-master the Client might already have the session keys, so it is the Client the first to test the resulting procedure. The Client encrypts a message ("finished") with test data which would revail if the handshake was tampered or not, and sends it to the Server...</p>
+            </div>
+             <div class="arrow-wrap top" style="width:50px">
+                <img class="arrow top" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
+            <div class="arrow-wrap down" style="width:50px">
+                <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
+            </div>
         </div>
         <div class='step' data-step='16'>
+        </div>
+        <div class='step' data-step='17'>
             <div class="explain">
                 <p>If, after receiving and decrypting the ciphertext the Client message was as expected, the Server will respond to the Client with a similar message... </p>
             </div> 
@@ -244,9 +254,9 @@ In order to facilitate the explanation I have identified 3 phases within the Pre
                 <img class="arrow down" src="{{site.baseurl}}{% link /mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/arrow_down.png %}" style="width:100%;">
             </div>      
         </div> 
-        <div class='step' data-step='17'>
-        </div> 
         <div class='step' data-step='18'>
+        </div> 
+        <div class='step' data-step='19'>
             <div class="explain">
                 <p>If the Client gets the message from the Server as expected, then <strong>the handshake is finished</strong>. </p>
             </div> 

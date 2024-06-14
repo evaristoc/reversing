@@ -74,7 +74,18 @@ window.onload = (event) => {
 
     const resourcesImgs = '../../../../../mngassets/posts/2024-05-27-tls-ssl-v1.2-handshake-made-simple-session-keys-generation/img/';
 
+    /*
+    types:
+    -- e: explain
+    -- i: image only
+    -- t: title (subtitle)
+
+    text: true or false
+
+    img (image for #scrollfig): something or null
+    */
     let imageNamesObj = {
+        metadata: {types: {descrption:'based on the classes', e: 'explain', i: 'image only', t:'title (subtitle'}, texts:{description:'true if text, otherwise false'}, imgs:{description:'images for #scrollfig; null if no image for that step'}},
          0: {img:null,type:'t',text:true},
          1: {img:'TLS - asymmetric keys.png',type:'e',text:true},
          2: {img:'TLS - client asymmetric encryption.svg',type:'e',text:true},
@@ -89,10 +100,11 @@ window.onload = (event) => {
          11: {img:null,type:'t',text:true},
          12: {img:'TLS - session keys.png',type:'e',text:true},
          13: {img:'TLS - session keys.png',type:'e',text:true},
-         14: {img:'TLS - clientFINISHED2server airplane.svg',type:'i',text:false},
-         15: {img:null,type:'e',text:true},
-         16: {img:'TLS - serverFINISHED2client airplane.svg',type:'i',text:false},
-         17: {img:null,type:'e',text:true}
+         14: {img:null,type:'e',text:true},
+         15: {img:'TLS - clientFINISHED2server airplane.svg',type:'i',text:false},
+         16: {img:null,type:'e',text:true},
+         17: {img:'TLS - serverFINISHED2client airplane.svg',type:'i',text:false},
+         18: {img:null,type:'e',text:true}
     }
 
 
@@ -157,7 +169,7 @@ window.onload = (event) => {
         try{
             if(response.index in imageNamesObj){
                 let currentActive = imageNamesObj[response.index];
-                if([0,1,2,3,4,5,6,7,8,9,10,11,14,15,16,17].includes(response.index)){
+                if([0,1,2,3,4,5,6,7,8,9,10,11,14,15,16,17,18].includes(response.index)){
                     imagePlacing(currentActive.img);
                     if(currentActive.text && currentActive.type == 'e'){
                         let totalHeight = 0;
