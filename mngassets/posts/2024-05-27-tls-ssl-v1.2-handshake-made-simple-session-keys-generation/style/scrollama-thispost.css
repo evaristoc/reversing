@@ -23,7 +23,7 @@ img.scrollamaImg{
     animation-fill-mode: forwards;
   }
 
-.step[data-step="4"], .step.is-active[data-step="4"],.step[data-step="15"], .step.is-active[data-step="15"] ,.step[data-step="17"], .step.is-active[data-step="17"]  {
+.step[data-step="4"], .step.is-active[data-step="4"],.step[data-step="16"], .step.is-active[data-step="16"] ,.step[data-step="18"], .step.is-active[data-step="18"]  {
     background-color: #f3f3f3;
 }
 

@@ -181,7 +181,7 @@ window.onload = (event) => {
                             response.element.querySelectorAll('.arrow-wrap').forEach((v)=>{v.style.display = 'none';})
                         }
                     }
-                }else if(response.index == 12 && figElem.getElementsByClassName('scrollamaImg')[0] == null){
+                }else if((response.index == 12 || response.index == 13) && figElem.getElementsByClassName('scrollamaImg')[0] == null){
                     imagePlacing(currentActive.img);
                     let totalHeight = 0;
                     response.element.querySelector('.explain').querySelectorAll('p').forEach((v)=>{totalHeight += v.clientHeight;})
@@ -192,20 +192,22 @@ window.onload = (event) => {
                         response.element.querySelectorAll('.arrow-wrap').forEach((v)=>{v.style.display = 'none';})
                     }
                 }
-                else if(response.index == 13){
-                    let totalHeight = 0;
-                    response.element.querySelector('.explain').querySelectorAll('p').forEach((v)=>{totalHeight += v.clientHeight;})
-                    //console.log(total, Array.from(response.element.querySelector('.explain').querySelectorAll('p')).reduce((t,p)=>{return t += p.clientHeight;}), .95*response.element.querySelector('.explain').clientHeight);
-                    if(totalHeight > .97*response.element.querySelector('.explain').clientHeight){
-                        arrowOpacityAnimationScroll();
-                        arrowAnimationClick();
-                    }else{
-                        response.element.querySelectorAll('.arrow-wrap').forEach((v)=>{v.style.display = 'none';})
-                    }
-                    if(!figElem.getElementsByClassName('scrollamaImg')[0].src.includes('TLS%20-%20session%20keys.png')){
-                        imagePlacing(currentActive.img);
-                    }
-                }
+                //else if(response.index == 13){
+                    // let totalHeight = 0;
+                    // response.element.querySelector('.explain').querySelectorAll('p').forEach((v)=>{totalHeight += v.clientHeight;})
+                    // //console.log(total, Array.from(response.element.querySelector('.explain').querySelectorAll('p')).reduce((t,p)=>{return t += p.clientHeight;}), .95*response.element.querySelector('.explain').clientHeight);
+                    // if(totalHeight > .97*response.element.querySelector('.explain').clientHeight){
+                    //     arrowOpacityAnimationScroll();
+                    //     arrowAnimationClick();
+                    // }else{
+                    //     response.element.querySelectorAll('.arrow-wrap').forEach((v)=>{v.style.display = 'none';})
+                    // }
+                    // //if(!figElem.getElementsByClassName('scrollamaImg')[0].src.includes('TLS%20-%20session%20keys.png')){
+                    // if(!figElem.getElementsByClassName('scrollamaImg')[0] == null){
+                    //     imagePlacing(currentActive.img);
+                    // }
+
+                //}
             }else{
                 alert('step not found');
             }
