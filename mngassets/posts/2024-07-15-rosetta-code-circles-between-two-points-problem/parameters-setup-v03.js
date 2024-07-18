@@ -1,23 +1,3 @@
-let paramsFigure = {
-	widthSVG:640,
-	heightSVG: 640,
-	marginTopFig: 20,
-	marginRightFig: 40,
-	marginBottomFig: 20,
-	marginLeftFig: 40,
-	circle: {
-		x: null,
-		y: null,
-		r: null
-	},
-
-	startTime : new Date().getTime(),
-	pointA: null,
-	pointB: null,
-	middlePoint: null,
-	points: []
-}
-
 class canvasScene {
 	constructor(container, id){
 		this.container = container;
@@ -49,12 +29,20 @@ class canvasScene {
 	}
 }
 
+/*CLASSES*/
 class Point {
-	constructor(x, y){
+	
+	name;
+	
+	constructor(x, y, name){
 		this.position = {
 			x: x,
 			y: y
 		}
+		if(name && typeof name == 'string'){
+			this.name = name;
+		}
+
 		//paramsFigure.points.push(this);
 	}
 
@@ -73,6 +61,14 @@ class Point {
 	set y(y){
 		this.position.y = y;
 	}
+
+	get nameget(){
+		return this.name;
+	}
+
+	set nameset(name){
+		this.name = name;
+	}
 	
 	draw(){
 	}
@@ -80,38 +76,21 @@ class Point {
 
 class Line{
 	constructor(pointA, pointB){
-		this.pointA = pointA;
-		this.pointB = pointB;
+		
+		//Because the approach and formulas, we need the points sorted by x values
+		if(pointA.x <= pointB.x){
+			this.pointA = pointA;
+			this.pointB = pointB;
+		}else{
+			this.pointA = pointB;
+			this.pointB = pointA;
+		}
 		this.middlePoint = this.findMiddlePoint();
 		let a = this.findParamsNormal();
 		this.mt = a.mt; 
 		this.atanT = a.atanT; 
 		this.cT = a.cT;
 	}
-
-	//get pointA(){
-	//	return this.pointA;
-	//}
-
-	//get pointB(){
-	//	return this.pointB;
-	//}
-
-	//set pointA(pointA){
-	//	this.pointA = pointA;
-	//}
-
-	//set pointB(pointB){
-	//	this.pointB = pointB;
-	//}	
-
-	//get middlePoint(){
-	//	return this.middlePoint;
-	//}
-
-	//get atanT(){
-	//	return this.atanT;
-	//}
 
 	findMiddlePoint(){
 		return new Point((this.pointB.x + this.pointA.x)/2, (this.pointB.y + this.pointA.y)/2);
@@ -137,7 +116,7 @@ class Circle extends Point{
 }
 
 
-//E: https://stackoverflow.com/questions/29879267/es6-class-multiple-inheritance
+//E: CHECK: https://stackoverflow.com/questions/29879267/es6-class-multiple-inheritance (super cool!!!)
 class PointCircleGeoms extends Line{
 	
 	centerbasedonTrig;
@@ -177,38 +156,35 @@ class PointCircleGeoms extends Line{
 		/* From
 		https://testbook.com/question-answer/find-the-equation-of-the-family-of-circles-which-a--5f7c9e2f9c609e28bb4ea4cb
 		Question: find-the-equation-of-the-family-of-circles-which-are-passing-through-...
+
+		https://www.quora.com/How-do-you-convert-a-general-form-to-a-standard-form-circle
+		
+		finding the Standard Equation:
+
+		(x - h)**2 + (y - k)**2 = r**2
+		
+		from the General Equation:
+
+		x**2 + 2hx + y**2 + 2ky + C = 0
+
+		where: C = h**2 + k**2 + r**2 (A from the equation is equal for x and y and in this case is 1)
+
+		using:
+
+			//solving cuadratica
+			X*X-X*(pointA.x+pointB.x)+pointA.x*pointB.x +
+			Y*Y-Y*(pointA.y+pointB.y)+pointA.y*pointB.y +
+			//solving determinante
+			Y*(pointB.x*1 - pointA.x*1)*lambda +
+			X*(pointA.y*1 - pointB.y*1)*lambda +
+			(pointA.x*pointB.y*1 - pointA.y*pointB.x*1)*lambda
 		*/
-		//if(lambda != -1){
-			/*
-			https://www.quora.com/How-do-you-convert-a-general-form-to-a-standard-form-circle
-			
-			finding the Standard Equation:
-	
-			(x - h)**2 + (y - k)**2 = r**2
-			
-			from the General Equation:
-	
-			x**2 + 2hx + y**2 + 2ky + C = 0
-	
-			where: C = h**2 + k**2 + r**2 (A from the equation is equal for x and y and in this case is 1)
-	
-			using:
-	
-				//solving cuadratica
-				X*X-X*(pointA.x+pointB.x)+pointA.x*pointB.x +
-				Y*Y-Y*(pointA.y+pointB.y)+pointA.y*pointB.y +
-				//solving determinante
-				Y*(pointB.x*1 - pointA.x*1)*lambda +
-				X*(pointA.y*1 - pointB.y*1)*lambda +
-				(pointA.x*pointB.y*1 - pointA.y*pointB.x*1)*lambda
-			*/
-			let h = ((this.pointA.x+this.pointB.x)-(this.pointA.y*1 - this.pointB.y*1)*lambda)/2; // NOTICE: I changed the sign of the second expression (the determinant solution) and it was correct
-			let k = ((this.pointA.y+this.pointB.y)-(this.pointB.x*1 - this.pointA.x*1)*lambda)/2; // NOTICE: same as above
-			let C = this.pointA.x*this.pointB.x + this.pointA.y*this.pointB.y + (this.pointA.x*this.pointB.y*1.0 - this.pointA.y*this.pointB.x*1.0)*lambda;
-			let rA2 =  -C + h**2 + k**2;
-			let r = Math.sqrt(rA2);
-			return new Circle(h, k, r);;
-		//}
+		let h = ((this.pointA.x+this.pointB.x)-(this.pointA.y*1 - this.pointB.y*1)*lambda)/2; // NOTICE: I changed the sign of the second expression (the determinant solution) and it was correct
+		let k = ((this.pointA.y+this.pointB.y)-(this.pointB.x*1 - this.pointA.x*1)*lambda)/2; // NOTICE: same as above
+		let C = this.pointA.x*this.pointB.x + this.pointA.y*this.pointB.y + (this.pointA.x*this.pointB.y*1.0 - this.pointA.y*this.pointB.x*1.0)*lambda;
+		let rA2 =  -C + h**2 + k**2;
+		let r = Math.sqrt(rA2);
+		return new Circle(h, k, r);
 	}
 
 	findDistBtwPoints(){
@@ -289,6 +265,28 @@ console.log(testPointCircleGeoms01.circleFamilythru2Points(2));
 let testPointCircleGeoms02 = new PointCircleGeoms(new Point(20, 30), new Point(50, 30), 30);
 console.log("testPointCircleGeoms02", testPointCircleGeoms02);
 
+/*FIGURE, GENERAL PARAMETERS*/
+
+let paramsFigure = {
+	widthSVG:640,
+	heightSVG: 640,
+	marginTopFig: 20,
+	marginRightFig: 40,
+	marginBottomFig: 20,
+	marginLeftFig: 40,
+	geoms:{
+		points:{
+			pointA: new Point(175, 300, 'A'),
+			pointB: new Point(425, 200, 'B'),
+			middlePoint: null,
+			C1: null,
+			C2: null
+		},
+		segments:[
+			{points: null, dist: null, color: null},
+		],
+		r: 180},
+}
 
 export {paramsFigure};
 export {canvasScene};

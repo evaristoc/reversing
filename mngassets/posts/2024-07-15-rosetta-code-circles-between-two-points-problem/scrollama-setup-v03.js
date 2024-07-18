@@ -3,15 +3,13 @@
 //import {canvasScene} from './huffman-flow-field-setup-03.js';
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import {paramsFigure} from './parameters-setup-v03.js';
-import {Point} from './parameters-setup-v03.js';
+//import {Point} from './parameters-setup-v03.js';
 import {PointCircleGeoms} from './parameters-setup-v03.js';
 import {eventHandlers} from './scrollama-eventhandlers-v03.js';
-import {paramsFigure} from './parameters-setup-v03.js';
+//import {paramsFigure} from './parameters-setup-v03.js';
 
 window.onload = (event) => {
 
-    const geometries = new PointCircleGeoms(new Point(175, 300), new Point(425, 200), 180);
-    
     /*HELPER FUNCTIONS*/
 
     function getElement(parent, selector, all=false){
@@ -70,6 +68,8 @@ window.onload = (event) => {
 
     function init() {
  
+        const geometries = new PointCircleGeoms(paramsFigure.geoms.points.pointA, paramsFigure.geoms.points.pointB, paramsFigure.geoms.points.r);
+
        
         handleResize();
         //E: order of the functions is important!
