@@ -2,6 +2,7 @@
 //import {Hair} from './huffman-flow-field-setup-03.js';
 //import {canvasScene} from './huffman-flow-field-setup-03.js';
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+import {svg} from './parameters-setup-v03.js';
 import {paramsFigure} from './parameters-setup-v03.js';
 //import {Point} from './parameters-setup-v03.js';
 import {PointCircleGeoms} from './parameters-setup-v03.js';
@@ -10,7 +11,9 @@ import {eventHandlers} from './scrollama-eventhandlers-v03.js';
 
 window.onload = (event) => {
 
+    ////////////////////
     /*HELPER FUNCTIONS*/
+    ////////////////////
 
     function getElement(parent, selector, all=false){
         if(!all) {
@@ -35,17 +38,20 @@ window.onload = (event) => {
         
     }
 
-
     // scrollama event handlers
     function handleStepEnter(response) {
         eventHandlers.handleStepEnter01(response);
     }
 
-    /*SCROLLAMA SETUP AND ELEMENT GATHERING*/  
+    /////////////////////////////////////////
+    /*SCROLLAMA SETUP AND ELEMENT GATHERING*/
+    /////////////////////////////////////////
+
     const scrolly = getElementD3js(d3, "#stickyoverlay");
-    paramsFigure.container = eventHandlers.container = getElementD3js(scrolly, "figure");
-    paramsFigure.width = paramsFigure.container.node().offsetWidth;
-    paramsFigure.height = 200;
+    const container = getElementD3js(scrolly, "figure");
+    //paramsFigure.container = getElementD3js(scrolly, "figure");
+    //paramsFigure.width = paramsFigure.container.node().offsetWidth;
+    //paramsFigure.height = 200;
     const article = getElementD3js(scrolly, "div .articlepost");
     eventHandlers.step = getElementD3js(article, ".step", true);
 
@@ -66,11 +72,19 @@ window.onload = (event) => {
         scroller.resize();
     }
 
+
+    //////////
+    /* INIT */
+    //////////
+
     function init() {
  
         const geometries = new PointCircleGeoms(paramsFigure.geoms.points.pointA, paramsFigure.geoms.points.pointB, paramsFigure.geoms.points.r);
         geometries.middlePoint.name = 'M';
         paramsFigure.geoms.points.middlePoint = geometries.middlePoint;
+
+        // Append the SVG element.
+        container.append(svg.node());
 
         handleResize();
         //E: order of the functions is important!

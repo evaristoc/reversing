@@ -1,3 +1,6 @@
+/* IMPORTS */
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+
 /*CLASSES*/
 
 class canvasScene {
@@ -75,10 +78,10 @@ class Point {
 }
 
 class Line{
+	linename; //in case I want to implement a watcher of point name changes: https://stackoverflow.com/questions/43461248/ecmascript-6-watch-changes-to-class-properties
+
 	constructor(pointA, pointB, linename){
 		
-		linename; //in case I want to implement a watcher of point name changes: https://stackoverflow.com/questions/43461248/ecmascript-6-watch-changes-to-class-properties
-
 		//Because the approach and formulas, we need the points sorted by x values
 		if(pointA.x <= pointB.x){
 			this.pointA = pointA;
@@ -275,7 +278,8 @@ console.log("testPointCircleGeoms02", testPointCircleGeoms02);
 /*FIGURE, GENERAL PARAMETERS*/
 
 let paramsFigure = {
-	widthSVG:640,
+	container: null,
+	widthSVG: 640,
 	heightSVG: 640,
 	marginTopFig: 20,
 	marginRightFig: 40,
@@ -295,7 +299,47 @@ let paramsFigure = {
 		r: 180},
 }
 
+/* DATA GATHERING */
+
+
+/*FIGURE SETUP*/
+
+// Create the SVG container.
+const svg = d3.create("svg")
+    .attr("width", paramsFigure.widthSVG)
+    .attr("height", paramsFigure.heightSVG);
+
+
+// Declare the x (horizontal position) scale.
+const xScale = d3.scaleLinear()
+    .domain([0, paramsFigure.widthSVG])
+    .range([0, paramsFigure.widthSVG]);
+
+// Declare the y (vertical position) scale.
+const yScale = d3.scaleLinear()
+    .domain([0, paramsFigure.heightSVG])
+    .range([paramsFigure.heightSVG, 0]);
+
+let lines = svg
+		.append('g')
+		.attr('class', 'g-segments');
+
+lines
+	.selectAll('.g-segments')
+	.data(segments)
+	.enter()
+	.append("line")
+	.attr('x1', (d,i) => {return xScale(d[0].x)})
+	.attr('y1', (d,i) => {return yScale(d[0].y)})
+	.attr('x2', (d,i) => {return xScale(d[1].x)})
+	.attr('y2', (d,i) => {return yScale(d[1].y)})
+	.attr("fill", "none")
+	.attr("stroke", (d,i) => {return d[2]})
+	.attr("stroke-width", 1.);
+
+
 export {paramsFigure};
+export {svg};
 export {canvasScene};
 export {Point};
 export {PointCircleGeoms};

@@ -37,8 +37,6 @@ Ok, let's get this started!
 
 <section id='stickyoverlay'>
     <figure id="scrollfig">
-        <!--<p>0</p>-->
-        <div id="threejs-container">    </div>
     </figure>
     <div id="test"></div>
     <div class="articlepost">
