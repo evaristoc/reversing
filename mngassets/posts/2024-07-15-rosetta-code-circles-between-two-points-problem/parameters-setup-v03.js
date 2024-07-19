@@ -1,3 +1,5 @@
+/*CLASSES*/
+
 class canvasScene {
 	constructor(container, id){
 		this.container = container;
@@ -28,8 +30,6 @@ class canvasScene {
 		this.container.node().appendChild(this.canvasElem);
 	}
 }
-
-/*CLASSES*/
 class Point {
 	
 	name;
@@ -62,21 +62,23 @@ class Point {
 		this.position.y = y;
 	}
 
-	get nameget(){
-		return this.name;
-	}
+	//get getName(){
+	//	return this.name;
+	//}
 
-	set nameset(name){
-		this.name = name;
-	}
+	//set setName(name){
+	//	this.name = name;
+	//}
 	
 	draw(){
 	}
 }
 
 class Line{
-	constructor(pointA, pointB){
+	constructor(pointA, pointB, linename){
 		
+		linename; //in case I want to implement a watcher of point name changes: https://stackoverflow.com/questions/43461248/ecmascript-6-watch-changes-to-class-properties
+
 		//Because the approach and formulas, we need the points sorted by x values
 		if(pointA.x <= pointB.x){
 			this.pointA = pointA;
@@ -84,6 +86,11 @@ class Line{
 		}else{
 			this.pointA = pointB;
 			this.pointB = pointA;
+		}
+		if(linename && typeof linename == 'string'){
+			this.linename = linename;
+		}else if(this.pointA.name && this.pointB.name){
+			this.linename = this.pointA.name + this.pointB.name;
 		}
 		this.middlePoint = this.findMiddlePoint();
 		let a = this.findParamsNormal();

@@ -69,8 +69,9 @@ window.onload = (event) => {
     function init() {
  
         const geometries = new PointCircleGeoms(paramsFigure.geoms.points.pointA, paramsFigure.geoms.points.pointB, paramsFigure.geoms.points.r);
+        geometries.middlePoint.name = 'M';
+        paramsFigure.geoms.points.middlePoint = geometries.middlePoint;
 
-       
         handleResize();
         //E: order of the functions is important!
         //After rendering the canvas and before running the handler
