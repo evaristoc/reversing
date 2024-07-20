@@ -34,13 +34,17 @@ figure {
     /*background-color: #8a8a8a;*/
     background-color: #f3f3f3;
     z-index: 0;
-    opacity: 0;
+    opacity: 1.; /* E: was set to 0.0 in last Perlin noise post so a animation effect could be added for the entrance of the graphics */
 }
 
-div #threejs-container{
+/*
+E: see the use of this at the last post over Perlin noise
+
+#threejs-container{
   position: relative;
   top: 405px;
 }
+*/
 
 /*
 figure p {

@@ -3,7 +3,7 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 /*CLASSES*/
 
-class canvasScene {
+class Scene {
 	constructor(container, id){
 		this.container = container;
 		this.canvasElem = document.createElement('canvas');
@@ -278,9 +278,8 @@ console.log("testPointCircleGeoms02", testPointCircleGeoms02);
 /*FIGURE, GENERAL PARAMETERS*/
 
 let paramsFigure = {
-	container: null,
-	widthSVG: 640,
-	heightSVG: 640,
+	widthSVG: null,
+	heightSVG: null,
 	marginTopFig: 20,
 	marginRightFig: 40,
 	marginBottomFig: 20,
@@ -300,46 +299,52 @@ let paramsFigure = {
 }
 
 /* DATA GATHERING */
-
+let segments = [[{x:testPointCircleGeoms02.pointA.x,y:testPointCircleGeoms02.pointA.y},{x:testPointCircleGeoms02.pointB.x,y:testPointCircleGeoms02.pointB.y}]]
 
 /*FIGURE SETUP*/
 
 // Create the SVG container.
-const svg = d3.create("svg")
-    .attr("width", paramsFigure.widthSVG)
-    .attr("height", paramsFigure.heightSVG);
+function SVGCreate(width, height){
+	const svg = d3.create("svg")
+    .attr("width", width)
+    .attr("height", height);
 
 
-// Declare the x (horizontal position) scale.
-const xScale = d3.scaleLinear()
-    .domain([0, paramsFigure.widthSVG])
-    .range([0, paramsFigure.widthSVG]);
+	// Declare the x (horizontal position) scale.
+	const xScale = d3.scaleLinear()
+		.domain([0, width])
+		.range([0, height]);
 
-// Declare the y (vertical position) scale.
-const yScale = d3.scaleLinear()
-    .domain([0, paramsFigure.heightSVG])
-    .range([paramsFigure.heightSVG, 0]);
+	// Declare the y (vertical position) scale.
+	const yScale = d3.scaleLinear()
+		.domain([0, width])
+		.range([height, 0]);
 
-let lines = svg
-		.append('g')
-		.attr('class', 'g-segments');
+	let lines = svg
+			.append('g')
+			.attr('class', 'g-segments');
 
-lines
-	.selectAll('.g-segments')
-	.data(segments)
-	.enter()
-	.append("line")
-	.attr('x1', (d,i) => {return xScale(d[0].x)})
-	.attr('y1', (d,i) => {return yScale(d[0].y)})
-	.attr('x2', (d,i) => {return xScale(d[1].x)})
-	.attr('y2', (d,i) => {return yScale(d[1].y)})
-	.attr("fill", "none")
-	.attr("stroke", (d,i) => {return d[2]})
-	.attr("stroke-width", 1.);
+	lines
+		.selectAll('.g-segments')
+		.data(segments)
+		.enter()
+		.append("line")
+		.attr('x1', (d,i) => {return xScale(d[0].x)})
+		.attr('y1', (d,i) => {return yScale(d[0].y)})
+		.attr('x2', (d,i) => {return xScale(d[1].x)})
+		.attr('y2', (d,i) => {return yScale(d[1].y)})
+		.attr("fill", "none")
+		//.attr("stroke", (d,i) => {return d[2]})
+		.attr("stroke", "black")
+		.attr("stroke-width", 1.);
+	
+	return svg;
+}
+
 
 
 export {paramsFigure};
-export {svg};
-export {canvasScene};
+export {SVGCreate};
+export {Scene};
 export {Point};
 export {PointCircleGeoms};

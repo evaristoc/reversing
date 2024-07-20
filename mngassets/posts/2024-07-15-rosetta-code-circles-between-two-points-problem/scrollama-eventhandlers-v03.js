@@ -65,7 +65,7 @@ export let eventHandlers = {
         //this.baseContext.fillStyle = "#f3f3f3";
         //this.baseContext.fill();
     },
-    handleStepEnter01 : function(response){
+    handleStepEnter01 : function(svg){
         // response = { element, direction, index }
 
         /*
@@ -85,29 +85,26 @@ export let eventHandlers = {
         Another way to define the variables?
         */
 
-        this.step.classed('is-active', function (d, i) { return i === response.index; });
+        let zelf = this;
+
+        return function(response){
+            zelf.step.classed('is-active', function (d, i) { return i === response.index; });
 
      
         
-        //E - from https://codepen.io/GreenSock/pen/bGbQwo
-        //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
-        if(response.index === 0){
-            
-           
-            function tweener() {
-            }        
-            tweener();
-
-        }
-        if(response.index === 1){
-            function strokes(hairs, otherHairs){
+            //E - from https://codepen.io/GreenSock/pen/bGbQwo
+            //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
+            if(response.index === 1){
+            }
+            if(response.index === 2){
+            }
+            if(response.index === 3){
+            }
+            if(response.index === 7){
+            }
+            if(response.index === 8){
             }
         }
-        if(response.index === 3){
-        }
-        if(response.index === 7){
-        }
-        if(response.index === 8){
-        }
+
     }
 }

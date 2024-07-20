@@ -1,13 +1,16 @@
 //import {hello} from './huffman-flow-field-setup.js';
 //import {Hair} from './huffman-flow-field-setup-03.js';
 //import {canvasScene} from './huffman-flow-field-setup-03.js';
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-import {svg} from './parameters-setup-v03.js';
+//import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+//import {svg} from './parameters-setup-v03.js';
+import {SVGCreate} from './parameters-setup-v03.js';
 import {paramsFigure} from './parameters-setup-v03.js';
 //import {Point} from './parameters-setup-v03.js';
 import {PointCircleGeoms} from './parameters-setup-v03.js';
 import {eventHandlers} from './scrollama-eventhandlers-v03.js';
 //import {paramsFigure} from './parameters-setup-v03.js';
+
+SVGCreate(paramsFigure.widthSVG, paramsFigure.heightSVG);
 
 window.onload = (event) => {
 
@@ -38,10 +41,10 @@ window.onload = (event) => {
         
     }
 
-    // scrollama event handlers
-    function handleStepEnter(response) {
-        eventHandlers.handleStepEnter01(response);
-    }
+    //// scrollama event handlers
+    //function handleStepEnter(response) {
+    //    eventHandlers.handleStepEnter01(response, svg);
+    //}
 
     /////////////////////////////////////////
     /*SCROLLAMA SETUP AND ELEMENT GATHERING*/
@@ -49,9 +52,12 @@ window.onload = (event) => {
 
     const scrolly = getElementD3js(d3, "#stickyoverlay");
     const container = getElementD3js(scrolly, "figure");
+    //const container = getElementD3js(d3, "#figuretest");
+    
+    //const container = getElementD3js(scrolly, "svg");
     //paramsFigure.container = getElementD3js(scrolly, "figure");
-    //paramsFigure.width = paramsFigure.container.node().offsetWidth;
-    //paramsFigure.height = 200;
+    paramsFigure.widthSVG = container.node().offsetWidth;
+    paramsFigure.heightSVG = 200;
     const article = getElementD3js(scrolly, "div .articlepost");
     eventHandlers.step = getElementD3js(article, ".step", true);
 
@@ -83,8 +89,16 @@ window.onload = (event) => {
         geometries.middlePoint.name = 'M';
         paramsFigure.geoms.points.middlePoint = geometries.middlePoint;
 
+        //console.log(svg);
+        let svg = SVGCreate(paramsFigure.widthSVG, paramsFigure.heightSVG);
         // Append the SVG element.
-        container.append(svg.node());
+        // E: It was not appended until: https://stackoverflow.com/questions/25516078/d3-create-object-without-appending
+        container.node().appendChild(svg.node());
+        //container.append(()=> svg.node);
+
+        
+        /* INIT IMAGE at eventHandlers */
+        let handleStepEnter = eventHandlers.handleStepEnter01(svg);
 
         handleResize();
         //E: order of the functions is important!
