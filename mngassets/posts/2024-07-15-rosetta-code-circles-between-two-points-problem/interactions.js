@@ -11,6 +11,12 @@ import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import {Point} from './data.js';
 import {PointCircleGeoms} from './data.js';
 
+// TO KEEP IN MIND:
+// In this project I am modifying Point properties so it can accept drawing attributes
+// but I would like to keep Point class as defined in data for future projects
+// 
+// The whole idea is to keep it re-usable and simple
+
 
 //REMEMBER we are using d3.js to handle the DOM
 //TODO:
