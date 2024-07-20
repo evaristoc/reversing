@@ -47,6 +47,7 @@ Ok, let's get this started!
         </div>
         <div class='step' data-step='2'>
             <div class="explain">
+            <p></p>
             </div>
         </div>
         <div class='step' data-step='3'>
@@ -84,7 +85,7 @@ Ok, let's get this started!
 <script src="{{ site.baseurl }}{% link mngassets/vendor/js/D3js/v7.8.5/d3.v7.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link mngassets/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
-<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-07-15-rosetta-code-circles-between-two-points-problem/parameters-setup-v03.js %}"></script>
+
 <script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-07-15-rosetta-code-circles-between-two-points-problem/scrollama-setup-v03.js %}"></script>
 
 

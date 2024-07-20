@@ -1,38 +1,5 @@
-/* IMPORTS */
-import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
+/* SCHEMA */
 
-/*CLASSES*/
-
-class Scene {
-	constructor(container, id){
-		this.container = container;
-		this.canvasElem = document.createElement('canvas');
-		this.scene = this.canvasElem.getContext('2d');
-		if(id){
-			this.canvasElem.setAttribute('id', id);
-		}
-
-	}
-
-	setDimensionsD3(w,h){
-		if(w){
-			this.width = w;
-		}else{
-			this.width = this.container.node().offsetWidth;
-		}
-		if(h){
-			this.height = h;
-		}
-		this.canvasElem.width = this.width;
-		this.canvasElem.height = this.height;
-
-
-	}
-
-	appendCanvasD3(){
-		this.container.node().appendChild(this.canvasElem);
-	}
-}
 class Point {
 	
 	name;
@@ -268,83 +235,21 @@ class PointCircleGeoms extends Line{
 
 }
 
-let testPointCircleGeoms01 = new PointCircleGeoms(new Point(20, 30), new Point(50, 30), null);
-console.log("testPointCircleGeoms01", testPointCircleGeoms01);
-console.log(testPointCircleGeoms01.circleFamilythru2Points(2));
+let geometries = {
+    // points:{
+    //     pointA: new Point(175, 300, 'A'),
+    //     pointB: new Point(425, 300, 'B'),
+    //     middlePoint: null,
+    //     C1: null,
+    //     C2: null
+    // },
+    //each point: {x:value, y:value, name: value}
+    points:[], 
+    //d3 works with list indexes so each {names:[], extremes:[], dists:[], colors:[]} should be ordered accordingly; 
+    //each extremes should be [{x:value, y:value}, {x:value, y:value}]
+    segments:[],
+    r: 180};
 
-let testPointCircleGeoms02 = new PointCircleGeoms(new Point(20, 30), new Point(50, 30), 30);
-console.log("testPointCircleGeoms02", testPointCircleGeoms02);
-
-/*FIGURE, GENERAL PARAMETERS*/
-
-let paramsFigure = {
-	widthSVG: null,
-	heightSVG: null,
-	marginTopFig: 20,
-	marginRightFig: 40,
-	marginBottomFig: 20,
-	marginLeftFig: 40,
-	geoms:{
-		points:{
-			pointA: new Point(175, 300, 'A'),
-			pointB: new Point(425, 200, 'B'),
-			middlePoint: null,
-			C1: null,
-			C2: null
-		},
-		segments:[
-			{points: null, dist: null, color: null},
-		],
-		r: 180},
-}
-
-/* DATA GATHERING */
-let segments = [[{x:testPointCircleGeoms02.pointA.x,y:testPointCircleGeoms02.pointA.y},{x:testPointCircleGeoms02.pointB.x,y:testPointCircleGeoms02.pointB.y}]]
-
-/*FIGURE SETUP*/
-
-// Create the SVG container.
-function SVGCreate(width, height){
-	const svg = d3.create("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-
-	// Declare the x (horizontal position) scale.
-	const xScale = d3.scaleLinear()
-		.domain([0, width])
-		.range([0, height]);
-
-	// Declare the y (vertical position) scale.
-	const yScale = d3.scaleLinear()
-		.domain([0, width])
-		.range([height, 0]);
-
-	let lines = svg
-			.append('g')
-			.attr('class', 'g-segments');
-
-	lines
-		.selectAll('.g-segments')
-		.data(segments)
-		.enter()
-		.append("line")
-		.attr('x1', (d,i) => {return xScale(d[0].x)})
-		.attr('y1', (d,i) => {return yScale(d[0].y)})
-		.attr('x2', (d,i) => {return xScale(d[1].x)})
-		.attr('y2', (d,i) => {return yScale(d[1].y)})
-		.attr("fill", "none")
-		//.attr("stroke", (d,i) => {return d[2]})
-		.attr("stroke", "black")
-		.attr("stroke-width", 1.);
-	
-	return svg;
-}
-
-
-
-export {paramsFigure};
-export {SVGCreate};
-export {Scene};
 export {Point};
 export {PointCircleGeoms};
+export {geometries};

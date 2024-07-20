@@ -1,14 +1,8 @@
-//import {hello} from './huffman-flow-field-setup.js';
-//import {Hair} from './huffman-flow-field-setup-03.js';
-//import {canvasScene} from './huffman-flow-field-setup-03.js';
-//import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
-//import {svg} from './parameters-setup-v03.js';
-import {SVGCreate} from './parameters-setup-v03.js';
-import {paramsFigure} from './parameters-setup-v03.js';
-//import {Point} from './parameters-setup-v03.js';
-import {PointCircleGeoms} from './parameters-setup-v03.js';
-import {eventHandlers} from './scrollama-eventhandlers-v03.js';
-//import {paramsFigure} from './parameters-setup-v03.js';
+/* IMPORTS */
+import {SVGCreate} from './scene.js';
+import {paramsFigure} from './scene.js';
+import {geometries} from './data.js';
+import {eventHandlers} from './interactions.js';
 
 SVGCreate(paramsFigure.widthSVG, paramsFigure.heightSVG);
 
@@ -85,9 +79,9 @@ window.onload = (event) => {
 
     function init() {
  
-        const geometries = new PointCircleGeoms(paramsFigure.geoms.points.pointA, paramsFigure.geoms.points.pointB, paramsFigure.geoms.points.r);
-        geometries.middlePoint.name = 'M';
-        paramsFigure.geoms.points.middlePoint = geometries.middlePoint;
+        //const geometries = new PointCircleGeoms(paramsFigure.geoms.points.pointA, paramsFigure.geoms.points.pointB, paramsFigure.geoms.points.r);
+        //geometries.middlePoint.name = 'M';
+        //paramsFigure.geoms.points.middlePoint = geometries.middlePoint;
 
         //console.log(svg);
         let svg = SVGCreate(paramsFigure.widthSVG, paramsFigure.heightSVG);
@@ -98,7 +92,7 @@ window.onload = (event) => {
 
         
         /* INIT IMAGE at eventHandlers */
-        let handleStepEnter = eventHandlers.handleStepEnter01(svg);
+        let handleStepEnter = eventHandlers.handleStepEnter01(svg, paramsFigure, geometries);
 
         handleResize();
         //E: order of the functions is important!
