@@ -42,28 +42,33 @@ Ok, let's get this started!
     <div class="articlepost">
         <div class='step' data-step='1'>
             <div class="explain">
-            <p>Let's draw two points, <strong>A</strong> and <strong>B</strong> in any cartesian plane and each defined by their <strong>(x,y)</strong> coordinates.</p>
+            <p>Let's draw two points, <strong>A</strong> and <strong>B</strong> at any place of a cartesian plane, each defined by their <strong>(x,y)</strong> coordinates, being <strong>d</strong> > 0 the distance between those two points.</p>
           </div>
         </div>
         <div class='step' data-step='2'>
             <div class="explain">
-            <p></p>
+                <p>(<i>To keep it simple, we have assigned the same y-coordinate to both points</i>)</p>
             </div>
         </div>
         <div class='step' data-step='3'>
             <div class="explain">
+                <p>Now let's draw a segment between our points A and B. Let's call it the segment <strong>AB</strong></p>
             </div>
         </div>
-<div class='step' data-step='4'>
+        <div class='step' data-step='4'>
             <div class="explain">
+                <p>A circle could be defined as "<strong><i>all the points from the same distance called the</i> radius <i>to a point called the</i> center</strong>". That means that in order for our points A and B to be part of a circle, they have to be at a distance of radius <i>r</i> to the center of that circle.</p>
+                <p>Under the previously stated conditions, how many circles would contain our two points if we don't have a specific radius?</p>
             </div>
-</div>
+        </div>
         <div class='step' data-step='5'>
             <div class="explain">
+                <p>Here one example: a circle of radius equal to the half of the distance between A and B, with the middle point <strong>M</strong> between A and B as its center.</p>
             </div>
         </div>
         <div class='step' data-step='6'>
             <div class="explain">
+                <p>But there are other circles, all with a radius <i>r</i> larger than the half of the lenght of segment <strong>AB</strong></p>
             </div>
         </div>        
         <div class='step' data-step='7'>
@@ -71,8 +76,13 @@ Ok, let's get this started!
             </div>
         </div>
         <div class='step' data-step='8'>
+            <div class="explain">
+                <p>Here there are some. Notice that all the circles touch our two points.</p>
+                <p>Furthermore, they are not the only ones: we can draw some circles in the opposite direction.</p>
+            </div>
         </div>
         <div class='step' data-step='9'>
+            <p>We can draw infinite number of circles of infinite radius, <i>as long as the radius is equal or larger than the half distance between A and B.</i></p>
         </div>
     </div>
     <br>

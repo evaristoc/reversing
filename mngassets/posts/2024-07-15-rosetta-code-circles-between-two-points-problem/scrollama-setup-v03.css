@@ -46,6 +46,11 @@ E: see the use of this at the last post over Perlin noise
 }
 */
 
+svg{
+  position: relative;
+  top: 200px;
+}
+
 /*
 figure p {
     text-align: center;
@@ -121,9 +126,9 @@ figure p {
     background-color: #3b3b3b;
 }
 
-canvas {
+/*canvas {
     width : 100%;
-    /*position:absolute;*/
+    position:absolute;
     position:relative;
     top: -200px;
-}
+}*/

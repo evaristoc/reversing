@@ -1,8 +1,12 @@
+////////////
 /* SCHEMA */
+////////////
 
 class Point {
 	
 	name;
+
+
 	
 	constructor(x, y, name){
 		this.position = {
@@ -83,10 +87,10 @@ class Line{
 
 }
 
-class Circle extends Point{
+class Circle{
 
-	constructor(x, y, r){
-		super(x, y);
+	constructor(point, r){
+		this.center = point;
 		this.r = r;
 	}
 
@@ -161,7 +165,7 @@ class PointCircleGeoms extends Line{
 		let C = this.pointA.x*this.pointB.x + this.pointA.y*this.pointB.y + (this.pointA.x*this.pointB.y*1.0 - this.pointA.y*this.pointB.x*1.0)*lambda;
 		let rA2 =  -C + h**2 + k**2;
 		let r = Math.sqrt(rA2);
-		return new Circle(h, k, r);
+		return new Circle(new Point(h, k), r);
 	}
 
 	findDistBtwPoints(){
@@ -248,8 +252,17 @@ let geometries = {
     //d3 works with list indexes so each {names:[], extremes:[], dists:[], colors:[]} should be ordered accordingly; 
     //each extremes should be [{x:value, y:value}, {x:value, y:value}]
     segments:[],
-    r: 180};
+    circles:[],
+    circlesFam:[],
+    r: 180
+};
 
+
+
+/////////////
+/* EXPORTS */
+/////////////
 export {Point};
+export {Circle};
 export {PointCircleGeoms};
 export {geometries};

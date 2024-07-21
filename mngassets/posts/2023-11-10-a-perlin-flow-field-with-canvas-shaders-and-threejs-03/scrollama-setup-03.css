@@ -118,8 +118,8 @@ figure p {
 }
 
 canvas {
-    width : 100%;
-    /*position:absolute;*/
-    position:relative;
-    top: -200px;
+  width : 100%;
+  /*position:absolute;*/
+  position:relative;
+  top: -200px;
 }

@@ -4,8 +4,6 @@ import {paramsFigure} from './scene.js';
 import {geometries} from './data.js';
 import {eventHandlers} from './interactions.js';
 
-SVGCreate(paramsFigure.widthSVG, paramsFigure.heightSVG);
-
 window.onload = (event) => {
 
     ////////////////////
@@ -45,13 +43,16 @@ window.onload = (event) => {
     /////////////////////////////////////////
 
     const scrolly = getElementD3js(d3, "#stickyoverlay");
+
+    //TODO: check this out...
     const container = getElementD3js(scrolly, "figure");
+    eventHandlers.container = container;
     //const container = getElementD3js(d3, "#figuretest");
     
     //const container = getElementD3js(scrolly, "svg");
     //paramsFigure.container = getElementD3js(scrolly, "figure");
     paramsFigure.widthSVG = container.node().offsetWidth;
-    paramsFigure.heightSVG = 200;
+    paramsFigure.heightSVG = window.innerHeight/1.3;
     const article = getElementD3js(scrolly, "div .articlepost");
     eventHandlers.step = getElementD3js(article, ".step", true);
 
@@ -65,7 +66,7 @@ window.onload = (event) => {
     // TODO - should stay here!
     function handleResize() {
         
-        //eventHandlers.updateSizeStepElements();
+        eventHandlers.updateSizeStepElements();
         //eventHandlers.updateSizeCanvas();
 
     // tell scrollama to update new element dimensions
@@ -84,15 +85,15 @@ window.onload = (event) => {
         //paramsFigure.geoms.points.middlePoint = geometries.middlePoint;
 
         //console.log(svg);
-        let svg = SVGCreate(paramsFigure.widthSVG, paramsFigure.heightSVG);
+        let svgCreate = SVGCreate(paramsFigure.widthSVG, paramsFigure.heightSVG);
         // Append the SVG element.
         // E: It was not appended until: https://stackoverflow.com/questions/25516078/d3-create-object-without-appending
-        container.node().appendChild(svg.node());
+        container.node().appendChild(svgCreate.svg.node());
         //container.append(()=> svg.node);
 
         
         /* INIT IMAGE at eventHandlers */
-        let handleStepEnter = eventHandlers.handleStepEnter01(svg, paramsFigure, geometries);
+        let handleStepEnter = eventHandlers.handleStepEnter01(svgCreate, paramsFigure, geometries);
 
         handleResize();
         //E: order of the functions is important!

@@ -1,8 +1,12 @@
+/////////////
 /* IMPORTS */
+/////////////
+
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
+///////////
 /*CLASSES*/
-
+///////////
 class Scene {
 	constructor(container, id){
 		this.container = container;
@@ -41,7 +45,9 @@ class Scene {
 //let testPointCircleGeoms02 = new PointCircleGeoms(new Point(20, 30), new Point(50, 30), 30);
 //console.log("testPointCircleGeoms02", testPointCircleGeoms02);
 
+//////////////////////////////
 /*FIGURE, GENERAL PARAMETERS*/
+//////////////////////////////
 
 let paramsFigure = {
 	widthSVG: null,
@@ -52,7 +58,9 @@ let paramsFigure = {
 	marginLeftFig: 40
 }
 
+////////////////
 /*FIGURE SETUP*/
+////////////////
 
 // Create the SVG container.
 function SVGCreate(width, height){
@@ -64,11 +72,35 @@ function SVGCreate(width, height){
    //TO KEEP IN MIND: for this case I will 'dispacht' distinctive groups defined by geometry / svg shape
    // this might not be ideal if elements from different groups require to be animated simultaneously,
    // but it might work for this project 
-   return svg;
+
+    let symbols = svg
+    .append('g')
+    .attr('class', 'g-symbols');
+
+    let texts = svg
+        .append('g')
+        .attr('class', 'g-texts');
+    
+    let lines = svg
+        .append('g')
+        .attr('class', 'g-segments');
+
+    let circles = svg
+        .append('g')
+        .attr('class', 'g-circles');
+
+    let arcs = svg
+        .append('g')
+        .attr('class', 'g-arcs');
+
+
+   return {svg, symbols, texts, lines, circles, arcs};
 }
 
 
-
+/////////////
+/* EXPORTS */
+/////////////
 export {paramsFigure};
 export {SVGCreate};
 export {Scene};
