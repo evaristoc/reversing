@@ -330,6 +330,56 @@ let eventHandlers = {
                         .attr('stroke-width', 0.0)
                         .remove();
             }
+            if(response.index === 14){
+                //let MC = new Line(geometries.circlesFam[8].center, ABgeo.middlePoint, 'MC');
+                let AM = new Line(ABgeo.pointA, ABgeo.middlePoint, 'AM');
+                let radius = new Line(ABgeo.pointA, geometries.circlesFam[8].center, 'radius');
+                let newSegments = [AM, radius];
+
+                svgCreate.lines
+                    .selectAll('.g-segments')
+                    .data(newSegments)
+                    .enter()
+                    .append("line")
+                    .attr('x1', (d) => {return xScale(d.pointA.x)})
+                    .attr('y1', (d) => {return yScale(d.pointA.y)})
+                    .attr('x2', (d) => {return xScale(d.pointB.x)})
+                    .attr('y2', (d) => {return yScale(d.pointB.y)})
+                    .attr("fill", "none")
+                    //.attr("stroke", (d,i) => {return d[2]})
+                    .transition()
+                    .ease(d3.easeLinear)
+                    .duration(2000)
+                    .delay((d, i) => i * 100)
+                    .attr('stroke-width', 1.0)   
+                    .attr("stroke", "blue")
+                    .attr("stroke-width", 2.5);
+
+            }
+            if(response.index === 16){
+                let MC = new Line(ABgeo.middlePoint, geometries.circlesFam[8].center, 'MC');
+                let newSegments = [MC];
+
+                svgCreate.lines
+                    .selectAll('.g-segments')
+                    .data(newSegments)
+                    .enter()
+                    .append("line")
+                    .attr('x1', (d) => {return xScale(d.pointA.x)})
+                    .attr('y1', (d) => {return yScale(d.pointA.y)})
+                    .attr('x2', (d) => {return xScale(d.pointB.x)})
+                    .attr('y2', (d) => {return yScale(d.pointB.y)})
+                    .attr("fill", "none")
+                    //.attr("stroke", (d,i) => {return d[2]})
+                    .transition()
+                    .ease(d3.easeLinear)
+                    .duration(2000)
+                    .delay((d, i) => i * 100)
+                    .attr('stroke-width', 1.0)   
+                    .attr("stroke", "green")
+                    .attr("stroke-width", 2.5);
+
+            }
         }
 
     }

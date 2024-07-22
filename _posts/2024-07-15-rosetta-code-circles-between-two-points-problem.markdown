@@ -58,7 +58,7 @@ Ok, let's get this started!
         <div class='step' data-step='4'>
             <div class="explain">
                 <p>A circle could be defined as "<strong><i>all the points from the same distance called the</i> radius <i>to a point called the</i> center</strong>". That means that in order for our points A and B to be part of a circle, they have to be at a distance of radius <i>r</i> to the center of that circle.</p>
-                <p>Under the previously stated conditions, how many circles would contain our two points if we don't specify any radius?</p>
+                <p>Under the previously stated conditions, how many circles would contain our two points if we don't specify a radius?</p>
             </div>
         </div>
         <div class='step' data-step='5'>
@@ -87,44 +87,44 @@ Ok, let's get this started!
         </div>
         <div class='step' data-step='10'>
             <div class="explain">        
-                <p>And that is not all: we can include the circles in the opposite direction too.</p>
+                <p>And there is more: we can include the circles in the opposite direction too.</p>
                 <p>All of those circles form a <i>family of circles</i> containing our points A and B.</p>
             </div>
         </div>
         <div class='step' data-step='11'>
             <div class="explain">        
-                <p>One peculiarity of this circle family is that their centers are <i>colinear</i> over the perpendicular to the segment AB passing through the middle point M.</p>
+                <p>One peculiarity of this circle family is that their centers are <i>colinear</i>: they also belong to the perpendicular to the segment AB that passes through the middle point M.</p>
             </div>
         </div>
         <div class='step' data-step='12'>
             <div class="explain">        
-                <p>Now, the exercise gives us the two points and a radius. Let's say we got the radius of the following ones...</p>
+                <p>Now, the exercise gives us the two points and a radius. Let's say we got a radius corresponding to the following circles.</p>
             </div>
         </div>
         <div class='step' data-step='13'>
             <div class="explain">        
-                <p>... but we still don't know the coordinates of their centers, so we are not able to provide a numeric (programmatic) solution.</p>
+                <p>But because <i>we still don't know the coordinates of their centers</i> we are not able to provide a numeric (programmatic) solution :(.</p>
+                <p>So another way to pose part of our problem would be: <strong>How do we code a script that calculates the cooordinates of the centers of any of the circles of the corresponding circle family, given a radius and the two points?</strong></p>
             </div>
         </div>
         <div class='step' data-step='14'>
             <div class="explain">        
-                <p>What we know is that they are at a distance equals to the given radius <i>r</i>.</p>
-                <p>We have also learned that they are colinear to the middle point M. And because we know the length of the segment AB, we can also calculate the distance between A or B to M, which is... the half :).</p>
+                <p>Let's see what we have so far: the two points and the radius are given. We have also learned that the centers are colinear to the tangent that passes through the middle point M. And because we know the length of the segment AB and the radius, we can also calculate some distances.</p>
             </div>
         </div>
         <div class='step' data-step='15'>
             <div class="explain">        
-                <p>Actually, M is at the half distance between the centers of our two circles of radius <i>r</i>. BUT notice that the centers are at distance r to A and B but not to M.</p>
-                <p>The good news are: we have enough information to calculate how far is M to the center of any of the circles. Let's select the point A and let's try to get the center of the inferior circle.</p>
+                <!--<p>Another thing to keep in mind is that M is at the half distance between the centers of our two concerning circles. Notice though that although the centers are at distance <i>r</i> to A and B, they are not to the same distance to M.</p>-->
+                <p>The good news are: we have enough information to calculate how far is M to the center of any of the circles. Let's select the point A and let's draw some useful distances into the superior circle of the image as an example.</p>
             </div>
         </div>
         <div class='step' data-step='16'>
-            <div class="explain">        
+            <div class="explain">
+                <p>I hope you will agree with me that the shape we have highlighted ressembles a side and hypotenuse of a rectangular triangle, which allows us to find a solution to the distance between M and one of the centers using Pitagoras.</p>   
             </div>
         </div>
         <div class='step' data-step='17'>
             <div class="explain">        
-                <p>I hope you will agree with me that the shape we have highlighted is a rectangular triangle, which allows us to find a solution to the distance between M and one of the centers using Pitagoras.</p>
             </div>
         </div>
         <div class='step' data-step='18'>
@@ -135,7 +135,7 @@ Ok, let's get this started!
         </div>
         <div class='step' data-step='19'>
             <div class="explain">        
-                <p>This is a <i>rotation</i> of the geometry. Here we won't get the right solution by adding or substracting the found distances to existing coordinates. We need to find the <i>projection</i> of the rotated segments into the corresponding coordinates. And that requires some trigonometry. In fact, for a generalizable solution we need to consider the calculation of those projections.</p>
+                <p>This is a <i>rotation</i> of the geometry. Here we won't get the right solution by simply adding or substracting the found distances to existing coordinates. We need to find the <i>projection</i> of the rotated segments into the corresponding coordinates. And that requires some trigonometry. In fact, for a generalizable solution we need to consider the calculation of those projections.</p>
                 <p></p>
             </div>
         </div>

@@ -102,7 +102,7 @@ class Circle{
 //E: CHECK: https://stackoverflow.com/questions/29879267/es6-class-multiple-inheritance (super cool!!!)
 class PointCircleGeoms extends Line{
 	
-	centerbasedonTrig;
+	centerProjection;
 	distPoint2Center;
 
 	constructor(pointA, pointB, r){
@@ -111,7 +111,7 @@ class PointCircleGeoms extends Line{
 		this.distBtwPoints = this.findDistBtwPoints();
 		if(this.r){
 			this.distPoint2Center = this.findDistPoint2Center();
-			this.centerbasedonTrig = this.findCenterbasedonTrig();
+			this.centerProjection = this.findCenterByProjection();
 		}
 	}
 	
@@ -131,7 +131,7 @@ class PointCircleGeoms extends Line{
 		this.r = r;
 		if(this.r > 0){
 			this.distPoint2Center = this.findDistPoint2Center();
-			this.centerbasedonTrig = this.findCenterbasedonTrig();
+			this.centerProjection = this.findCenterByProjection();
 		}
 	}
 
@@ -179,64 +179,14 @@ class PointCircleGeoms extends Line{
 	}
 	
 
-	findCenterbasedonTrig(){ //here we are actually using the parametric equation of the circle
-		let asinT = Math.asin(this.distBtwPoints/2/this.r);
-		let theta1 = Math.PI - this.atanT - asinT;
-		let theta2 = Math.PI - this.atanT + asinT;
-		let theta3 = this.atanT + asinT;
-		let theta4 = this.atanT - asinT;
-		let theta5 = Math.PI + this.atanT + asinT;
-		let theta6 = Math.PI + this.atanT - asinT;
-		let theta7 = -this.atanT - asinT;
-		let theta8 = -this.atanT + asinT;
-	
-		let angls = [ this.atanT, asinT, this.atanT*57.30, this.asinT*57.30];
-		let calAngles = {'theta1 = Math.PI - atanT - asinT': theta1, 
-						'theta2 = Math.PI - atanT + asinT': theta2, 
-						'theta3 = atanT + asinT': theta3, 
-						'theta4 = atanT - asinT': theta4, 
-						'theta5 = Math.PI + atanT + asinT': theta5, 
-						'theta6 = Math.PI + atanT - asinT': theta6, 
-						'theta7 = -atanT - asinT': theta7, 
-						'theta8 = -atanT + asinT': theta8};
-	
-		//TODO: Probably a test based on below?
-		console.log(this.atanT > asinT, this.atanT == asinT, this.atanT > Math.PI/2, asinT > Math.PI/2, this.atanT > 0, asinT > 0, this.pointA.y == this.pointB.y);
+	findCenterByProjection(){ //here we are actually using the parametric equation of the circle
 		let xA, yA, xB, yB;
-		if(this.atanT > 0 && this.pointA.y != this.pointB.y){
-			console.log('FIRST COMPARISON')
-			console.log(angls);
-			console.log(calAngles);
-			console.log(Object.values(calAngles).map(a=>Math.sin(a)));
-			console.log(Object.values(calAngles).map(a=>Math.cos(a)));
-			xA = this.pointA.x -this. r*Math.cos(theta3); //atanT + asinT
-			yA = this.pointA.y - this.r*Math.sin(theta3); //atanT + asinT
-			xB = this.pointB.x + this.r*Math.cos(theta3); //atanT + asinT
-			yB = this.pointA.y + this.r*Math.sin(theta4); //atanT - asinT
-		}else if(this.pointA.y == this.pointB.y){
-			console.log('SECOND COMPARISON')
-			console.log(angls);
-			console.log(calAngles);
-			console.log(Object.values(calAngles).map(a=>Math.sin(a)));
-			console.log(Object.values(calAngles).map(a=>Math.cos(a)));
-			xA = this.pointA.x - this.r*Math.cos(theta4); //atanT - asinT
-			yA = this.pointA.y - this.r*Math.sin(theta3); //atanT + asinT
-			xB = this.pointB.x + this.r*Math.cos(theta4); //atanT - asinT
-			yB = this.pointA.y + this.r*Math.sin(theta4); //atanT - asinT       
-		}else if(this.atanT <= 0 && this.pointA.y != this.pointB.y){
-			console.log('THIRD COMPARISON')
-			console.log(angls);
-			console.log(calAngles);
-			console.log(Object.values(calAngles).map(a=>Math.sin(a)));
-			console.log(Object.values(calAngles).map(a=>Math.cos(a)));
-			xA = this.pointA.x - this.r*Math.cos(theta4); //atanT - asinT
-			yA = this.pointA.y -this. r*Math.sin(theta4); //atanT - asinT
-			xB = this.pointB.x + this.r*Math.cos(theta4); //atanT - asinT
-			yB = this.pointA.y + this.r*Math.sin(theta3); //atanT + asinT     
-		}
-
+        xA = this.middlePoint.x - this.distPoint2Center*Math.cos(this.atanT);
+        yA = this.middlePoint.y - this.distPoint2Center*Math.sin(this.atanT);
+        xB = this.middlePoint.x + this.distPoint2Center*Math.cos(this.atanT);
+        yB = this.middlePoint.y + this.distPoint2Center*Math.sin(this.atanT);
 	  
-		return [[new Circle(xA, yA, this.r), new Circle(xB, yB, this.r)], {atanT: this.atanT, asinT: asinT}];
+		return [[new Circle(xA, yA, this.r), new Circle(xB, yB, this.r)], {atanT: this.atanT}];
 	}
 
 }
