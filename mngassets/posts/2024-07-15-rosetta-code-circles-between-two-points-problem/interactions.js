@@ -16,6 +16,7 @@ I am also using this file to set the non-exisisting data required for the animat
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 import {PointCircleGeoms} from './data.js';
 import {Circle} from './data.js';
+import {Line} from './data.js';
 import {Point} from './data.js';
 // TO KEEP IN MIND:
 // In this project I am modifying Point properties so it can accept drawing attributes
@@ -99,10 +100,13 @@ let eventHandlers = {
         geometries.segments.push(ABgeo);
         geometries.circles.push(new Circle(ABgeo.middlePoint, ABgeo.distBtwPoints/2) );
 
-        for(let i = -10; i < 10; i++){
-            geometries.circlesFam.push(ABgeo.circleFamilythru2Points(i));
+        let counter = 0;
+        for(let i = -9; i < 10; i++){
+            let c = ABgeo.circleFamilythru2Points(i);
+            c.circleName = counter.toString();
+            geometries.circlesFam.push(c);
+            counter++;
         }
-        console.log(geometries.circlesFam);
 
 
         /* SCENE INITIALIZATION */        
@@ -120,33 +124,6 @@ let eventHandlers = {
 ;
 
 
-        svgCreate.lines
-            .selectAll('.g-segments')
-            .data(geometries.segments)
-            .enter()
-            .append("line")
-            .attr('x1', (d) => {return xScale(d.pointA.x)})
-            .attr('y1', (d) => {return yScale(d.pointA.y)})
-            .attr('x2', (d) => {return xScale(d.pointA.x)})
-            .attr('y2', (d) => {return yScale(d.pointA.y)})
-            .attr("fill", "none")
-            //.attr("stroke", (d,i) => {return d[2]})
-            .attr("stroke", "black")
-            .attr("stroke-width", 1.);
-
-        svgCreate.circles
-            .selectAll('.g-circles')
-            .data(geometries.circles)
-            .enter()
-            .append("circle")
-            .attr('r', (d)=>{return d.r})
-            .attr('cx', (d)=>{return d.center.x})
-            .attr('cy', (d)=>{return d.center.y})
-            .attr("fill", "none")
-            .attr("stroke", "black")
-            .attr("stroke-width", 0.);
-
-
         /* SCENE HANDLERS (AS PASSED FUNCTION) */
         
         let zelf = this;
@@ -158,6 +135,7 @@ let eventHandlers = {
             //E - from https://codepen.io/GreenSock/pen/bGbQwo
             //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
             if(response.index === 0){
+
                 svgCreate.symbols.selectAll('path').remove();
                 svgCreate.texts.selectAll('text').remove();
                 
@@ -198,10 +176,23 @@ let eventHandlers = {
                         .duration(8000)
                         .style('opacity', 1);
 
-
-
             }
             if(response.index === 2){
+                
+                svgCreate.lines
+                    .selectAll('.g-segments')
+                    .data(geometries.segments)
+                    .enter()
+                    .append("line")
+                    .attr('x1', (d) => {return xScale(d.pointA.x)})
+                    .attr('y1', (d) => {return yScale(d.pointA.y)})
+                    .attr('x2', (d) => {return xScale(d.pointA.x)})
+                    .attr('y2', (d) => {return yScale(d.pointA.y)})
+                    .attr("fill", "none")
+                    //.attr("stroke", (d,i) => {return d[2]})
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 1.);
+
                 svgCreate.lines
                         .selectAll('line')
                         .transition()
@@ -216,6 +207,7 @@ let eventHandlers = {
                 
                 geometries.points.push(ABgeo.middlePoint);
                 let circlesFamData = geometries.circlesFam.slice(Math.floor(geometries.circlesFam.length/2));
+                let circlesData = [geometries.circlesFam[9]];
 
                 svgCreate.symbols.selectAll('path').remove();
                 svgCreate.texts.selectAll('text').remove();
@@ -246,6 +238,18 @@ let eventHandlers = {
                     .style('opacity', 1);
 
                 svgCreate.circles
+                    .selectAll('.g-circles')
+                    .data(circlesData, d => d.circleName)
+                    .enter()
+                    .append("circle")
+                    .attr('r', (d)=>{return d.r})
+                    .attr('cx', (d)=>{return d.center.x})
+                    .attr('cy', (d)=>{return d.center.y})
+                    .attr("fill", "none")
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 0.);
+
+                svgCreate.circles
                         .selectAll('circle')
                         .transition()
                         .ease(d3.easeLinear)
@@ -255,14 +259,14 @@ let eventHandlers = {
             if(response.index == 5){
             }
             if(response.index === 6){
+                
                 let circlesFamData = geometries.circlesFam.slice(Math.floor(geometries.circlesFam.length/2), geometries.circlesFam.length);
-                //console.log(circlesFamData);
 
-                svgCreate.circles.selectAll('circle').data(circlesFamData).exit().remove();
-                //let circlesFamData = geometries.circles.concat(geometries.circlesFam.splice(Math.floor(geometries.circlesFam.length/2+1)));
+                svgCreate.circles.selectAll('circle').remove();
+
                 svgCreate.circles
                         .selectAll('circle')
-                        .data(circlesFamData)
+                        .data(circlesFamData, d => d.circleName)
                         .enter()
                         .append("circle")
                         .attr('r', (d)=>{return d.r})
@@ -276,27 +280,55 @@ let eventHandlers = {
                         .delay((d, i) => i * 100)
                         .attr('stroke-width', 1.0);              
             }
-            if(response.index === 8){
-                let circlesFamData01 = geometries.circlesFam.slice(0, Math.floor(geometries.circlesFam.length/2));
-                svgCreate.circles.selectAll('circle').data(circlesFamData01).exit().remove();
-                console.log(circlesFamData01);
-                //let circlesFamData = geometries.circles.concat(geometries.circlesFam.splice(Math.floor(geometries.circlesFam.length/2+1)));
+            if(response.index === 9){
+                
+                let circlesFamData = geometries.circlesFam.slice(0, Math.floor(geometries.circlesFam.length/2));
+
                 svgCreate.circles
                         .selectAll('circle')
-                        .data(circlesFamData01)
+                        .data(circlesFamData, d => d.circleName)
                         .enter()
                         .append("circle")
-                        //.merge(svgCreate.circles)
-                        .attr('r', (d)=>{console.log(d); return d.r})
+                        .attr('r', (d)=>{return d.r})
                         .attr('cx', (d)=>{return d.center.x})
                         .attr('cy', (d)=>{return d.center.y})
                         .attr("fill", "none")
                         .attr("stroke", "black")
+                        .attr('stroke-width', 1.0);              
+            }
+            if(response.index === 10){
+                
+                svgCreate.lines
+                    .selectAll('.g-segments')
+                    .data([new Line(geometries.circlesFam[0].center, geometries.circlesFam[geometries.circlesFam.length -1].center)])
+                    .enter()
+                    .append("line")
+                    .attr('x1', (d) => {return xScale(d.pointA.x)})
+                    .attr('y1', (d) => {return yScale(d.pointA.y)})
+                    .attr('x2', (d) => {return xScale(d.pointB.x)})
+                    .attr('y2', (d) => {return yScale(d.pointB.y)})
+                    .attr("fill", "none")
+                    //.attr("stroke", (d,i) => {return d[2]})
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 1.);
+            }
+            if(response.index === 11){
+                //https://www.geeksforgeeks.org/d3-js-selection-exit-function/
+                //https://gist.github.com/Petrlds/4045315
+                //let circlesFamData = [,,,,,,,,,geometries.circlesFam[9],,geometries.circlesFam[11],,,,,,,,];
+                //let circlesFamData = [geometries.circlesFam[8],geometries.circlesFam[10]];
+                let circlesExit = geometries.circlesFam.filter((v,i) => {return (v.circleName != "8") && (v.circleName != "10");})
+
+                svgCreate.circles
+                        .selectAll('circle')
+                        .data(circlesExit, d => d.circleName)
+                        //.exit() //WAUW! not required????????????????? probably yes only if as a separated declaration???
                         .transition()
                         .ease(d3.easeLinear)
                         .duration(2000)
                         .delay((d, i) => i * 100)
-                        .attr('stroke-width', 1.0);  
+                        .attr('stroke-width', 0.0)
+                        .remove();
             }
         }
 

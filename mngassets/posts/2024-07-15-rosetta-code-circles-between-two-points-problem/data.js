@@ -89,6 +89,8 @@ class Line{
 
 class Circle{
 
+    circleName;
+
 	constructor(point, r){
 		this.center = point;
 		this.r = r;
@@ -264,5 +266,6 @@ let geometries = {
 /////////////
 export {Point};
 export {Circle};
+export {Line};
 export {PointCircleGeoms};
 export {geometries};
