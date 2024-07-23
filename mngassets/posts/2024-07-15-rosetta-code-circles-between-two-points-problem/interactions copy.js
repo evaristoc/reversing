@@ -98,6 +98,7 @@ let eventHandlers = {
         geometries.points.push(ABgeo.pointA);
         geometries.points.push(ABgeo.pointB);
         geometries.segments.push(ABgeo);
+
         geometries.circles.push(new Circle(ABgeo.middlePoint, ABgeo.distBtwPoints/2) );
 
         let counter = 0;
@@ -107,7 +108,6 @@ let eventHandlers = {
             geometries.circlesFam.push(c);
             counter++;
         }
-
 
         /* SCENE INITIALIZATION */        
         

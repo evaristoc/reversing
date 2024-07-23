@@ -108,6 +108,16 @@ let eventHandlers = {
             counter++;
         }
 
+        let perpendicular = new Line(geometries.circlesFam[0].center, geometries.circlesFam[geometries.circlesFam.length -1].center, 'perpendicular');
+        let MC = new Line(ABgeo.middlePoint, geometries.circlesFam[8].center, 'MC');
+        let AM = new Line(ABgeo.pointA, ABgeo.middlePoint, 'AM');
+        //let rad = new Line(ABgeo.pointA, geometries.circlesFam[8].center, 'r');
+        let rad = AM;
+
+        geometries.segments.push(perpendicular);
+        geometries.segments.push(MC);
+        geometries.segments.push(AM);
+        geometries.segments.push(rad);
 
         /* SCENE INITIALIZATION */        
         
@@ -130,7 +140,7 @@ let eventHandlers = {
         
         return function(response){
             zelf.step.classed('is-active', function (d, i) { return i === response.index; });
-
+            //console.log(response);
        
             //E - from https://codepen.io/GreenSock/pen/bGbQwo
             //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
@@ -179,9 +189,12 @@ let eventHandlers = {
             }
             if(response.index === 2){
                 
+                let newSegments = geometries.segments.filter(d => d.lineName == 'AB');
+                console.log(geometries.segments, newSegments);
+
                 svgCreate.lines
                     .selectAll('.g-segments')
-                    .data(geometries.segments, d => d.lineName)
+                    .data(newSegments, d => d.lineName)
                     .enter()
                     .append("line")
                     .attr('x1', (d) => {return xScale(d.pointA.x)})
@@ -297,22 +310,28 @@ let eventHandlers = {
                         .attr('stroke-width', 1.0);              
             }
             if(response.index === 10){
-                let perpendicular = new Line(geometries.circlesFam[0].center, geometries.circlesFam[geometries.circlesFam.length -1].center);
-                perpendicular.lineName = 'perpendicular';
-                let newSegments = [perpendicular];
-                svgCreate.lines
-                    .selectAll('.g-segments')
-                    .data(newSegments,  d => d.lineName)
-                    .enter()
-                    .append("line")
-                    .attr('x1', (d) => {return xScale(d.pointA.x)})
-                    .attr('y1', (d) => {return yScale(d.pointA.y)})
-                    .attr('x2', (d) => {return xScale(d.pointB.x)})
-                    .attr('y2', (d) => {return yScale(d.pointB.y)})
-                    .attr("fill", "none")
-                    //.attr("stroke", (d,i) => {return d[2]})
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 1.);
+                
+                if(response.direction == 'down'){
+                    let newSegments = geometries.segments.filter(d => d.lineName == 'perpendicular');
+                
+                    svgCreate.lines
+                        .selectAll('.g-segments')
+                        .data(newSegments,  d => d.lineName)
+                        .enter()
+                        .append("line")
+                        .attr('x1', (d) => {return xScale(d.pointA.x)})
+                        .attr('y1', (d) => {return yScale(d.pointA.y)})
+                        .attr('x2', (d) => {return xScale(d.pointB.x)})
+                        .attr('y2', (d) => {return yScale(d.pointB.y)})
+                        .attr("fill", "none")
+                        //.attr("stroke", (d,i) => {return d[2]})
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 1.);
+                }else{
+                    let segmentsExit = geometries.segments.filter(d => d.lineName != 'perpendicular');
+                    svgCreate.lines.selectAll('line').data(segmentsExit).exit().remove();
+                }
+
             }
             if(response.index === 11){
                 //https://www.geeksforgeeks.org/d3-js-selection-exit-function/
@@ -333,65 +352,98 @@ let eventHandlers = {
                         .remove();
             }
             if(response.index === 13){
-                let MC = new Line(ABgeo.middlePoint, geometries.circlesFam[8].center, 'MC');
-                let AM = new Line(ABgeo.pointA, ABgeo.middlePoint, 'AM');
-                let rad = new Line(ABgeo.pointA, geometries.circlesFam[8].center, 'radius');
-                let segmentsExit = [AM, rad, MC];
-                svgCreate.lines.selectAll('line').data(segmentsExit).exit().remove();
             }
             if(response.index === 14){
-                //let MC = new Line(geometries.circlesFam[8].center, ABgeo.middlePoint, 'MC');
-                let AM = new Line(ABgeo.pointA, ABgeo.middlePoint, 'AM');
-                let rad = new Line(ABgeo.pointA, geometries.circlesFam[8].center, 'radius');
-                let newSegments = [AM, rad];
+                if(response.direction == 'down'){
+                    let radius = geometries.segments.filter(d.lineName == 'r');
+                    let newSegments = geometries.segments.filter(d => d.lineName == 'AM' || d.lineName == 'r');
+                    console.log(15, 'i', newSegments);
 
-                svgCreate.lines
-                    .selectAll('.g-segments')
-                    .data(newSegments, d => d.lineName)
-                    .enter()
-                    .append("line")
-                    .attr('x1', (d) => {return xScale(d.pointA.x)})
-                    .attr('y1', (d) => {return yScale(d.pointA.y)})
-                    .attr('x2', (d) => {return xScale(d.pointB.x)})
-                    .attr('y2', (d) => {return yScale(d.pointB.y)})
-                    .attr("fill", "none")
-                    //.attr("stroke", (d,i) => {return d[2]})
-                    .transition()
-                    .ease(d3.easeLinear)
-                    .duration(2000)
-                    .delay((d, i) => i * 100)
-                    .attr('stroke-width', 1.0)   
-                    .attr("stroke", "blue")
-                    .attr("stroke-width", 2.5);
+                    let radAnim = svgCreate.lines
+                        .selectAll('.g-segments')
+                        .data(radius, d => d.lineName)
+                        .enter()
+                        .append("line")
+                        .attr('x1', (d) => {return xScale(d.pointA.x)})
+                        .attr('y1', (d) => {return yScale(d.pointA.y)})
+                        .attr('x2', (d) => {return xScale(d.pointB.x)})
+                        .attr('y2', (d) => {return yScale(d.pointB.y)})
+                        .attr("fill", "none")
+                        //.attr("stroke", (d,i) => {return d[2]})
+
+radius[0].pointB = geometries.circlesFam[8].center, 'r';
+
+                    radius
+                        .transition()
+                        .ease(d3.easeLinear)
+                        .duration(2000)
+                        .delay((d, i) => i * 100)
+                        .attr('stroke-width', 1.0)   
+                        .attr("stroke", "blue")
+                        .attr("stroke-width", 2.5);
+
+                    svgCreate.lines
+                        .selectAll('.g-segments')
+                        .data(newSegments, d => d.lineName)
+                        .enter()
+                        .append("line")
+                        .attr('x1', (d) => {return xScale(d.pointA.x)})
+                        .attr('y1', (d) => {return yScale(d.pointA.y)})
+                        .attr('x2', (d) => {return xScale(d.pointB.x)})
+                        .attr('y2', (d) => {return yScale(d.pointB.y)})
+                        .attr("fill", "none")
+                        //.attr("stroke", (d,i) => {return d[2]})
+                        .transition()
+                        .ease(d3.easeLinear)
+                        .duration(2000)
+                        .delay((d, i) => i * 100)
+                        .attr('stroke-width', 1.0)   
+                        .attr("stroke", "blue")
+                        .attr("stroke-width", 2.5);
+                }else{
+                    let segmentsExit = geometries.segments.filter(d => d.lineName != 'AM' && d.lineName != 'r');
+                    console.log(15, 'o', segmentsExit);
+
+                    svgCreate.lines.selectAll('line').data(segmentsExit).exit().remove();
+                }
+
 
             }
             if(response.index === 16){
-                let MC = new Line(ABgeo.middlePoint, geometries.circlesFam[8].center, 'MC');
-                let newSegments = [MC];
+                if(response.direction == 'down'){
+                    let newSegments = geometries.segments.filter(d => d.lineName == 'MC');
 
-                svgCreate.lines
-                    .selectAll('.g-segments')
-                    .data(newSegments, d => d.lineName)
-                    .enter()
-                    .append("line")
-                    .attr('x1', (d) => {return xScale(d.pointA.x)})
-                    .attr('y1', (d) => {return yScale(d.pointA.y)})
-                    .attr('x2', (d) => {return xScale(d.pointB.x)})
-                    .attr('y2', (d) => {return yScale(d.pointB.y)})
-                    .attr("fill", "none")
-                    //.attr("stroke", (d,i) => {return d[2]})
-                    .transition()
-                    .ease(d3.easeLinear)
-                    .duration(2000)
-                    .delay((d, i) => i * 100)
-                    .attr('stroke-width', 1.0)   
-                    .attr("stroke", "green")
-                    .attr("stroke-width", 2.5);
+                    console.log(16, 'i', newSegments);
+
+                    svgCreate.lines
+                        .selectAll('.g-segments')
+                        .data(newSegments, d => d.lineName)
+                        .enter()
+                        .append("line")
+                        .attr('x1', (d) => {return xScale(d.pointA.x)})
+                        .attr('y1', (d) => {return yScale(d.pointA.y)})
+                        .attr('x2', (d) => {return xScale(d.pointB.x)})
+                        .attr('y2', (d) => {return yScale(d.pointB.y)})
+                        .attr("fill", "none")
+                        //.attr("stroke", (d,i) => {return d[2]})
+                        .transition()
+                        .ease(d3.easeLinear)
+                        .duration(2000)
+                        .delay((d, i) => i * 100)
+                        .attr('stroke-width', 1.0)   
+                        .attr("stroke", "green")
+                        .attr("stroke-width", 2.5);
+                }else{
+                    let segmentsExit = geometries.segments.filter(d => d.lineName != 'MC');
+                    console.log(16, 'o', segmentsExit);
+
+                    svgCreate.lines.selectAll('line').data(segmentsExit, d => d.lineName).exit().remove();                    
+                }
 
             }
-            if(response.index === 17){
+            //if(response.index === 17){
 
-            }
+            //}
         }
 
     }

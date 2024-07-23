@@ -51,7 +51,7 @@ class Point {
 class Line{
 	lineName; //in case I want to implement a watcher of point name changes: https://stackoverflow.com/questions/43461248/ecmascript-6-watch-changes-to-class-properties
 
-	constructor(pointA, pointB, linename){
+	constructor(pointA, pointB, lineName){
 		
 		//Because the approach and formulas, we need the points sorted by x values
 		if(pointA.x <= pointB.x){
@@ -61,10 +61,10 @@ class Line{
 			this.pointA = pointB;
 			this.pointB = pointA;
 		}
-		if(linename && typeof linename == 'string'){
-			this.linename = linename;
+		if(lineName && typeof lineName == 'string'){
+			this.lineName = lineName;
 		}else if(this.pointA.name && this.pointB.name){
-			this.linename = this.pointA.name + this.pointB.name;
+			this.lineName = this.pointA.name + this.pointB.name;
 		}
 		this.middlePoint = this.findMiddlePoint();
 		let a = this.findParamsNormal();
@@ -105,8 +105,8 @@ class PointCircleGeoms extends Line{
 	centerProjection;
 	distPoint2Center;
 
-	constructor(pointA, pointB, r){
-		super(pointA, pointB);
+	constructor(pointA, pointB, r, lineName){
+		super(pointA, pointB, lineName);
 		this.r = r;
 		this.distBtwPoints = this.findDistBtwPoints();
 		if(this.r){
