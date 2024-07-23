@@ -49,7 +49,7 @@ class Point {
 }
 
 class Line{
-	linename; //in case I want to implement a watcher of point name changes: https://stackoverflow.com/questions/43461248/ecmascript-6-watch-changes-to-class-properties
+	lineName; //in case I want to implement a watcher of point name changes: https://stackoverflow.com/questions/43461248/ecmascript-6-watch-changes-to-class-properties
 
 	constructor(pointA, pointB, linename){
 		

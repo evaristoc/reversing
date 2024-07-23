@@ -42,98 +42,117 @@ Ok, let's get this started!
     <div class="articlepost">
         <div class='step' data-step='1'>
             <div class="explain">
+            1
             <p>Let's draw two points, <strong>A</strong> and <strong>B</strong> at any place of a cartesian plane, each defined by their <strong>(x,y)</strong> coordinates, being <strong>d</strong> > 0 the distance between those two points.</p>
           </div>
         </div>
         <div class='step' data-step='2'>
             <div class="explain">
+            2
                 <p>Let's start simple by assigning the same y-coordinate to both points.</p>
             </div>
         </div>
         <div class='step' data-step='3'>
+            3
             <div class="explain">
                 <p>Now let's draw a segment between our points A and B. Let's call it the segment <strong>AB</strong></p>
             </div>
         </div>
         <div class='step' data-step='4'>
+            4
             <div class="explain">
                 <p>A circle could be defined as "<strong><i>all the points from the same distance called the</i> radius <i>to a point called the</i> center</strong>". That means that in order for our points A and B to be part of a circle, they have to be at a distance of radius <i>r</i> to the center of that circle.</p>
                 <p>Under the previously stated conditions, how many circles would contain our two points if we don't specify a radius?</p>
             </div>
         </div>
         <div class='step' data-step='5'>
+            5
             <div class="explain">
                 <p>Here one example: a circle of radius equal to the half of the distance between A and B, with the middle point <strong>M</strong> between A and B as its center.</p>
             </div>
         </div>
         <div class='step' data-step='6'>
+            6
             <div class="explain">
                 <p>There are other circles. Let's see some!</p>
             </div>
         </div>        
         <div class='step' data-step='7'>
+            7
             <div class="explain">
             </div>
         </div>
         <div class='step' data-step='8'>
+            8
             <div class="explain">
                 <p>In fact, we can draw infinite number of circles <i>as long as their radii are equal or larger than the half distance between A and B.</i></p>
             </div>
         </div>
         <div class='step' data-step='9'>
+            9
             <div class="explain">
                 <p>Notice that all the circles touch our two points while their centers get further away from our point M.</p>
             </div>
         </div>
         <div class='step' data-step='10'>
+            10
             <div class="explain">        
                 <p>And there is more: we can include the circles in the opposite direction too.</p>
                 <p>All of those circles form a <i>family of circles</i> containing our points A and B.</p>
             </div>
         </div>
         <div class='step' data-step='11'>
+            11
             <div class="explain">        
                 <p>One peculiarity of this circle family is that their centers are <i>colinear</i>: they also belong to the perpendicular to the segment AB that passes through the middle point M.</p>
             </div>
         </div>
         <div class='step' data-step='12'>
+            12
             <div class="explain">        
                 <p>Now, the exercise gives us the two points and a radius. Let's say we got a radius corresponding to the following circles.</p>
             </div>
         </div>
         <div class='step' data-step='13'>
+            13
             <div class="explain">        
                 <p>But because <i>we still don't know the coordinates of their centers</i> we are not able to provide a numeric (programmatic) solution :(.</p>
                 <p>So another way to pose part of our problem would be: <strong>How do we code a script that calculates the cooordinates of the centers of any of the circles of the corresponding circle family, given a radius and the two points?</strong></p>
             </div>
         </div>
         <div class='step' data-step='14'>
+            14
             <div class="explain">        
                 <p>Let's see what we have so far: the two points and the radius are given. We have also learned that the centers are colinear to the tangent that passes through the middle point M. And because we know the length of the segment AB and the radius, we can also calculate some distances.</p>
             </div>
         </div>
         <div class='step' data-step='15'>
+            15
             <div class="explain">        
                 <!--<p>Another thing to keep in mind is that M is at the half distance between the centers of our two concerning circles. Notice though that although the centers are at distance <i>r</i> to A and B, they are not to the same distance to M.</p>-->
-                <p>The good news are: we have enough information to calculate how far is M to the center of any of the circles. Let's select the point A and let's draw some useful distances into the superior circle of the image as an example.</p>
+                <p>Let's select the point A and let's draw some useful distances into the superior circle of the image as an example.</p>
             </div>
         </div>
         <div class='step' data-step='16'>
+            16
             <div class="explain">
                 <p>I hope you will agree with me that the shape we have highlighted ressembles a side and hypotenuse of a rectangular triangle, which allows us to find a solution to the distance between M and one of the centers using Pitagoras.</p>   
             </div>
         </div>
         <div class='step' data-step='17'>
+            17
             <div class="explain">        
             </div>
         </div>
         <div class='step' data-step='18'>
+            18
             <div class="explain">        
-                <p>This is a good work! We have a bunch of good information. However, now it comes the cumbersome part: <strong><i>that information has to be translated into xy-coordinates</i></strong>.</p>
-                <p>For our case looks relatively simple, by adding or substracting the found distances to the point M. The challenge of the problem lies on the fact that points A and B can be wherever in our plane. For example, let's say we had a different point A.</p>
+                <p>This is a bunch of good information! But this is still not enough: we still need to <strong><i>translate that information into xy-coordinates</i></strong>.</p>
+                <p>For our case looks relatively simple by adding or substracting the found distances to the point M. The challenge of the problem lies on the fact that points A and B can be wherever in our plane. For example, let's say we had a different point A.</p>
             </div>
         </div>
         <div class='step' data-step='19'>
+            19
             <div class="explain">        
                 <p>This is a <i>rotation</i> of the geometry. Here we won't get the right solution by simply adding or substracting the found distances to existing coordinates. We need to find the <i>projection</i> of the rotated segments into the corresponding coordinates. And that requires some trigonometry. In fact, for a generalizable solution we need to consider the calculation of those projections.</p>
                 <p></p>
