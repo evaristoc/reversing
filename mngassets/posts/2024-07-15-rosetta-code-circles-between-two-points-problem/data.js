@@ -4,17 +4,17 @@
 
 class Point {
 	
-	name;
+	pointName;
 
 
 	
-	constructor(x, y, name){
+	constructor(x, y, pointName){
 		this.position = {
 			x: x,
 			y: y
 		}
-		if(name && typeof name == 'string'){
-			this.name = name;
+		if(pointName && typeof pointName == 'string'){
+			this.pointName = pointName;
 		}
 
 		//paramsFigure.points.push(this);
@@ -63,18 +63,18 @@ class Line{
 		}
 		if(lineName && typeof lineName == 'string'){
 			this.lineName = lineName;
-		}else if(this.pointA.name && this.pointB.name){
-			this.lineName = this.pointA.name + this.pointB.name;
+		}else if(this.pointA.pointName && this.pointB.pointName){
+			this.lineName = this.pointA.pointName + this.pointB.pointName;
 		}
 		this.middlePoint = this.findMiddlePoint();
 		let a = this.findParamsNormal();
-		this.mt = a.mt; 
+		this.mt = a.mT; 
 		this.atanT = a.atanT; 
 		this.cT = a.cT;
 	}
 
 	findMiddlePoint(){
-		return new Point((this.pointB.x + this.pointA.x)/2, (this.pointB.y + this.pointA.y)/2);
+		return new Point((this.pointB.x + this.pointA.x)/2, (this.pointB.y + this.pointA.y)/2, 'M');
 	}
 
 	findParamsNormal(){

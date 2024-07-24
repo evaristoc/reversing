@@ -84,6 +84,12 @@ let eventHandlers = {
     handleStepEnter01 : function(svgCreate, scene, geometries){
 
         /* DATA GATHERING AND - SETTING */
+        /*
+        I decided to create data in this script because its reliance on scene settings
+
+        Although doing that appears to oppose the "separation of concerns" criterion, it seems to agree with the 
+        "one source of truth" and "keep it simple (and small)" criteria, at least for the existing code (jul-24).
+        */
 
 
         const ABgeo = new PointCircleGeoms(new Point(scene.widthSVG *.333, scene.heightSVG/2, 'A'), new Point(scene.widthSVG * .666, scene.heightSVG/2, 'B'), geometries.r);
@@ -91,7 +97,7 @@ let eventHandlers = {
         ABgeo.pointA.dy = 0;
         ABgeo.pointB.dx = 15;
         ABgeo.pointB.dy = 0;
-        ABgeo.middlePoint.name = 'M';
+        //ABgeo.middlePoint.pointName = 'M';
         ABgeo.middlePoint.dx = -7;
         ABgeo.middlePoint.dy = -10;        
 
@@ -112,7 +118,7 @@ let eventHandlers = {
         let MC = new Line(ABgeo.middlePoint, geometries.circlesFam[8].center, 'MC');
         let AM = new Line(ABgeo.pointA, ABgeo.middlePoint, 'AM');
         //let rad = new Line(ABgeo.pointA, geometries.circlesFam[8].center, 'r');
-        let rad = AM;
+        let rad = new Line(ABgeo.pointA, ABgeo.middlePoint, 'r');
 
         geometries.segments.push(perpendicular);
         geometries.segments.push(MC);
@@ -146,177 +152,196 @@ let eventHandlers = {
             //baseContext.fillStyle = `#${response.index}${response.index}${response.index}`;
             if(response.index === 0){
 
-                svgCreate.symbols.selectAll('path').remove();
-                svgCreate.texts.selectAll('text').remove();
-                
-                svgCreate.symbols
-                    .selectAll('.g-symbols')
-                    .data(geometries.points, (d) => {return d.name})
-                    .enter()
-                    .append('path')
-                    .attr('id', (d) => {return d.name})
-                    .attr('d', d3.symbol().type(d3.symbolCross).size(50))
-                    .attr('transform', (d) => `translate(${xScale(d.x)} , ${yScale(d.y)})`)
-                    .style('opacity', 0);
+                if(response.direction == 'down'){
+                    svgCreate.symbols.selectAll('path').remove();
+                    svgCreate.texts.selectAll('text').remove();
 
-                svgCreate.texts
-                    .selectAll('.g-texts')
-                    .data(geometries.points)
-                    .enter()      
-                    .append('text')
-                    .text((d) => d.name)
-                    .attr('x', (d) => xScale(d.x))
-                    .attr('y', (d) => yScale(d.y))
-                    .attr('dx', (d) => d.dx)
-                    .attr('dy', (d) => d.dy)
-                    .style('opacity', 0);
-
-                svgCreate.symbols
-                        .selectAll('path')
-                        .transition()
-                        .ease(d3.easePolyIn)
-                        .duration(8000)
-                        .style('opacity', 1);
-
-                           
-                svgCreate.texts
-                        .selectAll('text')
-                        .transition()
-                        .ease(d3.easePolyIn)
-                        .duration(8000)
-                        .style('opacity', 1);
-
+                    console.log(geometries.points);
+                    
+                    svgCreate.symbols
+                        .selectAll('.g-symbols')
+                        .data(geometries.points, d => d.pointName)
+                        .enter()
+                        .append('path')
+                        .attr('id', (d) => {return d.pointName})
+                        .attr('d', d3.symbol().type(d3.symbolCross).size(50))
+                        .attr('transform', (d) => `translate(${xScale(d.x)} , ${yScale(d.y)})`)
+                        .style('opacity', 0);
+    
+                    svgCreate.texts
+                        .selectAll('.g-texts')
+                        .data(geometries.points, d => d.pointName)
+                        .enter()      
+                        .append('text')
+                        .text((d) => d.pointName)
+                        .attr('x', (d) => xScale(d.x))
+                        .attr('y', (d) => yScale(d.y))
+                        .attr('dx', (d) => d.dx)
+                        .attr('dy', (d) => d.dy)
+                        .style('opacity', 0);
+    
+                    svgCreate.symbols
+                            .selectAll('path')
+                            .transition()
+                            .ease(d3.easePolyIn)
+                            .duration(8000)
+                            .style('opacity', 1);
+    
+                               
+                    svgCreate.texts
+                            .selectAll('text')
+                            .transition()
+                            .ease(d3.easePolyIn)
+                            .duration(8000)
+                            .style('opacity', 1);
+                }else{
+                    svgCreate.symbols.selectAll('path').remove();
+                    svgCreate.texts.selectAll('text').remove();                    
+                }
             }
             if(response.index === 2){
-                
-                let newSegments = geometries.segments.filter(d => d.lineName == 'AB');
-                console.log(geometries.segments, newSegments);
+                if(response.direction == 'down'){
+                    let segmentsIN = geometries.segments.filter(d => d.lineName == 'AB');
+                    console.log(geometries.segments);
+                    svgCreate.lines
+                        .selectAll('.g-segments')
+                        .data(segmentsIN, d => d.lineName)
+                        .enter()
+                        .append("line")
+                        .attr('x1', (d) => {return xScale(d.pointA.x)})
+                        .attr('y1', (d) => {return yScale(d.pointA.y)})
+                        .attr('x2', (d) => {return xScale(d.pointA.x)})
+                        .attr('y2', (d) => {return yScale(d.pointA.y)})
+                        .attr("fill", "none")
+                        //.attr("stroke", (d,i) => {return d[2]})
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 1.);
+    
+                    svgCreate.lines
+                            .selectAll('line')
+                            .transition()
+                            .ease(d3.easeLinear)
+                            .duration(2000)
+                            .attr('x2', (d) => {return xScale(d.pointB.x)})
+                            .attr('y2', (d) => {return yScale(d.pointB.y)});
+                }else{
+                    svgCreate.lines.selectAll('line').remove();
+                }
 
-                svgCreate.lines
-                    .selectAll('.g-segments')
-                    .data(newSegments, d => d.lineName)
-                    .enter()
-                    .append("line")
-                    .attr('x1', (d) => {return xScale(d.pointA.x)})
-                    .attr('y1', (d) => {return yScale(d.pointA.y)})
-                    .attr('x2', (d) => {return xScale(d.pointA.x)})
-                    .attr('y2', (d) => {return yScale(d.pointA.y)})
-                    .attr("fill", "none")
-                    //.attr("stroke", (d,i) => {return d[2]})
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 1.);
-
-                svgCreate.lines
-                        .selectAll('line')
-                        .transition()
-                        .ease(d3.easeLinear)
-                        .duration(2000)
-                        .attr('x2', (d) => {return xScale(d.pointB.x)})
-                        .attr('y2', (d) => {return yScale(d.pointB.y)});
-            }
-            if(response.index === 3){
             }
             if(response.index == 4){
                 
-                geometries.points.push(ABgeo.middlePoint);
-                let circlesFamData = geometries.circlesFam.slice(Math.floor(geometries.circlesFam.length/2));
-                let circlesData = [geometries.circlesFam[9]];
+                if(response.direction == 'down'){
+                    geometries.points.push(ABgeo.middlePoint);
+                    //let circlesOUT = geometries.circlesFam.slice(Math.floor(geometries.circlesFam.length/2));
+                    let circlesData = [geometries.circlesFam[9]];
+    
+                    svgCreate.symbols.selectAll('path').remove();
+                    svgCreate.texts.selectAll('text').remove();
+                        
+                    svgCreate.symbols
+                        .selectAll('.g-symbols')
+                        .data(geometries.points, d => d.pointName)
+                        .enter()
+                        .append('path')
+                        .merge(svgCreate.symbols)
+                        //.attr('id', (d) => {return d.pointName})
+                        .attr('d', d3.symbol().type(d3.symbolCross).size(50))
+                        .attr('transform', (d) => `translate(${xScale(d.x)} , ${yScale(d.y)})`)
+                        .style('opacity', 1);
+    
+                    svgCreate.texts
+                        .selectAll('.g-texts')
+                        .data(geometries.points, d => d.pointName)
+                        .enter()      
+                        .append('text')
+                        .merge(svgCreate.texts)
+                        .text((d) => d.pointName)
+                        .attr('x', (d) => xScale(d.x))
+                        .attr('y', (d) => yScale(d.y))
+                        .attr('dx', (d) => d.dx)
+                        .attr('dy', (d) => d.dy)
+                        .style('opacity', 1);
+    
+                    svgCreate.circles
+                        .selectAll('.g-circles')
+                        .data(circlesData, d => d.circleName)
+                        .enter()
+                        .append("circle")
+                        .attr('r', (d)=>{return d.r})
+                        .attr('cx', (d)=>{return d.center.x})
+                        .attr('cy', (d)=>{return d.center.y})
+                        .attr("fill", "none")
+                        .attr("stroke", "black")
+                        .attr("stroke-width", 0.);
+    
+                    svgCreate.circles
+                            .selectAll('circle')
+                            .transition()
+                            .ease(d3.easeLinear)
+                            .duration(2000)
+                            .attr('stroke-width', 1.0);
+                }else{
+                    svgCreate.circles.selectAll('circle').remove();
+                }
 
-                svgCreate.symbols.selectAll('path').remove();
-                svgCreate.texts.selectAll('text').remove();
-                svgCreate.circles.selectAll('circle').data(circlesFamData).exit().remove(); //?
-
-                svgCreate.symbols
-                    .selectAll('.g-symbols')
-                    .data(geometries.points, (d) => {return d.name})
-                    .enter()
-                    .append('path')
-                    .merge(svgCreate.symbols)
-                    .attr('id', (d) => {return d.name})
-                    .attr('d', d3.symbol().type(d3.symbolCross).size(50))
-                    .attr('transform', (d) => `translate(${xScale(d.x)} , ${yScale(d.y)})`)
-                    .style('opacity', 1);
-
-                svgCreate.texts
-                    .selectAll('.g-texts')
-                    .data(geometries.points)
-                    .enter()      
-                    .append('text')
-                    .merge(svgCreate.texts)
-                    .text((d) => d.name)
-                    .attr('x', (d) => xScale(d.x))
-                    .attr('y', (d) => yScale(d.y))
-                    .attr('dx', (d) => d.dx)
-                    .attr('dy', (d) => d.dy)
-                    .style('opacity', 1);
-
-                svgCreate.circles
-                    .selectAll('.g-circles')
-                    .data(circlesData, d => d.circleName)
-                    .enter()
-                    .append("circle")
-                    .attr('r', (d)=>{return d.r})
-                    .attr('cx', (d)=>{return d.center.x})
-                    .attr('cy', (d)=>{return d.center.y})
-                    .attr("fill", "none")
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 0.);
-
-                svgCreate.circles
-                        .selectAll('circle')
-                        .transition()
-                        .ease(d3.easeLinear)
-                        .duration(2000)
-                        .attr('stroke-width', 1.0);
-            }
-            if(response.index == 5){
             }
             if(response.index === 6){
                 
-                let circlesFamData = geometries.circlesFam.slice(Math.floor(geometries.circlesFam.length/2), geometries.circlesFam.length);
-
-                svgCreate.circles.selectAll('circle').remove();
-
-                svgCreate.circles
-                        .selectAll('circle')
-                        .data(circlesFamData, d => d.circleName)
-                        .enter()
-                        .append("circle")
-                        .attr('r', (d)=>{return d.r})
-                        .attr('cx', (d)=>{return d.center.x})
-                        .attr('cy', (d)=>{return d.center.y})
-                        .attr("fill", "none")
-                        .attr("stroke", "black")
-                        .transition()
-                        .ease(d3.easeLinear)
-                        .duration(2000)
-                        .delay((d, i) => i * 100)
-                        .attr('stroke-width', 1.0);              
+                if(response.direction == 'down'){
+                    let circlesIN = geometries.circlesFam.slice(Math.floor(geometries.circlesFam.length/2), geometries.circlesFam.length);
+                    //svgCreate.circles.selectAll('circle').remove();
+    
+                    svgCreate.circles
+                            .selectAll('circle')
+                            .data(circlesIN, d => d.circleName)
+                            .enter()
+                            .append("circle")
+                            .attr('r', (d)=>{return d.r})
+                            .attr('cx', (d)=>{return d.center.x})
+                            .attr('cy', (d)=>{return d.center.y})
+                            .attr("fill", "none")
+                            .attr("stroke", "black")
+                            .transition()
+                            .ease(d3.easeLinear)
+                            .duration(2000)
+                            .delay((d, i) => i * 100)
+                            .attr('stroke-width', 1.0);   
+                }else{
+                    let circlesOUT = [geometries.circlesFam[9]];
+                    svgCreate.circles.selectAll('circle').data(circlesOUT, d => d.circleName).exit().remove();
+                  
+                }
+           
             }
             if(response.index === 9){
                 
-                let circlesFamData = geometries.circlesFam.slice(0, Math.floor(geometries.circlesFam.length/2));
+                if(response.direction == 'down'){
+                    let circlesIN = geometries.circlesFam.slice(0, Math.floor(geometries.circlesFam.length/2));
 
-                svgCreate.circles
-                        .selectAll('circle')
-                        .data(circlesFamData, d => d.circleName)
-                        .enter()
-                        .append("circle")
-                        .attr('r', (d)=>{return d.r})
-                        .attr('cx', (d)=>{return d.center.x})
-                        .attr('cy', (d)=>{return d.center.y})
-                        .attr("fill", "none")
-                        .attr("stroke", "black")
-                        .attr('stroke-width', 1.0);              
+                    svgCreate.circles
+                            .selectAll('circle')
+                            .data(circlesIN, d => d.circleName)
+                            .enter()
+                            .append("circle")
+                            .attr('r', (d)=>{return d.r})
+                            .attr('cx', (d)=>{return d.center.x})
+                            .attr('cy', (d)=>{return d.center.y})
+                            .attr("fill", "none")
+                            .attr("stroke", "black")
+                            .attr('stroke-width', 1.0);  
+                }else{
+                    let circlesOUT = geometries.circlesFam.slice(Math.floor(geometries.circlesFam.length/2), geometries.circlesFam.length);
+                    svgCreate.circles.selectAll('circle').data(circlesOUT, d => d.circleName).exit().remove();
+                }
             }
             if(response.index === 10){
-                
                 if(response.direction == 'down'){
-                    let newSegments = geometries.segments.filter(d => d.lineName == 'perpendicular');
+                    let segmentsIN = geometries.segments.filter(d => d.lineName == 'perpendicular');
                 
                     svgCreate.lines
                         .selectAll('.g-segments')
-                        .data(newSegments,  d => d.lineName)
+                        .data(segmentsIN,  d => d.lineName)
                         .enter()
                         .append("line")
                         .attr('x1', (d) => {return xScale(d.pointA.x)})
@@ -328,96 +353,112 @@ let eventHandlers = {
                         .attr("stroke", "black")
                         .attr("stroke-width", 1.);
                 }else{
-                    let segmentsExit = geometries.segments.filter(d => d.lineName != 'perpendicular');
-                    svgCreate.lines.selectAll('line').data(segmentsExit).exit().remove();
+                    let segmentsOUT = geometries.segments.filter(d => d.lineName == 'AB');
+                    svgCreate.lines.selectAll('line').data(segmentsOUT).exit().remove();
                 }
-
             }
             if(response.index === 11){
-                //https://www.geeksforgeeks.org/d3-js-selection-exit-function/
-                //https://gist.github.com/Petrlds/4045315
-                //let circlesFamData = [,,,,,,,,,geometries.circlesFam[9],,geometries.circlesFam[11],,,,,,,,];
-                //let circlesFamData = [geometries.circlesFam[8],geometries.circlesFam[10]];
-                let circlesExit = geometries.circlesFam.filter((v,i) => {return (v.circleName != "8") && (v.circleName != "10");})
-
-                svgCreate.circles
-                        .selectAll('circle')
-                        .data(circlesExit, d => d.circleName)
-                        //.exit() //WAUW! not required????????????????? probably yes only if as a separated declaration???
-                        .transition()
-                        .ease(d3.easeLinear)
-                        .duration(2000)
-                        .delay((d, i) => i * 100)
-                        .attr('stroke-width', 0.0)
-                        .remove();
-            }
-            if(response.index === 13){
+                if(response.direction == 'down'){
+                    //https://www.geeksforgeeks.org/d3-js-selection-exit-function/
+                    //https://gist.github.com/Petrlds/4045315
+                    //let circlesFamData = [,,,,,,,,,geometries.circlesFam[9],,geometries.circlesFam[11],,,,,,,,];
+                    //let circlesFamData = [geometries.circlesFam[8],geometries.circlesFam[10]];
+                    let circlesOUT = geometries.circlesFam.filter((v,i) => {return (v.circleName != "8") && (v.circleName != "10");})
+                    svgCreate.circles
+                            .selectAll('circle')
+                            .data(circlesOUT, d => d.circleName)
+                            //.exit() //WAUW! not required????????????????? probably yes only if as a separated declaration???
+                            .transition()
+                            .ease(d3.easeLinear)
+                            .duration(2000)
+                            .delay((d, i) => i * 100)
+                            .attr('stroke-width', 0.0)
+                            .remove();
+                }else{
+                    let circlesIN = geometries.circlesFam.filter((v,i) => {return (v.circleName != "8") && (v.circleName != "10");});
+                    svgCreate.circles
+                            .selectAll('circle')
+                            .data(circlesIN, d => d.circleName)
+                            .enter()
+                            .append("circle")
+                            .attr('r', (d)=>{return d.r})
+                            .attr('cx', (d)=>{return d.center.x})
+                            .attr('cy', (d)=>{return d.center.y})
+                            .attr("fill", "none")
+                            .attr("stroke", "black")
+                            .attr('stroke-width', 1.0);
+                }
             }
             if(response.index === 14){
                 if(response.direction == 'down'){
-                    let radius = geometries.segments.filter(d.lineName == 'r');
-                    let newSegments = geometries.segments.filter(d => d.lineName == 'AM' || d.lineName == 'r');
-                    console.log(15, 'i', newSegments);
+                    let radiusIN = geometries.segments.filter(d => d.lineName == 'r');
+                    let segmentsIN = geometries.segments.filter(d => d.lineName == 'AM');
+                    console.log(15, 'i', radiusIN, segmentsIN);
 
-                    let radAnim = svgCreate.lines
-                        .selectAll('.g-segments')
-                        .data(radius, d => d.lineName)
-                        .enter()
-                        .append("line")
-                        .attr('x1', (d) => {return xScale(d.pointA.x)})
-                        .attr('y1', (d) => {return yScale(d.pointA.y)})
-                        .attr('x2', (d) => {return xScale(d.pointB.x)})
-                        .attr('y2', (d) => {return yScale(d.pointB.y)})
-                        .attr("fill", "none")
-                        //.attr("stroke", (d,i) => {return d[2]})
+                    let radiusAnim = svgCreate.lines
+                            .selectAll('.g-segments')
+                            .data(radiusIN, d => d.lineName)
+                            .enter()
+                            .append("line")
+                            .attr('x1', (d) => {return xScale(d.pointA.x)})
+                            .attr('y1', (d) => {return yScale(d.pointA.y)})
+                            .attr('x2', (d) => {return xScale(d.pointB.x)})
+                            .attr('y2', (d) => {return yScale(d.pointB.y)})
+                            .attr("fill", "none")
+                            .attr("stroke", "red")
+                            .attr("stroke-width", 1.0);
 
-radius[0].pointB = geometries.circlesFam[8].center, 'r';
-
-                    radius
+                    //IMPORTANT: d3 will accept a mutation of a shallow copy if that occurs before the delay of the transition is completed!!!
+                    radiusIN[0].pointB = geometries.circlesFam[8].center;
+                    
+                    radiusAnim
                         .transition()
                         .ease(d3.easeLinear)
                         .duration(2000)
-                        .delay((d, i) => i * 100)
-                        .attr('stroke-width', 1.0)   
-                        .attr("stroke", "blue")
-                        .attr("stroke-width", 2.5);
-
-                    svgCreate.lines
-                        .selectAll('.g-segments')
-                        .data(newSegments, d => d.lineName)
-                        .enter()
-                        .append("line")
-                        .attr('x1', (d) => {return xScale(d.pointA.x)})
-                        .attr('y1', (d) => {return yScale(d.pointA.y)})
-                        .attr('x2', (d) => {return xScale(d.pointB.x)})
                         .attr('y2', (d) => {return yScale(d.pointB.y)})
-                        .attr("fill", "none")
-                        //.attr("stroke", (d,i) => {return d[2]})
-                        .transition()
-                        .ease(d3.easeLinear)
+                        .delay(2000)
                         .duration(2000)
-                        .delay((d, i) => i * 100)
-                        .attr('stroke-width', 1.0)   
-                        .attr("stroke", "blue")
-                        .attr("stroke-width", 2.5);
+                        .ease(d3.easeLinear)
+                        .attr('stroke-width', 1.5)
+                        .attr("stroke", "red");
+
+                    
+                    let amAnim = svgCreate.lines
+                            .selectAll('.g-segments')
+                            .data(segmentsIN, d => d.lineName)
+                            .enter()
+                            .append('line')
+                            .attr('x1', (d) => {return xScale(d.pointA.x)})
+                            .attr('y1', (d) => {return yScale(d.pointA.y)})
+                            .attr('x2', (d) => {return xScale(d.pointB.x)})
+                            .attr('y2', (d) => {return yScale(d.pointB.y)});
+
+
+                    amAnim
+                            .transition()
+                            .delay(4000)
+                            .ease(d3.easeLinear)
+                            .duration(2000)
+                            .attr("stroke", "blue")
+                            .attr("stroke-width", 1.5);
+
                 }else{
-                    let segmentsExit = geometries.segments.filter(d => d.lineName != 'AM' && d.lineName != 'r');
-                    console.log(15, 'o', segmentsExit);
+                    let segmentsOUT = geometries.segments.filter(d => d.lineName != 'AM' && d.lineName != 'r' && d.lineName != 'MC');
+                    console.log(15, 'o', segmentsOUT);
 
-                    svgCreate.lines.selectAll('line').data(segmentsExit).exit().remove();
+                    svgCreate.lines.selectAll('line').data(segmentsOUT).exit().remove();
                 }
-
 
             }
             if(response.index === 16){
                 if(response.direction == 'down'){
-                    let newSegments = geometries.segments.filter(d => d.lineName == 'MC');
+                    let segmentsIN = geometries.segments.filter(d => d.lineName == 'MC');
 
-                    console.log(16, 'i', newSegments);
+                    console.log(16, 'i', segmentsIN);
 
                     svgCreate.lines
                         .selectAll('.g-segments')
-                        .data(newSegments, d => d.lineName)
+                        .data(segmentsIN, d => d.lineName)
                         .enter()
                         .append("line")
                         .attr('x1', (d) => {return xScale(d.pointA.x)})
@@ -434,10 +475,10 @@ radius[0].pointB = geometries.circlesFam[8].center, 'r';
                         .attr("stroke", "green")
                         .attr("stroke-width", 2.5);
                 }else{
-                    let segmentsExit = geometries.segments.filter(d => d.lineName != 'MC');
-                    console.log(16, 'o', segmentsExit);
+                    let segmentsOUT = geometries.segments.filter(d => d.lineName != 'MC');
+                    console.log(16, 'o', segmentsOUT);
 
-                    svgCreate.lines.selectAll('line').data(segmentsExit, d => d.lineName).exit().remove();                    
+                    svgCreate.lines.selectAll('line').data(segmentsOUT, d => d.lineName).exit().remove();                    
                 }
 
             }
