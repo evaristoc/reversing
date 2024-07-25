@@ -18,6 +18,7 @@ import {PointCircleGeoms} from './data.js';
 import {Circle} from './data.js';
 import {Line} from './data.js';
 import {Point} from './data.js';
+import {geometries} from './data.js';
 // TO KEEP IN MIND:
 // In this project I am modifying Point properties so it can accept drawing attributes
 // but I would like to keep Point class as defined in data for future projects
@@ -81,7 +82,7 @@ let eventHandlers = {
         },
     updateCanvasBackground : function(){
     },
-    handleStepEnter01 : function(svgCreate, scene, geometries){
+    handleStepEnter01 : function(svgCreate, scene){
 
         /* DATA GATHERING AND - SETTING */
         /*
@@ -91,39 +92,97 @@ let eventHandlers = {
         "one source of truth" and "keep it simple (and small)" criteria, at least for the existing code (jul-24).
         */
 
+        const [geom, geomRot] = geometries;
 
-        const ABgeo = new PointCircleGeoms(new Point(scene.widthSVG *.333, scene.heightSVG/2, 'A'), new Point(scene.widthSVG * .666, scene.heightSVG/2, 'B'), geometries.r);
+        const ABgeo = new PointCircleGeoms(new Point(scene.widthSVG *.333, scene.heightSVG/2, 'A'), new Point(scene.widthSVG * .666, scene.heightSVG/2, 'B'), geom.r);
         ABgeo.pointA.dx = -20;
         ABgeo.pointA.dy = 0;
         ABgeo.pointB.dx = 15;
         ABgeo.pointB.dy = 0;
         //ABgeo.middlePoint.pointName = 'M';
-        ABgeo.middlePoint.dx = -7;
-        ABgeo.middlePoint.dy = -10;        
+        ABgeo.middlePoint.dx = 7;
+        ABgeo.middlePoint.dy = -10;    
 
-        geometries.points.push(ABgeo.pointA);
-        geometries.points.push(ABgeo.pointB);
-        geometries.segments.push(ABgeo);
-        geometries.circles.push(new Circle(ABgeo.middlePoint, ABgeo.distBtwPoints/2) );
+
+        geom.points.push(ABgeo.pointA);
+        geom.points.push(ABgeo.pointB);
+        geom.points.push(ABgeo.middlePoint);
+        geom.segments.push(ABgeo);
+        geom.circles.push(new Circle(ABgeo.middlePoint, ABgeo.distBtwPoints/2) );
 
         let counter = 0;
         for(let i = -9; i < 10; i++){
             let c = ABgeo.circleFamilythru2Points(i);
             c.circleName = counter.toString();
-            geometries.circlesFam.push(c);
+            geom.circlesFam.push(c);
             counter++;
         }
 
-        let perpendicular = new Line(geometries.circlesFam[0].center, geometries.circlesFam[geometries.circlesFam.length -1].center, 'perpendicular');
-        let MC = new Line(ABgeo.middlePoint, geometries.circlesFam[8].center, 'MC');
+        let perpendicular = new Line(geom.circlesFam[0].center, geom.circlesFam[geom.circlesFam.length -1].center, 'perpendicular');
+        let MC = new Line(ABgeo.middlePoint, geom.circlesFam[8].center, 'MC');
         let AM = new Line(ABgeo.pointA, ABgeo.middlePoint, 'AM');
-        //let rad = new Line(ABgeo.pointA, geometries.circlesFam[8].center, 'r');
+        //let rad = new Line(ABgeo.pointA, geom.circlesFam[8].center, 'r');
         let rad = new Line(ABgeo.pointA, ABgeo.middlePoint, 'r');
 
-        geometries.segments.push(perpendicular);
-        geometries.segments.push(MC);
-        geometries.segments.push(AM);
-        geometries.segments.push(rad);
+        geom.segments.push(perpendicular);
+        geom.segments.push(MC);
+        geom.segments.push(AM);
+        geom.segments.push(rad);
+
+        //////////////////////////////////////////////////////////
+        /*rotated figure (notice different y-coord for point A) 
+        
+        values are calculated based on trigonometric functions:
+
+        y / AB = cos( 90 - alpha )
+
+        and:
+
+        x / AB = cos( alpha )
+        
+        */
+
+        let dx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( 180 - 10 );
+        let dy = ABgeo.distBtwPoints * Math.sin( 180 - 10 );
+        console.log(dx, dy);
+
+        const ABgeoRot = new PointCircleGeoms(new Point(scene.widthSVG *.333 + dx, scene.heightSVG/2 + dy, 'A'), ABgeo.pointB, geomRot.r);
+        ABgeoRot.pointA.dx = -20;
+        ABgeoRot.pointA.dy = 0;
+        ABgeoRot.pointB.dx = 15;
+        ABgeoRot.pointB.dy = 0;
+        //ABgeo.middlePoint.pointName = 'M';
+        ABgeoRot.middlePoint.dx = 7;
+        ABgeoRot.middlePoint.dy = -10;    
+
+
+        geomRot.points.push(ABgeoRot.pointA);
+        geomRot.points.push(ABgeoRot.pointB);
+        geomRot.points.push(ABgeoRot.middlePoint);
+        geomRot.segments.push(ABgeoRot);
+
+        counter = 0;
+        for(let i = -9; i < 10; i++){
+            let c = ABgeoRot.circleFamilythru2Points(i);
+            c.circleName = counter.toString();
+            geomRot.circlesFam.push(c);
+            counter++;
+        }
+
+        let perpendicularRot = new Line(geomRot.circlesFam[0].center, geomRot.circlesFam[geomRot.circlesFam.length -1].center, 'perpendicular');
+        let MCRot = new Line(ABgeoRot.middlePoint, geomRot.circlesFam[8].center, 'MC');
+        console.log(ABgeoRot.middlePoint == ABgeo.middlePoint)
+        console.log(ABgeoRot.pointA.x, ABgeo.pointA.x)
+        console.log(ABgeoRot.pointA.y, ABgeo.pointA.y)
+        console.log(ABgeoRot.middlePoint.y, ABgeo.middlePoint.y)
+        let AMRot = new Line(ABgeoRot.pointA, ABgeoRot.middlePoint, 'AM');
+        //let rad = new Line(ABgeo.pointA, geom.circlesFam[8].center, 'r');
+        let radRot = new Line(ABgeoRot.pointA, geomRot.circlesFam[8].center, 'r');
+
+        geomRot.segments.push(perpendicularRot);
+        geomRot.segments.push(MCRot);
+        geomRot.segments.push(AMRot);
+        geomRot.segments.push(radRot);
 
         /* SCENE INITIALIZATION */        
         
@@ -156,11 +215,12 @@ let eventHandlers = {
                     svgCreate.symbols.selectAll('path').remove();
                     svgCreate.texts.selectAll('text').remove();
 
-                    console.log(geometries.points);
-                    
+                    let pointsIN = geom.points.filter(d => (d.pointName == 'A') || (d.pointName == 'B'));
+                    console.log(pointsIN);
+
                     svgCreate.symbols
                         .selectAll('.g-symbols')
-                        .data(geometries.points, d => d.pointName)
+                        .data(pointsIN, d => d.pointName)
                         .enter()
                         .append('path')
                         .attr('id', (d) => {return d.pointName})
@@ -170,7 +230,7 @@ let eventHandlers = {
     
                     svgCreate.texts
                         .selectAll('.g-texts')
-                        .data(geometries.points, d => d.pointName)
+                        .data(pointsIN, d => d.pointName)
                         .enter()      
                         .append('text')
                         .text((d) => d.pointName)
@@ -178,6 +238,8 @@ let eventHandlers = {
                         .attr('y', (d) => yScale(d.y))
                         .attr('dx', (d) => d.dx)
                         .attr('dy', (d) => d.dy)
+                        .attr('fill', '#36454F')
+                        .style('z-index', 100)
                         .style('opacity', 0);
     
                     svgCreate.symbols
@@ -201,8 +263,8 @@ let eventHandlers = {
             }
             if(response.index === 2){
                 if(response.direction == 'down'){
-                    let segmentsIN = geometries.segments.filter(d => d.lineName == 'AB');
-                    console.log(geometries.segments);
+                    let segmentsIN = geom.segments.filter(d => d.lineName == 'AB');
+
                     svgCreate.lines
                         .selectAll('.g-segments')
                         .data(segmentsIN, d => d.lineName)
@@ -232,16 +294,13 @@ let eventHandlers = {
             if(response.index == 4){
                 
                 if(response.direction == 'down'){
-                    geometries.points.push(ABgeo.middlePoint);
-                    //let circlesOUT = geometries.circlesFam.slice(Math.floor(geometries.circlesFam.length/2));
-                    let circlesData = [geometries.circlesFam[9]];
-    
-                    svgCreate.symbols.selectAll('path').remove();
-                    svgCreate.texts.selectAll('text').remove();
+                    //let circlesOUT = geom.circlesFam.slice(Math.floor(geom.circlesFam.length/2));
+                    let pointsIN = geom.points.filter(d => (d.pointName == 'M'));
+                    let circlesIN = [geom.circlesFam[9]];
                         
                     svgCreate.symbols
                         .selectAll('.g-symbols')
-                        .data(geometries.points, d => d.pointName)
+                        .data(pointsIN, d => d.pointName)
                         .enter()
                         .append('path')
                         .merge(svgCreate.symbols)
@@ -252,7 +311,7 @@ let eventHandlers = {
     
                     svgCreate.texts
                         .selectAll('.g-texts')
-                        .data(geometries.points, d => d.pointName)
+                        .data(pointsIN, d => d.pointName)
                         .enter()      
                         .append('text')
                         .merge(svgCreate.texts)
@@ -261,11 +320,13 @@ let eventHandlers = {
                         .attr('y', (d) => yScale(d.y))
                         .attr('dx', (d) => d.dx)
                         .attr('dy', (d) => d.dy)
+                        .attr('fill', '#36454F')
+                        .style('z-index', 100)
                         .style('opacity', 1);
     
                     svgCreate.circles
                         .selectAll('.g-circles')
-                        .data(circlesData, d => d.circleName)
+                        .data(circlesIN, d => d.circleName)
                         .enter()
                         .append("circle")
                         .attr('r', (d)=>{return d.r})
@@ -282,14 +343,18 @@ let eventHandlers = {
                             .duration(2000)
                             .attr('stroke-width', 1.0);
                 }else{
+                    //console.log(5, 'o');
+                    let pointsOUT = geom.points.filter(d => (d.pointName == 'A') || (d.pointName == 'B'));
                     svgCreate.circles.selectAll('circle').remove();
+                    svgCreate.symbols.selectAll('path').data(pointsOUT, d => d.pointName).exit().remove();
+                    svgCreate.texts.selectAll('text').data(pointsOUT, d => d.pointName).exit().remove();
                 }
 
             }
             if(response.index === 6){
                 
                 if(response.direction == 'down'){
-                    let circlesIN = geometries.circlesFam.slice(Math.floor(geometries.circlesFam.length/2), geometries.circlesFam.length);
+                    let circlesIN = geom.circlesFam.slice(Math.floor(geom.circlesFam.length/2), geom.circlesFam.length);
                     //svgCreate.circles.selectAll('circle').remove();
     
                     svgCreate.circles
@@ -308,7 +373,8 @@ let eventHandlers = {
                             .delay((d, i) => i * 100)
                             .attr('stroke-width', 1.0);   
                 }else{
-                    let circlesOUT = [geometries.circlesFam[9]];
+                    console.log(7, 'o');
+                    let circlesOUT = [geom.circlesFam[9]];
                     svgCreate.circles.selectAll('circle').data(circlesOUT, d => d.circleName).exit().remove();
                   
                 }
@@ -317,7 +383,7 @@ let eventHandlers = {
             if(response.index === 9){
                 
                 if(response.direction == 'down'){
-                    let circlesIN = geometries.circlesFam.slice(0, Math.floor(geometries.circlesFam.length/2));
+                    let circlesIN = geom.circlesFam.slice(0, Math.floor(geom.circlesFam.length/2));
 
                     svgCreate.circles
                             .selectAll('circle')
@@ -331,13 +397,14 @@ let eventHandlers = {
                             .attr("stroke", "black")
                             .attr('stroke-width', 1.0);  
                 }else{
-                    let circlesOUT = geometries.circlesFam.slice(Math.floor(geometries.circlesFam.length/2), geometries.circlesFam.length);
+                    let circlesOUT = geom.circlesFam.slice(Math.floor(geom.circlesFam.length/2), geom.circlesFam.length);
                     svgCreate.circles.selectAll('circle').data(circlesOUT, d => d.circleName).exit().remove();
                 }
             }
             if(response.index === 10){
                 if(response.direction == 'down'){
-                    let segmentsIN = geometries.segments.filter(d => d.lineName == 'perpendicular');
+                    let segmentsIN = geom.segments.filter(d => d.lineName == 'perpendicular');
+                    console.log(11, 'i', segmentsIN);
                 
                     svgCreate.lines
                         .selectAll('.g-segments')
@@ -353,7 +420,7 @@ let eventHandlers = {
                         .attr("stroke", "black")
                         .attr("stroke-width", 1.);
                 }else{
-                    let segmentsOUT = geometries.segments.filter(d => d.lineName == 'AB');
+                    let segmentsOUT = geom.segments.filter(d => d.lineName == 'AB');
                     svgCreate.lines.selectAll('line').data(segmentsOUT).exit().remove();
                 }
             }
@@ -361,9 +428,9 @@ let eventHandlers = {
                 if(response.direction == 'down'){
                     //https://www.geeksforgeeks.org/d3-js-selection-exit-function/
                     //https://gist.github.com/Petrlds/4045315
-                    //let circlesFamData = [,,,,,,,,,geometries.circlesFam[9],,geometries.circlesFam[11],,,,,,,,];
-                    //let circlesFamData = [geometries.circlesFam[8],geometries.circlesFam[10]];
-                    let circlesOUT = geometries.circlesFam.filter((v,i) => {return (v.circleName != "8") && (v.circleName != "10");})
+                    //let circlesFamData = [,,,,,,,,,geom.circlesFam[9],,geom.circlesFam[11],,,,,,,,];
+                    //let circlesFamData = [geom.circlesFam[8],geom.circlesFam[10]];
+                    let circlesOUT = geom.circlesFam.filter((v,i) => {return (v.circleName != "8") && (v.circleName != "10");})
                     svgCreate.circles
                             .selectAll('circle')
                             .data(circlesOUT, d => d.circleName)
@@ -375,7 +442,7 @@ let eventHandlers = {
                             .attr('stroke-width', 0.0)
                             .remove();
                 }else{
-                    let circlesIN = geometries.circlesFam.filter((v,i) => {return (v.circleName != "8") && (v.circleName != "10");});
+                    let circlesIN = geom.circlesFam.filter((v,i) => {return (v.circleName != "8") && (v.circleName != "10");});
                     svgCreate.circles
                             .selectAll('circle')
                             .data(circlesIN, d => d.circleName)
@@ -391,8 +458,8 @@ let eventHandlers = {
             }
             if(response.index === 14){
                 if(response.direction == 'down'){
-                    let radiusIN = geometries.segments.filter(d => d.lineName == 'r');
-                    let segmentsIN = geometries.segments.filter(d => d.lineName == 'AM');
+                    let radiusIN = geom.segments.filter(d => d.lineName == 'r');
+                    let segmentsIN = geom.segments.filter(d => d.lineName == 'AM');
                     console.log(15, 'i', radiusIN, segmentsIN);
 
                     let radiusAnim = svgCreate.lines
@@ -409,8 +476,13 @@ let eventHandlers = {
                             .attr("stroke-width", 1.0);
 
                     //IMPORTANT: d3 will accept a mutation of a shallow copy if that occurs before the delay of the transition is completed!!!
-                    radiusIN[0].pointB = geometries.circlesFam[8].center;
-                    
+                    //MORE IMPORTANT: with the following change there is NO automatic re-calculation of associated parameters :(
+                    radiusIN[0].pointB = geom.circlesFam[8].center;
+                    radiusIN[0].middlePoint = radiusIN[0].findMiddlePoint();
+                    radiusIN[0].middlePoint.dx = -10;
+
+                    let segmentsNames = [radiusIN[0]];
+
                     radiusAnim
                         .transition()
                         .ease(d3.easeLinear)
@@ -442,17 +514,42 @@ let eventHandlers = {
                             .attr("stroke", "blue")
                             .attr("stroke-width", 1.5);
 
+                    svgCreate.texts
+                            .selectAll('.g-texts')
+                            .data(segmentsNames, d => d.lineName)
+                            .enter()      
+                            .append('text')
+                            .merge(svgCreate.texts)
+                            .text((d) => d.lineName)
+                            .attr('x', (d) => xScale(d.middlePoint.x))
+                            .attr('y', (d) => yScale(d.middlePoint.y))
+                            .attr('dx', (d) => xScale(d.middlePoint.dx))
+                            .attr('fill', '#36454F')
+                            .style('z-index', 100)
+                            .style('opacity', 0);
+
+                    svgCreate.texts
+                            .selectAll('text')
+                            .transition()
+                            .delay(4000)
+                            .duration(1000)
+                            //.attr('dx', (d) => d.dx)
+                            //.attr('dy', (d) => d.dy)
+                            .style('opacity', 1);
+
                 }else{
-                    let segmentsOUT = geometries.segments.filter(d => d.lineName != 'AM' && d.lineName != 'r' && d.lineName != 'MC');
+                    let segmentsOUT = geom.segments.filter(d => d.lineName != 'AM' && d.lineName != 'r' && d.lineName != 'MC');
+                    let textsOUT = geom.points;
                     console.log(15, 'o', segmentsOUT);
 
-                    svgCreate.lines.selectAll('line').data(segmentsOUT).exit().remove();
+                    svgCreate.lines.selectAll('line').data(segmentsOUT, d => d.lineName).exit().remove();
+                    svgCreate.texts.selectAll('text').data(textsOUT, d => d.pointName).exit().remove();
                 }
 
             }
             if(response.index === 16){
                 if(response.direction == 'down'){
-                    let segmentsIN = geometries.segments.filter(d => d.lineName == 'MC');
+                    let segmentsIN = geom.segments.filter(d => d.lineName == 'MC');
 
                     console.log(16, 'i', segmentsIN);
 
@@ -475,16 +572,53 @@ let eventHandlers = {
                         .attr("stroke", "green")
                         .attr("stroke-width", 2.5);
                 }else{
-                    let segmentsOUT = geometries.segments.filter(d => d.lineName != 'MC');
+                    let segmentsOUT = geom.segments.filter(d => d.lineName != 'MC');
                     console.log(16, 'o', segmentsOUT);
 
                     svgCreate.lines.selectAll('line').data(segmentsOUT, d => d.lineName).exit().remove();                    
                 }
 
-            }
-            //if(response.index === 17){
+            }if(response.index === 17){
+                if(response.direction == 'down'){
+                    let segmentsIN = geomRot.segments;
+                    let pointsIN = geomRot.points;
+                    console.log(17, 'i', segmentsIN);
+                    
+                    //svgCreate.lines.selectAll('line').remove();
+                    
+                    svgCreate.lines
+                        .selectAll('.g-segments')
+                        .data(segmentsIN,  d => d.lineName)
+                        .enter()
+                        .append('line')
+                        .attr('x1', (d) => {return xScale(d.pointA.x)})
+                        .attr('y1', (d) => {return yScale(d.pointA.y)})
+                        .attr('x2', (d) => {return xScale(d.pointB.x)})
+                        .attr('y2', (d) => {return yScale(d.pointB.y)})
+                        .attr('stroke-width', 1.0)
+                        .attr("stroke", "green")
 
-            //}
+
+
+
+                    svgCreate.symbols
+                        .selectAll('path')
+                        .data(pointsIN, d => d.pointName)
+                        .transition()
+                        .ease(d3.easeLinear)
+                        .duration(2000)
+                        .attr('transform', (d) => `translate(${xScale(d.x)} , ${yScale(d.y)})`);
+    
+                    svgCreate.texts
+                        .selectAll('text')
+                        .data(pointsIN, d => d.pointName)
+                        .transition()
+                        .ease(d3.easeLinear)
+                        .duration(2000)
+                        .attr('y', (d) => yScale(d.y));
+           
+                }           
+            }
         }
 
     }

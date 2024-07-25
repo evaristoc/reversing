@@ -132,3 +132,8 @@ figure p {
     position:relative;
     top: -200px;
 }*/
+
+.g-texts{
+  font-family: 'Comic Sans MS', 'Papyrus', sans-serif;
+  font-weight: bold;
+}

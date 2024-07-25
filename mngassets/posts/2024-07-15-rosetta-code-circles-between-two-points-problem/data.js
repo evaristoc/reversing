@@ -191,7 +191,7 @@ class PointCircleGeoms extends Line{
 
 }
 
-let geometries = {
+let geometryData = {
     // points:{
     //     pointA: new Point(175, 300, 'A'),
     //     pointB: new Point(425, 300, 'B'),
@@ -210,7 +210,6 @@ let geometries = {
 };
 
 
-
 /////////////
 /* EXPORTS */
 /////////////
@@ -218,4 +217,5 @@ export {Point};
 export {Circle};
 export {Line};
 export {PointCircleGeoms};
-export {geometries};
+//OBSERVATION: need to prevent shallow copy of the geometryData object: https://developer.mozilla.org/en-US/docs/Glossary/Deep_copy
+export let geometries = [geometryData, JSON.parse(JSON.stringify(geometryData))];

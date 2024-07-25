@@ -1,7 +1,6 @@
 /* IMPORTS */
 import {SVGCreate} from './scene.js';
 import {paramsFigure} from './scene.js';
-import {geometries} from './data.js';
 import {eventHandlers} from './interactions.js';
 
 window.onload = (event) => {
@@ -93,7 +92,7 @@ window.onload = (event) => {
 
         
         /* INIT IMAGE at eventHandlers */
-        let handleStepEnter = eventHandlers.handleStepEnter01(svgCreate, paramsFigure, geometries);
+        let handleStepEnter = eventHandlers.handleStepEnter01(svgCreate, paramsFigure);
 
         handleResize();
         //E: order of the functions is important!
