@@ -1,35 +1,68 @@
 ---
 layout: post
-title:  "Rosetta Code: 'circle between 2 points'  problem"
+title:  "What you need to know to solve... the Rosetta Code's 'circles of given radius through 2 points'  problem"
 date:   2024-07-15 12:00:00 +0200
-categories: blog update
+categories: blog what-you-need-to
 ---
 
-<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
-<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-07-15-rosetta-code-circles-between-two-points-problem/scrollama-setup-v03.css %}">
+<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-07-15-rosetta-code-circles-between-two-points-problem/style/scrollama-setup-v03.css %}">
 
-The [Rosetta Code project](https://rosettacode.org) is a collection of problems for coding practice and examples. There people are also suggested to provide solutions in different programming languages.
+No long time ago I was visiting the Freecodecamp forum to see how I could help. Then I found [a question that took my attention](https://forum.freecodecamp.org/t/circles-of-given-radius-through-two-points/688719).
 
-One of those problems that should be solved by beginners is the following:
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-07-15-rosetta-code-circles-between-two-points-problem/img/Circles through points 2024-07-26.png %}" style="width:100%;">
 
-> Given two points on a plane and a radius, **usually** two circles of given radius can be drawn through the points.
+The question was one of the many code problems listed in a section of the Freecodecamp curriculum to practice for code interviews. Specifically, the question was one under the [Rosetta Code problems](https://www.freecodecamp.org/learn/rosetta-code/).
 
-You can find more information about the problem on the problem's webpage:
+Freecodecamp provides an interface to Freecodecamp students to try the exercises. For example, here it is [the presentation of the problem in the Freecodecamp site](https://www.freecodecamp.org/learn/rosetta-code/rosetta-code-challenges/circles-of-given-radius-through-two-points).
 
-[Circles_of_given_radius_through_two_points](https://rosettacode.org/wiki/Circles_of_given_radius_through_two_points)
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-07-15-rosetta-code-circles-between-two-points-problem/img/Freecodecamp Circles through Points 2024-07-26.png %}" style="width:100%;">
 
- 
+However, the [Rosetta Code project](https://rosettacode.org) is actually a different project to Freecodecamp. It is in fact a collection of problems for coding practice and examples. There people are also suggested to provide solutions in different programming languages. And you can find exactly the same problem posted on the Rosetta Code webpages: [Circles_of_given_radius_through_two_points](https://rosettacode.org/wiki/Circles_of_given_radius_through_two_points).
 
-In this post I am going to check the aforementioned Rosetta Code problem by providing **a visual reconstruction of some of the mathematical basics that explain the exercise and its solution**.
+Furthermore, the Rosetta Code project allows users to provide example solutions to the posted problems. 
 
-However, it is important to clarify the scope of my solution:
-* There are one general solution ("*...usually two circles...*"") and 4 cases. I will focus on *an example* of the general solution, briefly touching some of the cases.
-* I will put more attention to the theory used in [the Javascript solution for this problem](https://rosettacode.org/wiki/Circles_of_given_radius_through_two_points#JavaScript), expanded and with some variants.
-* Furthermore, my solution has strong dependency on the selected data (eg. points, angles, etc). I will clarify which ones I am using for my solution and I will stick to them for a more general *code* solution.
+To the time of this writing, this was the solution given in Javascript:
 
-After working on my visualization **I ended up with a slightly different solution** to the one given on the webpage of the exercise. However, the idea of this post is not to discuss my code, but rather focusing on the concepts and the strategy that I used to visualize the problem. I expect that the explanation will give you additional inputs to come with *your own* solution.
+```js
+const hDist = (p1, p2) => Math.hypot(...p1.map((e, i) => e - p2[i])) / 2;
+const pAng = (p1, p2) => Math.atan(p1.map((e, i) => e - p2[i]).reduce((p, c) => c / p, 1));
+const solveF = (p, r) => t => [r*Math.cos(t) + p[0], r*Math.sin(t) + p[1]];
+const diamPoints = (p1, p2) => p1.map((e, i) => e + (p2[i] - e) / 2);
 
-I will end this post with a short discussion about my findings and things that I think we should consider when trying to come up with a better, nicer solution.
+const findC = (...args) => {
+  const [p1, p2, s] = args;
+  const solve = solveF(p1, s);
+  const halfDist = hDist(p1, p2);
+
+  let msg = `p1: ${p1}, p2: ${p2}, r:${s} Result: `;
+  switch (Math.sign(s - halfDist)) {
+    case 0:
+      msg += s ? `Points on diameter. Circle at: ${diamPoints(p1, p2)}` :
+        'Radius Zero';
+      break;
+    case 1:
+      if (!halfDist) {
+        msg += 'Coincident point. Infinite solutions';
+      }
+      else {
+        let theta = pAng(p1, p2);
+        let theta2 = Math.acos(halfDist / s);
+        [1, -1].map(e => solve(theta + e * theta2)).forEach(
+          e => msg += `Circle at ${e} `);
+      }
+      break;
+    case -1:
+      msg += 'No intersection. Points further apart than circle diameter';
+      break;
+  }
+  return msg;
+};
+```
+There was no much follow up in the Freecodecamp thread after all, but I still wanted to check the problem, only to find what there appeared to be a couple of discrepancies in the solution given on the Rosetta Code project.
+
+This motivated me to make a revision of the problem. In this post I am going to **visually show a few things that we should keep in mind in order to get a possible solution to the coding problem**, without directly giving you a code.
+
+I will end this post with a short discussion about my findings and how they compare to the Rosetta Code solution.
 
 Ok, let's get this started!
 
@@ -165,7 +198,7 @@ Ok, let's get this started!
 <script src="{{ site.baseurl }}{% link mngassets/vendor/js/scrollama/v2.1.2/scrollama.v2.min.js %}"></script>
 <script src="{{ site.baseurl }}{% link mngassets/vendor/js/stickyfill/v2.1.0/stickyfill.v2.min.js %}"></script>
 
-<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-07-15-rosetta-code-circles-between-two-points-problem/scrollama-setup-v03.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-07-15-rosetta-code-circles-between-two-points-problem/js/scrollama-setup-v03.js %}"></script>
 
 
 # Tada!
