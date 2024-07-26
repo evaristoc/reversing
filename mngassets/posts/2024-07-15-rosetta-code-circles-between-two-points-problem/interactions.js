@@ -146,7 +146,7 @@ let eventHandlers = {
         let dy = ABgeo.distBtwPoints * Math.sin( 180 - 10 );
         console.log(dx, dy);
 
-        const ABgeoRot = new PointCircleGeoms(new Point(scene.widthSVG *.333 + dx, scene.heightSVG/2 + dy, 'A'), ABgeo.pointB, geomRot.r);
+        const ABgeoRot = new PointCircleGeoms(new Point(scene.widthSVG *.333 + dx, scene.heightSVG/2 + dy, 'A'), new Point(scene.widthSVG * .666, scene.heightSVG/2, 'B'), geomRot.r);
         ABgeoRot.pointA.dx = -20;
         ABgeoRot.pointA.dy = 0;
         ABgeoRot.pointB.dx = 15;
@@ -171,10 +171,6 @@ let eventHandlers = {
 
         let perpendicularRot = new Line(geomRot.circlesFam[0].center, geomRot.circlesFam[geomRot.circlesFam.length -1].center, 'perpendicular');
         let MCRot = new Line(ABgeoRot.middlePoint, geomRot.circlesFam[8].center, 'MC');
-        console.log(ABgeoRot.middlePoint == ABgeo.middlePoint)
-        console.log(ABgeoRot.pointA.x, ABgeo.pointA.x)
-        console.log(ABgeoRot.pointA.y, ABgeo.pointA.y)
-        console.log(ABgeoRot.middlePoint.y, ABgeo.middlePoint.y)
         let AMRot = new Line(ABgeoRot.pointA, ABgeoRot.middlePoint, 'AM');
         //let rad = new Line(ABgeo.pointA, geom.circlesFam[8].center, 'r');
         let radRot = new Line(ABgeoRot.pointA, geomRot.circlesFam[8].center, 'r');
@@ -587,16 +583,17 @@ let eventHandlers = {
                     //svgCreate.lines.selectAll('line').remove();
                     
                     svgCreate.lines
-                        .selectAll('.g-segments')
+                        .selectAll('line')
                         .data(segmentsIN,  d => d.lineName)
-                        .enter()
-                        .append('line')
+                        .transition()
+                        .ease(d3.easeLinear)
+                        .duration(2000)
                         .attr('x1', (d) => {return xScale(d.pointA.x)})
                         .attr('y1', (d) => {return yScale(d.pointA.y)})
-                        .attr('x2', (d) => {return xScale(d.pointB.x)})
+                        .attr('21', (d) => {return xScale(d.pointB.x)})
                         .attr('y2', (d) => {return yScale(d.pointB.y)})
                         .attr('stroke-width', 1.0)
-                        .attr("stroke", "green")
+                        .attr("stroke", "green");
 
 
 
@@ -615,6 +612,7 @@ let eventHandlers = {
                         .transition()
                         .ease(d3.easeLinear)
                         .duration(2000)
+                        .attr('x', (d) => xScale(d.x))
                         .attr('y', (d) => yScale(d.y));
            
                 }           
