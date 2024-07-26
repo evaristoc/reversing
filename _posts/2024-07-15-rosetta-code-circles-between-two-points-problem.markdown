@@ -97,8 +97,8 @@ Ok, let's get this started!
         <div class='step' data-step='10'>
             10
             <div class="explain">        
-                <p>And there is more: we can include the circles in the opposite direction too.</p>
-                <p>All of those circles form a <i>family of circles</i> containing our points A and B.</p>
+                <p>And there are more: we can include the circles in the opposite direction too.</p>
+                <p>All those circles form a <i>family of circles</i> containing our points A and B.</p>
             </div>
         </div>
         <div class='step' data-step='11'>
@@ -110,51 +110,46 @@ Ok, let's get this started!
         <div class='step' data-step='12'>
             12
             <div class="explain">        
-                <p>Now, the exercise gives us the two points and a radius. Let's say we got a radius corresponding to the following circles.</p>
+                <p>Now, the exercise gives us two points and a radius. We have already spoken about the points. Let's say we got a radius corresponding to the following circles...</p>
             </div>
         </div>
         <div class='step' data-step='13'>
             13
             <div class="explain">        
-                <p>But because <i>we still don't know the coordinates of their centers</i> we are not able to provide a numeric (programmatic) solution :(.</p>
+                <p>... but because <i>we still don't know the coordinates of their centers</i> we are not able to provide a numeric (programmatic) solution :(.</p>
                 <p>So another way to pose part of our problem would be: <strong>How do we code a script that calculates the cooordinates of the centers of any of the circles of the corresponding circle family, given a radius and the two points?</strong></p>
             </div>
         </div>
         <div class='step' data-step='14'>
             14
             <div class="explain">        
-                <p>Let's see what we have so far: the two points and the radius are given. We have also learned that the centers are colinear to the tangent that passes through the middle point M. And because we know the length of the segment AB and the radius, we can also calculate some distances.</p>
+                <p>Let's see what we have so far: the two points and the radius are given. We have also learned that the centers are colinear to the perpendicular that passes through the middle point M. And because we know the length of the segment AB and the radius, we can also calculate some distances.</p>
             </div>
         </div>
         <div class='step' data-step='15'>
             15
             <div class="explain">        
                 <!--<p>Another thing to keep in mind is that M is at the half distance between the centers of our two concerning circles. Notice though that although the centers are at distance <i>r</i> to A and B, they are not to the same distance to M.</p>-->
-                <p>Let's select the point A and let's draw some useful distances into the superior circle of the image as an example.</p>
+                <p>Let's select the point A and let's draw some useful distances pointing to the center one of the possible circles.</p>
             </div>
         </div>
         <div class='step' data-step='16'>
             16
             <div class="explain">
-                <p>I hope you will agree with me that the shape we have highlighted ressembles a side and hypotenuse of a rectangular triangle, which allows us to find a solution to the distance between M and one of the centers using Pitagoras.</p>   
+                <p>I hope you will agree with me that the shape we have highlighted ressembles a side and hypotenuse of a rectangular triangle, which allows us to find a solution for the distance between M and one of the centers using Pitagoras.</p>   
             </div>
         </div>
         <div class='step' data-step='17'>
             17
             <div class="explain">        
+                <p>This is a bunch of good information! But this is still not enough: we still need to <strong><i>translate that information into xy-coordinates</i></strong>.</p>
+                <p>For the simple case where the AB segment is parallel to the the x-coord as our current example, finding the right coordinates of the centers would be as simple addition and substraction to the coordinates of the point M. The challenge of the problem lies on the fact that points A and B can be wherever in our plane. For example, let's say we had a different point A.</p>
             </div>
         </div>
         <div class='step' data-step='18'>
             18
             <div class="explain">        
-                <p>This is a bunch of good information! But this is still not enough: we still need to <strong><i>translate that information into xy-coordinates</i></strong>.</p>
-                <p>For our case looks relatively simple by adding or substracting the found distances to the point M. The challenge of the problem lies on the fact that points A and B can be wherever in our plane. For example, let's say we had a different point A.</p>
-            </div>
-        </div>
-        <div class='step' data-step='19'>
-            19
-            <div class="explain">        
-                <p>This is a <i>rotation</i> of the geometry. Here we won't get the right solution by simply adding or substracting the found distances to existing coordinates. We need to find the <i>projection</i> of the rotated segments into the corresponding coordinates. And that requires some trigonometry. In fact, for a generalizable solution we need to consider the calculation of those projections.</p>
+                <p>This is a <i>rotation</i> of the geometry. Here we won't get the right solution by simply adding or substracting to the point M. We need to find the <i>projection</i> of the rotated segments into the x and y axes of our cartesian plane. And that requires some trigonometry. In fact, for a generalizable solution we need to consider the calculation of those projections.</p>
                 <p></p>
             </div>
         </div>

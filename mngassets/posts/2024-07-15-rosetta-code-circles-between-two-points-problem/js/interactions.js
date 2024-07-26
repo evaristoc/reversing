@@ -118,7 +118,7 @@ let eventHandlers = {
             counter++;
         }
 
-        let perpendicular = new Line(geom.circlesFam[0].center, geom.circlesFam[geom.circlesFam.length -1].center, 'perpendicular');
+        let perpendicular = new Line(geom.circlesFam[geom.circlesFam.length -1].center, geom.circlesFam[0].center, 'perpendicular');
         let MC = new Line(ABgeo.middlePoint, geom.circlesFam[8].center, 'MC');
         let AM = new Line(ABgeo.pointA, ABgeo.middlePoint, 'AM');
         //let rad = new Line(ABgeo.pointA, geom.circlesFam[8].center, 'r');
@@ -174,6 +174,8 @@ let eventHandlers = {
         let AMRot = new Line(ABgeoRot.pointA, ABgeoRot.middlePoint, 'AM');
         //let rad = new Line(ABgeo.pointA, geom.circlesFam[8].center, 'r');
         let radRot = new Line(ABgeoRot.pointA, geomRot.circlesFam[8].center, 'r');
+        
+        geomRot.points.push(radRot.middlePoint);
 
         geomRot.segments.push(perpendicularRot);
         geomRot.segments.push(MCRot);
@@ -452,6 +454,24 @@ let eventHandlers = {
                             .attr('stroke-width', 1.0);
                 }
             }
+            if(response.index === 12){
+                if(response.direction == 'down'){
+                    svgCreate.circles.selectAll('circle').remove();
+                }else{
+                    let circlesIN = geom.circlesFam.filter((v,i) => {return (v.circleName == "8") || (v.circleName == "10");});
+                    svgCreate.circles
+                            .selectAll('circle')
+                            .data(circlesIN, d => d.circleName)
+                            .enter()
+                            .append("circle")
+                            .attr('r', (d)=>{return d.r})
+                            .attr('cx', (d)=>{return d.center.x})
+                            .attr('cy', (d)=>{return d.center.y})
+                            .attr("fill", "none")
+                            .attr("stroke", "black")
+                            .attr('stroke-width', 1.0);
+                }
+            }
             if(response.index === 14){
                 if(response.direction == 'down'){
                     let radiusIN = geom.segments.filter(d => d.lineName == 'r');
@@ -477,7 +497,7 @@ let eventHandlers = {
                     radiusIN[0].middlePoint = radiusIN[0].findMiddlePoint();
                     radiusIN[0].middlePoint.dx = -10;
 
-                    let segmentsNames = [radiusIN[0]];
+                    //let segmentsNames = [radiusIN[0]];
 
                     radiusAnim
                         .transition()
@@ -512,7 +532,7 @@ let eventHandlers = {
 
                     svgCreate.texts
                             .selectAll('.g-texts')
-                            .data(segmentsNames, d => d.lineName)
+                            .data(radiusIN, d => d.lineName)
                             .enter()      
                             .append('text')
                             .merge(svgCreate.texts)
@@ -543,11 +563,11 @@ let eventHandlers = {
                 }
 
             }
-            if(response.index === 16){
+            if(response.index === 15){
                 if(response.direction == 'down'){
                     let segmentsIN = geom.segments.filter(d => d.lineName == 'MC');
 
-                    console.log(16, 'i', segmentsIN);
+                    console.log(15, 'i', segmentsIN);
 
                     svgCreate.lines
                         .selectAll('.g-segments')
@@ -569,7 +589,7 @@ let eventHandlers = {
                         .attr("stroke-width", 2.5);
                 }else{
                     let segmentsOUT = geom.segments.filter(d => d.lineName != 'MC');
-                    console.log(16, 'o', segmentsOUT);
+                    console.log(15, 'o', segmentsOUT);
 
                     svgCreate.lines.selectAll('line').data(segmentsOUT, d => d.lineName).exit().remove();                    
                 }
@@ -578,7 +598,6 @@ let eventHandlers = {
                 if(response.direction == 'down'){
                     let segmentsIN = geomRot.segments;
                     let pointsIN = geomRot.points;
-                    console.log(17, 'i', segmentsIN);
                     
                     //svgCreate.lines.selectAll('line').remove();
                     
@@ -590,10 +609,8 @@ let eventHandlers = {
                         .duration(2000)
                         .attr('x1', (d) => {return xScale(d.pointA.x)})
                         .attr('y1', (d) => {return yScale(d.pointA.y)})
-                        .attr('21', (d) => {return xScale(d.pointB.x)})
-                        .attr('y2', (d) => {return yScale(d.pointB.y)})
-                        .attr('stroke-width', 1.0)
-                        .attr("stroke", "green");
+                        .attr('x2', (d) => {return xScale(d.pointB.x)})
+                        .attr('y2', (d) => {return yScale(d.pointB.y)});
 
 
 
@@ -614,8 +631,43 @@ let eventHandlers = {
                         .duration(2000)
                         .attr('x', (d) => xScale(d.x))
                         .attr('y', (d) => yScale(d.y));
-           
-                }           
+               }else{
+                let segmentsIN = geom.segments;
+                let pointsIN = geom.points;
+                
+                //svgCreate.lines.selectAll('line').remove();
+                
+                svgCreate.lines
+                    .selectAll('line')
+                    .data(segmentsIN,  d => d.lineName)
+                    .transition()
+                    .ease(d3.easeLinear)
+                    .duration(2000)
+                    .attr('x1', (d) => {return xScale(d.pointA.x)})
+                    .attr('y1', (d) => {return yScale(d.pointA.y)})
+                    .attr('x2', (d) => {return xScale(d.pointB.x)})
+                    .attr('y2', (d) => {return yScale(d.pointB.y)});
+
+
+
+
+                svgCreate.symbols
+                    .selectAll('path')
+                    .data(pointsIN, d => d.pointName)
+                    .transition()
+                    .ease(d3.easeLinear)
+                    .duration(2000)
+                    .attr('transform', (d) => `translate(${xScale(d.x)} , ${yScale(d.y)})`);
+
+                svgCreate.texts
+                    .selectAll('text')
+                    .data(pointsIN, d => d.pointName)
+                    .transition()
+                    .ease(d3.easeLinear)
+                    .duration(2000)
+                    .attr('x', (d) => xScale(d.x))
+                    .attr('y', (d) => yScale(d.y));                
+               }         
             }
         }
 
