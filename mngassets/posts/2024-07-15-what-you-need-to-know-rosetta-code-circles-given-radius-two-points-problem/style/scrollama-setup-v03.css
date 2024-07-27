@@ -22,7 +22,7 @@ div .articlepost {
     margin: 0 auto;
 }
 
-figure {
+#stickyoverlay figure {
     position: -webkit-sticky;
     position: sticky;
     left: 0;

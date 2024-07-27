@@ -100,8 +100,8 @@ let eventHandlers = {
         ABgeo.pointB.dx = 15;
         ABgeo.pointB.dy = 0;
         //ABgeo.middlePoint.pointName = 'M';
-        ABgeo.middlePoint.dx = 7;
-        ABgeo.middlePoint.dy = -10;    
+        ABgeo.middlePoint.dx = -20;
+        ABgeo.middlePoint.dy = 15;    
 
 
         geom.points.push(ABgeo.pointA);
@@ -121,8 +121,12 @@ let eventHandlers = {
         let perpendicular = new Line(geom.circlesFam[geom.circlesFam.length -1].center, geom.circlesFam[0].center, 'perpendicular');
         let MC = new Line(ABgeo.middlePoint, geom.circlesFam[8].center, 'MC');
         let AM = new Line(ABgeo.pointA, ABgeo.middlePoint, 'AM');
-        //let rad = new Line(ABgeo.pointA, geom.circlesFam[8].center, 'r');
         let rad = new Line(ABgeo.pointA, ABgeo.middlePoint, 'r');
+
+        geom.circlesFam[8].center.pointName = 'C1';
+        geom.circlesFam[8].center.dx = 10;
+
+        geom.points.push(geom.circlesFam[8].center);
 
         geom.segments.push(perpendicular);
         geom.segments.push(MC);
@@ -134,7 +138,7 @@ let eventHandlers = {
         
         values are calculated based on trigonometric functions:
 
-        y / AB = cos( 90 - alpha )
+        y / AB = sin( alpha )
 
         and:
 
@@ -142,18 +146,20 @@ let eventHandlers = {
         
         */
 
-        let dx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( 180 - 10 );
-        let dy = ABgeo.distBtwPoints * Math.sin( 180 - 10 );
-        console.log(dx, dy);
+        //Found the resulting animation accidentally using below numbers and I loved what happened!!!
+        let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( 180 - 30 );
+        let ddy = ABgeo.distBtwPoints * Math.sin( 180 - 30 );
+        //let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( Math.PI/4 );
+        //let ddy = ABgeo.distBtwPoints * Math.sin( Math.PI/4 );
+        console.log(ddx, ddy);
 
-        const ABgeoRot = new PointCircleGeoms(new Point(scene.widthSVG *.333 + dx, scene.heightSVG/2 + dy, 'A'), new Point(scene.widthSVG * .666, scene.heightSVG/2, 'B'), geomRot.r);
+        const ABgeoRot = new PointCircleGeoms(new Point(scene.widthSVG *.333 + ddx, scene.heightSVG/2 + ddy, 'A'), new Point(scene.widthSVG * .666, scene.heightSVG/2, 'B'), geomRot.r);
         ABgeoRot.pointA.dx = -20;
         ABgeoRot.pointA.dy = 0;
         ABgeoRot.pointB.dx = 15;
         ABgeoRot.pointB.dy = 0;
-        //ABgeo.middlePoint.pointName = 'M';
-        ABgeoRot.middlePoint.dx = 7;
-        ABgeoRot.middlePoint.dy = -10;    
+        ABgeoRot.middlePoint.dx = -20;
+        ABgeoRot.middlePoint.dy = 15;    
 
 
         geomRot.points.push(ABgeoRot.pointA);
@@ -174,9 +180,13 @@ let eventHandlers = {
         let AMRot = new Line(ABgeoRot.pointA, ABgeoRot.middlePoint, 'AM');
         //let rad = new Line(ABgeo.pointA, geom.circlesFam[8].center, 'r');
         let radRot = new Line(ABgeoRot.pointA, geomRot.circlesFam[8].center, 'r');
-        
-        geomRot.points.push(radRot.middlePoint);
 
+        geomRot.circlesFam[8].center.pointName = 'C1';
+        geomRot.circlesFam[8].center.dx = 10;
+        
+        geomRot.points.push(geomRot.circlesFam[8].center);
+        //geomRot.points.push(radRot.middlePoint);
+        
         geomRot.segments.push(perpendicularRot);
         geomRot.segments.push(MCRot);
         geomRot.segments.push(AMRot);
@@ -237,14 +247,13 @@ let eventHandlers = {
                         .attr('dx', (d) => d.dx)
                         .attr('dy', (d) => d.dy)
                         .attr('fill', '#36454F')
-                        .style('z-index', 100)
                         .style('opacity', 0);
     
                     svgCreate.symbols
                             .selectAll('path')
                             .transition()
                             .ease(d3.easePolyIn)
-                            .duration(8000)
+                            .duration(5000)
                             .style('opacity', 1);
     
                                
@@ -252,7 +261,7 @@ let eventHandlers = {
                             .selectAll('text')
                             .transition()
                             .ease(d3.easePolyIn)
-                            .duration(8000)
+                            .duration(5000)
                             .style('opacity', 1);
                 }else{
                     svgCreate.symbols.selectAll('path').remove();
@@ -273,7 +282,6 @@ let eventHandlers = {
                         .attr('x2', (d) => {return xScale(d.pointA.x)})
                         .attr('y2', (d) => {return yScale(d.pointA.y)})
                         .attr("fill", "none")
-                        //.attr("stroke", (d,i) => {return d[2]})
                         .attr("stroke", "black")
                         .attr("stroke-width", 1.);
     
@@ -302,7 +310,6 @@ let eventHandlers = {
                         .enter()
                         .append('path')
                         .merge(svgCreate.symbols)
-                        //.attr('id', (d) => {return d.pointName})
                         .attr('d', d3.symbol().type(d3.symbolCross).size(50))
                         .attr('transform', (d) => `translate(${xScale(d.x)} , ${yScale(d.y)})`)
                         .style('opacity', 1);
@@ -319,7 +326,6 @@ let eventHandlers = {
                         .attr('dx', (d) => d.dx)
                         .attr('dy', (d) => d.dy)
                         .attr('fill', '#36454F')
-                        .style('z-index', 100)
                         .style('opacity', 1);
     
                     svgCreate.circles
@@ -414,7 +420,6 @@ let eventHandlers = {
                         .attr('x2', (d) => {return xScale(d.pointB.x)})
                         .attr('y2', (d) => {return yScale(d.pointB.y)})
                         .attr("fill", "none")
-                        //.attr("stroke", (d,i) => {return d[2]})
                         .attr("stroke", "black")
                         .attr("stroke-width", 1.);
                 }else{
@@ -535,13 +540,12 @@ let eventHandlers = {
                             .data(radiusIN, d => d.lineName)
                             .enter()      
                             .append('text')
-                            .merge(svgCreate.texts)
+                            //.merge(svgCreate.texts)
                             .text((d) => d.lineName)
                             .attr('x', (d) => xScale(d.middlePoint.x))
                             .attr('y', (d) => yScale(d.middlePoint.y))
                             .attr('dx', (d) => xScale(d.middlePoint.dx))
                             .attr('fill', '#36454F')
-                            .style('z-index', 100)
                             .style('opacity', 0);
 
                     svgCreate.texts
@@ -549,8 +553,6 @@ let eventHandlers = {
                             .transition()
                             .delay(4000)
                             .duration(1000)
-                            //.attr('dx', (d) => d.dx)
-                            //.attr('dy', (d) => d.dy)
                             .style('opacity', 1);
 
                 }else{
@@ -566,8 +568,9 @@ let eventHandlers = {
             if(response.index === 15){
                 if(response.direction == 'down'){
                     let segmentsIN = geom.segments.filter(d => d.lineName == 'MC');
+                    let pointsIN = geom.points.filter(d => d.pointName == 'C1');
 
-                    console.log(15, 'i', segmentsIN);
+                    console.log(15, 'i', segmentsIN, pointsIN);
 
                     svgCreate.lines
                         .selectAll('.g-segments')
@@ -579,14 +582,30 @@ let eventHandlers = {
                         .attr('x2', (d) => {return xScale(d.pointB.x)})
                         .attr('y2', (d) => {return yScale(d.pointB.y)})
                         .attr("fill", "none")
-                        //.attr("stroke", (d,i) => {return d[2]})
                         .transition()
                         .ease(d3.easeLinear)
                         .duration(2000)
-                        .delay((d, i) => i * 100)
                         .attr('stroke-width', 1.0)   
                         .attr("stroke", "green")
-                        .attr("stroke-width", 2.5);
+                        .attr("stroke-width", 3.5);
+
+                    svgCreate.texts
+                        .selectAll('.g-texts')
+                        .data(pointsIN, d => d.pointName)
+                        .enter()      
+                        .append('text')
+                        .merge(svgCreate.texts)
+                        .text((d) => d.pointName)
+                        .attr('x', (d) => xScale(d.x))
+                        .attr('y', (d) => yScale(d.y))
+                        .attr('dx', (d) => xScale(d.dx))
+                        .attr('fill', '#36454F')
+                        .style('opacity', 0)
+                        .transition()
+                        .ease(d3.easeLinear)
+                        .duration(3500)
+                        .style('opacity', 1);
+
                 }else{
                     let segmentsOUT = geom.segments.filter(d => d.lineName != 'MC');
                     console.log(15, 'o', segmentsOUT);
@@ -594,13 +613,81 @@ let eventHandlers = {
                     svgCreate.lines.selectAll('line').data(segmentsOUT, d => d.lineName).exit().remove();                    
                 }
 
+            }if(response.index === 16){
+                if(response.direction == 'up'){
+                    let segmentsIN = geom.segments;
+                    let pointsIN = geom.points;
+
+                    // SAME AS following animation!!
+                    //there are some issues with the point handling because the way the are defined
+                    //in the classes and other functions.
+                    //ordering by naming is not working and right now I don't have an answer.
+                    //it would take some thought to solve it so I am using a bad hack instead.
+                    //I am working on the pointsIN so I am manage the project based on its position 
+                    //in the Array (which corresponds with its position in the html)
+                    let radius = geom.segments.filter(d => d.lineName == 'r');
+                    let radiusPoint = {
+                        x: radius[0].middlePoint.x,
+                        y: radius[0].middlePoint.y,
+                        pointName: 'r',
+                        dx: 7               
+                    };
+
+                    //https://www.geeksforgeeks.org/how-to-insert-an-item-into-array-at-specific-index-in-javascript/
+                    pointsIN = [...pointsIN.slice(0, 3), radiusPoint, pointsIN[3]];
+                    
+                    svgCreate.lines
+                        .selectAll('line')
+                        .data(segmentsIN,  d => d.lineName)
+                        .transition()
+                        .ease(d3.easeLinear)
+                        .duration(2000)
+                        .attr('x1', (d) => {return xScale(d.pointA.x)})
+                        .attr('y1', (d) => {return yScale(d.pointA.y)})
+                        .attr('x2', (d) => {return xScale(d.pointB.x)})
+                        .attr('y2', (d) => {return yScale(d.pointB.y)});
+    
+                    svgCreate.symbols
+                        .selectAll('path')
+                        .data(pointsIN)
+                        .transition()
+                        .ease(d3.easeLinear)
+                        .duration(2000)
+                        .attr('transform', (d) => `translate(${xScale(d.x)} , ${yScale(d.y)})`);
+    
+                    svgCreate.texts
+                        .selectAll('text')
+                        .data(pointsIN)
+                        .transition()
+                        .ease(d3.easeLinear)
+                        .duration(2000)
+                        .attr('x', (d) => xScale(d.x))
+                        .attr('y', (d) => yScale(d.y));      
+                }
             }if(response.index === 17){
                 if(response.direction == 'down'){
                     let segmentsIN = geomRot.segments;
+                    
+                    //there are some issues with the point handling because the way the are defined
+                    //in the classes and other functions.
+                    //ordering by naming is not working and right now I don't have an answer.
+                    //it would take some thought to solve it so I am using a bad hack instead.
+                    //I am working on the pointsIN so I am manage the project based on its position 
+                    //in the Array (which corresponds with its position in the html)
                     let pointsIN = geomRot.points;
+                    let radius = geomRot.segments.filter(d => d.lineName == 'r');
+                    let radiusPoint = {
+                        x: radius[0].middlePoint.x,
+                        y: radius[0].middlePoint.y,
+                        pointName: 'r',
+                        dx: 7               
+                    };
                     
-                    //svgCreate.lines.selectAll('line').remove();
-                    
+                    //https://www.geeksforgeeks.org/how-to-insert-an-item-into-array-at-specific-index-in-javascript/
+                    pointsIN = [...pointsIN.slice(0, 3), radiusPoint, pointsIN[3]];
+                    console.log(pointsIN);
+
+
                     svgCreate.lines
                         .selectAll('line')
                         .data(segmentsIN,  d => d.lineName)
@@ -613,11 +700,9 @@ let eventHandlers = {
                         .attr('y2', (d) => {return yScale(d.pointB.y)});
 
 
-
-
                     svgCreate.symbols
                         .selectAll('path')
-                        .data(pointsIN, d => d.pointName)
+                        .data(pointsIN)
                         .transition()
                         .ease(d3.easeLinear)
                         .duration(2000)
@@ -625,49 +710,69 @@ let eventHandlers = {
     
                     svgCreate.texts
                         .selectAll('text')
-                        .data(pointsIN, d => d.pointName)
+                        .data(pointsIN)
                         .transition()
                         .ease(d3.easeLinear)
                         .duration(2000)
-                        .attr('x', (d) => xScale(d.x))
+                        .attr('x', (d) => {return xScale(d.x)})
                         .attr('y', (d) => yScale(d.y));
                }else{
-                let segmentsIN = geom.segments;
-                let pointsIN = geom.points;
-                
-                //svgCreate.lines.selectAll('line').remove();
-                
-                svgCreate.lines
-                    .selectAll('line')
-                    .data(segmentsIN,  d => d.lineName)
-                    .transition()
-                    .ease(d3.easeLinear)
-                    .duration(2000)
-                    .attr('x1', (d) => {return xScale(d.pointA.x)})
-                    .attr('y1', (d) => {return yScale(d.pointA.y)})
-                    .attr('x2', (d) => {return xScale(d.pointB.x)})
-                    .attr('y2', (d) => {return yScale(d.pointB.y)});
-
-
-
-
-                svgCreate.symbols
-                    .selectAll('path')
-                    .data(pointsIN, d => d.pointName)
-                    .transition()
-                    .ease(d3.easeLinear)
-                    .duration(2000)
-                    .attr('transform', (d) => `translate(${xScale(d.x)} , ${yScale(d.y)})`);
-
-                svgCreate.texts
-                    .selectAll('text')
-                    .data(pointsIN, d => d.pointName)
-                    .transition()
-                    .ease(d3.easeLinear)
-                    .duration(2000)
-                    .attr('x', (d) => xScale(d.x))
-                    .attr('y', (d) => yScale(d.y));                
                }         
+            }if(response.index === 18){
+                if(response.direction == 'down'){
+                    let dxSegment = new Line(new Point(geomRot.points[2].x, geomRot.points[2].y),  new Point(geomRot.points[3].x, geomRot.points[2].y), 'dx');
+                    let dySegment = new Line(new Point(geomRot.points[3].x, geomRot.points[2].y),  new Point(geomRot.points[3].x, geomRot.points[3].y), 'dy');
+    
+                    let segmentsIN = [dxSegment, dySegment];
+                    console.log(segmentsIN);
+    
+                    svgCreate.lines
+                        .selectAll('.g-segments')
+                        .data(segmentsIN,  d => d.lineName)
+                        .enter()
+                        .append('line')
+                        .attr('x1', (d) => {return xScale(d.pointA.x)})
+                        .attr('y1', (d) => {return yScale(d.pointA.y)})
+                        .attr('x2', (d) => {return xScale(d.pointB.x)})
+                        .attr('y2', (d) => {return yScale(d.pointB.y)})
+                        .transition()
+                        .ease(d3.easeLinear)
+                        .duration(2000)
+                        .attr('stroke-width', 1.0)   
+                        .attr("stroke", "black");
+    
+                    svgCreate.texts
+                        .selectAll('.g-texts')
+                        .data(segmentsIN,  d => d.lineName)
+                        .enter()
+                        .append('text')
+                        .text((d) => d.lineName)
+                        .attr('x', (d) => xScale(d.middlePoint.x))
+                        .attr('y', (d) => yScale(d.middlePoint.y))
+                        .attr('fill', '#36454F')
+                        .style('font-size', '0.75rem')
+                        .style('opacity', 1);
+                }else{
+                    svgCreate.arcs.selectAll('path').remove();
+                }
+            }if(response.index == 19){
+                
+                let axis = geomRot.points[2];
+                let startAngle = ABgeoRot.atanT;
+                
+                svgCreate.arcs
+                    .append('path')
+                    .attr('transform', `translate(${xScale(axis.x)},${yScale(axis.y)})`)
+                    .attr('d', d3.arc()({
+                        innerRadius:27,
+                        outerRadius: 28,
+                        startAngle: startAngle - Math.PI/4,
+                        endAngle: -Math.PI/4
+                        //startAngle: startAngle + (Math.PI/2 -  startAngle),
+                        //endAngle: (Math.PI/2 -  startAngle)
+                    }))
+                    .attr('fill','none')
+                    .attr('stroke','orange')
             }
         }
 
