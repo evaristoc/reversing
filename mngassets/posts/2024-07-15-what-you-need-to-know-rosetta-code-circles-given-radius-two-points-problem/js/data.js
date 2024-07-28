@@ -123,17 +123,17 @@ class PointCircleGeoms extends Line{
 		return this.distPoint2Center;
 	}
 
-	get getr(){
-		return this.r;
-	}
+	// get getr(){
+	// 	return this.r;
+	// }
 
-	set setr(r){
-		this.r = r;
-		if(this.r > 0){
-			this.distPoint2Center = this.findDistPoint2Center();
-			this.centerProjection = this.findCenterByProjection();
-		}
-	}
+	// set setr(r){
+	// 	this.r = r;
+	// 	if(this.r > 0){
+	// 		this.distPoint2Center = this.findDistPoint2Center();
+	// 		this.centerProjection = this.findCenterByProjection();
+	// 	}
+	// }
 
 	circleFamilythru2Points(lambda){
 		/* From
@@ -178,8 +178,13 @@ class PointCircleGeoms extends Line{
 		return Math.sqrt(this.r**2 - (this.distBtwPoints/2)**2); //Why? It is a square!!!
 	}
 	
-
+	/*TODO: 
+	Check this method, as it is giving strange results when called, like two different radii when 
+	only one is possible???
+	A correct result is calculated at interactive block number 20 on 'interactions.js'
+	*/
 	findCenterByProjection(){ //here we are actually using the parametric equation of the circle
+		console.log(this.atanT, this.r)
 		let xA, yA, xB, yB;
         xA = this.middlePoint.x - this.distPoint2Center*Math.cos(this.atanT);
         yA = this.middlePoint.y - this.distPoint2Center*Math.sin(this.atanT);

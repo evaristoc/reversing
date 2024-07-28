@@ -123,7 +123,7 @@ let eventHandlers = {
         let AM = new Line(ABgeo.pointA, ABgeo.middlePoint, 'AM');
         let rad = new Line(ABgeo.pointA, ABgeo.middlePoint, 'r');
 
-        geom.circlesFam[8].center.pointName = 'C1';
+        geom.circlesFam[8].center.pointName = 'C';
         geom.circlesFam[8].center.dx = 10;
 
         geom.points.push(geom.circlesFam[8].center);
@@ -149,8 +149,10 @@ let eventHandlers = {
         //Found the resulting animation accidentally using below numbers and I loved what happened!!!
         //let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( 180 - 30.3 );
         //let ddy = ABgeo.distBtwPoints * Math.sin( 180 - 30.3 );
-        let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( Math.PI/4 );
-        let ddy = ABgeo.distBtwPoints * Math.sin( Math.PI/4 );
+        //let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( Math.PI/4 );
+        //let ddy = ABgeo.distBtwPoints * Math.sin( Math.PI/4 );
+        let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( Math.PI/3 );
+        let ddy = ABgeo.distBtwPoints * Math.sin( Math.PI/3 );
         console.log(ddx, ddy);
 
         const ABgeoRot = new PointCircleGeoms(new Point(scene.widthSVG *.333 + ddx, scene.heightSVG/2 + ddy, 'A'), new Point(scene.widthSVG * .666, scene.heightSVG/2, 'B'), geomRot.r);
@@ -181,7 +183,7 @@ let eventHandlers = {
         //let rad = new Line(ABgeo.pointA, geom.circlesFam[8].center, 'r');
         let radRot = new Line(ABgeoRot.pointA, geomRot.circlesFam[8].center, 'r');
 
-        geomRot.circlesFam[8].center.pointName = 'C1';
+        geomRot.circlesFam[8].center.pointName = 'C';
         geomRot.circlesFam[8].center.dx = 10;
         
         geomRot.points.push(geomRot.circlesFam[8].center);
@@ -568,7 +570,7 @@ let eventHandlers = {
             if(response.index === 15){
                 if(response.direction == 'down'){
                     let segmentsIN = geom.segments.filter(d => d.lineName == 'MC');
-                    let pointsIN = geom.points.filter(d => d.pointName == 'C1');
+                    let pointsIN = geom.points.filter(d => d.pointName == 'C');
 
                     console.log(15, 'i', segmentsIN, pointsIN);
 
@@ -754,44 +756,54 @@ let eventHandlers = {
                         .style('opacity', 1);
                 }else{
                     svgCreate.arcs.selectAll('path').remove();
+                    svgCreate.circles.selectAll('circle').remove();
                 }
             }if(response.index == 19){
                 
-                let axis = geomRot.points[2];
-                let angle = ABgeoRot.atanT;
+                if(response.direction = 'down'){
+                    let axis = geomRot.points[2];
+                    let angle = ABgeoRot.atanT;
+    
+                   
+                    svgCreate.arcs
+                        .append('path')
+                        .attr('transform', `translate(${xScale(axis.x)},${yScale(axis.y)})`)
+                        .attr('d', d3.arc()({
+                            innerRadius:25,
+                            outerRadius: 28,
+                            startAngle: angle < 0? -Math.PI/2 : Math.PI/2,
+                            endAngle: angle < 0? -Math.PI/2 - angle : Math.PI/2 - angle
+                        }))
+                        .attr('fill','orange')
+                        .attr('stroke','#FF8C00')                    
+                }else{
+                    svgCreate.circles.selectAll('circle').remove();
+                }
 
-                //let circlesIN = ABgeoRot.findCenterByProjection()[0];
-                let r = 180;
-                //(Math.PI - (Math.PI/2-angle)
-                let x1 = ABgeoRot.middlePoint.x - ABgeoRot.distPoint2Center*Math.cos((angle));
-                let y1 = ABgeoRot.middlePoint.y - ABgeoRot.distPoint2Center*Math.sin((angle));
-                //let x2 =
-                //let y2 =
-                let c = [new Circle(new Point(x1, y1), r)];
-
-                svgCreate.circles
-                    .selectAll('circle')
-                    .data(c)
-                    .enter()
-                    .append("circle")
-                    .attr('r', (d)=>{console.log(d.r); return d.r})
-                    .attr('cx', (d)=>{console.log(d); return xScale(d.center.x)})
-                    .attr('cy', (d)=>{return yScale(d.center.y)})
-                    .attr("fill", "none")
-                    .attr("stroke", "black")
-                    .attr('stroke-width', 1.0);
-                
-                svgCreate.arcs
-                    .append('path')
-                    .attr('transform', `translate(${xScale(axis.x)},${yScale(axis.y)})`)
-                    .attr('d', d3.arc()({
-                        innerRadius:27,
-                        outerRadius: 28,
-                        startAngle: Math.PI/2,
-                        endAngle: angle < 0? -angle : angle
-                    }))
-                    .attr('fill','none')
-                    .attr('stroke','orange')
+            }if(response.index == 20){
+                if(response.direction == 'down'){
+                    //WARNING: found a serious bug with this method (see data.js); keeping for later...
+                    //let [circlesIN, angleD] = ABgeoRot.findCenterByProjection();
+                    //console.log(angle, angleD, circlesIN);                    //let circlesIN = ABgeoRot.findCenterByProjection()[0];
+                    let angle = ABgeoRot.atanT;
+                    let r = 180;
+                    let x1 = ABgeoRot.middlePoint.x - ABgeoRot.distPoint2Center*Math.cos(angle);
+                    let y1 = ABgeoRot.middlePoint.y - ABgeoRot.distPoint2Center*Math.sin(angle);
+                    let c = [new Circle(new Point(x1, y1), r)];
+    
+   
+                    svgCreate.circles
+                        .selectAll('circle')
+                        .data(c)
+                        .enter()
+                        .append("circle")
+                        .attr('r', (d)=>{return d.r})
+                        .attr('cx', (d)=>{return xScale(d.center.x)})
+                        .attr('cy', (d)=>{return yScale(d.center.y)})
+                        .attr("fill", "none")
+                        .attr("stroke", "black")
+                        .attr('stroke-width', 1.0);
+                }
             }
         }
 

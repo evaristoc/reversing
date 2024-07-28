@@ -92,20 +92,20 @@ So... Let's get this started!
         <div class='step' data-step='3'>
             3
             <div class="explain">
-                <p>Now let's draw a segment between our points A and B. Let's call it the segment <strong>AB</strong></p>
+                <p>Now let's draw a segment between our points <i>A</i> and <i>B</i>. Let's call it the segment <strong>AB</strong></p>
             </div>
         </div>
         <div class='step' data-step='4'>
             4
             <div class="explain">
-                <p>A circle could be defined as "<strong><i>all the points from the same distance known as the</i> radius <i>to a point called the</i> center</strong>". That means that in order for our points A and B to be part of a circle, they have to be at a distance of radius <i>r</i> to the center of that circle.</p>
+                <p>A circle could be defined as "<strong><i>all the points from the same distance known as the</i> radius <i>to a point called the</i> center</strong>". That means that in order for our points <i>A</i> and <i>B</i> to be part of a circle, they have to be at a distance of radius <i>r</i> to the center of that circle.</p>
                 <p>Under the previously stated conditions, how many circles would contain our two points if we don't specify a radius?</p>
             </div>
         </div>
         <div class='step' data-step='5'>
             5
             <div class="explain">
-                <p>Here one example: a circle of radius equal to the half of the distance between A and B, with the middle point <strong>M</strong> between A and B as its center.</p>
+                <p>Here one example: a circle of radius equal to the half length of the segment <i>AB</i>, with the middle point <strong>M</strong> of segment <i>AB</i> as the center of the circle.</p>
             </div>
         </div>
         <div class='step' data-step='6'>
@@ -122,26 +122,26 @@ So... Let's get this started!
         <div class='step' data-step='8'>
             8
             <div class="explain">
-                <p>In fact, we can draw infinite number of circles <i>as long as their radii are equal or larger than the half distance between A and B.</i></p>
+                <p>In fact, we can draw infinite number of circles <i>as long as their radii are equal or larger than the half distance between <i>A</i> and <i>B</i>.</i></p>
             </div>
         </div>
         <div class='step' data-step='9'>
             9
             <div class="explain">
-                <p>Notice that all the circles touch our two points while their centers get further away from our point M.</p>
+                <p>Notice that all the circles touch our two points while their centers get further away from our point <i>M</i>.</p>
             </div>
         </div>
         <div class='step' data-step='10'>
             10
             <div class="explain">        
                 <p>And there are more: we can include the circles in the opposite direction too.</p>
-                <p>All those circles form a <i>family of circles</i> containing our points A and B.</p>
+                <p>All those circles form a <strong><i>family of circles</i></strong> containing our points <i>A</i> and <i>B</i>.</p>
             </div>
         </div>
         <div class='step' data-step='11'>
             11
             <div class="explain">        
-                <p>One peculiarity of this circle family is that their centers are <i>colinear</i>: they all belong to the perpendicular to the segment AB that passes through the middle point M.</p>
+                <p>One peculiarity of this circle family is that their centers are <i>colinear</i>: they all belong to the perpendicular to the segment <i>AB</i> that passes through the middle point <i>M</i>.</p>
             </div>
         </div>
         <div class='step' data-step='12'>
@@ -160,52 +160,52 @@ So... Let's get this started!
         <div class='step' data-step='14'>
             14
             <div class="explain">        
-                <p>Let's see what we have so far: the two points and the radius are given. We have also learned that the centers are colinear to the perpendicular that passes through the middle point M. And because we know the length of the segment AB and the radius, we can also calculate some distances.</p>
+                <p>Let's see what we have so far. The two points and the radius are given. We have also learned that the centers are colinear to the perpendicular that passes through the middle point <i>M</i>. And because we know the length of the segment <i>AB</i> and the radius, we can also calculate some distances.</p>
             </div>
         </div>
         <div class='step' data-step='15'>
             15
             <div class="explain">        
-                <p>Let's select the point A and let's draw some useful distances pointing to the center of one of the possible circles: the radius <i>r</i> and the segment <i>AM</i>.</p>
+                <p>Let's select the point <i>A</i> and let's draw some useful distances: the length of segment <i>AM</i> and the radius <i>r</i>, pointing to one of the possible centers.</p>
             </div>
         </div>
         <div class='step' data-step='16'>
             16
             <div class="explain">
-                <p>I hope you will agree with me that the shape we have highlighted ressembles a side and hypotenuse of a rectangular triangle, which allows us to find a solution for the distance between M and one of the centers using Pitagoras.</p>   
+                <p>I hope you will agree with me that the shape we have highlighted ressembles a side and hypotenuse of a rectangular triangle, which allows us to find a solution for the distance between <i>M</i> and one of the centers using Pitagoras. Let's call one of those centers <strong>C</strong>.</p>
             </div>
         </div>
         <div class='step' data-step='17'>
             17
             <div class="explain">        
                 <p>This is a bunch of good information! But it is not enough: we still need to <strong><i>translate that information into the xy-coordinates of the centers</i></strong>.</p>
-                <p>For the simple case where the AB segment is parallel to the the x-coord as our current example, finding the right coordinates of the centers would consist of simple additions and substractions to the coordinates of the point M. The challenge of a more general solution lies on the fact that points A and B can be wherever in our plane. For example, let's say we had a different point A.</p>
+                <p>For the simple case where the <i>AB</i> segment is parallel to the the x-coord as our current example, finding the right coordinates of the centers would consist of simple additions and substractions to the coordinates of the point <i>M</i>. <strong><i>The challenge of a more general solution</i></strong> lies on the fact that points <i>A</i> and <i>B</i> can be wherever in our plane. For example, let's say we had a different point <i>A</i>.</p>
             </div>
         </div>
         <div class='step' data-step='18'>
             18
             <div class="explain">        
-                <p>This is a <i>rotation</i> of the geometry! Here we won't get the right solution by simply adding or substracting to the point M. We need to find the <i>projection</i> of the segment <i>MC1</i> over the x and y axes of our cartesian plane. And that requires some trigonometry.</p>
+                <p>This is a <i>rotation</i> of the geometry! Here we won't get the right solution by simply adding or substracting to the point <i>M</i>. We need to find the <strong><i>projection</i></strong> of the segment <i>MC</i> over the x and y axes of our cartesian plane. And that requires some trigonometry.</p>
                 <p></p>
             </div>
         </div>
         <div class='step' data-step='19'>
             19
             <div class="explain">        
-                <p>Those segments, <strong>dx</strong> and  <strong>dy</strong> should be calculated based on the angle between the segment <i>MC1</i> and the x-axis. In our example, that angle would be...</p>
+                <p>Those segments, <strong>dx</strong> and  <strong>dy</strong> should be calculated based on the angle between the segment <i>MC</i> and the x-axis. In our example, that angle would be...</p>
             </div>
         </div>
         <div class='step' data-step='20'>
             20
             <div class="explain">        
-                <p>... the one indicated by the orange arc. It is the arctan of perpendicular to the segment <i>AB</i>.</p> 
-                <p><i>dx</i> is the cosine of the angle by the length of the segment <i>MC1</i>, and <i>dy</i> is similar but by using the sine.</p>
+                <p>... the one indicated by the orange arc. It is the arctan of the perpendicular to the segment <i>AB</i>.</p> 
+                <p><i>dx</i> is the cosine of the angle by the length of the segment <i>MC</i>, and <i>dy</i> is similar but by using the sine.</p>
             </div>
         </div>
         <div class='step' data-step='21'>
             21
             <div class="explain">        
-                <p>Once you have those values, you have to add / substract them to the corresponding coordinates of the point M in order to get the coordinates of the centers of the circles.</p>
+                <p>Once you have those values, you have to add / substract them to the corresponding coordinates of the point <i>M</i> in order to get the coordinates of the centers of the circles. For example, here it is the circle after a substraction...</p>
                 <p>And that's it!</p>
             </div>
         </div>
