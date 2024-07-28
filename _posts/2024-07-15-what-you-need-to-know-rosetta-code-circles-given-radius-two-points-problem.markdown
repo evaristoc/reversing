@@ -263,3 +263,4 @@ As previously mentioned, this project was made with d3.js and scrollama.js.
 
 I am evaluating my workflow and the tools I use every time I start a new post. This time was the appropiate one to introduce some [Babel](https://babeljs.io/) and [Jest](https://jestjs.io/). I already had planned to practice unit testing for my projects for a while :).
 
+I could test a test, but... with some hiccups from Jekyll. Maybe a topic for another day.
