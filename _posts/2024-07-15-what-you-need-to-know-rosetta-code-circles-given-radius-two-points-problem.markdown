@@ -237,7 +237,7 @@ For my implementation, the angle of the perpendicular to AB was igual to:
 angle = arctan( - (xB - xA)/(yB - yA) )
 ```
 
-Then it is a question of trying different points to test your implementation. But there is a few things I had to keep in mind with my implementation that I would like to share...
+Then it was a question of trying different points to test your implementation. But there are a few things I had to keep in mind with my implementation that I would like to share...
 
 # So... What did we learn from this code?
 
@@ -256,4 +256,10 @@ Well, first of all, I mentioned the relevance of the order of the reference poin
 What also makes the provided solution a bit tricky is that the reference point used to calculate the centers seems to be based on the first point of entry, point A in my case, which also makes more difficult the calculation of the necessary angles and the correct *dx* and *dy*. It is not impossible: it is only more difficult, and prone to error.
 
 But it is up to you to try this or other approaches! There are *many* ways to approach this problem. Mine might be also incomplete, or even wrong. My invitation is for you to evaluate the existing one to this date (jul-2024) and see if you can improve that! I'm sure you can. I wish you happy coding!
+
+----
+
+As previously mentioned, this project was made with d3.js and scrollama.js.
+
+I am evaluating my workflow and the tools I use every time I start a new post. This time was the appropiate one to introduce some [Babel](https://babeljs.io/) and [Jest](https://jestjs.io/). I already had planned to practice unit testing for my projects for a while :).
 
