@@ -205,7 +205,7 @@ So... Let's get this started!
         <div class='step' data-step='21'>
             21
             <div class="explain">        
-                <p>Once you have those values, you have to add / substract them to the corresponding coordinates of the point <i>M</i> in order to get the coordinates of the centers of the circles. For example, here it is the circle after a substraction...</p>
+                <p>Once you have those values, you have to add / substract them to the corresponding coordinates of the point <i>M</i> in order to get the coordinates of the centers of the circles. For example, here it is one of the circles after a substraction...</p>
                 <p>And that's it!</p>
             </div>
         </div>
@@ -231,15 +231,36 @@ So... Let's get this started!
 
 # Tada!
 
-(TODO)
+For my implementation, the angle of the perpendicular to AB was igual to:
+
+```
+angle = arctan( - (xB - xA)/(yB - yA) )
+```
+
+Then it was a question of trying different points to test your implementation. But there are a few things I had to keep in mind with my implementation that I would like to share...
 
 # So... What did we learn from this code?
 
-(TODO)
+First of all, the solution to this problem would be affected by the selection of the point, A or B, used as reference for further calculations.
+
+In my case I used the point A, but it is important to consider that I *always* left the point A to left of the point B, by sorting them by their x coordinates. This is relevant.
+
+The other thing I did was to use the middle point of the segment AB as my reference to find the centers of the circles. Why? Because it is equidistant to each of the centers. That is because the middle point M is not only the middle point between A and B but also between the centers of the *circles with same radii*. Selecting the middle point in this case makes the caculations easier.
 
 # Final Remarks
 
-(TODO)
+How my approach was different to the one given in the aforementioned solution?
 
-I wish you happy coding!
+Well, first of all, I mentioned the relevance of the order of the reference points. The solution I posted won't care for that, so you would have different results if you invert the points.
 
+What also makes the provided solution a bit tricky is that the reference point used to calculate the centers seems to be based on the first point of entry, point A in my case, which also makes more difficult the calculation of the necessary angles and the correct *dx* and *dy*. It is not impossible: it is only more difficult, and prone to error.
+
+But it is up to you to try this or other approaches! There are *many* ways to approach this problem. Mine might be also incomplete, or even wrong. My invitation is for you to evaluate the existing one to this date (jul-2024) and see if you can improve that! I'm sure you can. I wish you happy coding!
+
+----
+
+As previously mentioned, this project was made with d3.js and scrollama.js.
+
+I am evaluating my workflow and the tools I use every time I start a new post. This time was the appropiate one to introduce some [Babel](https://babeljs.io/) and [Jest](https://jestjs.io/). I already had planned to practice unit testing for my projects for a while :).
+
+I could test a test, but... with some hiccups from Jekyll. Maybe a topic for another day.
