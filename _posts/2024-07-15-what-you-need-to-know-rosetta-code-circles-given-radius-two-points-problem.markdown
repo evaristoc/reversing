@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "What you need to know... solving the Rosetta Code's 'circles of given radius through two points'  problem"
-date:   2024-07-31 12:00:00 +0200
+date:   2024-07-15 12:00:00 +0200
 categories: blog what-you-need-to
 ---
 

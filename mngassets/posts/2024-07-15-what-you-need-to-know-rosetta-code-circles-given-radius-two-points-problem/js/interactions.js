@@ -147,10 +147,10 @@ let eventHandlers = {
         */
 
         //Found the resulting animation accidentally using below numbers and I loved what happened!!!
-        let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( 180 - 30.3 );
-        let ddy = ABgeo.distBtwPoints * Math.sin( 180 - 30.3 );
-        //let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( Math.PI/4 );
-        //let ddy = ABgeo.distBtwPoints * Math.sin( Math.PI/4 );
+        //let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( 180 - 30.3 );
+        //let ddy = ABgeo.distBtwPoints * Math.sin( 180 - 30.3 );
+        let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( Math.PI/4 );
+        let ddy = ABgeo.distBtwPoints * Math.sin( Math.PI/4 );
         console.log(ddx, ddy);
 
         const ABgeoRot = new PointCircleGeoms(new Point(scene.widthSVG *.333 + ddx, scene.heightSVG/2 + ddy, 'A'), new Point(scene.widthSVG * .666, scene.heightSVG/2, 'B'), geomRot.r);
@@ -762,8 +762,9 @@ let eventHandlers = {
 
                 //let circlesIN = ABgeoRot.findCenterByProjection()[0];
                 let r = 180;
-                let x1 = ABgeoRot.middlePoint.x - ABgeoRot.distPoint2Center*Math.sin(Math.PI/2-angle);
-                let y1 = ABgeoRot.middlePoint.x - ABgeoRot.distPoint2Center*Math.cos(Math.PI/2-angle);
+                //(Math.PI - (Math.PI/2-angle)
+                let x1 = ABgeoRot.middlePoint.x - ABgeoRot.distPoint2Center*Math.cos((angle));
+                let y1 = ABgeoRot.middlePoint.y - ABgeoRot.distPoint2Center*Math.sin((angle));
                 //let x2 =
                 //let y2 =
                 let c = [new Circle(new Point(x1, y1), r)];
@@ -774,8 +775,8 @@ let eventHandlers = {
                     .enter()
                     .append("circle")
                     .attr('r', (d)=>{console.log(d.r); return d.r})
-                    .attr('cx', (d)=>{console.log(d); return d.center.x})
-                    .attr('cy', (d)=>{return d.center.y})
+                    .attr('cx', (d)=>{console.log(d); return xScale(d.center.x)})
+                    .attr('cy', (d)=>{return yScale(d.center.y)})
                     .attr("fill", "none")
                     .attr("stroke", "black")
                     .attr('stroke-width', 1.0);
