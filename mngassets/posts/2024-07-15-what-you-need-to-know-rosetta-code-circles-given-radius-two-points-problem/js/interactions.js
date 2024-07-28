@@ -147,8 +147,8 @@ let eventHandlers = {
         */
 
         //Found the resulting animation accidentally using below numbers and I loved what happened!!!
-        let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( 180 - 30 );
-        let ddy = ABgeo.distBtwPoints * Math.sin( 180 - 30 );
+        let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( 180 - 30.3 );
+        let ddy = ABgeo.distBtwPoints * Math.sin( 180 - 30.3 );
         //let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( Math.PI/4 );
         //let ddy = ABgeo.distBtwPoints * Math.sin( Math.PI/4 );
         console.log(ddx, ddy);
@@ -758,7 +758,27 @@ let eventHandlers = {
             }if(response.index == 19){
                 
                 let axis = geomRot.points[2];
-                let startAngle = ABgeoRot.atanT;
+                let angle = ABgeoRot.atanT;
+
+                //let circlesIN = ABgeoRot.findCenterByProjection()[0];
+                let r = 180;
+                let x1 = ABgeoRot.middlePoint.x - ABgeoRot.distPoint2Center*Math.sin(Math.PI/2-angle);
+                let y1 = ABgeoRot.middlePoint.x - ABgeoRot.distPoint2Center*Math.cos(Math.PI/2-angle);
+                //let x2 =
+                //let y2 =
+                let c = [new Circle(new Point(x1, y1), r)];
+
+                svgCreate.circles
+                    .selectAll('circle')
+                    .data(c)
+                    .enter()
+                    .append("circle")
+                    .attr('r', (d)=>{console.log(d.r); return d.r})
+                    .attr('cx', (d)=>{console.log(d); return d.center.x})
+                    .attr('cy', (d)=>{return d.center.y})
+                    .attr("fill", "none")
+                    .attr("stroke", "black")
+                    .attr('stroke-width', 1.0);
                 
                 svgCreate.arcs
                     .append('path')
@@ -766,10 +786,8 @@ let eventHandlers = {
                     .attr('d', d3.arc()({
                         innerRadius:27,
                         outerRadius: 28,
-                        startAngle: startAngle - Math.PI/4,
-                        endAngle: -Math.PI/4
-                        //startAngle: startAngle + (Math.PI/2 -  startAngle),
-                        //endAngle: (Math.PI/2 -  startAngle)
+                        startAngle: Math.PI/2,
+                        endAngle: angle < 0? -angle : angle
                     }))
                     .attr('fill','none')
                     .attr('stroke','orange')
