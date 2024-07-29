@@ -66,6 +66,7 @@ class Line{
 		}else if(this.pointA.pointName && this.pointB.pointName){
 			this.lineName = this.pointA.pointName + this.pointB.pointName;
 		}
+		this.distBtwPoints = this.findDistBtwPoints();
 		this.middlePoint = this.findMiddlePoint();
 		let a = this.findParamsNormal();
 		this.mt = a.mT; 
@@ -83,6 +84,10 @@ class Line{
 		atanT = Math.atan(mT);
 		cT = this.middlePoint.y - mT*this.middlePoint.x;
 		return {mT: mT, atanT: atanT, cT: cT};
+	}
+
+	findDistBtwPoints(){
+    	return Math.sqrt((this.pointB.x - this.pointA.x)**2 + (this.pointB.y - this.pointA.y)**2);
 	}
 
 }
@@ -108,7 +113,6 @@ class PointCircleGeoms extends Line{
 	constructor(pointA, pointB, r, lineName){
 		super(pointA, pointB, lineName);
 		this.r = r;
-		this.distBtwPoints = this.findDistBtwPoints();
 		if(this.r){
 			this.distPoint2Center = this.findDistPoint2Center();
 			this.centerProjection = this.findCenterByProjection();
@@ -170,9 +174,6 @@ class PointCircleGeoms extends Line{
 		return new Circle(new Point(h, k), r);
 	}
 
-	findDistBtwPoints(){
-    	return Math.sqrt((this.pointB.x - this.pointA.x)**2 + (this.pointB.y - this.pointA.y)**2);
-	}
 
 	findDistPoint2Center(){
 		return Math.sqrt(this.r**2 - (this.distBtwPoints/2)**2); //Why? It is a square!!!

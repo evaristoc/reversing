@@ -147,12 +147,12 @@ let eventHandlers = {
         */
 
         //Found the resulting animation accidentally using below numbers and I loved what happened!!!
-        //let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( 180 - 30.3 );
-        //let ddy = ABgeo.distBtwPoints * Math.sin( 180 - 30.3 );
+        let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( 180 - 30.3 );
+        let ddy = ABgeo.distBtwPoints * Math.sin( 180 - 30.3 );
         //let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( Math.PI/4 );
         //let ddy = ABgeo.distBtwPoints * Math.sin( Math.PI/4 );
-        let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( Math.PI/3 );
-        let ddy = ABgeo.distBtwPoints * Math.sin( Math.PI/3 );
+        //let ddx = ABgeo.distBtwPoints - ABgeo.distBtwPoints * Math.cos( Math.PI/3 );
+        //let ddy = ABgeo.distBtwPoints * Math.sin( Math.PI/3 );
         console.log(ddx, ddy);
 
         const ABgeoRot = new PointCircleGeoms(new Point(scene.widthSVG *.333 + ddx, scene.heightSVG/2 + ddy, 'A'), new Point(scene.widthSVG * .666, scene.heightSVG/2, 'B'), geomRot.r);
@@ -786,9 +786,13 @@ let eventHandlers = {
                     //let [circlesIN, angleD] = ABgeoRot.findCenterByProjection();
                     //console.log(angle, angleD, circlesIN);                    //let circlesIN = ABgeoRot.findCenterByProjection()[0];
                     let angle = ABgeoRot.atanT;
-                    let r = 180;
-                    let x1 = ABgeoRot.middlePoint.x - ABgeoRot.distPoint2Center*Math.cos(angle);
-                    let y1 = ABgeoRot.middlePoint.y - ABgeoRot.distPoint2Center*Math.sin(angle);
+                    //let r = geomRot.circlesFam[8].r;
+                    let r = geomRot.segments.filter(d => d.lineName == 'r')[0].distBtwPoints;
+                    let lengthMC = geomRot.segments.filter(d => d.lineName == 'MC')[0].distBtwPoints;
+                    console.log('r', r);
+                    let x1 = ABgeoRot.middlePoint.x + lengthMC*Math.cos(angle);
+                    let y1 = ABgeoRot.middlePoint.y + lengthMC*Math.sin(angle);
+                    //console.log( ABgeoRot.middlePoint.x, ABgeoRot.distPoint2Center, Math.cos(angle));
                     let c = [new Circle(new Point(x1, y1), r)];
     
    

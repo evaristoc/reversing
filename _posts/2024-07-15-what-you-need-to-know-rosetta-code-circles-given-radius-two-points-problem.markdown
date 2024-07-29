@@ -58,15 +58,17 @@ const findC = (...args) => {
   return msg;
 };
 ```
-There was no much follow up in the Freecodecamp thread after all, but I still wanted to check the problem, only to find what appeared to be some errors in the solution above.
+There was no much follow up in the Freecodecamp thread after all, but I still wanted to check the problem and the code on the Rosetta Code page, only to find some possible errors in the code.
 
 > Keep in mind that the current Rosetta Code solution can be eventually updated
 
-This motivated me to revise the problem. Similarly I wanted for some time to test the use of [d3.js](https://d3js.org/) and [scrollama.js](https://github.com/russellsamora/scrollama) for storytelling.
+This motivated me to revise the problem.
+
+At the same time, I wanted for a while to test the use of [d3.js](https://d3js.org/) and [scrollama.js](https://github.com/russellsamora/scrollama) for storytelling, and this problem seemed like a good opportunity to give it a go.
 
 So what not to combine those two interests and to make **an animation of few things we should know to get a solution of the Rosetta Code problem**?
 
-Notice that I won't provide any code here: I will only show some theory that could help to solve it. I will end this post with a short discussion about my findings and how they compare to the posted Rosetta Code solution. Similarly, I would like to write about what I discovered working with d3.js and scrollama.js, but that will be left for a different post.
+Notice that I won't provide any code here: I will only show some theory that could help to solve it. I will end this post with a short discussion about my findings and how they compare to the posted Rosetta Code solution.
 
 So... Let's get this started!
 
@@ -154,19 +156,19 @@ So... Let's get this started!
             13
             <div class="explain">        
                 <p>... but because <i>we still don't know the coordinates of their centers</i> we are not able to provide a numeric (programmatic) solution for them :(.</p>
-                <p>So another way to pose part of our problem would be: <strong>How do we code a script that calculates the cooordinates of the centers of any of the circles of the corresponding circle family, given a radius and the two points?</strong></p>
+                <p>So another way to pose part of our problem would be: <strong><i>How do we code a script that calculates the cooordinates of the centers of any of the circles of the corresponding circle family, given a radius and the two points?</i></strong></p>
             </div>
         </div>
         <div class='step' data-step='14'>
             14
             <div class="explain">        
-                <p>Let's see what we have so far. The two points and the radius are given. We have also learned that the centers are colinear to the perpendicular that passes through the middle point <i>M</i>. And because we know the length of the segment <i>AB</i> and the radius, we can also calculate some distances.</p>
+                <p>Let's see what we have so far. The two points and the radius are given. We have also learned that the centers are colinear to the perpendicular that passes through the middle point <i>M</i>.</p>
             </div>
         </div>
         <div class='step' data-step='15'>
             15
             <div class="explain">        
-                <p>Let's select the point <i>A</i> and let's draw some useful distances: the length of segment <i>AM</i> and the radius <i>r</i>, pointing to one of the possible centers.</p>
+                <p>Let's select the point <i>A</i> and let's draw some useful data: the length of segment <i>AM</i> and the radius <i>r</i>, pointing to one of the possible centers.</p>
             </div>
         </div>
         <div class='step' data-step='16'>
@@ -185,7 +187,7 @@ So... Let's get this started!
         <div class='step' data-step='18'>
             18
             <div class="explain">        
-                <p>This is a <i>rotation</i> of the geometry! Here we won't get the right solution by simply adding or substracting to the point <i>M</i>. We need to find the <strong><i>projection</i></strong> of the segment <i>MC</i> over the x and y axes of our cartesian plane. And that requires some trigonometry.</p>
+                <p>This is a <i>rotation</i> of the geometry! Here we won't get the right solution by simply adding or substracting to the point <i>M</i>. We need to find the <strong><i>projection</i></strong> of the segment <i>MC</i> over the x and y axes of our cartesian plane. And that requires some <strong><i>trigonometry</i></strong>.</p>
                 <p></p>
             </div>
         </div>
@@ -205,7 +207,7 @@ So... Let's get this started!
         <div class='step' data-step='21'>
             21
             <div class="explain">        
-                <p>Once you have those values, you have to add / substract them to the corresponding coordinates of the point <i>M</i> in order to get the coordinates of the centers of the circles. For example, here it is one of the circles after a substraction...</p>
+                <p>Once you have the lengths of <i>dx</i> and <i>dy</i>, you have to add / substract them to the corresponding coordinates of the point <i>M</i> to get the coordinates of the centers of the circles. For example, here it is one of the circles after a substraction...</p>
                 <p>And that's it!</p>
             </div>
         </div>
@@ -237,23 +239,23 @@ For my implementation, the angle of the perpendicular to AB was igual to:
 angle = arctan( - (xB - xA)/(yB - yA) )
 ```
 
-Then it was a question of trying different points to test your implementation. But there are a few things I had to keep in mind with my implementation that I would like to share...
+Then it was a question of trying different points to test the implementation. But there are a few things I had to keep in mind with my implementation that I would like to share...
 
 # So... What did we learn from this code?
 
 First of all, the solution to this problem would be affected by the selection of the point, A or B, used as reference for further calculations.
 
-In my case I used the point A, but it is important to consider that I *always* left the point A to left of the point B, by sorting them by their x coordinates. This is relevant.
+In my case I used the point A as reference, but it is important to consider that I *always* left the point A to the left of the point B, by sorting them by their x coordinates. This is relevant.
 
-The other thing I did was to use the middle point of the segment AB as my reference to find the centers of the circles. Why? Because it is equidistant to each of the centers. That is because the middle point M is not only the middle point between A and B but also between the centers of the *circles with same radii*. Selecting the middle point in this case makes the caculations easier.
+The other thing I did was to use the middle point of the segment AB as my reference to find the centers of the circles. Why? Because it is equidistant to each of the centers. That is because the point M is not only the middle point between A and B but also between the centers of the *any of the circles with the same radii*. Selecting the middle point in this case makes the caculations easier.
 
 # Final Remarks
 
-How my approach was different to the one given in the aforementioned solution?
+How my approach was different to the one given in the solution found in the Rosetta Code page?
 
-Well, first of all, I mentioned the relevance of the order of the reference points. The solution I posted won't care for that, so you would have different results if you invert the points.
+Well, first of all, I mentioned the relevance of the order of the reference points. The solution in the Rosetta Code page is not taking that in consideration, so you might have different results if you invert the order of the points.
 
-What also makes the provided solution a bit tricky is that the reference point used to calculate the centers seems to be based on the first point of entry, point A in my case, which also makes more difficult the calculation of the necessary angles and the correct *dx* and *dy*. It is not impossible: it is only more difficult, and prone to error.
+What also makes the Rosetta Code solution a bit tricky is that the reference point used to calculate the centers seems to be the first point of entry (*p1* in that code), which also makes more difficult the calculation of the necessary angles and coordinates. Bear in mind that the approach was not per se wrong: it is only more difficult and prone to error.
 
 But it is up to you to try this or other approaches! There are *many* ways to approach this problem. Mine might be also incomplete, or even wrong. My invitation is for you to evaluate the existing one to this date (jul-2024) and see if you can improve that! I'm sure you can. I wish you happy coding!
 
