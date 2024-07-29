@@ -207,7 +207,7 @@ So... Let's get this started!
         <div class='step' data-step='21'>
             21
             <div class="explain">        
-                <p>Once you have the lengths of <i>dx</i> and <i>dy</i>, you have to add / substract them to the corresponding coordinates of the point <i>M</i> to get the coordinates of the centers of the circles. For example, here it is one of the circles after a substraction...</p>
+                <p>Once you have the lengths of <i>dx</i> and <i>dy</i>, you have to add / substract them to the corresponding coordinates of the point <i>M</i> to get the coordinates of the centers of the circles. For example, here it is one of the circles after a addition...</p>
                 <p>And that's it!</p>
             </div>
         </div>
@@ -261,7 +261,7 @@ But it is up to you to try this or other approaches! There are *many* ways to ap
 
 ----
 
-As previously mentioned, this project was made with d3.js and scrollama.js.
+As previously mentioned, this project was also an experiment that combined d3.js and scrollama.js. There are a few thing that should be improved, but there were also positives.
 
 I am evaluating my workflow and the tools I use every time I start a new post. This time was the appropiate one to introduce some [Babel](https://babeljs.io/) and [Jest](https://jestjs.io/). I already had planned to practice unit testing for my projects for a while :).
 
