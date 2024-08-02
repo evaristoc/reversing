@@ -2,6 +2,15 @@
 /* SCHEMA */
 ////////////
 
+import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+
+const config = { }
+const mathjs = create(all, config);
+
+console.log(mathjs, mathjs.compare([3,2,1], [1, 2, 3]));
+
+
+
 class Point {
 	
 	pointName;
@@ -89,7 +98,116 @@ class Line{
 	findDistBtwPoints(){
     	return Math.sqrt((this.pointB.x - this.pointA.x)**2 + (this.pointB.y - this.pointA.y)**2);
 	}
+}
 
+class Vector{
+	//TODO
+}
+class Triangle{
+
+	//constructor(pointA, pointB, pointC, alpha, beta, gamma, ab, bc, ca){
+		constructor(pointA, pointB, pointC){
+		//this is incorrect: segments are one thing; length of segments other
+		let AB = pointA && pointB? new Line(pointA, pointB, 'AB') : undefined;
+		let BC = pointB && pointC? new Line(pointB, pointC, 'BC') : undefined;
+		let CA = pointA && pointC? new Line(pointC, pointA, 'CA') : undefined;
+
+		if(AB && BC && CA){
+
+			let intersections = 0;
+			[[BC.pointA.x,BC.pointA.y],[BC.pointB.x,BC.pointb.y]].forEach((d)=>{
+				if([AB.pointA.x,AB.pointA.y].every((el,i) => el == d[i])){
+					intersections++;
+				}
+				if([AB.pointB.x,AB.pointB.y].every((el,i) => el == d[i])){
+					intersections++;
+				}
+			})
+			if(intersections == 1){
+				[[CA.pointA.x,CA.pointA.y],[CA.pointB.x,CA.pointb.y]].forEach((d)=>{
+					if([BC.pointA.x,BC.pointA.y].every((el,i) => el == d[i])){
+						intersections++;
+					};
+					if([BC.pointB.x,BC.pointB.y].every((el,i) => el == d[i])){
+						intesections++;
+					};
+				});
+
+				if(intersections == 2){
+					[[AB.pointA.x,AB.pointA.y],[AB.pointB.x,AB.pointb.y]].forEach((d)=>{
+						if([CA.pointA.x,CA.pointA.y].every((el,i) => el == d[i])){
+							intersections++;
+						}
+						if([CA.pointB.x,CA.pointB.y].every((el,i) => el == d[i])){
+							intesections++;
+						}
+					});
+
+					if(intersections == 3){
+						this.AB = AB;
+						this.BC = BC;
+						this.CA = CA;
+					}else{
+						alert('no full intersection or other point');						
+					}
+
+				}else{
+					alert('no full intersection or other point');
+				}
+	
+			}else{
+				alert('insufficient segments to define a triangle');
+			}
+			//if I am using lines, then I should check if lines cut!
+		}
+		//}else if(ab && bc && ca){
+			//TODO?
+		//}
+		//this.alpha = alpha? alpha : this.AB && this.BC? this.calcAngle(this.AB, this.BC) : undefined;
+		//this.beta = beta? beta : this.BC && this.CA? this.calcAngle(this.BC, this.CA) : undefined;
+		//this.gamma = gamma? gamma : this.CA && this.AB? this.calcAngle(this.CA, this.AB) : undefined;
+		this.isRect = null; //add operation here
+	}
+
+
+	calcAngle(seg1, seg2){
+		/*
+		TODO:
+		-- calculate angles
+		https://www.cuemath.com/geometry/angle-between-vectors/
+		https://unacademy.com/content/jee/study-material/mathematics/angle-between-two-lines
+		*/	
+	}
+
+	isRectangular(){
+		/*
+		TODO:
+		-- so far only possible if all sides are available
+		*/
+		if(this.AB && this.BC && this.CA){
+			//sort - the longest is the hyp
+			//try pitagoras - if not correct then it is not rect
+		}else{
+			alert('one of the segments is not defined :(')
+		}	
+	}
+
+	pitagoras(){
+		/*
+		TODO:
+		-- confirm rectangular shape
+		-- create a function that works for all possible combinations of segments using Math library
+		*/
+	}
+
+	trigProjections(){
+		/*
+		TODO:
+		-- confirm rectangular shape
+		-- re-use existing code to calculate projections based on sin and cos
+		*/
+
+	}
 }
 
 class Circle{
