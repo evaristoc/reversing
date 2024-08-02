@@ -211,9 +211,6 @@ The following is where the animation takes place:
 </tbody>
 </table>
 </div>
-<script src="
-https://cdn.jsdelivr.net/npm/mathjs@13.0.3/lib/browser/mathjs.min.js
-"></script>
 <script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-01-how-to-make-recursive-circles-like-jk/js/main.js %}"></script>
 
 https://www.youtube.com/watch?v=pBeHXNRPNi4

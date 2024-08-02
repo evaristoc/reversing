@@ -1,12 +1,9 @@
 /* 
 !!!NOTE!!!
-from 20-07-24 this file is renamed from 'eventHlanders' to 'interactions'
 
-This file could be also called 'controllers' but I would keep 'interactions' for now, as controllers sounds a higher level of order
+in this occasion (08-2024) I will introduce a new file, "drawings.js" 
 
-I am for now also adding the animations as part of this interactions.js file, but this might be separated in the future
-
-I am also using this file to set the non-exisisting data required for the animations
+The role of interactions.js (aka controller) is more like receiving the different drawings and setting them accordingly
 
 */
 
