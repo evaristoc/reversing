@@ -1,0 +1,139 @@
+ #outro {
+        height: 640px;
+    }
+  
+  
+#stickyoverlay {
+    position: relative;
+    background-color: #f3f3f3;
+    padding: 1rem;
+}
+
+/*#stickyoverlay >* {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}*/
+
+div .articlepost {
+    position: relative;
+    padding: 0;
+    max-width: 20rem;
+    margin: 0 auto;
+}
+
+#stickyoverlay figure {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    /*background-color: #8a8a8a;*/
+    background-color: #f3f3f3;
+    z-index: 0;
+    opacity: 1.; /* E: was set to 0.0 in last Perlin noise post so a animation effect could be added for the entrance of the graphics */
+}
+
+/*
+E: see the use of this at the last post over Perlin noise
+
+#threejs-container{
+  position: relative;
+  top: 405px;
+}
+*/
+
+svg{
+  position: relative;
+  top: 200px;
+}
+
+/*
+figure p {
+    text-align: center;
+    padding: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-size: 8rem;
+    font-weight: 900;
+    color: #fff;
+}
+*/
+
+@keyframes myAnimation01{
+    0%{
+      opacity: 1;
+    }
+    50%{
+      opacity: 0.5;
+    }
+    100%{
+      opacity: 0;
+    }
+  }
+
+  @keyframes myAnimation02{
+    0%{
+      opacity: 0;
+    }
+    50%{
+      opacity: 0.5;
+    }
+    100%{
+      opacity: 1;
+    }
+  }
+
+.step div {
+    animation-name: myAnimation01;
+    animation-duration: 1000ms;
+    animation-fill-mode: forwards;
+    /*z-index: 10;*/
+}
+
+.step p {
+    margin: 0 auto 0.01rem auto;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.step:last-child {
+    margin-bottom: 0;
+}
+
+.step.is-active div {
+    animation-name: myAnimation02;
+    animation-duration: 1000ms;
+    animation-fill-mode: forwards;
+}
+
+.step.is-active p {
+    background-color: goldenrod;
+    color: #3b3b3b;
+}
+
+.step p {
+    text-align: align;
+    padding: 1rem;
+    font-size: 0.85rem;
+    background-color: #3b3b3b;
+}
+
+/*canvas {
+    width : 100%;
+    position:absolute;
+    position:relative;
+    top: -200px;
+}*/
+
+.g-texts{
+  font-family: 'Comic Sans MS', 'Papyrus', sans-serif;
+  font-weight: bold;
+}
