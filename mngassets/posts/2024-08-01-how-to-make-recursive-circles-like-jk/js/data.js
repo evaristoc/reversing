@@ -2,10 +2,10 @@
 /* IMPORTS */
 /////////////
 
-//import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
 
-//const config = { }
-//const mathjs = create(all, config);
+const config = { }
+const mathjs = create(all, config);
 
 ////////////
 /* SCHEMA */

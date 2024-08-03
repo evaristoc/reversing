@@ -1,10 +1,12 @@
 //https://medium.com/@elysiumceleste/how-to-run-tests-for-a-specific-file-in-jest-a85e4ed31c2d
+//https://gist.github.com/rstacruz/511f43265de4939f6ca729a3df7b001c
+//https://jestjs.io/docs/ecmascript-modules
 //npm test --findRelatedFiles posts/2024-08-01-how-to-make-recursive-circles-like-jk/js/data.test.js
 
-//import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
 
-//const config = { }
-//const mathjs = create(all, config);
+const config = { }
+const mathjs = create(all, config);
 
 import {PointCircleGeoms} from './data.js';
 import {Circle} from './data.js';
