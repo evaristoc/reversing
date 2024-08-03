@@ -3,10 +3,12 @@
 //https://jestjs.io/docs/ecmascript-modules
 //npm test --findRelatedFiles posts/2024-08-01-how-to-make-recursive-circles-like-jk/js/data.test.js
 
-import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+import {create, all} from 'mathjs';
 
 const config = { }
 const mathjs = create(all, config);
+
+console.log('env', process.env.NODE_ENV);
 
 import {PointCircleGeoms} from './data.js';
 import {Circle} from './data.js';

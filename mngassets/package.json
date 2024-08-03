@@ -12,5 +12,8 @@
         "babel-jest": "^29.7.0",
         "cross-env": "^7.0.3",
         "jest": "^29.7.0"
+    },
+    "dependencies": {
+        "mathjs": "^13.0.3"
     }
 }

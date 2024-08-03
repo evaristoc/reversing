@@ -1,11 +1,34 @@
 /////////////
 /* IMPORTS */
 /////////////
+let mathjs;
 
-import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+//https://stackoverflow.com/questions/38946112/es6-import-error-handling
 
-const config = { }
-const mathjs = create(all, config);
+//import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+//const config = { }
+//mathjs = create(all, config);
+//console.log('m', mathjs);
+try{
+	if(process.env.NODE_ENV == 'test'){
+		const {create, all} = require('mathjs');
+		const config = { }
+		mathjs = create(all, config);
+	}
+}catch(e){
+	if(e instanceof ReferenceError){
+		//https://stackoverflow.com/questions/38946112/es6-import-error-handling
+		import("https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm").then(({create, all})=>{
+			const config = { };
+			mathjs = create(all, config);
+			console.log('m', mathjs);
+		}).catch(err=>
+			console.log(err.message)
+		)
+	}
+}
+
+
 
 ////////////
 /* SCHEMA */

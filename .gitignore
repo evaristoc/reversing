@@ -4,3 +4,4 @@ _site
 _archived
 
 */node_modules
+*/.env
