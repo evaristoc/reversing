@@ -99,6 +99,10 @@ describe('tests for Triangle', () =>{
         expect(() => {new Triangle(new Point(1,2,'testA'), new Point(1,2,'testB'), new Point(3,4,'testC'), 'testtriangle')}).toThrow("Equal points");
     });
 
+    test('creates a triangle: error if at least one point is null or undefined', () => {
+        //let line = this.line.run()
+        expect(() => {new Triangle(new Point(1,2,'testA'), null, new Point(3,4,'testC'), 'testtriangle')}).toThrow("Not all points");
+    });
 });
 
 

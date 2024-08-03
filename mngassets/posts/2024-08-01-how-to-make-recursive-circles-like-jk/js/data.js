@@ -118,17 +118,22 @@ class Triangle{
 	//constructor(pointA, pointB, pointC, alpha, beta, gamma, ab, bc, ca){
 		constructor(pointA, pointB, pointC, triangleName){
 		//this is incorrect: segments are one thing; length of segments other
-		if(AB && BC && CA){
+		this.AB;
+		this.BC;
+		this.CA;
+		if(pointA && pointB && pointC){
 			try{
-				this.AB = pointA && pointB? new Line(pointA, pointB, 'AB') : undefined;
-				this.BC = pointB && pointC? new Line(pointB, pointC, 'BC') : undefined;
-				this.CA = pointA && pointC? new Line(pointC, pointA, 'CA') : undefined;
+				this.AB = new Line(pointA, pointB, 'AB');
+				this.BC = new Line(pointB, pointC, 'BC');
+				this.CA = new Line(pointC, pointA, 'CA');
 			}catch(e){
 				throw new Error("Equal points", { cause: "Triangle Class - constructor: equal points" });
 			}finally{
 				this.triangleName = triangleName;
 			}
 
+		}else{
+			throw new ReferenceError("Not all points", { cause: "Triangle Class - constructor: at least one of the points is not given" });
 		}
 
 		// if(AB && BC && CA){
