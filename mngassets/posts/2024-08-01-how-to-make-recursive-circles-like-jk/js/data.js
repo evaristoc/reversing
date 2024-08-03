@@ -115,6 +115,7 @@ class Triangle{
 	*/
 
 	triangleName;
+	isRect;
 	//constructor(pointA, pointB, pointC, alpha, beta, gamma, ab, bc, ca){
 		constructor(pointA, pointB, pointC, triangleName){
 		//this is incorrect: segments are one thing; length of segments other
@@ -135,91 +136,10 @@ class Triangle{
 		}else{
 			throw new ReferenceError("Not all points", { cause: "Triangle Class - constructor: at least one of the points is not given" });
 		}
-
-		// if(AB && BC && CA){
-		// 	if(![pointA.x,pointA.y].every( (v,i) => v == [pointB.x,pointB.y][i])){
-		// 		if(![pointB.x,pointB.y].every( (v,i) => v == [pointC.x,pointC.y][i])){
-		// 			if(![pointC.x,pointC.y].every( (v,i) => v == [pointA.x,pointA.y][i])){
-		// 				this.AB = AB;
-		// 				this.BC = BC;
-		// 				this.CA = CA;
-		// 			}else{
-		// 				//move to Line!!
-		// 				throw new Error("Equal points", { cause: "Triangle Class - constructor: equal points" });						
-		// 			}
-		// 		}else{
-		// 			//move to Line!!
-		// 			throw new Error("Equal points", { cause: "Triangle Class - constructor: equal points" });					
-		// 		}
-		// 	}else{
-		// 		//move to Line!!
-		// 		throw new Error("Equal points", { cause: "Triangle Class - constructor: equal points" });
-		// 	}
-		// }
-		
-		
-		// if(AB && BC && CA){
-		// 	let intersections = 0;
-		// 	[[BC.pointA.x,BC.pointA.y],[BC.pointB.x,BC.pointB.y]].forEach((d)=>{
-		// 		if([AB.pointA.x,AB.pointA.y].every((el,i) => el == d[i])){
-		// 			intersections++;
-		// 		}
-		// 		if([AB.pointB.x,AB.pointB.y].every((el,i) => el == d[i])){
-		// 			intersections++;
-		// 		}
-		// 	})
-		// 	if(intersections == 1){
-		// 		[[CA.pointA.x,CA.pointA.y],[CA.pointB.x,CA.pointB.y]].forEach((d)=>{
-		// 			if([BC.pointA.x,BC.pointA.y].every((el,i) => el == d[i])){
-		// 				intersections++;
-		// 			};
-		// 			if([BC.pointB.x,BC.pointB.y].every((el,i) => el == d[i])){
-		// 				intersections++;
-		// 			};
-		// 		});
-
-		// 		if(intersections == 2){
-		// 			[[AB.pointA.x,AB.pointA.y],[AB.pointB.x,AB.pointB.y]].forEach((d)=>{
-		// 				if([CA.pointA.x,CA.pointA.y].every((el,i) => el == d[i])){
-		// 					intersections++;
-		// 				}
-		// 				if([CA.pointB.x,CA.pointB.y].every((el,i) => el == d[i])){
-		// 					intersections++;
-		// 				}
-		// 			});
-
-		// 			if(intersections == 3){
-		// 				this.AB = AB;
-		// 				this.BC = BC;
-		// 				this.CA = CA;
-		// 			}else{
-		// 				//alert('no full intersection or other point');
-		// 				throw new Error("No full intersection or other point", { cause: "Triangle Class - constructor: no full intersection, or other point" });					
-		// 			}
-
-		// 		}else{
-		// 			//alert('no full intersection or other point');
-		// 			throw new Error("No full intersection or other point", { cause: "Triangle Class - constructor: no full intersection, or other point" });
-
-		// 		}
-	
-		// 	}else{
-		// 		//alert('insufficient segments to define a triangle');
-		// 		throw new Error("Insufficient segments to define a triangle", { cause: "Triangle Class - constructor: insufficient segments to define a triangle" });
-		// 	}
-		// 	//if I am using lines, then I should check if lines cut!
-		// }
-		//}else if(ab && bc && ca){
-			//TODO?
-		//}
-		//this.alpha = alpha? alpha : this.AB && this.BC? this.calcAngle(this.AB, this.BC) : undefined;
-		//this.beta = beta? beta : this.BC && this.CA? this.calcAngle(this.BC, this.CA) : undefined;
-		//this.gamma = gamma? gamma : this.CA && this.AB? this.calcAngle(this.CA, this.AB) : undefined;
-		this.isRect = null; //add operation here
 	}
 
 
-	calcAngle(seg1, seg2){
+	__calcAngle(seg1, seg2){
 		/*
 		TODO:
 		-- calculate angles
@@ -228,7 +148,7 @@ class Triangle{
 		*/	
 	}
 
-	isRectangular(){
+	__isRectangular(){
 		/*
 		TODO:
 		-- so far only possible if all sides are available
@@ -241,7 +161,7 @@ class Triangle{
 		}	
 	}
 
-	pitagoras(){
+	__pitagoras(){
 		/*
 		TODO:
 		-- confirm rectangular shape
@@ -249,7 +169,7 @@ class Triangle{
 		*/
 	}
 
-	trigProjections(){
+	__trigProjections(){
 		/*
 		TODO:
 		-- confirm rectangular shape

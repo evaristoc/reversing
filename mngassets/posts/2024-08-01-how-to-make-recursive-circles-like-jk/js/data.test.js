@@ -57,6 +57,11 @@ describe('tests for Line', () =>{
     test('creates a line: no given name', () => {
         expect(line.lineName).toBe('testline');
     });
+
+    test('creates a triangle: error if points equal to each other', () => {
+        //let line = this.line.run()
+        expect(() => {new Line(new Point(1,2,'testA'), new Point(1,2,'testB'), 'testline')}).toThrow("Equal points");
+    });
     
     test('creates a line: points A and B', () => {
         //let line = this.line.run()
@@ -94,7 +99,7 @@ describe('tests for Triangle', () =>{
         expect(triangle.triangleName).toBe('testtriangle');
     });
 
-    test('creates a triangle: error if points too far from each other', () => {
+    test('creates a triangle: error if points equal to each other', () => {
         //let line = this.line.run()
         expect(() => {new Triangle(new Point(1,2,'testA'), new Point(1,2,'testB'), new Point(3,4,'testC'), 'testtriangle')}).toThrow("Equal points");
     });
