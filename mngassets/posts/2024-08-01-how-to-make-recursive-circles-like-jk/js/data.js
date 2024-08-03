@@ -2,10 +2,10 @@
 /* IMPORTS */
 /////////////
 
-import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+//import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
 
-const config = { }
-const mathjs = create(all, config);
+//const config = { }
+//const mathjs = create(all, config);
 
 ////////////
 /* SCHEMA */
@@ -61,15 +61,19 @@ class Line{
 	lineName; //in case I want to implement a watcher of point name changes: https://stackoverflow.com/questions/43461248/ecmascript-6-watch-changes-to-class-properties
 
 	constructor(pointA, pointB, lineName){
-		
-		//Because the approach and formulas, we need the points sorted by x values
-		if(pointA.x <= pointB.x){
-			this.pointA = pointA;
-			this.pointB = pointB;
+		if(![pointA.x,pointA.y].every( (v,i) => v == [pointB.x,pointB.y][i])){
+			//Because the approach and formulas, we need the points sorted by x values
+			if(pointA.x <= pointB.x){
+				this.pointA = pointA;
+				this.pointB = pointB;
+			}else{
+				this.pointA = pointB;
+				this.pointB = pointA;
+			}					
 		}else{
-			this.pointA = pointB;
-			this.pointB = pointA;
+			throw new Error("Equal points", { cause: "Line Class - constructor: equal points" });
 		}
+
 		if(lineName && typeof lineName == 'string'){
 			this.lineName = lineName;
 		}else if(this.pointA.pointName && this.pointB.pointName){
@@ -105,61 +109,101 @@ class Vector{
 }
 class Triangle{
 
+	/*
+	TODO:
+	https://stackoverflow.com/a/65510172
+	*/
+
+	triangleName;
 	//constructor(pointA, pointB, pointC, alpha, beta, gamma, ab, bc, ca){
-		constructor(pointA, pointB, pointC){
+		constructor(pointA, pointB, pointC, triangleName){
 		//this is incorrect: segments are one thing; length of segments other
-		let AB = pointA && pointB? new Line(pointA, pointB, 'AB') : undefined;
-		let BC = pointB && pointC? new Line(pointB, pointC, 'BC') : undefined;
-		let CA = pointA && pointC? new Line(pointC, pointA, 'CA') : undefined;
-
 		if(AB && BC && CA){
-
-			let intersections = 0;
-			[[BC.pointA.x,BC.pointA.y],[BC.pointB.x,BC.pointb.y]].forEach((d)=>{
-				if([AB.pointA.x,AB.pointA.y].every((el,i) => el == d[i])){
-					intersections++;
-				}
-				if([AB.pointB.x,AB.pointB.y].every((el,i) => el == d[i])){
-					intersections++;
-				}
-			})
-			if(intersections == 1){
-				[[CA.pointA.x,CA.pointA.y],[CA.pointB.x,CA.pointb.y]].forEach((d)=>{
-					if([BC.pointA.x,BC.pointA.y].every((el,i) => el == d[i])){
-						intersections++;
-					};
-					if([BC.pointB.x,BC.pointB.y].every((el,i) => el == d[i])){
-						intesections++;
-					};
-				});
-
-				if(intersections == 2){
-					[[AB.pointA.x,AB.pointA.y],[AB.pointB.x,AB.pointb.y]].forEach((d)=>{
-						if([CA.pointA.x,CA.pointA.y].every((el,i) => el == d[i])){
-							intersections++;
-						}
-						if([CA.pointB.x,CA.pointB.y].every((el,i) => el == d[i])){
-							intesections++;
-						}
-					});
-
-					if(intersections == 3){
-						this.AB = AB;
-						this.BC = BC;
-						this.CA = CA;
-					}else{
-						alert('no full intersection or other point');						
-					}
-
-				}else{
-					alert('no full intersection or other point');
-				}
-	
-			}else{
-				alert('insufficient segments to define a triangle');
+			try{
+				this.AB = pointA && pointB? new Line(pointA, pointB, 'AB') : undefined;
+				this.BC = pointB && pointC? new Line(pointB, pointC, 'BC') : undefined;
+				this.CA = pointA && pointC? new Line(pointC, pointA, 'CA') : undefined;
+			}catch(e){
+				throw new Error("Equal points", { cause: "Triangle Class - constructor: equal points" });
+			}finally{
+				this.triangleName = triangleName;
 			}
-			//if I am using lines, then I should check if lines cut!
+
 		}
+
+		// if(AB && BC && CA){
+		// 	if(![pointA.x,pointA.y].every( (v,i) => v == [pointB.x,pointB.y][i])){
+		// 		if(![pointB.x,pointB.y].every( (v,i) => v == [pointC.x,pointC.y][i])){
+		// 			if(![pointC.x,pointC.y].every( (v,i) => v == [pointA.x,pointA.y][i])){
+		// 				this.AB = AB;
+		// 				this.BC = BC;
+		// 				this.CA = CA;
+		// 			}else{
+		// 				//move to Line!!
+		// 				throw new Error("Equal points", { cause: "Triangle Class - constructor: equal points" });						
+		// 			}
+		// 		}else{
+		// 			//move to Line!!
+		// 			throw new Error("Equal points", { cause: "Triangle Class - constructor: equal points" });					
+		// 		}
+		// 	}else{
+		// 		//move to Line!!
+		// 		throw new Error("Equal points", { cause: "Triangle Class - constructor: equal points" });
+		// 	}
+		// }
+		
+		
+		// if(AB && BC && CA){
+		// 	let intersections = 0;
+		// 	[[BC.pointA.x,BC.pointA.y],[BC.pointB.x,BC.pointB.y]].forEach((d)=>{
+		// 		if([AB.pointA.x,AB.pointA.y].every((el,i) => el == d[i])){
+		// 			intersections++;
+		// 		}
+		// 		if([AB.pointB.x,AB.pointB.y].every((el,i) => el == d[i])){
+		// 			intersections++;
+		// 		}
+		// 	})
+		// 	if(intersections == 1){
+		// 		[[CA.pointA.x,CA.pointA.y],[CA.pointB.x,CA.pointB.y]].forEach((d)=>{
+		// 			if([BC.pointA.x,BC.pointA.y].every((el,i) => el == d[i])){
+		// 				intersections++;
+		// 			};
+		// 			if([BC.pointB.x,BC.pointB.y].every((el,i) => el == d[i])){
+		// 				intersections++;
+		// 			};
+		// 		});
+
+		// 		if(intersections == 2){
+		// 			[[AB.pointA.x,AB.pointA.y],[AB.pointB.x,AB.pointB.y]].forEach((d)=>{
+		// 				if([CA.pointA.x,CA.pointA.y].every((el,i) => el == d[i])){
+		// 					intersections++;
+		// 				}
+		// 				if([CA.pointB.x,CA.pointB.y].every((el,i) => el == d[i])){
+		// 					intersections++;
+		// 				}
+		// 			});
+
+		// 			if(intersections == 3){
+		// 				this.AB = AB;
+		// 				this.BC = BC;
+		// 				this.CA = CA;
+		// 			}else{
+		// 				//alert('no full intersection or other point');
+		// 				throw new Error("No full intersection or other point", { cause: "Triangle Class - constructor: no full intersection, or other point" });					
+		// 			}
+
+		// 		}else{
+		// 			//alert('no full intersection or other point');
+		// 			throw new Error("No full intersection or other point", { cause: "Triangle Class - constructor: no full intersection, or other point" });
+
+		// 		}
+	
+		// 	}else{
+		// 		//alert('insufficient segments to define a triangle');
+		// 		throw new Error("Insufficient segments to define a triangle", { cause: "Triangle Class - constructor: insufficient segments to define a triangle" });
+		// 	}
+		// 	//if I am using lines, then I should check if lines cut!
+		// }
 		//}else if(ab && bc && ca){
 			//TODO?
 		//}
@@ -210,6 +254,8 @@ class Triangle{
 	}
 }
 
+//let a = new Triangle(new Point(1,2,'testA'), new Point(1,2,'testB'), new Point(3,4,'testC'), 'testtriangle');
+//console.log(a);
 class Circle{
 
     circleName;
@@ -340,6 +386,7 @@ let geometryData = {
 export {Point};
 export {Circle};
 export {Line};
+export {Triangle};
 export {PointCircleGeoms};
 //OBSERVATION: need to prevent shallow copy of the geometryData object: https://developer.mozilla.org/en-US/docs/Glossary/Deep_copy
 export let geometries = [geometryData, JSON.parse(JSON.stringify(geometryData))];

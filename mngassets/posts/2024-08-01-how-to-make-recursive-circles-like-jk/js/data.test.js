@@ -1,7 +1,16 @@
+//https://medium.com/@elysiumceleste/how-to-run-tests-for-a-specific-file-in-jest-a85e4ed31c2d
+//npm test --findRelatedFiles posts/2024-08-01-how-to-make-recursive-circles-like-jk/js/data.test.js
+
+//import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+
+//const config = { }
+//const mathjs = create(all, config);
+
 import {PointCircleGeoms} from './data.js';
 import {Circle} from './data.js';
 import {Line} from './data.js';
 import {Point} from './data.js';
+import {Triangle} from './data.js';
 
 //only positives for now...
 
@@ -67,6 +76,31 @@ describe('tests for Line', () =>{
     //TODO: paramsNormal and testing angles
 
 });
+
+describe('tests for Triangle', () =>{
+    let triangle = new Triangle(new Point(1,2,'testA'), new Point(3,2,'testB'), new Point(3,4,'testC'), 'testtriangle');
+    //let triangleN = new Triangle(new Point(1,2,'testA'), new Point(20,2,'testB'), new Point(3,4,'testC'), 'testtriangle');
+    // beforeAll(() => {
+    //     this.inst = new Line(new Point(1,2,'testA'), new Point(3,2,'testB'), 'testline');
+    //     //return this.line;
+    // });
+
+    test('creates a triangle: is truthy', () => {
+        expect(triangle).toBeTruthy();
+    });
+
+    test('creates a triangle: given name', () => {
+        //let line = this.line.run()
+        expect(triangle.triangleName).toBe('testtriangle');
+    });
+
+    test('creates a triangle: error if points too far from each other', () => {
+        //let line = this.line.run()
+        expect(() => {new Triangle(new Point(1,2,'testA'), new Point(1,2,'testB'), new Point(3,4,'testC'), 'testtriangle')}).toThrow("Equal points");
+    });
+
+});
+
 
 //TODO: Circle and PointCircleGeoms
 
