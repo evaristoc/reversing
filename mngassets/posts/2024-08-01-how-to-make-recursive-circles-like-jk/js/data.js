@@ -1,33 +1,43 @@
 /////////////
 /* IMPORTS */
 /////////////
-let mathjs;
 
 //https://stackoverflow.com/questions/38946112/es6-import-error-handling
 
-//import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
-//const config = { }
-//mathjs = create(all, config);
-//console.log('m', mathjs);
-try{
-	if(process.env.NODE_ENV == 'test'){
-		const {create, all} = require('mathjs');
-		const config = { }
-		mathjs = create(all, config);
-	}
-}catch(e){
-	if(e instanceof ReferenceError){
-		//https://stackoverflow.com/questions/38946112/es6-import-error-handling
-		import("https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm").then(({create, all})=>{
-			const config = { };
-			mathjs = create(all, config);
-			console.log('m', mathjs);
-		}).catch(err=>
-			console.log(err.message)
-		)
-	}
-}
+// //import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+// //const config = { }
+// //mathjs = create(all, config);
+// //console.log('m', mathjs);
+// try{
+// 	if(process.env.NODE_ENV == 'test'){
+// 		// const {create, all} = require('mathjs');
+// 		// const config = { }
+// 		// mathjs = create(all, config);
+// 		//https://stackoverflow.com/questions/38946112/es6-import-error-handling
+// 	}
+// }catch(e){
+// 	if(e instanceof ReferenceError){
+// 		//https://stackoverflow.com/questions/38946112/es6-import-error-handling
+// 		import("https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm").then(({create, all})=>{
+// 			const config = { };
+// 			mathjs = create(all, config);
+// 			console.log('m', mathjs);
+// 		}).catch(err=>
+// 			console.log(err.message)
+// 		)
+// 	}
+// }
 
+
+let mathjs;
+
+import("https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm").then(({create, all})=>{
+	const config = { };
+	mathjs = create(all, config);
+	console.log('m', mathjs.sqrt(2));
+}).catch(err=>
+	console.log(err.message)
+)
 
 
 ////////////
@@ -102,33 +112,84 @@ class Line{
 		}else if(this.pointA.pointName && this.pointB.pointName){
 			this.lineName = this.pointA.pointName + this.pointB.pointName;
 		}
-		this.distBtwPoints = this.findDistBtwPoints();
-		this.middlePoint = this.findMiddlePoint();
-		let a = this.findParamsNormal();
-		this.mt = a.mT; 
-		this.atanT = a.atanT; 
-		this.cT = a.cT;
 	}
 
-	findMiddlePoint(){
+	get middlePoint(){
+		return this.__findMiddlePoint();
+	}
+
+	get distBtwPoints(){
+		return this.__findDistBtwPoints();
+	}
+
+	get paramsNormal(){
+		return this.__findParamsNormal();
+	}
+
+	get scope(){
+		return this.__findScope();
+	}
+
+	get projectionSegment(){
+		const scope = this.__findScope();
+		const alpha = mathjs.atan(scope);
+		return this.__trigProjectionSegment(alpha);
+	}
+
+	__findMiddlePoint(){
 		return new Point((this.pointB.x + this.pointA.x)/2, (this.pointB.y + this.pointA.y)/2, 'M');
 	}
 
-	findParamsNormal(){
-		let mT, cT, atanT;
-		mT =  - (this.pointB.x - this.pointA.x)/(this.pointB.y - this.pointA.y);
+	__findScope(){
+		return (this.pointB.y - this.pointA.y)/(this.pointB.x - this.pointA.x);
+	}
+
+	__findParamsNormal(){
+		let mT, cT, atanT, middlePoint;
+		mT =  - 1/this.__findScope();
 		atanT = Math.atan(mT);
-		cT = this.middlePoint.y - mT*this.middlePoint.x;
+		middlePoint = this.__findMiddlePoint();
+		cT = middlePoint.y - mT*middlePoint.x;
 		return {mT: mT, atanT: atanT, cT: cT};
 	}
 
-	findDistBtwPoints(){
+	__findDistBtwPoints(){
     	return Math.sqrt((this.pointB.x - this.pointA.x)**2 + (this.pointB.y - this.pointA.y)**2);
 	}
+
+	__trigProjectionSegment(alpha){
+		const module = this.__findDistBtwPoints();
+		let xA;
+		xA = module*Math.cos(alpha);
+		return new Triangle(this.pointA, new Point(this.pointA.x + xA, this.pointA.y), this.pointB, 'trigProjection');
+	}
+
 }
 
 class Vector{
 	//TODO
+}
+
+class Arc{
+
+	constructor(segmentA, segmentB){
+		this.segmentA = segmentA;
+		this.segmentB = segmentB
+	}
+
+	__findTanAngle(){
+		/*
+		TODO:
+		-- calculate angles
+		https://www.cuemath.com/geometry/angle-between-vectors/
+		https://unacademy.com/content/jee/study-material/mathematics/angle-between-two-lines
+		*/
+		let tanAngle = (this.segmentA.m - this.segmentB.m)/(1 + this.segmentA.m*this.segmentB.m);
+
+		return tanAngle;
+
+	}
+
 }
 class Triangle{
 
@@ -138,7 +199,7 @@ class Triangle{
 	*/
 
 	triangleName;
-	isRect;
+	isRect = false;
 	//constructor(pointA, pointB, pointC, alpha, beta, gamma, ab, bc, ca){
 		constructor(pointA, pointB, pointC, triangleName){
 		//this is incorrect: segments are one thing; length of segments other
@@ -150,6 +211,20 @@ class Triangle{
 				this.AB = new Line(pointA, pointB, 'AB');
 				this.BC = new Line(pointB, pointC, 'BC');
 				this.CA = new Line(pointC, pointA, 'CA');
+				let alpha1Arc = new Arc(this.AB, this.BC, 'alpha1');
+				let alpha2Arc = new Arc(this.AB, this.BC, 'alpha2');
+				let alpha3Arc = new Arc(this.AB, this.BC, 'alpha3');
+				this.alpha1 = alpha1Arc.__findTanAngle();
+				this.alpha2 = alpha2Arc.__findTanAngle();
+				this.alpha3 = alpha3Arc.__findTanAngle();
+				if(this.alpha1 == mathjs.PI/2 || this.alpha2 == mathjs.PI/2 || this.alpha3 == mathjs.PI/2 ){
+					this.isRect = true;
+				}
+				if(triangleName && typeof triangleName == 'string'){
+					this.triangleName = triangleName;
+				}else{
+					this.triangleName = 'ABC';
+				}
 			}catch(e){
 				throw new Error("Equal points", { cause: "Triangle Class - constructor: equal points" });
 			}finally{
@@ -162,44 +237,16 @@ class Triangle{
 	}
 
 
-	__calcAngle(seg1, seg2){
-		/*
-		TODO:
-		-- calculate angles
-		https://www.cuemath.com/geometry/angle-between-vectors/
-		https://unacademy.com/content/jee/study-material/mathematics/angle-between-two-lines
-		*/	
-	}
-
-	__isRectangular(){
-		/*
-		TODO:
-		-- so far only possible if all sides are available
-		*/
-		if(this.AB && this.BC && this.CA){
-			//sort - the longest is the hyp
-			//try pitagoras - if not correct then it is not rect
-		}else{
-			alert('one of the segments is not defined :(')
-		}	
-	}
-
 	__pitagoras(){
-		/*
-		TODO:
-		-- confirm rectangular shape
-		-- create a function that works for all possible combinations of segments using Math library
-		*/
+		if(this.isRect){
+			/*
+			TODO:
+			-- confirm rectangular shape
+			-- create a function that works for all possible combinations of segments using Math library
+			*/
+		}
 	}
 
-	__trigProjections(){
-		/*
-		TODO:
-		-- confirm rectangular shape
-		-- re-use existing code to calculate projections based on sin and cos
-		*/
-
-	}
 }
 
 //let a = new Triangle(new Point(1,2,'testA'), new Point(1,2,'testB'), new Point(3,4,'testC'), 'testtriangle');
@@ -225,31 +272,19 @@ class PointCircleGeoms extends Line{
 	constructor(pointA, pointB, r, lineName){
 		super(pointA, pointB, lineName);
 		this.r = r;
+	}
+
+	get distPoint2Center(){
+		return this.__findDistPoint2Center();
+	}
+
+	get centerProjection(){
 		if(this.r){
-			this.distPoint2Center = this.findDistPoint2Center();
-			this.centerProjection = this.findCenterByProjection();
+			return this.centerProjection = this.__findCenterByProjection();
 		}
-	}
-	
-	get getdistBtwPoints(){
-		return this.distBtwPoints;
-	}
 
-	get getdistPoint2Center(){
-		return this.distPoint2Center;
+		return;
 	}
-
-	// get getr(){
-	// 	return this.r;
-	// }
-
-	// set setr(r){
-	// 	this.r = r;
-	// 	if(this.r > 0){
-	// 		this.distPoint2Center = this.findDistPoint2Center();
-	// 		this.centerProjection = this.findCenterByProjection();
-	// 	}
-	// }
 
 	circleFamilythru2Points(lambda){
 		/* From
@@ -282,13 +317,13 @@ class PointCircleGeoms extends Line{
 		let k = ((this.pointA.y+this.pointB.y)-(this.pointB.x*1 - this.pointA.x*1)*lambda)/2; // NOTICE: same as above
 		let C = this.pointA.x*this.pointB.x + this.pointA.y*this.pointB.y + (this.pointA.x*this.pointB.y*1.0 - this.pointA.y*this.pointB.x*1.0)*lambda;
 		let rA2 =  -C + h**2 + k**2;
-		let r = Math.sqrt(rA2);
+		let r = mathjs.sqrt(rA2);
 		return new Circle(new Point(h, k), r);
 	}
 
 
-	findDistPoint2Center(){
-		return Math.sqrt(this.r**2 - (this.distBtwPoints/2)**2); //Why? It is a square!!!
+	__findDistPoint2Center(){
+		return mathjs.sqrt(this.r**2 - (this.__findDistBtwPoints()/2)**2);
 	}
 	
 	/*TODO: 
@@ -296,15 +331,17 @@ class PointCircleGeoms extends Line{
 	only one is possible???
 	A correct result is calculated at interactive block number 20 on 'interactions.js'
 	*/
-	findCenterByProjection(){ //here we are actually using the parametric equation of the circle
-		console.log(this.atanT, this.r)
+	__findCenterByProjection(r){ //here we are actually using the parametric equation of the circle
+		const {mT, atanT, cT} = this.__findParamsNormal();
+		const distPoint2Center = this.__findDistPoint2Center();
+		const middlePoint = this.__findMiddlePoint();
 		let xA, yA, xB, yB;
-        xA = this.middlePoint.x - this.distPoint2Center*Math.cos(this.atanT);
-        yA = this.middlePoint.y - this.distPoint2Center*Math.sin(this.atanT);
-        xB = this.middlePoint.x + this.distPoint2Center*Math.cos(this.atanT);
-        yB = this.middlePoint.y + this.distPoint2Center*Math.sin(this.atanT);
+        xA = middlePoint.x - distPoint2Center*Math.cos(atanT);
+        yA = middlePoint.y - distPoint2Center*Math.sin(atanT);
+        xB = middlePoint.x + distPoint2Center*Math.cos(atanT);
+        yB = middlePoint.y + distPoint2Center*Math.sin(atanT);
 	  
-		return [[new Circle(xA, yA, this.r), new Circle(xB, yB, this.r)], {atanT: this.atanT}];
+		return [[new Circle(xA, yA, r), new Circle(xB, yB, r)], {atanT: atanT}];
 	}
 
 }
