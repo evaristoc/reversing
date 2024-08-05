@@ -151,9 +151,7 @@ class Line{
 	}
 
 	get projectionSegment(){
-		const scope = this.__findScope();
-		const alpha = mathjs.atan(scope);
-		return this.__trigProjectionSegment(alpha);
+		return this.__trigProjectionSegment();
 	}
 
 	__findMiddlePoint(){
@@ -177,11 +175,20 @@ class Line{
     	return Math.sqrt((this.pointB.x - this.pointA.x)**2 + (this.pointB.y - this.pointA.y)**2);
 	}
 
-	__trigProjectionSegment(alpha){
+	__trigProjectionSegment(){
+		/* Observation: having SERIOUS problems with the use of floating numbers, having to use approximations */
 		const module = this.__findDistBtwPoints();
+		const scope = this.__findScope();
+		const alpha = mathjs.atan(scope);
 		let xA;
 		xA = module*mathjs.cos(alpha);
-		return new Triangle(this.pointA, new Point(this.pointA.x + xA, this.pointA.y), this.pointB, 'trigProjection');
+		if(xA == 0 || xA == module){
+			return this;
+		}
+		let xAApprox = parseFloat(xA.toFixed(10));
+		//console.log('x', this.pointA.x + xAApprox, );
+
+		return new Triangle(this.pointA, new Point(this.pointA.x + xAApprox, this.pointA.y, 'pointProj'), this.pointB, 'trigProjection');
 	}
 
 }

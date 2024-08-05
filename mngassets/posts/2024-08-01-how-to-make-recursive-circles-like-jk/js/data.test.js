@@ -44,6 +44,7 @@ describe('tests for Point', () =>{
 describe('tests for Line', () =>{
     let line = new Line(new Point(1,2,'testA'), new Point(3,2,'testB'), 'testline');
     let lineN = new Line(new Point(1,2,'testA'), new Point(3,2,'testB'));
+    let lineIncl = new Line(new Point(1,4,'testA'), new Point(3,2,'testB'));
     // beforeAll(() => {
     //     this.inst = new Line(new Point(1,2,'testA'), new Point(3,2,'testB'), 'testline');
     //     //return this.line;
@@ -82,10 +83,16 @@ describe('tests for Line', () =>{
         expect(line.middlePoint.pointName).toBe('M');
     });
 
-    test('creates a line: projections to be set', () => {
+    test('creates a parallel line to x: projections to be set', () => {
         //let line = this.line.run();
-        console.log('p', line.projectionSegment);
+        //console.log('p', line.projectionSegment);
         expect(line.projectionSegment).toBeTruthy();
+    });
+
+    test('creates a non-parallel line to x: projections to be set', () => {
+        //let line = this.line.run();
+        //console.log('p', line.projectionSegment);
+        expect(lineIncl.projectionSegment).toBeTruthy();
     });
     //TODO: paramsNormal and testing angles
 
@@ -95,6 +102,7 @@ describe('tests for Triangle', () =>{
     let triangle = new Triangle(new Point(1,2,'testA'), new Point(3,2,'testB'), new Point(3,4,'testC'), 'testtriangle');
     let triangle903060 = new Triangle(new Point(0,0,'testA'), new Point(mathjs.sqrt(3),0,'testB'), new Point(mathjs.sqrt(3),1,'testC'), 'testtriangle');
     let triangle609030 = new Triangle(new Point(0,0,'testA'), new Point(mathjs.sqrt(3),1,'testB'), new Point(mathjs.sqrt(3),0,'testC'), 'testtriangle');
+    let triangleCoord = new Triangle(new Point(1,4,'testA'), new Point(3.000000000000000, 4, 'testC'), new Point(3,2,'testB'), 'testtriangle');
 
     
     //let triangleN = new Triangle(new Point(1,2,'testA'), new Point(20,2,'testB'), new Point(3,4,'testC'), 'testtriangle');
@@ -146,6 +154,11 @@ describe('tests for Triangle', () =>{
         expect(triangle609030.alpha1.interiorAngle.toFixed(6)).toEqual((mathjs.PI/3).toFixed(6));
         expect(triangle609030.alpha2.interiorAngle).toEqual(mathjs.PI/2);
         expect(triangle609030.alpha3.interiorAngle.toFixed(6)).toEqual((mathjs.PI/6).toFixed(6));
+    });
+    test('creates a coord triangle: test is defined', () => {
+        //let line = this.line.run()
+        //console.log(triangle609030.alpha3.interiorAngle.toFixed(6));
+        expect(triangleCoord).toBeTruthy();
     });
 });
 
