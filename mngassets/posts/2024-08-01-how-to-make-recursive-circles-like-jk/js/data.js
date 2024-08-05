@@ -8,37 +8,57 @@
 // //const config = { }
 // //mathjs = create(all, config);
 // //console.log('m', mathjs);
+
+let mathjs;
+
+// async function getMathjs(){
+// 	const {create, all} = await import("https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm");
+// 	const config = {};
+// 	mathjs = create(all, config);
+// 	console.log('m', mathjs);
+// };
+
+// function assignESM(v, fn){
+// 	v = fn();
+// }
+
 // try{
 // 	if(process.env.NODE_ENV == 'test'){
-// 		// const {create, all} = require('mathjs');
-// 		// const config = { }
-// 		// mathjs = create(all, config);
+// 		const {create, all} = require('mathjs');
+// 		const config = { }
+// 		mathjs = create(all, config);
 // 		//https://stackoverflow.com/questions/38946112/es6-import-error-handling
 // 	}
 // }catch(e){
 // 	if(e instanceof ReferenceError){
 // 		//https://stackoverflow.com/questions/38946112/es6-import-error-handling
-// 		import("https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm").then(({create, all})=>{
-// 			const config = { };
-// 			mathjs = create(all, config);
-// 			console.log('m', mathjs);
-// 		}).catch(err=>
-// 			console.log(err.message)
-// 		)
+// 		assignESM(mathjs, getMathjs);
+
+		
+// 		// import("https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm").then(({create, all})=>{
+// 		// 	const config = { };
+// 		// 	mathjs = create(all, config);
+// 		// }).catch(err=>
+// 		// 	console.log(err.message)
+// 		// )
 // 	}
 // }
 
 
-let mathjs;
 
-import("https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm").then(({create, all})=>{
-	const config = { };
-	mathjs = create(all, config);
-	console.log('m', mathjs.sqrt(2));
-}).catch(err=>
-	console.log(err.message)
-)
+// 	console.log('m', mathjs.sqrt(2));
+// }).catch(err=>
+// 	console.log(err.message)
+// )
 
+
+const {create, all} = require('mathjs');
+const config = { }
+mathjs = create(all, config);
+
+// import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+// const config = { }
+// mathjs = create(all, config);
 
 ////////////
 /* SCHEMA */
@@ -160,7 +180,7 @@ class Line{
 	__trigProjectionSegment(alpha){
 		const module = this.__findDistBtwPoints();
 		let xA;
-		xA = module*Math.cos(alpha);
+		xA = module*mathjs.cos(alpha);
 		return new Triangle(this.pointA, new Point(this.pointA.x + xA, this.pointA.y), this.pointB, 'trigProjection');
 	}
 
@@ -172,21 +192,38 @@ class Vector{
 
 class Arc{
 
-	constructor(segmentA, segmentB){
+	arcName;
+
+	constructor(segmentA, segmentB, arcName){
 		this.segmentA = segmentA;
-		this.segmentB = segmentB
+		this.segmentB = segmentB;
+		
+		if(arcName && typeof arcName == 'string'){
+			this.arcName = arcName;
+		}else {
+			this.lineName = 'arcAB';
+		}
 	}
 
-	__findTanAngle(){
+	get interiorAngle(){
+		return this.__findIntAngle()
+	}
+
+	__findIntAngle(){
+		/* Interior Angle between two segments */
 		/*
 		TODO:
 		-- calculate angles
 		https://www.cuemath.com/geometry/angle-between-vectors/
 		https://unacademy.com/content/jee/study-material/mathematics/angle-between-two-lines
 		*/
-		let tanAngle = (this.segmentA.m - this.segmentB.m)/(1 + this.segmentA.m*this.segmentB.m);
+		//let tanAngle = (this.segmentA.scope - this.segmentB.scope)/(1 + this.segmentA.scope*this.segmentB.scope);
+		let angle1 = mathjs.abs(mathjs.atan(this.segmentA.scope));
+		let angle2 = mathjs.abs(mathjs.atan(this.segmentB.scope));
+		let angle;
 
-		return tanAngle;
+		angle = mathjs.max(angle1,angle2) - mathjs.min(angle1,angle2);
+		return angle;
 
 	}
 
@@ -196,6 +233,15 @@ class Triangle{
 	/*
 	TODO:
 	https://stackoverflow.com/a/65510172
+	*/
+
+	/*
+	useful table
+		Angle in Degrees	Angle in Radians
+		45°	π/4 = 0.785 Rad
+		60°	π/3 = 1.047 Rad
+		90°	π/2 = 1.571 Rad
+		120°	2π/3 = 2.094 Rad
 	*/
 
 	triangleName;
@@ -211,14 +257,21 @@ class Triangle{
 				this.AB = new Line(pointA, pointB, 'AB');
 				this.BC = new Line(pointB, pointC, 'BC');
 				this.CA = new Line(pointC, pointA, 'CA');
-				let alpha1Arc = new Arc(this.AB, this.BC, 'alpha1');
-				let alpha2Arc = new Arc(this.AB, this.BC, 'alpha2');
-				let alpha3Arc = new Arc(this.AB, this.BC, 'alpha3');
-				this.alpha1 = alpha1Arc.__findTanAngle();
-				this.alpha2 = alpha2Arc.__findTanAngle();
-				this.alpha3 = alpha3Arc.__findTanAngle();
-				if(this.alpha1 == mathjs.PI/2 || this.alpha2 == mathjs.PI/2 || this.alpha3 == mathjs.PI/2 ){
+				let alpha1Arc = new Arc(this.AB, this.BC, 'alphaAC');
+				let alpha2Arc = new Arc(this.BC, this.CA, 'alphaBA');
+				let alpha3Arc = new Arc(this.CA, this.AB, 'alphaCB');
+				let alpha1 = alpha1Arc.__findIntAngle();
+				let alpha2 = alpha2Arc.__findIntAngle();
+				let alpha3 = alpha3Arc.__findIntAngle();
+				if(alpha1 == mathjs.PI/2 || alpha2 == mathjs.PI/2 || alpha3 == mathjs.PI/2 ){
 					this.isRect = true;
+				}
+				if((alpha1 + alpha2 + alpha3) == mathjs.PI){
+					this.alpha1 = alpha1Arc;
+					this.alpha2 = alpha2Arc;
+					this.alpha3 = alpha3Arc;
+				}else{
+					throw new Error("Triangle Class - constructor: incorrect calculation of angles");					
 				}
 				if(triangleName && typeof triangleName == 'string'){
 					this.triangleName = triangleName;
@@ -226,7 +279,7 @@ class Triangle{
 					this.triangleName = 'ABC';
 				}
 			}catch(e){
-				throw new Error("Equal points", { cause: "Triangle Class - constructor: equal points" });
+				throw new Error("Triangle Class - constructor: error in the construction of the triangle", { cause: e.message });
 			}finally{
 				this.triangleName = triangleName;
 			}
@@ -248,6 +301,7 @@ class Triangle{
 	}
 
 }
+
 
 //let a = new Triangle(new Point(1,2,'testA'), new Point(1,2,'testB'), new Point(3,4,'testC'), 'testtriangle');
 //console.log(a);
@@ -345,6 +399,7 @@ class PointCircleGeoms extends Line{
 	}
 
 }
+
 
 let geometryData = {
     // points:{

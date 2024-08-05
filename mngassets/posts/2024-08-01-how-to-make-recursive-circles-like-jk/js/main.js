@@ -1,5 +1,5 @@
 /* IMPORTS */
-import {Point} from './data.js';
+import {result} from './drawings.js';
 
 window.onload = (event) => {
 

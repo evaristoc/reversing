@@ -10,6 +10,17 @@ All line functions go in another place
 etc etc etc
 
 */
+let mathjs;
+import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+const config = { }
+mathjs = create(all, config);
+
+import {Line, Triangle, Point} from './data.js';
+
+let result = new Triangle(new Point(0,0,'testA'), new Point(mathjs.sqrt(3),0,'testB'), new Point(mathjs.sqrt(3),1,'testC'), 'testtriangle');
+console.log(result);
+
+export {result};
 
 /* CIRCLE DRAWINGS */
 

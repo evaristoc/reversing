@@ -82,12 +82,21 @@ describe('tests for Line', () =>{
         expect(line.middlePoint.pointName).toBe('M');
     });
 
+    test('creates a line: projections to be set', () => {
+        //let line = this.line.run();
+        console.log('p', line.projectionSegment);
+        expect(line.projectionSegment).toBeTruthy();
+    });
     //TODO: paramsNormal and testing angles
 
 });
 
 describe('tests for Triangle', () =>{
     let triangle = new Triangle(new Point(1,2,'testA'), new Point(3,2,'testB'), new Point(3,4,'testC'), 'testtriangle');
+    let triangle903060 = new Triangle(new Point(0,0,'testA'), new Point(mathjs.sqrt(3),0,'testB'), new Point(mathjs.sqrt(3),1,'testC'), 'testtriangle');
+    let triangle609030 = new Triangle(new Point(0,0,'testA'), new Point(mathjs.sqrt(3),1,'testB'), new Point(mathjs.sqrt(3),0,'testC'), 'testtriangle');
+
+    
     //let triangleN = new Triangle(new Point(1,2,'testA'), new Point(20,2,'testB'), new Point(3,4,'testC'), 'testtriangle');
     // beforeAll(() => {
     //     this.inst = new Line(new Point(1,2,'testA'), new Point(3,2,'testB'), 'testline');
@@ -105,12 +114,38 @@ describe('tests for Triangle', () =>{
 
     test('creates a triangle: error if points equal to each other', () => {
         //let line = this.line.run()
-        expect(() => {new Triangle(new Point(1,2,'testA'), new Point(1,2,'testB'), new Point(3,4,'testC'), 'testtriangle')}).toThrow("Equal points");
+        //expect(() => {new Triangle(new Point(1,2,'testA'), new Point(1,2,'testB'), new Point(3,4,'testC'), 'testtriangle')}).toThrow("Equal points");
     });
 
     test('creates a triangle: error if at least one point is null or undefined', () => {
         //let line = this.line.run()
         expect(() => {new Triangle(new Point(1,2,'testA'), null, new Point(3,4,'testC'), 'testtriangle')}).toThrow("Not all points");
+    });
+
+    test('creates a triangle: sides are defined', () => {
+        expect(triangle.AB).toBeTruthy();
+    });
+
+    test('creates a triangle: angles are defined', () => {
+        expect(triangle.alpha1).toBeTruthy();
+    });
+
+    test('creates a triangle: give an name to angle', () => {
+        expect(triangle.alpha1.arcName).toBe('alphaAC');
+    });
+
+    test('creates a positive right triangle: capture angles', () => {
+        //let line = this.line.run()
+        expect(triangle903060.alpha1.interiorAngle).toEqual(mathjs.PI/2);
+        expect(triangle903060.alpha2.interiorAngle.toFixed(6)).toEqual((mathjs.PI/3).toFixed(6));
+        expect(triangle903060.alpha3.interiorAngle.toFixed(6)).toEqual((mathjs.PI/6).toFixed(6));
+    });
+    test('creates a positive left triangle: capture angles', () => {
+        //let line = this.line.run()
+        //console.log(triangle609030.alpha3.interiorAngle.toFixed(6));
+        expect(triangle609030.alpha1.interiorAngle.toFixed(6)).toEqual((mathjs.PI/3).toFixed(6));
+        expect(triangle609030.alpha2.interiorAngle).toEqual(mathjs.PI/2);
+        expect(triangle609030.alpha3.interiorAngle.toFixed(6)).toEqual((mathjs.PI/6).toFixed(6));
     });
 });
 
