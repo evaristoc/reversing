@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "How to make an animation of recursive tangent circles - a code by JK"
-date:   2024-08-01 12:00:00 +0200
+date:   2024-10-01 12:00:00 +0200
 categories: blog update
 ---
 

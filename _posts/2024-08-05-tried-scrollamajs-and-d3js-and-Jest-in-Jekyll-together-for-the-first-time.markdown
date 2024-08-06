@@ -6,7 +6,7 @@ categories: update
 ---
 
 
-I keep exploring technologies for my posts involving the use of the storytelling approach.
+I keep exploring technologies for my posts involving the implementation of the storytelling techniques.
 
 I just recently [finished a post]({{site.baseurl}}{% link _posts/2024-08-05-tried-scrollamajs-and-d3js-and-Jest-in-Jekyll-together-for-the-first-time.markdown %}) where I started to experiment with combining [d3.js](https://d3js.org/) and [scrollama.js](https://github.com/russellsamora/scrollama). There were some positives after using both of them.
 
