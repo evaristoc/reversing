@@ -30,4 +30,4 @@ It is worth mentioning that I am always evaluating my workflow and the tools I u
 
 I must say... combining Jekyll and Jest for unit-testing your custom javascript while also using ESM could lead to a lot of inconveniences. To start with Jekyll not being friendly to node_modules. But then Jest not being friendly to ESM. To date, I haven't found a solution for all that and I am resourcing to manual work :(.
 
-This unpractical approach is a motivation to revise first the use of Vitest as well as probably moving earlier a date for adopting another CMS and hosting more compatible with Javascript stack, which it was still in my plans anyway.
+This unpractical approach is a motivation to revise first the use of Vitest as well as probably moving earlier a date for adopting another CMS and hosting more compatible with Javascript stack, which it was still in my plans anyway. My objective is to find something that allows me to separate code from content, which I am not doing at the moment. And I cannot keep using Git for content version management... that is wrong.
