@@ -1,22 +1,21 @@
 ---
 layout: post
-title:  "How to make an animation of recursive tangent circles - a code by JK"
-date:   2024-10-01 12:00:00 +0200
+title:  "How to recursively make circles inside circles... and animate them like JK"
+date:   2024-08-01 12:00:00 +0200
 categories: blog update
 ---
 
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
-<link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-11-10-a-perlin-flow-field-with-canvas-shaders-and-threejs-03/scrollama-setup-03.css %}">
 
 # THIS POST IN UNDER PREPARATION
 
 https://codepen.io/DonKarlssonSan/pen/jOMROaB
 
-Some people find circles a fascinating form. They are surrounded by mathematical paradigms, like being a closed curve and still being ruled by one of the most interesting irrational numbers, Pi, which is a [transcendental number](https://en.wikipedia.org/wiki/Transcendental_number).
+Some people find circles a fascinating form. They are surrounded by mathematical paradigms. For example: did you know that even if circles are closed curves they still are ruled by one of the most interesting irrational numbers, Pi, which is a [transcendental number](https://en.wikipedia.org/wiki/Transcendental_number)?
 
 And if you are a fan of circles, why not having several of them, recursively?
 
-This is what JK, or Johan Karlsson, did for one his projects in Codepen:
+This is what JK, or Johan Karlsson, one of my favorites [artist in Codepen](https://codepen.io/DonKarlssonSan), did for one of his series for the 2021 edition of [Genuary](https://genuary.art/): "Recursive Circles III".
 
 <p class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="jOMROaB" data-pen-title="Recursive Circles III" data-user="DonKarlssonSan" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
   <span>See the Pen <a href="https://codepen.io/DonKarlssonSan/pen/jOMROaB">
@@ -25,9 +24,21 @@ This is what JK, or Johan Karlsson, did for one his projects in Codepen:
 </p>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
 
+Questions that I had when looking at his project were:
+
+*How did JK manage to get those circles inside other circles?*
+
+*Furthermore, how did he make the recursion?*
+
+*And how did he make them rotate in harmony?*
+
+In this post I will try to re-verse the code to get some answers to my questions. I will include visuals using [scrollama.js](https://github.com/russellsamora/scrollama) and [d3.js](https://d3js.org/) (SVG) but also the canvas API.
+
+# The Code
+
 There are many other projects about recursivity and circles, but I chose JK's one because I like his projects and the way he codes. He is usually on the search of striking patterns based on few geometric forms, all with very simple code using pure ES5 vanilla Javascript.
 
-In this post, I will be re-versing one of his simplest projects posted on Codepen, "Recursive Circles III". He made it as a part of a series for the 2021 edition of [Genuary](https://genuary.art/), an artificial generated month to carry out a generative art project per day.
+Let's put some attention to the JS code.
 
 The code for this project is truly simple: A very simple css, a one-line html and a javascript of just 58 lines of prettified code, including empty lines, consisting of:
 
@@ -37,9 +48,18 @@ The code for this project is truly simple: A very simple css, a one-line html an
 * Recursive calls of the drawing function, with a clear termination
 * A `draw` function
 
-# The Code
+It is obvious that the problem he tried to solve was not really complex. I mean, not building the new AI software or something like that. But it still shows a couple of good practices, particularly in terms of order and readability.
 
-Let's put some attention to the JS code.
+By evaluating the final product, you can imagine that there were a few problems to solve, and that can be almost xxx from the code self. There were at least three problems:
+* **The mathematical problem of inserting circles inside circles**.
+* **The recursive function**.
+* **The animation**.
+
+They might have been solved in that precise order!
+
+Still, I guess on the rush to get his daily project done for the creative coding month, and because there is no point to invent the wheel, JK left a few things unexplained in the code.
+
+
 
 JK started his code with an instantiation of the canvas:
 
@@ -213,11 +233,30 @@ The following is where the animation takes place:
 </tbody>
 </table>
 </div>
-<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-01-how-to-make-recursive-circles-like-jk/js/main.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-01-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/js/main.js %}"></script>
 
 https://www.youtube.com/watch?v=pBeHXNRPNi4
 
 https://thinkib.net/mathanalysis/page/27758/3-circles-inside-a-circle
+
+
+# The Code
+
+Let's see first the use of the canvas interface and then let's explore the balancing movement of the strokes.
+
+
+
+# Tada!
+
+# So... What did we learn from this code?
+
+# Final Remarks
+
+Meanwhile, I wish you happy coding!
+
+# DUMPED
+
+I like the simplicity of this project. In particular, it poses a small mathematical challenge: **to insert circles inside other circle in the right positions so they are tangent between them**. The next challenge that this example poses is **the recurrency of all those insertions**. And last but not least, **the animation, so all rotate in harmony**.
 
 **Waves and Trigonometry**
 
@@ -234,40 +273,4 @@ Darryl used a different approach. He calculated the angle of rotation, positione
 For that he needed to use some formulas. And which functions are common to waves, rotations, and angles? Indeed, [trigonometic functions](https://www.math.net/trigonometric-functions).
 
 Darryl used one of the values of rgba-encoded colors to calculate the angles of rotation. Remember that rgb-encoded colors are represented by a vector of values ranging from 0 to 255. He needed only one of those three coordinates because in his project all the coordinates had the same value per pixel (grey-scale).
-
-
-# The Code
-
-Let's see first the use of the canvas interface and then let's explore the balancing movement of the strokes.
-
-
-
-# Tada!
-
-If you look closely at the last image, you might notice that the "hairs" move to the right and left based on how light or dark the the passing noise flow is.
-
-This passing noise flow is kept away from the viewer, giving the illusion of an invisible force flowing through the hairs.
-
-# So... What did we learn from this code?
-
-There are few things I learned from this single project:
-
-* the use of flowing noise functions to get effects on canvas-based graphics
-* a revision of the power of the canvas API as intermediate to get data between graphical APIs
-* a refreshing of rotation programming techniques
-* ... and more
-
-In fact, there are still things we can get deeper into by just using this example, but I think we could stop here.
-
-# Final Remarks
-
-I still find myself ripping at the Darryl's pen as I watch the moving of the hairs mimicking the passing of a soft water stream accross floating grass.
-
-From this project I liked the way some nice effects were obtained with a minimal effort. If you consider all the tools and technology involved you might wonder what I mean with "minimal effort".
-
-It is fair to say that only when you have at least a basic understanding of all those technologies and techniques the effort of putting them together becomes closer to "minimal". And I would not disagree. But for this project in particular is more about the few elements used between all those technologies to generate the final effect. For example, how a single value from the WebGL rendering was enough to create a nice visual effect in the context canvas. 
-
-Now, what are your thoughts? Was there anything Darryl Huffman could have done differently? Is this pen one that could work for some of your projects? Is there any other effect that you would like to try using similar techniques?
-
- I hope that all three of these posts were helpful for you. With this we have completed our analysis of this implementation. Time for something new. Meanwhile, I wish you happy coding!
 
