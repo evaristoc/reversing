@@ -8,6 +8,8 @@ categories: blog update
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2023-11-10-a-perlin-flow-field-with-canvas-shaders-and-threejs-03/scrollama-setup-03.css %}">
 
+# THIS POST IN UNDER PREPARATION
+
 https://codepen.io/DonKarlssonSan/pen/jOMROaB
 
 Some people find circles a fascinating form. They are surrounded by mathematical paradigms, like being a closed curve and still being ruled by one of the most interesting irrational numbers, Pi, which is a [transcendental number](https://en.wikipedia.org/wiki/Transcendental_number).

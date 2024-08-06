@@ -7,8 +7,6 @@ categories: blog what-you-need-to
 
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/posts/2024-07-15-what-you-need-to-know-rosetta-code-circles-given-radius-two-points-problem/style/scrollama-setup-v03.css %}">
 
-# (observation: this is a draft close to completion.)
-
 No long time ago I was visiting the Freecodecamp forum to see how I could help. Then I found [a question that took my attention](https://forum.freecodecamp.org/t/circles-of-given-radius-through-two-points/688719).
 
 <img src="{{site.baseurl}}{% link /mngassets/posts/2024-07-15-what-you-need-to-know-rosetta-code-circles-given-radius-two-points-problem/img/Circles through points 2024-07-26.png %}" style="width:100%;">
@@ -68,7 +66,7 @@ At the same time, I wanted for a while to test the use of [d3.js](https://d3js.o
 
 So what not to combine those two interests and to make **an animation of few things we should know to get a solution of the Rosetta Code problem**?
 
-Notice that I won't provide any code here: I will only show some theory that could help to solve it. I will end this post with a short discussion about my findings and how they compare to the posted Rosetta Code solution.
+Notice that I won't provide any code here: I will only show some theory that could help to solve it. I will end this post with a short discussion about my findings and how they compare to the posted Rosetta Code solution, and a bit of the technologies I used for this post too.
 
 So... Let's get this started!
 
@@ -261,8 +259,4 @@ But it is up to you to try this or other approaches! There are *many* ways to ap
 
 ----
 
-As previously mentioned, this project was also an experiment that combined d3.js and scrollama.js. There are a few thing that should be improved, but there were also positives.
-
-I am evaluating my workflow and the tools I use every time I start a new post. This time was the appropiate one to introduce some [Babel](https://babeljs.io/) and [Jest](https://jestjs.io/). I already had planned to practice unit testing for my projects for a while :).
-
-I could test a test, but... with some hiccups from Jekyll. Maybe a topic for another day.
+Interested in my first experience working with d3.js, scrollama.js but also Jest for unit testing and Jekyll? [Check this post to know more]({{site.baseurl}}{% link _posts/2024-08-05-tried-scrollamajs-and-d3js-and-Jest-in-Jekyll-together-for-the-first-time.markdown %})

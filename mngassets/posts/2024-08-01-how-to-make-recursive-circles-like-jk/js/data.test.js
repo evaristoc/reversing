@@ -63,6 +63,16 @@ describe('tests for Line', () =>{
         expect(line.lineName).toBe('testline');
     });
 
+    test('creates a line: accept a line for points with the same x', () => {
+        //let line = this.line.run()
+        expect(new Line(new Point(1,2,'testA'), new Point(1,4,'testB'), 'testline')).toBeTruthy();
+    });
+
+    test('creates a line: calculates the colineal point nearest to a given point', () => {
+        //let line = this.line.run()
+        expect(new Line(new Point(1,2,'testA'), new Point(1,4,'testB'), 'testline').__findNearestToPoint(new Point(0,5)).x).toEqual(1);
+    });
+
     test('creates a triangle: error if points equal to each other', () => {
         //let line = this.line.run()
         expect(() => {new Line(new Point(1,2,'testA'), new Point(1,2,'testB'), 'testline')}).toThrow("Equal points");

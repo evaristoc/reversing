@@ -142,6 +142,10 @@ class Line{
 		return this.__findDistBtwPoints();
 	}
 
+	get paramsLine(){
+		return this.__findParamsLine();
+	}
+
 	get paramsNormal(){
 		return this.__findParamsNormal();
 	}
@@ -162,11 +166,51 @@ class Line{
 		return (this.pointB.y - this.pointA.y)/(this.pointB.x - this.pointA.x);
 	}
 
+	__findNearestToPoint(point){
+		/* find the point on the line nearest to a given point
+		//using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line but for the expression : y - mx - c = 0
+
+
+		the following code is not required but kept for future sections...
+				// if([mathjs.PI/2, 3*mathjs.PI/2].includes(mathjs.abs(atan))){
+				// 	xNear = point.x + cNeg/mNeg; // NO: IT DOESN'T SOLVE CORRECT POSITION POINT
+				// 	yNear = point.y;
+				// }else if([mathjs.PI, 2*mathjs.PI].includes(mathjs.abs(atan))){
+				// 	xNear = point.x;
+				// 	yNear = point.y + cNeg; // NO: IT DOESN'T SOLVE CORRECT POSITION POINT
+				// }else{
+				// 	xNear = (1*(1*point.x - mNeg*point.y) - mNeg*cNeg)/(1 + mNeg**2);
+				// 	yNear = (mNeg*(-1*point.x + mNeg*point.y) - 1*cNeg)/(1 + mNeg**2);
+				// }
+		*/
+		let {m, atan, c} = this.paramsLine;
+		let mNeg = -m;
+		let cNeg = -c;
+		let xNear, yNear;
+		if([mathjs.PI/2, 3*mathjs.PI/2].includes(mathjs.abs(atan))){
+			xNear = this.pointA.x; //it can be this.pointB.x: they are both the same for this specific case
+			yNear = point.y;
+		}else{
+			xNear = (1*(1*point.x - mNeg*point.y) - mNeg*cNeg)/(1 + mNeg**2);
+			yNear = (mNeg*(-1*point.x + mNeg*point.y) - 1*cNeg)/(1 + mNeg**2);
+		}
+		return new Point(xNear, yNear, 'nearest line point to '+point.pointName);
+	}
+
+	__findParamsLine(){
+		let m, c, atan, middlePoint;
+		m =  this.scope;
+		atan = Math.atan(m);
+		middlePoint = this.middlePoint;
+		c = middlePoint.y - m*middlePoint.x;
+		return {m, atan, c};		
+	}
+
 	__findParamsNormal(){
 		let mT, cT, atanT, middlePoint;
-		mT =  - 1/this.__findScope();
+		mT =  - 1/this.scope;
 		atanT = Math.atan(mT);
-		middlePoint = this.__findMiddlePoint();
+		middlePoint = this.middlePoint;
 		cT = middlePoint.y - mT*middlePoint.x;
 		return {mT: mT, atanT: atanT, cT: cT};
 	}
@@ -177,8 +221,8 @@ class Line{
 
 	__trigProjectionSegment(){
 		/* Observation: having SERIOUS problems with the use of floating numbers, having to use approximations */
-		const module = this.__findDistBtwPoints();
-		const scope = this.__findScope();
+		const module = this.distBtwPoints;
+		const scope = this.scope;
 		const alpha = mathjs.atan(scope);
 		let xA;
 		xA = module*mathjs.cos(alpha);
@@ -297,14 +341,21 @@ class Triangle{
 	}
 
 
-	__pitagoras(){
-		if(this.isRect){
+	pitagoras(hyp=true, segment1Length, segment2Length){
 			/*
 			TODO:
 			-- confirm rectangular shape
 			-- create a function that works for all possible combinations of segments using Math library
+			-- assume rectangular triangle, otherwise this won't work for other projects based on lines
 			*/
-		}
+			let segment3Length;
+			if(hyp){
+				segment3Length =  mathjs.sqrt(mathjs.max(mathjs.abs(segment1Length), mathjs.abs(segment2Length))**2 - mathjs.min(mathjs.abs(segment1Length), mathjs.abs(segment2Length)));
+			}else{
+				segment3Length =  mathjs.sqrt(mathjs.hypot(segment1Length, segment2Length));
+			}
+
+			return segment3Length;
 	}
 
 }
