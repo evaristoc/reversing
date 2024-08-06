@@ -28,6 +28,8 @@ But I will keep improving it in future projects as I understand better what to e
 
 It is worth mentioning that I am always evaluating my workflow and the tools I use every time I start a new post. This was also the appropiate time to introduce some [Babel](https://babeljs.io/) and [Jest](https://jestjs.io/). I already had planned to practice unit testing for my projects for a while :).
 
-I must say... combining Jekyll and Jest for unit-testing your custom javascript while also using ESM could lead to a lot of inconveniences. To start with Jekyll not being friendly to node_modules. But then Jest not being friendly to ESM. To date, I haven't found a solution for all that and I am resourcing to manual work :(.
+I must say: trying to keep a smooth workflow of unit-testing your custom javascript with Jest on Jekyll when also using ESM is not realistic. Jekyll *hates* node_modules. And Jest is not very friendly to ESMs. To date, I haven't found a solution for all that and I am resourcing to manual work :(.
 
-This unpractical approach is a motivation to revise first the use of Vitest as well as probably moving earlier a date for adopting another CMS and hosting more compatible with Javascript stack, which it was still in my plans anyway. My objective is to find something that allows me to separate code from content, which I am not doing at the moment. And I cannot keep using Git for content version management... that is wrong.
+The unpracticalities of this approach is a motivation to revise other options earlier than I wanted. The thing is, I could go and try to implement what I think would be a convoluted solution for those problems, but I would rather find a simpler solution than putting effort on a task that was not conceived as a priority when starting this blog.
+
+For testing, I will try Vitest and see how it behaves. I will also be looking for an OS CSM platform that allows better content management as well as the insertion of Javascript code, and try to separate both. It became quickly clear that using Git for content management is just wrong.
