@@ -30,6 +30,6 @@ It is worth mentioning that I am always evaluating my workflow and the tools I u
 
 I must say: trying to keep a smooth workflow of unit-testing your custom javascript with Jest on Jekyll when also using ESM is not realistic. Jekyll *hates* node_modules. And Jest is not very friendly to ESMs. To date, I haven't found a solution for all that and I am resourcing to manual work :(.
 
-The unpracticalities of this approach is a motivation to revise other options earlier than I wanted. The thing is, I could go and try to implement what I think would be a convoluted solution for those problems, but I would rather find a simpler solution than putting effort on a task that was not conceived as a priority when starting this blog.
+The unpracticalities of this approach is a motivation to revise other options earlier than planned. The thing is, I could go and try to implement what I think would be a convoluted solution for those problems, but I would rather find a simpler solution than putting effort on a task that was not conceived as a priority when starting this blog.
 
 For testing, I will try Vitest and see how it behaves. I will also be looking for an OS CSM platform that allows better content management as well as the insertion of Javascript code, and try to separate both. It became quickly clear that using Git for content management is just wrong.
