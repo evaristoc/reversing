@@ -26,21 +26,28 @@ This is what JK, or Johan Karlsson, one of my favorites [artist in Codepen](http
 
 Questions that I had when looking at his project were:
 
+*How did he organize his code?*
+
 *How did JK manage to get those circles inside other circles?*
 
-*Furthermore, how did he make the recursion?*
+*How did he make the recursion?*
 
 *And how did he make them rotate in harmony?*
 
-In this post I will try to re-verse the code to get some answers to my questions. I will include visuals using [scrollama.js](https://github.com/russellsamora/scrollama) and [d3.js](https://d3js.org/) (SVG) but also the canvas API.
+In this post I will try to re-verse the code to get some answers to my questions. I will include visuals using tools I am currently exploring such as [scrollama.js](https://github.com/russellsamora/scrollama) and [d3.js](https://d3js.org/) (SVG) but also the [canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
 
 # The Code
 
-There are many other projects about recursivity and circles, but I chose JK's one because I like his projects and the way he codes. He is usually on the search of striking patterns based on few geometric forms, all with very simple code using pure ES5 vanilla Javascript.
+There are many other more advanced projects about recursivity and circles, but I chose JK's one because I like his projects and the way he codes. He is usually on the search of striking patterns based on few geometric forms, all with very simple code using vanilla Javascript.
+
+The whole implementation for this project was truly simple: A very simple css, a one-line html and a javascript of just 58 lines of prettified code, including empty lines.
 
 Let's put some attention to the JS code.
 
-The code for this project is truly simple: A very simple css, a one-line html and a javascript of just 58 lines of prettified code, including empty lines, consisting of:
+
+#### Code Composition and Organization
+
+The code consists of:
 
 * A canvas instantiation function
 * Canvas circles using the `arc` method
@@ -48,45 +55,8 @@ The code for this project is truly simple: A very simple css, a one-line html an
 * Recursive calls of the drawing function, with a clear termination
 * A `draw` function
 
-It is obvious that the problem he tried to solve was not really complex. I mean, not building the new AI software or something like that. But it still shows a couple of good practices, particularly in terms of order and readability.
-
-By evaluating the final product, you can imagine that there were a few problems to solve, and that can be almost xxx from the code self. There were at least three problems:
-* **The mathematical problem of inserting circles inside circles**.
-* **The recursive function**.
-* **The animation**.
-
-They might have been solved in that precise order!
-
-Still, I guess on the rush to get his daily project done for the creative coding month, and because there is no point to invent the wheel, JK left a few things unexplained in the code.
-
-
-
 JK started his code with an instantiation of the canvas:
 
-```javascript
-function drawPattern(x, y, r, angle, iteration) {
-  if(iteration < 0) return;
-  
-  let newR = r * shrinkFactor;
-  ctx.beginPath();
-  ctx.arc(x, y, r, 0, Math.PI * 2);
-  ctx.stroke();
-  
-  let r2 = r - newR;
-  let x1 = Math.cos(angle) * r2 + x;
-  let y1 = Math.sin(angle) * r2 + y;
-  drawPattern(x1, y1, newR, angle * 1.1, iteration - 1);
-  
-  let x2 = Math.cos(angle + Math.PI * 2 / 3) * r2 + x;
-  let y2 = Math.sin(angle + Math.PI * 2 / 3) * r2 + y;
-  drawPattern(x2, y2, newR, angle * 1.2, iteration - 1);
-  
-  let x3 = Math.cos(angle + Math.PI * 4 / 3) * r2 + x;
-  let y3 = Math.sin(angle + Math.PI * 4 / 3) * r2 + y;
-  drawPattern(x3, y3, newR, angle * 1.3, iteration - 1);
-
-}
-```
 <div class="codetable-wrap" style="width:auto; overflow-x: auto;">
 <table>
 <colgroup>
@@ -238,6 +208,48 @@ The following is where the animation takes place:
 https://www.youtube.com/watch?v=pBeHXNRPNi4
 
 https://thinkib.net/mathanalysis/page/27758/3-circles-inside-a-circle
+
+It is obvious that the problem he tried to solve was not really complex. I mean, he was not building the new AI software or something like that. But JK's code shows a couple of good practices, particularly in terms of order and readability. This, as well as other projects by the same author, keeps a code structure that reminds a bit the typical canvas. Moreover, it resembles very much the typical P5.js code structure:
+
+<div class="language-javascript highlighter-rouge"><div class="highlight col02"><pre class="highlight col02"><code class="col02"><span class="c1">//variables for color change</span>
+<span class="kd">let</span> <span class="nx">redVal</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kd">let</span> <span class="nx">greenVal</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="c1">//variable for sun position</span>
+<span class="kd">let</span> <span class="nx">sunHeight</span> <span class="o">=</span> <span class="mi">600</span><span class="p">;</span> <span class="c1">//point below horizon</span>
+
+<span class="kd">function</span> <span class="nx">setup</span><span class="p">()</span> <span class="p">{</span>
+<span class=""> </span> <span class="nx">createCanvas</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="mi">400</span><span class="p">);</span>
+<span class=""> </span> <span class="nx">noStroke</span><span class="p">();</span> <span class="c1">//removes shape outlines</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+<span class="">  </span><span class="c1">// call sky function</span>
+<span class="">  </span><span class="nx">sky</span><span class="p">();</span>
+
+<span class=""> </span> <span class="c1">// a function for the sun;</span>
+<span class=""> </span> <span class="c1">// a function for the mountains;</span>
+
+<span class="">  </span><span class="c1">// a function to update the variables</span>
+<span class="p">}</span>
+
+<span class="c1">// A function to draw the sky</span>
+<span class="kd">function</span> <span class="nx">sky</span><span class="p">()</span> <span class="p">{</span>
+<span class=""> </span> <span class="nx">background</span><span class="p">(</span><span class="nx">redVal</span><span class="p">,</span> <span class="nx">greenVal</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+(*From [P5.js website (tutorials)](https://p5js.org/tutorials/organizing-code-with-functions/)*)
+
+#### Functionality Blocks
+
+By evaluating the final product, you can imagine that there were a few problems to solve, and that can be almost deciphered from the code itself. There were at least three problems:
+* **The mathematical problem of inserting circles inside circles**.
+* **The recursive function**.
+* **The animation**.
+
+They might have been solved in that precise order!
+
+Maybe the rush to get his daily project done for the creative coding month, the no point to re-invent the wheel, and why not, but JK left a few things unexplained in the code. Instead, he resourced to the use of magic shortcuts in the form of pre-calculated values to solve some of the problems.
+
 
 
 # The Code
