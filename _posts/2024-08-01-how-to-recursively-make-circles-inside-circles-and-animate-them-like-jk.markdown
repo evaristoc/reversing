@@ -7,7 +7,7 @@ categories: blog update
 
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
 
-# THIS POST IN UNDER PREPARATION
+# **THIS POST IS STILL UNDER PREPARATION**
 
 https://codepen.io/DonKarlssonSan/pen/jOMROaB
 
@@ -151,15 +151,15 @@ The following is where the animation takes place:
  32
  33
  34
- 35
+<span style="color:yellow;"> 35</span>
  36
  37
  38
- 39
+<span style="color:yellow;"> 39</span>
  40
  41
  42
- 43
+<span style="color:yellow;"> 43</span>
  44
  45
  46</code>
@@ -183,15 +183,15 @@ The following is where the animation takes place:
   <span class="kd">let</span> <span class="nx">r2</span> <span class="o">=</span> <span class="nx">r</span> <span class="o">-</span> <span class="nx">newR</span><span class="p">;</span>
   <span class="kd">let</span> <span class="nx">x1</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">angle</span><span class="p">)</span> <span class="o">*</span> <span class="nx">r2</span> <span class="o">+</span> <span class="nx">x</span><span class="p">;</span>
   <span class="kd">let</span> <span class="nx">y1</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">angle</span><span class="p">)</span> <span class="o">*</span> <span class="nx">r2</span> <span class="o">+</span> <span class="nx">y</span><span class="p">;</span>
-  <span class="nx">drawPattern</span><span class="p">(</span><span class="nx">x1</span><span class="p">,</span> <span class="nx">y1</span><span class="p">,</span> <span class="nx">newR</span><span class="p">,</span> <span class="nx">angle</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">,</span> <span class="nx">iteration</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="nx">drawPattern</span><span class="p">(</span><span class="nx">x1</span><span class="p">,</span> <span class="nx">y1</span><span class="p">,</span> <span class="nx">newR</span><span class="p">,</span> <span class="nx">angle</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">,</span> <span class="nx">iteration</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span><span class="code-note"><em><-- Magic number: <code>angle*1.1</code></em></span>
   
   <span class="kd">let</span> <span class="nx">x2</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">angle</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="nx">r2</span> <span class="o">+</span> <span class="nx">x</span><span class="p">;</span>
   <span class="kd">let</span> <span class="nx">y2</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">angle</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="nx">r2</span> <span class="o">+</span> <span class="nx">y</span><span class="p">;</span>
-  <span class="nx">drawPattern</span><span class="p">(</span><span class="nx">x2</span><span class="p">,</span> <span class="nx">y2</span><span class="p">,</span> <span class="nx">newR</span><span class="p">,</span> <span class="nx">angle</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">,</span> <span class="nx">iteration</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="nx">drawPattern</span><span class="p">(</span><span class="nx">x2</span><span class="p">,</span> <span class="nx">y2</span><span class="p">,</span> <span class="nx">newR</span><span class="p">,</span> <span class="nx">angle</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">,</span> <span class="nx">iteration</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span><span class="code-note"><em><-- Magic number: <code>angle*1.2</code></em></span>
   
   <span class="kd">let</span> <span class="nx">x3</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">angle</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="nx">r2</span> <span class="o">+</span> <span class="nx">x</span><span class="p">;</span>
   <span class="kd">let</span> <span class="nx">y3</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">angle</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="nx">r2</span> <span class="o">+</span> <span class="nx">y</span><span class="p">;</span>
-  <span class="nx">drawPattern</span><span class="p">(</span><span class="nx">x3</span><span class="p">,</span> <span class="nx">y3</span><span class="p">,</span> <span class="nx">newR</span><span class="p">,</span> <span class="nx">angle</span> <span class="o">*</span> <span class="mf">1.3</span><span class="p">,</span> <span class="nx">iteration</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="nx">drawPattern</span><span class="p">(</span><span class="nx">x3</span><span class="p">,</span> <span class="nx">y3</span><span class="p">,</span> <span class="nx">newR</span><span class="p">,</span> <span class="nx">angle</span> <span class="o">*</span> <span class="mf">1.3</span><span class="p">,</span> <span class="nx">iteration</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span><span class="code-note"><em><-- Magic number: <code>angle*1.3</code></em></span>
 
 <span class="p">}</span>
 </code>
@@ -205,11 +205,64 @@ The following is where the animation takes place:
 </div>
 <script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-01-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/js/main.js %}"></script>
 
-https://www.youtube.com/watch?v=pBeHXNRPNi4
+A magic constant here is the argument related to `iterations`, which control the depth of the recursions, and have a particular effect on performance (*relevant!*). He also make use of "magic numbers" to modify the values of the angles when recursively calling the function.
 
-https://thinkib.net/mathanalysis/page/27758/3-circles-inside-a-circle
+The last function he declared was the `draw` function, accepting an argument (a time-based one):
 
-It is obvious that the problem he tried to solve was not really complex. I mean, he was not building the new AI software or something like that. But JK's code shows a couple of good practices, particularly in terms of order and readability. This, as well as other projects by the same author, keeps a code structure that reminds a bit the typical canvas. Moreover, it resembles very much the typical P5.js code structure:
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge col01">
+<div class="highlight" style="margin:0px">
+<pre class="highlight col01" style="margin:0px;">
+<code class="col01"> 46
+ 47
+ 48
+ 49
+ 50
+<span style="color:yellow;"> 51</span>
+<span style="color:yellow;"> 52</span>
+<span style="color:yellow;"> 53</span>
+ 54
+ 55
+ 56</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge col02">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight col02" style="margin:0px;">
+<code class="col02">
+<span class="kd">function</span> <span class="nx">draw</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">draw</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">white</span><span class="dl">"</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">);</span>
+  <span class="nx">shrinkFactor</span> <span class="o">=</span> <span class="mf">0.463</span><span class="p">;</span><span class="code-note"><em><-- Magic number: <code>shrinkFactor = 0.463</code></em></span>
+  <span class="kd">let</span> <span class="nx">r</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.475</span><span class="p">;</span><span class="code-note"><em><-- Magic number: <code>(...)*0.475</code></em></span>
+  <span class="kd">let</span> <span class="nx">angle</span> <span class="o">=</span> <span class="nx">now</span> <span class="o">/</span> <span class="mi">2000</span><span class="p">;</span><span class="code-note"><em><-- Magic number: <code>now/2000</code></em></span>
+  <span class="nx">drawPattern</span><span class="p">(</span><span class="nx">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">h</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">angle</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+I would like you to notice that in the `draw` function are further settings. In particular, there is a few "magic numbers" that will discuss later: **`shrinkFactor`**, one associated to the value of `r`, and another to the `angle`.
+
+It is obvious that the problem he tried to solve was not really complex. I mean, he was not building the new AI software or something like that. But JK's code shows a couple of good practices, particularly in terms of code organization and readability. His approach seems a minimalistic one, even in his choices for the naming conventions.
+
+In general the code structure selected for this project, as well as other projects by the same author, reminds me a bit the typical organization pattern I have found in many other canvas projects. In particular, it appears to be inspired very much on the typical P5.js pattern:
 
 <div class="language-javascript highlighter-rouge"><div class="highlight col02"><pre class="highlight col02"><code class="col02"><span class="c1">//variables for color change</span>
 <span class="kd">let</span> <span class="nx">redVal</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -239,24 +292,34 @@ It is obvious that the problem he tried to solve was not really complex. I mean,
 </code></pre></div></div>
 (*From [P5.js website (tutorials)](https://p5js.org/tutorials/organizing-code-with-functions/)*)
 
-#### Functionality Blocks
+#### Workflow's Blocks
 
 By evaluating the final product, you can imagine that there were a few problems to solve, and that can be almost deciphered from the code itself. There were at least three problems:
 * **The mathematical problem of inserting circles inside circles**.
 * **The recursive function**.
 * **The animation**.
 
-They might have been solved in that precise order!
+However, maybe because the rush to get his daily project done for the creative coding month, the no-point-to-re-invent-the-wheel, and why not, JK left a few things unexplained in the code. Instead, he resourced to the use of magic shortcuts in the form of pre-calculated values. To give some meaningful explanations to the workflow we would benefit from revealing where those values come from.
 
-Maybe the rush to get his daily project done for the creative coding month, the no point to re-invent the wheel, and why not, but JK left a few things unexplained in the code. Instead, he resourced to the use of magic shortcuts in the form of pre-calculated values to solve some of the problems.
-
-
-
-# The Code
-
-Let's see first the use of the canvas interface and then let's explore the balancing movement of the strokes.
+The most important of all of them is the value of `shrinkFactor`.
 
 
+
+#### *`shrinkFactor`: Solving the "Three circles inside a circle" problem*
+
+This is one of the first things that JK did. But instead of solving the whole thing by himself, he used a mathematical formula. You can find exactly the same problem and its geometric solution by [following this link](https://thinkib.net/mathanalysis/page/27758/3-circles-inside-a-circle).
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-08-01-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/circlesinacircle 2024-08-08.png %}" style="width:100%;">
+*Source*: [thinkib](https://thinkib.net/mathanalysis/page/27758/3-circles-inside-a-circle)
+
+It is a "magic number" because it is a constant proportion that stay the same for circles of any size. So solving for one gives you a solution you can use for all of them.
+
+
+https://www.youtube.com/watch?v=pBeHXNRPNi4
+
+
+
+# In Action
 
 # Tada!
 
@@ -266,23 +329,4 @@ Let's see first the use of the canvas interface and then let's explore the balan
 
 Meanwhile, I wish you happy coding!
 
-# DUMPED
-
-I like the simplicity of this project. In particular, it poses a small mathematical challenge: **to insert circles inside other circle in the right positions so they are tangent between them**. The next challenge that this example poses is **the recurrency of all those insertions**. And last but not least, **the animation, so all rotate in harmony**.
-
-**Waves and Trigonometry**
-
-Another interesting aspect of the project is the one used to create the effect of waves passing through the "hairs".
-
-Darryl wanted the strokes to oscillate right and left based on data coming from the WebGL renderer. More specifically, variations in the coloring of the pixels of each "screenshot" should drive changes in the rotation of the stroke, giving the illusion of balancing or waving.
-
-The canvas API offers different solutions for rotating drawings. Examples are:
-- an ```arc``` method
-- a ```rotate``` method
-
-Darryl used a different approach. He calculated the angle of rotation, positioned the pen in the origin point of the stroke (```(x,y)```) and redraw the stroke using the canvas' [**lineTo**](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo) method based on the angle of rotation.
-
-For that he needed to use some formulas. And which functions are common to waves, rotations, and angles? Indeed, [trigonometic functions](https://www.math.net/trigonometric-functions).
-
-Darryl used one of the values of rgba-encoded colors to calculate the angles of rotation. Remember that rgb-encoded colors are represented by a vector of values ranging from 0 to 255. He needed only one of those three coordinates because in his project all the coordinates had the same value per pixel (grey-scale).
 
