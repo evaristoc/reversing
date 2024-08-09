@@ -386,8 +386,10 @@ Where `r2` might have a misleading name, as it is not a radius but *the distance
   left: 0;
 }
 </style>
+<script src="{{ site.baseurl }}{% link mngassets/vendor/js/konva/konva.min.js %}"></script>
 <div id="gui-circlestheory"></div>
 <canvas id="circlestheory"></canvas>
+<div id='konvacontainer'></div>
 </section>
 
 #### `drawPattern` function: centers, radii, angles and a couple of other magic numbers

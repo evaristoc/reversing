@@ -78,17 +78,29 @@ function canvasCreate(w, h, selector){
 	ctx.fill();
 
 
-	//__resize(w, h, canvas);
+	//const konvaContainer = section.querySelector('#konvacontainer');
+	const stage = new Konva.Stage({
+		container: '#konvacontainer',
+		width: w,
+		height:h
+	});
+
+	const layer = new Konva.Layer();
+
+
+
+	__resize(w, h, canvas);
 	
 
-   return {section, canvas, ctx, guiElem, w, h};
+   return {section, canvas, ctx, guiElem, w, h, stage, layer};
 }
 
 function __resize(w, h, c){
-	w = c.width = window.innerWidth;
-	h = c.height = window.innerHeight;
-
-
+	//w = c.width = window.innerWidth;
+	//h = c.height = window.innerHeight;
+	let container = document.querySelector('div.wrapper');
+	w = c.width = container.offsetWidth;
+	h = c.height = 300;
 }
 
 
