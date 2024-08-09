@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "How to recursively make circles inside circles... and animate them like JK"
-date:   2024-08-01 12:00:00 +0200
+date:   2024-08-08 12:00:00 +0200
 categories: blog update
 ---
 
@@ -104,8 +104,8 @@ JK started his code with an instantiation of the canvas:
 <span class="kd">function</span> <span class="nx">setup</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">"</span><span class="s2">#canvas</span><span class="dl">"</span><span class="p">);</span>
   <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">"</span><span class="s2">2d</span><span class="dl">"</span><span class="p">);</span>
-  <span class="nx">resize</span><span class="p">();</span>
-  <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">resize</span><span class="dl">"</span><span class="p">,</span> <span class="nx">resize</span><span class="p">);</span>
+  <span class="nx">resize</span><span class="p">();</span>                                 <span class="code-note"><em><-- <code>resize</code> is called inside <code>setup</code>...</em></span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">resize</span><span class="dl">"</span><span class="p">,</span> <span class="nx">resize</span><span class="p">);</span><span class="code-note"><em><--... and linked to a global event.</em></span>
 <span class="p">}</span>
 
 <span class="kd">function</span> <span class="nx">resize</span><span class="p">()</span> <span class="p">{</span>
@@ -203,7 +203,7 @@ The following is where the animation takes place:
 </tbody>
 </table>
 </div>
-<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-01-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/js/main.js %}"></script>
+<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/js/main.js %}"></script>
 
 A magic constant here is the argument related to `iterations`, which control the depth of the recursions, and have a particular effect on performance (*relevant!*). He also make use of "magic numbers" to modify the values of the angles when recursively calling the function.
 
@@ -245,9 +245,9 @@ The last function he declared was the `draw` function, accepting an argument (a 
   <span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">draw</span><span class="p">);</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">white</span><span class="dl">"</span><span class="p">;</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">);</span>
-  <span class="nx">shrinkFactor</span> <span class="o">=</span> <span class="mf">0.463</span><span class="p">;</span><span class="code-note"><em><-- Magic number: <code>shrinkFactor = 0.463</code></em></span>
-  <span class="kd">let</span> <span class="nx">r</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.475</span><span class="p">;</span><span class="code-note"><em><-- Magic number: <code>(...)*0.475</code></em></span>
-  <span class="kd">let</span> <span class="nx">angle</span> <span class="o">=</span> <span class="nx">now</span> <span class="o">/</span> <span class="mi">2000</span><span class="p">;</span><span class="code-note"><em><-- Magic number: <code>now/2000</code></em></span>
+  <span class="nx">shrinkFactor</span> <span class="o">=</span> <span class="mf">0.463</span><span class="p">;</span>            <span class="code-note"><em><-- Magic number: <code>shrinkFactor = 0.463</code></em></span>
+  <span class="kd">let</span> <span class="nx">r</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.475</span><span class="p">;</span>  <span class="code-note"><em><-- Magic number: <code>(...)*0.475</code></em></span>
+  <span class="kd">let</span> <span class="nx">angle</span> <span class="o">=</span> <span class="nx">now</span> <span class="o">/</span> <span class="mi">2000</span><span class="p">;</span>          <span class="code-note"><em><-- Magic number: <code>now/2000</code></em></span>
   <span class="nx">drawPattern</span><span class="p">(</span><span class="nx">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">h</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">angle</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
 <span class="p">}</span>
 
@@ -258,9 +258,14 @@ The last function he declared was the `draw` function, accepting an argument (a 
 </table>
 </div>
 
-I would like you to notice that in the `draw` function are further settings. In particular, there is a few "magic numbers" that will discuss later: **`shrinkFactor`**, one associated to the value of `r`, and another to the `angle`.
+Notice that in the `draw` function there are more configurations. In particular, there are some "magic numbers": 
+* the **`shrinkFactor`**, 
+* one associated to the value of `r`, and 
+* another associated to the `angle`.
 
-It is obvious that the problem he tried to solve was not really complex. I mean, he was not building the new AI software or something like that. But JK's code shows a couple of good practices, particularly in terms of code organization and readability. His approach seems a minimalistic one, even in his choices for the naming conventions.
+we will discuss them later.
+
+I would rather finish this section by highlighting for such a simple and small script how JK's code managed to show a couple of good practices, particularly in terms of code organization and readability. His approach seems a minimalistic one, even in his choices for the naming conventions.
 
 In general the code structure selected for this project, as well as other projects by the same author, reminds me a bit the typical organization pattern I have found in many other canvas projects. In particular, it appears to be inspired very much on the typical P5.js pattern:
 
@@ -294,32 +299,100 @@ In general the code structure selected for this project, as well as other projec
 
 #### Workflow's Blocks
 
-By evaluating the final product, you can imagine that there were a few problems to solve, and that can be almost deciphered from the code itself. There were at least three problems:
+By evaluating the final product, you could almost discerned from the code the problems that JK had to solve. We could separate the workflow in 3 different problems, or steps:
 * **The mathematical problem of inserting circles inside circles**.
 * **The recursive function**.
 * **The animation**.
 
-However, maybe because the rush to get his daily project done for the creative coding month, the no-point-to-re-invent-the-wheel, and why not, JK left a few things unexplained in the code. Instead, he resourced to the use of magic shortcuts in the form of pre-calculated values. To give some meaningful explanations to the workflow we would benefit from revealing where those values come from.
+However, maybe because the rush to get his daily project done for the creative coding month, the no-point-to-re-invent-the-wheel, and why not, JK left a few things unexplained in the code. Instead, he resourced to the use of magic shortcuts in the form of pre-calculated values. We would be better able to offer insightful explanations for the workflow if we revealed the origins of such values.
 
 The most important of all of them is the value of `shrinkFactor`.
 
 
-
 #### *`shrinkFactor`: Solving the "Three circles inside a circle" problem*
 
-This is one of the first things that JK did. But instead of solving the whole thing by himself, he used a mathematical formula. You can find exactly the same problem and its geometric solution by [following this link](https://thinkib.net/mathanalysis/page/27758/3-circles-inside-a-circle).
+The project is based on a repetitive pattern consisting in repeatively inserting three circles inside a circle. Probably before starting, JK might had to solve first how to do insert those circles.
 
-<img src="{{site.baseurl}}{% link /mngassets/posts/2024-08-01-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/circlesinacircle 2024-08-08.png %}" style="width:100%;">
+Well... it turns out that it is a very common secondary-school problem. You can find exactly the same problem and its geometric solution by [following this link](https://thinkib.net/mathanalysis/page/27758/3-circles-inside-a-circle).
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/circlesinacircle 2024-08-08.png %}" style="width:100%;">
 *Source*: [thinkib](https://thinkib.net/mathanalysis/page/27758/3-circles-inside-a-circle)
 
-It is a "magic number" because it is a constant proportion that stay the same for circles of any size. So solving for one gives you a solution you can use for all of them.
+Instead of coding the solution to the problem, JK used a mathematical formula to get a value. I refer to it as a "magic number" because it is a constant proportion that stay the same for circles of any size. So solving for one gives you a solution you can use for all of them.
 
+From the image you can see the solution:
 
-https://www.youtube.com/watch?v=pBeHXNRPNi4
+`R = r((3 + 2 * sqrt(3))/3)`
 
+which gives the relation between the radius `R` of the containing circle against the radius `r` of any of the three inserted circles. For `r = 1`, the value of `R` is (approx) 2.155.
 
+Inverting the proportion gives:
 
-# In Action
+`r/R = 0.464`
+
+which is the value used by JK, probably adjusted to 0.463.
+
+The value is used to re-calculate the size of `r` of all the inner circles at any recursion.
+
+Now, to calculate the inner circles he needed to get the position of the centers. Those are the coordinates calculated as `(x1,y1)`, `(x2,y2)`,  and  `(x3,y3)`. This is done with a code that is repeated for each center. Here is one of them:
+<div class="codetable-wrap" style="width:auto; overflow-x: auto;">
+<table>
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody>
+<tr>
+<td style="padding:0px; position:sticky; left:0; opacity:0.70;">
+<div class="language-javascript highlighter-rouge col01">
+<div class="highlight" style="margin:0px">
+<pre class="highlight col01" style="margin:0px;">
+<code class="col01"> 32
+ 33
+ 34</code>
+</pre>
+</div>
+</div>
+</td>
+<td style="padding:0px;">
+<div class="language-javascript highlighter-rouge col02">
+<div class="highlight" style="margin:0px;">
+<pre class="highlight col02" style="margin:0px;">
+<code class="col02">  <span class="kd">let</span> <span class="nx">r2</span> <span class="o">=</span> <span class="nx">r</span> <span class="o">-</span> <span class="nx">newR</span><span class="p">;</span>
+  <span class="kd">let</span> <span class="nx">x1</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">cos</span><span class="p">(</span><span class="nx">angle</span><span class="p">)</span> <span class="o">*</span> <span class="nx">r2</span> <span class="o">+</span> <span class="nx">x</span><span class="p">;</span>
+  <span class="kd">let</span> <span class="nx">y1</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">angle</span><span class="p">)</span> <span class="o">*</span> <span class="nx">r2</span> <span class="o">+</span> <span class="nx">y</span><span class="p">;</span></code>
+</pre>
+</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+Where `r2` might have a misleading name, as it is not a radius but *the distance between the center of the outer circle to the center of each of the inner circles*.
+
+We will reproduce the whole calculation of the value later.
+
+#### `drawPattern` function: centers, radii, angles and a couple of other magic numbers
+
+Once he got the constant relations necessary to calculate the inner circles, it should have been easier for JK to draw them.
+
+Every time the function was used, the newR (the radius of the inner circles) was calculated.
+
+Centers were found from the angles, which were 120 degrees (2*PI/3 radians) apart of each other, at a distance of `r - newR` from the center.
+
+The `interation` controlled the depth of the recursion (set to 6 in the original project).
+
+But then he also multiplied the angles by other `magic numbers` at each self call of the `drawPattern` function. Those numbers were made up and only controlled for different rotation speeds of the circles.
+
+`angle` is actually the value of the angular speed: the magnitude of the arc that the circle should travel at each frame. The larger that value, the faster it goes.
+
+The "magic numbers" used by JK had as effect that several different circles rotated under different speeds, also helped by the recursive placing of the different circles.
+
+#### `draw` function: setting up the size of the first outer circle and the initial speed of rotation
+
+The "magic numbers" used in the `draw` function are more mundane and don't require a lot of discussion. One was used to fit the outest circle to an appropiate size on the screen (the "0.475"). The other one, the 2000 in `let angle = now / 2000;`, was more a way to initialize the angular speed of the first inner circles.
 
 # Tada!
 
@@ -329,4 +402,4 @@ https://www.youtube.com/watch?v=pBeHXNRPNi4
 
 Meanwhile, I wish you happy coding!
 
-
+https://www.youtube.com/watch?v=pBeHXNRPNi4

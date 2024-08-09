@@ -39,6 +39,11 @@ describe('tests for Point', () =>{
         expect([point.x, point.y]).toEqual([1,2]);
     });
 
+    test('creates a point: get correct point coordinates', () => {
+        // let point = this.point.run();
+        expect(point.findOtherPointCoordHavingAngleAndDist(mathjs.PI/4, 1)).toEqual({xAApprox: parseFloat((mathjs.sqrt(2)/2).toFixed(10)), yAApprox: parseFloat((mathjs.sqrt(2)/2).toFixed(10))});
+    });
+
 });
 
 describe('tests for Line', () =>{
@@ -70,7 +75,7 @@ describe('tests for Line', () =>{
 
     test('creates a line: calculates the colineal point nearest to a given point', () => {
         //let line = this.line.run()
-        expect(new Line(new Point(1,2,'testA'), new Point(1,4,'testB'), 'testline').__findNearestToPoint(new Point(0,5)).x).toEqual(1);
+        expect(new Line(new Point(1,2,'testA'), new Point(1,4,'testB'), 'testline').findNearestToPoint(new Point(0,5)).x).toEqual(1);
     });
 
     test('creates a triangle: error if points equal to each other', () => {

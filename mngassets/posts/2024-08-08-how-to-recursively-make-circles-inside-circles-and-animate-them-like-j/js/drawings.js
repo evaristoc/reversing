@@ -15,7 +15,7 @@ import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
 const config = { }
 mathjs = create(all, config);
 
-import {Line, Triangle, Point} from './data.js';
+import {Line, Triangle, Point, Circle} from './data.js';
 
 let result = new Triangle(new Point(0,0,'testA'), new Point(mathjs.sqrt(3),0,'testB'), new Point(mathjs.sqrt(3),1,'testC'), 'testtriangle');
 console.log(result);

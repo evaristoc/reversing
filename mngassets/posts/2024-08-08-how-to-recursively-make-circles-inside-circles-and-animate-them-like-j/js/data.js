@@ -1,64 +1,20 @@
 /////////////
 /* IMPORTS */
 /////////////
-
+//https://medium.com/sessionstack-blog/how-javascript-works-3-types-of-polymorphism-f10ff4992be1
 //https://stackoverflow.com/questions/38946112/es6-import-error-handling
+//https://clouddevs.com/javascript/function-overloading-techniques/
 
-// //import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
-// //const config = { }
-// //mathjs = create(all, config);
-// //console.log('m', mathjs);
 
 let mathjs;
 
-// async function getMathjs(){
-// 	const {create, all} = await import("https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm");
-// 	const config = {};
-// 	mathjs = create(all, config);
-// 	console.log('m', mathjs);
-// };
-
-// function assignESM(v, fn){
-// 	v = fn();
-// }
-
-// try{
-// 	if(process.env.NODE_ENV == 'test'){
-// 		const {create, all} = require('mathjs');
-// 		const config = { }
-// 		mathjs = create(all, config);
-// 		//https://stackoverflow.com/questions/38946112/es6-import-error-handling
-// 	}
-// }catch(e){
-// 	if(e instanceof ReferenceError){
-// 		//https://stackoverflow.com/questions/38946112/es6-import-error-handling
-// 		assignESM(mathjs, getMathjs);
-
-		
-// 		// import("https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm").then(({create, all})=>{
-// 		// 	const config = { };
-// 		// 	mathjs = create(all, config);
-// 		// }).catch(err=>
-// 		// 	console.log(err.message)
-// 		// )
-// 	}
-// }
-
-
-
-// 	console.log('m', mathjs.sqrt(2));
-// }).catch(err=>
-// 	console.log(err.message)
-// )
-
-
-const {create, all} = require('mathjs');
-const config = { }
-mathjs = create(all, config);
-
-// import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+// const {create, all} = require('mathjs');
 // const config = { }
 // mathjs = create(all, config);
+
+import {create, all} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+const config = { }
+mathjs = create(all, config);
 
 ////////////
 /* SCHEMA */
@@ -98,16 +54,26 @@ class Point {
 		this.position.y = y;
 	}
 
-	//get getName(){
-	//	return this.name;
-	//}
-
-	//set setName(name){
-	//	this.name = name;
-	//}
 	
-	draw(){
+	/* Public Methods */
+
+	findOtherPointCoordHavingAngleAndDist(alpha, module){
+		/* 
+		OO issue... trying to reuse this method in other classes (like Circle) than won't extend Line
+		But because Circle doesn't extend Line then I had to redo this functionality there too (statics are not 
+		accessible from instances, so it won't check for 'this').
+
+		Observation: having SERIOUS problems with the use of floating numbers, having to use approximations 
+		*/
+		let xA, yA;
+		xA = module*mathjs.cos(alpha);
+		let xAApprox = parseFloat(xA.toFixed(10));
+		yA = module*mathjs.sin(alpha);
+		let yAApprox = parseFloat(yA.toFixed(10));
+
+		return {xAApprox, yAApprox};
 	}
+
 }
 
 class Line{
@@ -135,40 +101,90 @@ class Line{
 	}
 
 	get middlePoint(){
-		return this.__findMiddlePoint();
+		return this.#findMiddlePoint();
 	}
 
 	get distBtwPoints(){
-		return this.__findDistBtwPoints();
+		return this.#findDistBtwPoints();
 	}
 
 	get paramsLine(){
-		return this.__findParamsLine();
+		return this.#findParamsLine();
 	}
 
 	get paramsNormal(){
-		return this.__findParamsNormal();
+		return this.#findParamsNormal();
 	}
 
 	get scope(){
-		return this.__findScope();
+		return this.#findScope();
 	}
 
 	get projectionSegment(){
-		return this.__trigProjectionSegment();
+		return this.#trigProjectionSegment();
 	}
 
-	__findMiddlePoint(){
+	/* Private methods */
+
+	#findMiddlePoint(){
 		return new Point((this.pointB.x + this.pointA.x)/2, (this.pointB.y + this.pointA.y)/2, 'M');
 	}
 
-	__findScope(){
+	#findScope(){
 		return (this.pointB.y - this.pointA.y)/(this.pointB.x - this.pointA.x);
 	}
 
-	__findNearestToPoint(point){
+	#findParamsLine(){
+		let m, c, atan, middlePoint;
+		m =  this.scope;
+		atan = Math.atan(m);
+		middlePoint = this.middlePoint;
+		c = middlePoint.y - m*middlePoint.x;
+		return {m, atan, c};		
+	}
+
+	#findParamsNormal(){
+		let mT, cT, atanT, middlePoint;
+		mT =  - 1/this.scope;
+		atanT = Math.atan(mT);
+		middlePoint = this.middlePoint;
+		cT = middlePoint.y - mT*middlePoint.x;
+		return {mT: mT, atanT: atanT, cT: cT};
+	}
+
+	#findDistBtwPoints(){
+    	return Math.sqrt((this.pointB.x - this.pointA.x)**2 + (this.pointB.y - this.pointA.y)**2);
+	}
+
+	#trigProjectionSegment(){
+		/* 
+		OO issue... trying to reuse this method in other classes (like Circle) than won't extend Line
+		But because Circle doesn't extend Line then I had to redo this functionality there too (statics are not 
+		accessible from instances, so it won't check for 'this').
+
+		Observation: having SERIOUS problems with the use of floating numbers, having to use approximations 
+		*/
+		let alpha, module;
+		
+		const scope = this.scope;
+		alpha = mathjs.atan(scope);
+
+		module = this.distBtwPoints;
+
+		let {xAApprox, yAApprox} = this.pointA.findOtherPointCoordHavingAngleAndDist(alpha, module);
+
+		if(xAApprox == 0 || xAApprox == module){
+			return this;
+		}
+
+		return new Triangle(this.pointA, new Point(this.pointA.x + xAApprox, this.pointA.y, 'pointProj'), this.pointB, 'trigProjection');
+	}
+
+	/* Public methods */
+
+	findNearestToPoint(point){
 		/* find the point on the line nearest to a given point
-		//using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line but for the expression : y - mx - c = 0
+		//using https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line but using standard equation : y - mx - c = 0
 
 
 		the following code is not required but kept for future sections...
@@ -197,43 +213,7 @@ class Line{
 		return new Point(xNear, yNear, 'nearest line point to '+point.pointName);
 	}
 
-	__findParamsLine(){
-		let m, c, atan, middlePoint;
-		m =  this.scope;
-		atan = Math.atan(m);
-		middlePoint = this.middlePoint;
-		c = middlePoint.y - m*middlePoint.x;
-		return {m, atan, c};		
-	}
-
-	__findParamsNormal(){
-		let mT, cT, atanT, middlePoint;
-		mT =  - 1/this.scope;
-		atanT = Math.atan(mT);
-		middlePoint = this.middlePoint;
-		cT = middlePoint.y - mT*middlePoint.x;
-		return {mT: mT, atanT: atanT, cT: cT};
-	}
-
-	__findDistBtwPoints(){
-    	return Math.sqrt((this.pointB.x - this.pointA.x)**2 + (this.pointB.y - this.pointA.y)**2);
-	}
-
-	__trigProjectionSegment(){
-		/* Observation: having SERIOUS problems with the use of floating numbers, having to use approximations */
-		const module = this.distBtwPoints;
-		const scope = this.scope;
-		const alpha = mathjs.atan(scope);
-		let xA;
-		xA = module*mathjs.cos(alpha);
-		if(xA == 0 || xA == module){
-			return this;
-		}
-		let xAApprox = parseFloat(xA.toFixed(10));
-		//console.log('x', this.pointA.x + xAApprox, );
-
-		return new Triangle(this.pointA, new Point(this.pointA.x + xAApprox, this.pointA.y, 'pointProj'), this.pointB, 'trigProjection');
-	}
+	/* Static methods */
 
 }
 
@@ -257,10 +237,12 @@ class Arc{
 	}
 
 	get interiorAngle(){
-		return this.__findIntAngle()
+		return this.#findIntAngleBtwSegs();
 	}
 
-	__findIntAngle(){
+	/* Private Methods */
+
+	#findIntAngleBtwSegs(){
 		/* Interior Angle between two segments */
 		/*
 		TODO:
@@ -276,6 +258,28 @@ class Arc{
 		angle = mathjs.max(angle1,angle2) - mathjs.min(angle1,angle2);
 		return angle;
 
+	}
+
+	/* Public Methods */
+
+
+	/* Static Methods */
+
+	static pitagoras(hyp=true, segment1Length, segment2Length){
+		/*
+		TODO:
+		-- confirm rectangular shape
+		-- create a function that works for all possible combinations of segments using Math library
+		-- assume rectangular triangle, otherwise this won't work for other projects based on lines
+		*/
+		let segment3Length;
+		if(hyp){
+			segment3Length =  mathjs.sqrt(mathjs.max(mathjs.abs(segment1Length), mathjs.abs(segment2Length))**2 - mathjs.min(mathjs.abs(segment1Length), mathjs.abs(segment2Length)));
+		}else{
+			segment3Length =  mathjs.sqrt(mathjs.hypot(segment1Length, segment2Length));
+		}
+
+		return segment3Length;
 	}
 
 }
@@ -305,22 +309,41 @@ class Triangle{
 		this.CA;
 		if(pointA && pointB && pointC){
 			try{
-				this.AB = new Line(pointA, pointB, 'AB');
-				this.BC = new Line(pointB, pointC, 'BC');
-				this.CA = new Line(pointC, pointA, 'CA');
-				let alpha1Arc = new Arc(this.AB, this.BC, 'alphaAC');
-				let alpha2Arc = new Arc(this.BC, this.CA, 'alphaBA');
-				let alpha3Arc = new Arc(this.CA, this.AB, 'alphaCB');
-				let alpha1 = alpha1Arc.__findIntAngle();
-				let alpha2 = alpha2Arc.__findIntAngle();
-				let alpha3 = alpha3Arc.__findIntAngle();
-				if(alpha1 == mathjs.PI/2 || alpha2 == mathjs.PI/2 || alpha3 == mathjs.PI/2 ){
-					this.isRect = true;
-				}
+				let AB = new Line(pointA, pointB, 'AB');
+				let BC = new Line(pointB, pointC, 'BC');
+				let CA = new Line(pointC, pointA, 'CA');
+				let alpha1Arc = new Arc(AB, BC, 'alphaAC');
+				let alpha2Arc = new Arc(BC, CA, 'alphaBA');
+				let alpha3Arc = new Arc(CA, AB, 'alphaCB');
+				let alpha1 = alpha1Arc.interiorAngle;
+				let alpha2 = alpha2Arc.interiorAngle;
+				let alpha3 = alpha3Arc.interiorAngle;
 				if((alpha1 + alpha2 + alpha3) == mathjs.PI){
-					this.alpha1 = alpha1Arc;
-					this.alpha2 = alpha2Arc;
-					this.alpha3 = alpha3Arc;
+					if(alpha1 != 0 && alpha2 != 0 && alpha3 != 0){
+						if(alpha1 == mathjs.PI/2 || alpha2 == mathjs.PI/2 || alpha3 == mathjs.PI/2 ){
+							this.isRect = true;
+						}
+						this.AB = AB;
+						this.BC = BC;
+						this.CA = CA;
+						this.alpha1 = alpha1Arc;
+						this.alpha2 = alpha2Arc;
+						this.alpha3 = alpha3Arc;
+						//for eventual calculation of the height between each of the vertices and its opposite side 
+						try{
+							this.pointAsegBC = this.#findHeightBtwSegAndVer(pointA, this.BC);
+							this.pointAsegBC.pointName = 'pointAsegBC';
+							this.pointBsegCA = this.#findHeightBtwSegAndVer(pointB, this.CA);
+							this.pointBsegCA.pointName = 'pointBsegCA';
+							this.pointCsegAB = this.#findHeightBtwSegAndVer(pointC, this.AB);
+							this.pointCsegAB.pointName = 'pointCsegAB';
+						}catch(e){
+							throw new Error("Triangle Class - constructor: failed to find at least one of the opposite points to a vertice", {cause: e.cause, stack: e.stack? e.stack:undefined});
+						}
+
+					}else{
+						throw new Error("Triangle Class - constructor: at least one of the angles is 0; it is likely a Line");
+					}
 				}else{
 					throw new Error("Triangle Class - constructor: incorrect calculation of angles");					
 				}
@@ -341,22 +364,15 @@ class Triangle{
 	}
 
 
-	pitagoras(hyp=true, segment1Length, segment2Length){
-			/*
-			TODO:
-			-- confirm rectangular shape
-			-- create a function that works for all possible combinations of segments using Math library
-			-- assume rectangular triangle, otherwise this won't work for other projects based on lines
-			*/
-			let segment3Length;
-			if(hyp){
-				segment3Length =  mathjs.sqrt(mathjs.max(mathjs.abs(segment1Length), mathjs.abs(segment2Length))**2 - mathjs.min(mathjs.abs(segment1Length), mathjs.abs(segment2Length)));
-			}else{
-				segment3Length =  mathjs.sqrt(mathjs.hypot(segment1Length, segment2Length));
-			}
+	/* Private Methods */
 
-			return segment3Length;
+	#findHeightBtwSegAndVer(vertice, oppSeg){
+		return oppSeg.findNearestToPoint(vertice);
 	}
+
+	/* Public Methods */
+
+	/* Static Methods */
 
 }
 
@@ -369,8 +385,22 @@ class Circle{
 
 	constructor(point, r){
 		this.center = point;
+		this.center.pointName = 'Center';
 		this.r = r;
 	}
+
+	/* Private Methods */
+
+	/* Public Methods */
+
+	findCoordPointCircleGivenAngleToX(angle){
+		let {xAApprox, yAApprox} = this.center.findOtherPointCoordHavingAngleAndDist(angle, this.r);
+
+		return new Triangle(this.center, new Point(this.center.x + xAApprox, this.center.y, 'pointProj'), new Point(this.center.x + xAApprox, this.center.y + yAApprox, 'pointCircle'), 'trigProjection');;
+
+	}
+
+	/* Static Methods */
 
 }
 
@@ -387,16 +417,43 @@ class PointCircleGeoms extends Line{
 	}
 
 	get distPoint2Center(){
-		return this.__findDistPoint2Center();
+		return this.#findDistPoint2Center();
 	}
 
 	get centerProjection(){
 		if(this.r){
-			return this.centerProjection = this.__findCenterByProjection();
+			return this.centerProjection = this.#findCenterByProjection();
 		}
 
 		return;
 	}
+
+	/* Private Methods */
+
+	#findDistPoint2Center(){
+		return mathjs.sqrt(this.r**2 - (this.distBtwPoints/2)**2);
+	}
+	
+	/*TODO: 
+	Check this method, as it is giving strange results when called, like two different radii when 
+	only one is possible???
+	A correct result is calculated at interactive block number 20 on 'interactions.js'
+	*/
+	#findCenterByProjection(){ //here we are actually using the parametric equation of the circle
+		const {mT, atanT, cT} = this.paramsNormal;
+		const distPoint2Center = this.distPoint2Center;
+		const middlePoint = this.middlePoint;
+		let xA, yA, xB, yB;
+        xA = middlePoint.x - distPoint2Center*Math.cos(atanT);
+        yA = middlePoint.y - distPoint2Center*Math.sin(atanT);
+        xB = middlePoint.x + distPoint2Center*Math.cos(atanT);
+        yB = middlePoint.y + distPoint2Center*Math.sin(atanT);
+	  
+		return [[new Circle(xA, yA, r), new Circle(xB, yB, r)], {atanT: atanT}];
+	}
+
+
+	/* Public Methods */
 
 	circleFamilythru2Points(lambda){
 		/* From
@@ -431,29 +488,6 @@ class PointCircleGeoms extends Line{
 		let rA2 =  -C + h**2 + k**2;
 		let r = mathjs.sqrt(rA2);
 		return new Circle(new Point(h, k), r);
-	}
-
-
-	__findDistPoint2Center(){
-		return mathjs.sqrt(this.r**2 - (this.__findDistBtwPoints()/2)**2);
-	}
-	
-	/*TODO: 
-	Check this method, as it is giving strange results when called, like two different radii when 
-	only one is possible???
-	A correct result is calculated at interactive block number 20 on 'interactions.js'
-	*/
-	__findCenterByProjection(r){ //here we are actually using the parametric equation of the circle
-		const {mT, atanT, cT} = this.__findParamsNormal();
-		const distPoint2Center = this.__findDistPoint2Center();
-		const middlePoint = this.__findMiddlePoint();
-		let xA, yA, xB, yB;
-        xA = middlePoint.x - distPoint2Center*Math.cos(atanT);
-        yA = middlePoint.y - distPoint2Center*Math.sin(atanT);
-        xB = middlePoint.x + distPoint2Center*Math.cos(atanT);
-        yB = middlePoint.y + distPoint2Center*Math.sin(atanT);
-	  
-		return [[new Circle(xA, yA, r), new Circle(xB, yB, r)], {atanT: atanT}];
 	}
 
 }
