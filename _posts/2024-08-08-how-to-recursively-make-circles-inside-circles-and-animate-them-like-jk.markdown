@@ -372,7 +372,23 @@ Now, to calculate the inner circles he needed to get the position of the centers
 
 Where `r2` might have a misleading name, as it is not a radius but *the distance between the center of the outer circle to the center of each of the inner circles*.
 
-We will reproduce the whole calculation of the value later.
+<section id="section01">
+<style>
+  #circlestheory{
+    border: 1px solid grey;
+  }
+  #section01{
+    position: relative;
+  }
+  #gui-circlestheory {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+</style>
+<div id="gui-circlestheory"></div>
+<canvas id="circlestheory"></canvas>
+</section>
 
 #### `drawPattern` function: centers, radii, angles and a couple of other magic numbers
 
@@ -390,9 +406,19 @@ But then he also multiplied the angles by other `magic numbers` at each self cal
 
 The "magic numbers" used by JK had as effect that several different circles rotated under different speeds, also helped by the recursive placing of the different circles.
 
+<section id="section02">
+<div id="gui-speedexample"></div>
+<canvas id="speedexample"></canvas>
+</section>
+
 #### `draw` function: setting up the size of the first outer circle and the initial speed of rotation
 
 The "magic numbers" used in the `draw` function are more mundane and don't require a lot of discussion. One was used to fit the outest circle to an appropiate size on the screen (the "0.475"). The other one, the 2000 in `let angle = now / 2000;`, was more a way to initialize the angular speed of the first inner circles.
+
+<section id="section03">
+<div id="gui-initialsetupexample"></div>
+<canvas id="initialsetupexample"></canvas>
+</section>
 
 # Tada!
 

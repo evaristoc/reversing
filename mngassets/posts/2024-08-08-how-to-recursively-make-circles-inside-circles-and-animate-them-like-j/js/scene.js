@@ -38,13 +38,6 @@ class Scene {
 	}
 }
 
-//let testPointCircleGeoms01 = new PointCircleGeoms(new Point(20, 30), new Point(50, 30), null);
-//console.log("testPointCircleGeoms01", testPointCircleGeoms01);
-//console.log(testPointCircleGeoms01.circleFamilythru2Points(2));
-
-//let testPointCircleGeoms02 = new PointCircleGeoms(new Point(20, 30), new Point(50, 30), 30);
-//console.log("testPointCircleGeoms02", testPointCircleGeoms02);
-
 //////////////////////////////
 /*FIGURE, GENERAL PARAMETERS*/
 //////////////////////////////
@@ -62,39 +55,40 @@ let paramsFigure = {
 /*FIGURE SETUP*/
 ////////////////
 
-// Create the SVG container.
-function SVGCreate(width, height){
-	const svg = d3.create("svg")
-    .attr("width", width)
-    .attr("height", height);
+// Create the Canvas container.
+function canvasCreate(w, h, selector){
+	let section = document.querySelector(selector);
 
-
-   //TO KEEP IN MIND: for this case I will 'dispacht' distinctive groups defined by geometry / svg shape
-   // this might not be ideal if elements from different groups require to be animated simultaneously,
-   // but it might work for this project 
-
-    let symbols = svg
-    .append('g')
-    .attr('class', 'g-symbols');
-
-    let texts = svg
-        .append('g')
-        .attr('class', 'g-texts');
+	let guiElem = section.querySelector("div");
     
-    let lines = svg
-        .append('g')
-        .attr('class', 'g-segments');
+	let canvas = section.querySelector("canvas");
 
-    let circles = svg
-        .append('g')
-        .attr('class', 'g-circles');
+	canvas.setAttribute('width', w);
+	canvas.setAttribute('height', h);
+	
 
-    let arcs = svg
-        .append('g')
-        .attr('class', 'g-arcs');
+	let ctx = canvas.getContext("2d");
+
+		//ctx.fillRect(0, 0, w, h);
+	ctx.lineWidth = 10;
+	ctx.strokeStyle = 'red';
+	ctx.beginPath();
+	ctx.rect(175, 25, 100, 100);
+	ctx.stroke();
+	ctx.fill();
 
 
-   return {svg, symbols, texts, lines, circles, arcs};
+	//__resize(w, h, canvas);
+	
+
+   return {section, canvas, ctx, guiElem, w, h};
+}
+
+function __resize(w, h, c){
+	w = c.width = window.innerWidth;
+	h = c.height = window.innerHeight;
+
+
 }
 
 
@@ -102,5 +96,5 @@ function SVGCreate(width, height){
 /* EXPORTS */
 /////////////
 export {paramsFigure};
-export {SVGCreate};
+export {canvasCreate};
 export {Scene};

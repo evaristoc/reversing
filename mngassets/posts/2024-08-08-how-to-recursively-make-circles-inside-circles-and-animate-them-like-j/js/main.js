@@ -1,5 +1,7 @@
 /* IMPORTS */
-import {result} from './drawings.js';
+import {result, circlesTheory} from './drawings.js';
+
+import {canvasCreate} from './scene.js';
 
 window.onload = (event) => {
 
@@ -17,8 +19,9 @@ window.onload = (event) => {
     //////////
 
     function init() {
- 
-    
+        let container = document.querySelector('div.wrapper');
+
+        circlesTheory(canvasCreate(container.offsetWidth, 300, '#section01'))
     
     }
     
