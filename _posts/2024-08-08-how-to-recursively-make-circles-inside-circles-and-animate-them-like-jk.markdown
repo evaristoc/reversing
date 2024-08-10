@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to recursively make circles inside circles... and animate them like JK"
+title:  "How to recursively make circles inside circles and animate them like JK"
 date:   2024-08-08 12:00:00 +0200
 categories: blog update
 ---
@@ -387,10 +387,22 @@ Where `r2` might have a misleading name, as it is not a radius but *the distance
 }
 </style>
 <script src="{{ site.baseurl }}{% link mngassets/vendor/js/konva/konva.min.js %}"></script>
-<div id="gui-circlestheory"></div>
-<canvas id="circlestheory"></canvas>
+<!--<div id="gui-circlestheory"></div>-->
+<!--<canvas id="circlestheory"></canvas>-->
 <div id='konvacontainer'></div>
+    <div id="buttons">
+      <input type="button" id="play" value="Play" />
+      <input type="button" id="pause" value="Pause" />
+      <input type="button" id="reverse" value="Reverse" />
+      <input type="button" id="reset" value="Reset" />
+      <input type="button" id="seek" value="Seek 3" />
+      <input type="button" id="finish" value="Finish" />
+    </div>
+<!-- USE KONVA WITH BUTTON FNCTIONALITY FOR REVERSING AND FORWADING TO SHOW THIS PROCEDURE -->
 </section>
+<br/>
+
+
 
 #### `drawPattern` function: centers, radii, angles and a couple of other magic numbers
 
@@ -411,6 +423,7 @@ The "magic numbers" used by JK had as effect that several different circles rota
 <section id="section02">
 <div id="gui-speedexample"></div>
 <canvas id="speedexample"></canvas>
+<!-- USE CANVAS API WITH THE ACTUAL FUNCTION PLUS DATGUI TO MODIFY THE VALUES OF THE ENTRIES -->
 </section>
 
 #### `draw` function: setting up the size of the first outer circle and the initial speed of rotation
@@ -420,6 +433,7 @@ The "magic numbers" used in the `draw` function are more mundane and don't requi
 <section id="section03">
 <div id="gui-initialsetupexample"></div>
 <canvas id="initialsetupexample"></canvas>
+<!-- USE CANVAS API WITH THE ACTUAL FUNCTION PLUS DATGUI TO MODIFY THE VALUES OF THE ENTRIES -->
 </section>
 
 # Tada!

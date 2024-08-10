@@ -59,23 +59,23 @@ let paramsFigure = {
 function canvasCreate(w, h, selector){
 	let section = document.querySelector(selector);
 
-	let guiElem = section.querySelector("div");
+	// let guiElem = section.querySelector("div");
     
-	let canvas = section.querySelector("canvas");
+	// let canvas = section.querySelector("canvas");
 
-	canvas.setAttribute('width', w);
-	canvas.setAttribute('height', h);
+	// canvas.setAttribute('width', w);
+	// canvas.setAttribute('height', h);
 	
 
-	let ctx = canvas.getContext("2d");
+	// let ctx = canvas.getContext("2d");
 
-		//ctx.fillRect(0, 0, w, h);
-	ctx.lineWidth = 10;
-	ctx.strokeStyle = 'red';
-	ctx.beginPath();
-	ctx.rect(175, 25, 100, 100);
-	ctx.stroke();
-	ctx.fill();
+	// 	//ctx.fillRect(0, 0, w, h);
+	// ctx.lineWidth = 10;
+	// ctx.strokeStyle = 'red';
+	// ctx.beginPath();
+	// ctx.rect(175, 25, 100, 100);
+	// ctx.stroke();
+	// ctx.fill();
 
 
 	//const konvaContainer = section.querySelector('#konvacontainer');
@@ -89,19 +89,20 @@ function canvasCreate(w, h, selector){
 
 
 
-	__resize(w, h, canvas);
+	//__resize(w, h, canvas);
 	
 
-   return {section, canvas, ctx, guiElem, w, h, stage, layer};
+   //return {section, canvas, ctx, guiElem, w, h, stage, layer};
+   return {stage, layer};
 }
 
-function __resize(w, h, c){
-	//w = c.width = window.innerWidth;
-	//h = c.height = window.innerHeight;
-	let container = document.querySelector('div.wrapper');
-	w = c.width = container.offsetWidth;
-	h = c.height = 300;
-}
+// function __resize(w, h, c){
+// 	//w = c.width = window.innerWidth;
+// 	//h = c.height = window.innerHeight;
+// 	let container = document.querySelector('div.wrapper');
+// 	w = c.width = container.offsetWidth;
+// 	h = c.height = 300;
+// }
 
 
 /////////////
