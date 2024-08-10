@@ -57,11 +57,11 @@ export function circlesTheory(argts){
 
     let xA240, yA240;
     ({xAApprox:xA240, yAApprox:yA240} = pointAtZero.findOtherPointCoordHavingAngleAndDist(4*Math.PI/3 + rotLines, circleOuter.r));
-    let line02 = new Line(circleOuter.center, new Point(circleOuter.center.x + xA240, circleOuter.center.y + yA240, 'CenA'), 'line01');
+    let line02 = new Line(circleOuter.center, new Point(circleOuter.center.x + xA240, circleOuter.center.y + yA240, 'CenA'), 'line02');
 
     let xA360, yA360;
     ({xAApprox:xA360, yAApprox:yA360} = pointAtZero.findOtherPointCoordHavingAngleAndDist(2*Math.PI + rotLines, circleOuter.r));
-    let line03 = new Line(circleOuter.center, new Point(circleOuter.center.x + xA360, circleOuter.center.y + yA360, 'CenA'), 'line01');
+    let line03 = new Line(circleOuter.center, new Point(circleOuter.center.x + xA360, circleOuter.center.y + yA360, 'CenA'), 'line03');
 
     let rInner = circleOuter.r*0.464;
 
@@ -123,8 +123,17 @@ export function circlesTheory(argts){
         lineCap: 'round'
     });
 
+    let triangle02 = new Konva.Line({
+        points: [circleOuter.center.x, circleOuter.center.y, circleInner.center.x, circleInner.center.y, (circleInner.center.x + circleOuter.center.x + xA2)/2, (circleInner.center.y + circleOuter.center.y + yA2)/2, circleOuter.center.x, circleOuter.center.y],
+        stroke: 'none',
+        fill: 'lightgrey'
+    });
+
+    let xA3, yA3;
+    ({xAApprox:xA3, yAApprox:yA3} = pointAtZero.findOtherPointCoordHavingAngleAndDist(2*Math.PI/3 + Math.PI, circleOuter.r));
+
     let radiusInner = new Konva.Line({
-        points: [circleInner.center.x, circleInner.center.y, circleOuter.center.x + xA2, circleOuter.center.y + yA2],
+        points: [(circleInner.center.x + circleOuter.center.x + xA2)/2, (circleInner.center.y + circleOuter.center.y + yA2)/2, circleInner.center.x, circleInner.center.y, circleOuter.center.x + xA3, circleOuter.center.y + yA3],
         stroke: 'red',
         lineCap: 'round'
     });
@@ -196,6 +205,7 @@ export function circlesTheory(argts){
     layer.add(cirOuter);
     layer.add(cirInner);
     layer.add(triangle01);
+    layer.add(triangle02);
     layer.add(radiusInner);
     layer.add(lin01);
     layer.add(lin02);
