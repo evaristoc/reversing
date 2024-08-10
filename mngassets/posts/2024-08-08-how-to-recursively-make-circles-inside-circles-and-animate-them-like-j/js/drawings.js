@@ -136,7 +136,8 @@ export function circlesTheory(argts){
                     radius: circleInner.r,
                     fill: 'white',
                     stroke: 'black',
-                    strokeWidth: 4
+                    strokeWidth: 4,
+                    opacity: 1
                 });
 
         // since this text is inside of a defined area, we can center it using
@@ -173,19 +174,19 @@ let rect01 = new Konva.Rect({
 
     let lin01 = new Konva.Line({
                     points: [line01.pointA.x, line01.pointA.y, line01.pointB.x, line01.pointB.y],
-                    stroke: 'blue',
+                    stroke: 'black',
                     lineCap: 'round'
                 });
 
     let lin02 = new Konva.Line({
                     points: [line02.pointA.x, line02.pointA.y, line02.pointB.x, line02.pointB.y],
-                    stroke: 'blue',
+                    stroke: 'black',
                     lineCap: 'round'
                 });
 
     let lin03 = new Konva.Line({
                     points: [line03.pointA.x, line03.pointA.y, line03.pointB.x, line03.pointB.y],
-                    stroke: 'blue',
+                    stroke: 'black',
                     lineCap: 'round'
                 });
 
@@ -234,21 +235,22 @@ let rect01 = new Konva.Rect({
 
     //TODO: 
 
+
     let sidesIsc = new Konva.Line({
-        points: [circleInner.center.x, circleInner.center.y, circleOuter.center.x, circleOuter.center.y, circleOuter.center.x + xA2, circleOuter.center.y + yA2],
-        stroke: 'green',
-        lineCap: 'round',
-        opacity: 0
-    });
+      points: [circleInner.center.x, circleInner.center.y, circleOuter.center.x, circleOuter.center.y, circleOuter.center.x + xA2, circleOuter.center.y + yA2],
+      stroke: 'green',
+      lineCap: 'round',
+      opacity: 0
+  });
+  
+  let nosideIsc = new Konva.Line({
+    points: [circleOuter.center.x, circleOuter.center.y, circleOuter.center.x + xA3, circleOuter.center.y + yA3],
+    stroke: 'green',
+    lineCap: 'round',
+    opacity: 0
+});
 
-    let nosideIsc = new Konva.Line({
-        points: [circleInner.center.x, circleInner.center.y, circleOuter.center.x, circleOuter.center.y, circleOuter.center.x + xA3, circleOuter.center.y + yA3],
-        stroke: 'green',
-        lineCap: 'round',
-        opacity: 0
-    });
-
-        // since this text is inside of a defined area, we can center it using
+  // since this text is inside of a defined area, we can center it using
     // align: 'center'
     let text03 = new Konva.Text({
         x: 20,
@@ -558,7 +560,6 @@ let rect01 = new Konva.Rect({
         easing: Konva.Easings.Linear
       });
 
-
     layer.add(nosideIsc);
     layer.add(sidesIsc);
     layer.add(group03);
@@ -599,12 +600,12 @@ let rect01 = new Konva.Rect({
 
 
     layer.add(group05);
-    let tween05a = new Konva.Tween({
-        node: nosideIsc,
-        duration: 3,
-        opacity: 0,
-        easing: Konva.Easings.Linear
-    });
+    // let tween05a = new Konva.Tween({
+    //     node: nosideIsc,
+    //     duration: 3,
+    //     opacity: 0,
+    //     easing: Konva.Easings.Linear
+    // });
     let tween05b = new Konva.Tween({
         node: cirInner03,
         duration: 3,
@@ -635,7 +636,7 @@ let rect01 = new Konva.Rect({
         easing: Konva.Easings.Linear
     });
 
-    layer.add(radiusInner);
+    //layer.add(radiusInner);
 
     layer.add(simpleText);
 
@@ -647,11 +648,22 @@ let rect01 = new Konva.Rect({
     // draw the image
     layer.draw();
 
+          // play tween forward
+        document.getElementById('seek01').addEventListener(
+          'click',
+          function () {
+            tween02.reverse();
+          },
+          false
+        );
       // play tween forward
       document.getElementById('seek02').addEventListener(
         'click',
         function () {
           tween02.play();
+          tween03a.reverse();
+          tween03b.reverse();
+          tween03c.reverse();
         },
         false
       );
@@ -670,6 +682,9 @@ let rect01 = new Konva.Rect({
             tween03a.play();
             tween03b.play();
             tween03c.play();
+            tween04a.reverse();
+            tween04b.reverse();
+
         },
         false
       );  
@@ -679,6 +694,9 @@ let rect01 = new Konva.Rect({
         function () {
             tween04a.play();
             tween04b.play();
+            tween03a.play();
+            tween05b.reverse();
+            tween05c.reverse();
         },
         false
       );
@@ -686,7 +704,8 @@ let rect01 = new Konva.Rect({
       document.getElementById('seek05').addEventListener(
         'click',
         function () {
-            tween05a.play();
+            //tween05a.play();
+            tween03a.reverse();
             tween05b.play();
             tween05c.play();
         },

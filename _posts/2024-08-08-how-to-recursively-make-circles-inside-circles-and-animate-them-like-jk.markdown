@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to recursively make four kissing circles and animate them like JK"
+title:  "How to recursively make kissing circles and animate them like JK"
 date:   2024-08-08 12:00:00 +0200
 categories: blog update
 ---
