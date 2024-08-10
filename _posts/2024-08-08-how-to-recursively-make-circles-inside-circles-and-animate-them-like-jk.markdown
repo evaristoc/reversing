@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to recursively make circles inside circles and animate them like JK"
+title:  "How to recursively make four kissing circles and animate them like JK"
 date:   2024-08-08 12:00:00 +0200
 categories: blog update
 ---
@@ -324,6 +324,9 @@ From the image you can see the solution:
 
 `R = r((3 + 2 * sqrt(3))/3)`
 
+> There is another way to get the same relationship by using the [Descartes' Circle Theorem](https://en.wikipedia.org/wiki/Descartes%27_theorem), where, for this particular example, reduces to  
+>`(3/r - 1/R)^2 = 2(3/(r^2) + 1/(R^2))`
+
 which gives the relation between the radius `R` of the containing circle against the radius `r` of any of the three inserted circles. For `r = 1`, the value of `R` is (approx) 2.155.
 
 Inverting the proportion gives:
@@ -387,17 +390,27 @@ Where `r2` might have a misleading name, as it is not a radius but *the distance
 }
 </style>
 <script src="{{ site.baseurl }}{% link mngassets/vendor/js/konva/konva.min.js %}"></script>
+<script src="https://rawgit.com/konvajs/greensock-plugin/master/KonvaPlugin.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TimelineLite.min.js"></script>
 <!--<div id="gui-circlestheory"></div>-->
 <!--<canvas id="circlestheory"></canvas>-->
 <div id='konvacontainer'></div>
-    <div id="buttons">
-      <input type="button" id="play" value="Play" />
-      <input type="button" id="pause" value="Pause" />
-      <input type="button" id="reverse" value="Reverse" />
-      <input type="button" id="reset" value="Reset" />
-      <input type="button" id="seek" value="Seek 3" />
-      <input type="button" id="finish" value="Finish" />
-    </div>
+  <div id="buttons">
+    <input type="button" id="seek01" value="Seek 01" />
+    <input type="button" id="seek02" value="Seek 02" />
+    <input type="button" id="seek03" value="Seek 03" />
+    <input type="button" id="seek04" value="Seek 04" />
+    <input type="button" id="seek05" value="Seek 05" />
+    <input type="button" id="seek06" value="Seek 06" />
+    <input type="button" id="seek07" value="Seek 07" />
+    <input type="button" id="seek08" value="Seek 08" />
+    <input type="button" id="seek09" value="Seek 09" />
+    <input type="button" id="seek10" value="Seek 10" />
+    <input type="button" id="seek11" value="Seek 11" />
+    <input type="button" id="seek12" value="Seek 12" />
+    <input type="button" id="seek13" value="Seek 13" />
+  </div>
 <!-- USE KONVA WITH BUTTON FNCTIONALITY FOR REVERSING AND FORWADING TO SHOW THIS PROCEDURE -->
 </section>
 <br/>
