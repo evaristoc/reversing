@@ -119,7 +119,8 @@ export function circlesTheory(argts){
                     radius: circleInner.r,
                     fill: 'white',
                     stroke: 'black',
-                    strokeWidth: 4
+                    strokeWidth: 4,
+                    opacity: 1
                 });
 
     let cirInner02 = new Konva.Circle({
@@ -128,7 +129,8 @@ export function circlesTheory(argts){
                     radius: circleInner.r,
                     fill: 'white',
                     stroke: 'black',
-                    strokeWidth: 4
+                    strokeWidth: 4,
+                    opacity: 1
                 });
     let cirInner03 = new Konva.Circle({
                     x: circleOuter.center.x + xA3,
@@ -175,19 +177,22 @@ let rect01 = new Konva.Rect({
     let lin01 = new Konva.Line({
                     points: [line01.pointA.x, line01.pointA.y, line01.pointB.x, line01.pointB.y],
                     stroke: 'black',
-                    lineCap: 'round'
+                    lineCap: 'round',
+
                 });
 
     let lin02 = new Konva.Line({
                     points: [line02.pointA.x, line02.pointA.y, line02.pointB.x, line02.pointB.y],
                     stroke: 'black',
-                    lineCap: 'round'
+                    lineCap: 'round',
+
                 });
 
     let lin03 = new Konva.Line({
                     points: [line03.pointA.x, line03.pointA.y, line03.pointB.x, line03.pointB.y],
                     stroke: 'black',
-                    lineCap: 'round'
+                    lineCap: 'round',
+
                 });
 
 
@@ -236,12 +241,19 @@ let rect01 = new Konva.Rect({
     //TODO: 
 
 
-    let sidesIsc = new Konva.Line({
-      points: [circleInner.center.x, circleInner.center.y, circleOuter.center.x, circleOuter.center.y, circleOuter.center.x + xA2, circleOuter.center.y + yA2],
+    let sideIsc01 = new Konva.Line({
+      points: [circleOuter.center.x, circleOuter.center.y, circleOuter.center.x + xA2, circleOuter.center.y + yA2],
       stroke: 'green',
       lineCap: 'round',
       opacity: 0
   });
+
+  let sideIsc02 = new Konva.Line({
+    points: [circleInner.center.x, circleInner.center.y, circleOuter.center.x, circleOuter.center.y],
+    stroke: 'green',
+    lineCap: 'round',
+    opacity: 0
+});
   
   let nosideIsc = new Konva.Line({
     points: [circleOuter.center.x, circleOuter.center.y, circleOuter.center.x + xA3, circleOuter.center.y + yA3],
@@ -291,12 +303,19 @@ let rect01 = new Konva.Rect({
 
     /* 4- line between center */
 
-    let baseIsc = new Konva.Line({
-        points: [circleInner.center.x, circleInner.center.y, circleOuter.center.x + xA2, circleOuter.center.y + yA2],
+    let baseIsc01 = new Konva.Line({
+        points: [circleOuter.center.x + xA2, circleOuter.center.y + yA2, (circleInner.center.x + circleOuter.center.x + xA2)/2, (circleInner.center.y + circleOuter.center.y + yA2)/2],
         stroke: 'green',
         lineCap: 'round',
         opacity: 0
     });
+
+    let baseIsc02 = new Konva.Line({
+      points: [(circleInner.center.x + circleOuter.center.x + xA2)/2, (circleInner.center.y + circleOuter.center.y + yA2)/2, circleInner.center.x, circleInner.center.y],
+      stroke: 'green',
+      lineCap: 'round',
+      opacity: 0
+  });
 
     let text04 = new Konva.Text({
         x: 20,
@@ -395,6 +414,14 @@ let rect01 = new Konva.Rect({
        * drawing function which draws a triangle
        */
     console.log((circleInner.center.x + circleOuter.center.x + xA2)/2, (circleInner.center.y + circleOuter.center.y + yA2)/2);
+
+    let sideRect01 = new Konva.Line({
+      points: [circleOuter.center.x, circleOuter.center.y, (circleInner.center.x + circleOuter.center.x + xA2)/2, (circleInner.center.y + circleOuter.center.y + yA2)/2],
+      stroke: 'green',
+      lineCap: 'round',
+      opacity: 1
+  });
+
     let triangleRect = new Konva.Shape({
         //https://github.com/konvajs/react-konva/issues/201
             //width: 260,
@@ -561,7 +588,8 @@ let rect01 = new Konva.Rect({
       });
 
     layer.add(nosideIsc);
-    layer.add(sidesIsc);
+    layer.add(sideIsc01);
+    layer.add(sideIsc02);
     layer.add(group03);
     let tween03a = new Konva.Tween({
         node: nosideIsc,
@@ -569,12 +597,18 @@ let rect01 = new Konva.Rect({
         opacity: 1,
         easing: Konva.Easings.Linear
     });
-    let tween03b = new Konva.Tween({
-        node: sidesIsc,
+    let tween03b1 = new Konva.Tween({
+        node: sideIsc01,
         duration: 3,
         opacity: 1,
         easing: Konva.Easings.Linear
     });
+    let tween03b2 = new Konva.Tween({
+      node: sideIsc02,
+      duration: 3,
+      opacity: 1,
+      easing: Konva.Easings.Linear
+  });
     let tween03c = new Konva.Tween({
         node: group03,
         duration: 3,
@@ -583,14 +617,21 @@ let rect01 = new Konva.Rect({
     });
 
 
-    layer.add(baseIsc);
+    layer.add(baseIsc01);
+    layer.add(baseIsc02);
     layer.add(group04);
-    let tween04a = new Konva.Tween({
-        node: baseIsc,
+    let tween04a1 = new Konva.Tween({
+        node: baseIsc01,
         duration: 3,
         opacity: 1,
         easing: Konva.Easings.Linear
     });
+    let tween04a2 = new Konva.Tween({
+      node: baseIsc02,
+      duration: 3,
+      opacity: 1,
+      easing: Konva.Easings.Linear
+  });
     let tween04b = new Konva.Tween({
         node: group04,
         duration: 3,
@@ -619,8 +660,6 @@ let rect01 = new Konva.Rect({
         easing: Konva.Easings.Linear
     });
 
-
-
     layer.add(triangleRect);
     layer.add(group07);
     let tween07a = new Konva.Tween({
@@ -635,6 +674,12 @@ let rect01 = new Konva.Rect({
         opacity: 0,
         easing: Konva.Easings.Linear
     });
+  //   let tween07c = new Konva.Tween({
+  //     node: sideRect01,
+  //     duration: 3,
+  //     opacity: 1,
+  //     easing: Konva.Easings.Linear
+  // });
 
     //layer.add(radiusInner);
 
@@ -662,7 +707,8 @@ let rect01 = new Konva.Rect({
         function () {
           tween02.play();
           tween03a.reverse();
-          tween03b.reverse();
+          tween03b1.reverse();
+          tween03b2.reverse();
           tween03c.reverse();
         },
         false
@@ -680,9 +726,11 @@ let rect01 = new Konva.Rect({
         'click',
         function () {
             tween03a.play();
-            tween03b.play();
+            tween03b1.play();
+            tween03b2.play();
             tween03c.play();
-            tween04a.reverse();
+            tween04a1.reverse();
+            tween04a2.reverse();
             tween04b.reverse();
 
         },
@@ -692,7 +740,8 @@ let rect01 = new Konva.Rect({
       document.getElementById('seek04').addEventListener(
         'click',
         function () {
-            tween04a.play();
+            tween04a1.play();
+            tween04a2.play();
             tween04b.play();
             tween03a.play();
             tween05b.reverse();
@@ -706,8 +755,66 @@ let rect01 = new Konva.Rect({
         function () {
             //tween05a.play();
             tween03a.reverse();
+            //tween06a.reverse();
             tween05b.play();
             tween05c.play();
+        },
+        false
+      );
+
+      document.getElementById('seek06').addEventListener(
+        'click',
+        function () {
+          let groupAll = new Konva.Group();
+
+          group02.opacity(0);
+
+
+          let _lin01 = new Konva.Line({
+            points: [line01.pointA.x, line01.pointA.y, line01.pointB.x, line01.pointB.y],
+            stroke: 'black',
+            lineCap: 'round',
+            opacity: 1
+        });
+
+        let _lin02 = new Konva.Line({
+          points: [line02.pointA.x, line02.pointA.y, line02.pointB.x, line02.pointB.y],
+          stroke: 'black',
+          lineCap: 'round',
+          opacity: 1
+      });
+
+      let _lin03 = new Konva.Line({
+        points: [line03.pointA.x, line03.pointA.y, line03.pointB.x, line03.pointB.y],
+        stroke: 'black',
+        lineCap: 'round',
+        opacity: 1
+    });
+
+          layer.add(sideRect01);
+          groupAll.add(cirOuter);
+          groupAll.add(cirInner01);
+          groupAll.add(cirInner02);
+          groupAll.add(sideRect01);
+          groupAll.add(triangleRect);
+          groupAll.add(baseIsc01);
+          groupAll.add(sideIsc01);
+          groupAll.add(baseIsc02);
+          groupAll.add(sideIsc02);
+          groupAll.add(_lin01);
+          groupAll.add(_lin02);
+          groupAll.add(_lin03);      
+          layer.add(groupAll);
+      
+          let tween06a = new Konva.Tween({
+              node: groupAll,
+              duration: 3,
+              easing: Konva.Easings.Linear,
+              scaleX: 1.7,
+              scaleY: 1.7,
+              x: -300
+          });
+            tween06a.play();
         },
         false
       );
@@ -715,11 +822,28 @@ let rect01 = new Konva.Rect({
       document.getElementById('seek07').addEventListener(
         'click',
         function () {
+            tween03b1.reverse();
+            tween04a1.reverse();
             tween07a.play();
             tween07b.play();
+            sideRect01.opacity(1);
+            //tween07c.play();
         },
         false
-      );  
+      );
+
+
+
+
+
+
+
+
+
+
+
+
+
     // // the tween has to be created after the node has been added to the layer
     // let tween = new Konva.Tween({
     // node: rct,
