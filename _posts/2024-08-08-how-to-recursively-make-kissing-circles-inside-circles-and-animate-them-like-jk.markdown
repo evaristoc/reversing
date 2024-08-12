@@ -14,6 +14,8 @@ categories: blog what-you-need-to
 </p>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
 
+***(OBSERVARTION: THIS POST IS A FIRST DRAFT.)***
+
 Some people find circles a fascinating shape. Circles are surrounded by mathematical paradigms. For example: did you know that even if circles are closed curves they still are ruled by one of the most interesting irrational numbers, Pi, which is a [transcendental number](https://en.wikipedia.org/wiki/Transcendental_number)?
 
 And if you are a fan of circles, why not having several of them, recursively?
