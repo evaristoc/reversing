@@ -2,20 +2,10 @@
 layout: post
 title:  "How to recursively make kissing circles and animate them like JK"
 date:   2024-08-08 12:00:00 +0200
-categories: blog update
+categories: blog what-you-need-to
 ---
-
+<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/js/main.js %}"></script>
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
-
-# **THIS POST IS STILL UNDER PREPARATION**
-
-https://codepen.io/DonKarlssonSan/pen/jOMROaB
-
-Some people find circles a fascinating form. They are surrounded by mathematical paradigms. For example: did you know that even if circles are closed curves they still are ruled by one of the most interesting irrational numbers, Pi, which is a [transcendental number](https://en.wikipedia.org/wiki/Transcendental_number)?
-
-And if you are a fan of circles, why not having several of them, recursively?
-
-This is what JK, or Johan Karlsson, one of my favorites [artist in Codepen](https://codepen.io/DonKarlssonSan), did for one of his series for the 2021 edition of [Genuary](https://genuary.art/): "Recursive Circles III".
 
 <p class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="jOMROaB" data-pen-title="Recursive Circles III" data-user="DonKarlssonSan" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
   <span>See the Pen <a href="https://codepen.io/DonKarlssonSan/pen/jOMROaB">
@@ -23,6 +13,12 @@ This is what JK, or Johan Karlsson, one of my favorites [artist in Codepen](http
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
+
+Some people find circles a fascinating shape. Circles are surrounded by mathematical paradigms. For example: did you know that even if circles are closed curves they still are ruled by one of the most interesting irrational numbers, Pi, which is a [transcendental number](https://en.wikipedia.org/wiki/Transcendental_number)?
+
+And if you are a fan of circles, why not having several of them, recursively?
+
+This is what JK, or Johan Karlsson, one of my favorites [artist in Codepen](https://codepen.io/DonKarlssonSan), did for one of his series for the 2021 edition of [Genuary](https://genuary.art/): "Recursive Circles III".
 
 Questions that I had when looking at his project were:
 
@@ -34,7 +30,9 @@ Questions that I had when looking at his project were:
 
 *And how did he make them rotate in harmony?*
 
-In this post I will try to re-verse the code to get some answers to my questions. I will include visuals using tools I am currently exploring such as [scrollama.js](https://github.com/russellsamora/scrollama) and [d3.js](https://d3js.org/) (SVG) but also the [canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
+In this post I will try to re-verse the code to get some answers to my questions. I will include quick visuals using a carousel and also the [canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
+
+> I want to share some carousels I found when working on this project (POST IN PREPARATION)
 
 # The Code
 
@@ -203,7 +201,6 @@ The following is where the animation takes place:
 </tbody>
 </table>
 </div>
-<script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/js/main.js %}"></script>
 
 A magic constant here is the argument related to `iterations`, which control the depth of the recursions, and have a particular effect on performance (*relevant!*). He also make use of "magic numbers" to modify the values of the angles when recursively calling the function.
 
@@ -313,29 +310,7 @@ The most important of all of them is the value of `shrinkFactor`.
 
 The project is based on a repetitive pattern consisting in repeatively inserting three circles inside a circle. Probably before starting, JK might had to solve first how to do insert those circles.
 
-Well... it turns out that it is a very common secondary-school problem. You can find exactly the same problem and its geometric solution by [following this link](https://thinkib.net/mathanalysis/page/27758/3-circles-inside-a-circle).
-
-<img src="{{site.baseurl}}{% link /mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/circlesinacircle 2024-08-08.png %}" style="width:100%;">
-*Source*: [thinkib](https://thinkib.net/mathanalysis/page/27758/3-circles-inside-a-circle)
-
-Instead of coding the solution to the problem, JK used a mathematical formula to get a value. I refer to it as a "magic number" because it is a constant proportion that stay the same for circles of any size. So solving for one gives you a solution you can use for all of them.
-
-From the image you can see the solution:
-
-`R = r((3 + 2 * sqrt(3))/3)`
-
-> There is another way to get the same relationship by using the [Descartes' Circle Theorem](https://en.wikipedia.org/wiki/Descartes%27_theorem), where, for this particular example, reduces to  
->`(3/r - 1/R)^2 = 2(3/(r^2) + 1/(R^2))`
-
-which gives the relation between the radius `R` of the containing circle against the radius `r` of any of the three inserted circles. For `r = 1`, the value of `R` is (approx) 2.155.
-
-Inverting the proportion gives:
-
-`r/R = 0.464`
-
-which is the value used by JK, probably adjusted to 0.463.
-
-The value is used to re-calculate the size of `r` of all the inner circles at any recursion.
+The `shrinkFactor` value is used to re-calculate the size of `r` of all the inner circles at any recursion. Now, instead of coding the solution to get the value, JK used the result of a mathematical solution. I refer to it as a "magic number" because it is a constant proportion that stay the same for circles of any size. So solving for one gives you a solution you can use for all of them.
 
 Now, to calculate the inner circles he needed to get the position of the centers. Those are the coordinates calculated as `(x1,y1)`, `(x2,y2)`,  and  `(x3,y3)`. This is done with a code that is repeated for each center. Here is one of them:
 <div class="codetable-wrap" style="width:auto; overflow-x: auto;">
@@ -375,46 +350,150 @@ Now, to calculate the inner circles he needed to get the position of the centers
 
 Where `r2` might have a misleading name, as it is not a radius but *the distance between the center of the outer circle to the center of each of the inner circles*.
 
+But how did he come to that value of `shrinkFactor`?
+
+Well... it turns out that it is a very common secondary-school problem. You can find exactly the same problem and its geometric solution by [following this link](https://thinkib.net/mathanalysis/page/27758/3-circles-inside-a-circle).
+
+<img src="{{site.baseurl}}{% link /mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/circlesinacircle 2024-08-08.png %}" style="width:100%;">
+*Source*: [thinkib](https://thinkib.net/mathanalysis/page/27758/3-circles-inside-a-circle)
+
+Let's follow the reasoning step by step:
+
+
 <section id="section01">
 <style>
-  #circlestheory{
-    border: 1px solid grey;
-  }
-  #section01{
-    position: relative;
-  }
-  #gui-circlestheory {
-  position: absolute;
-  top: 0;
-  left: 0;
+#section01 {
+  margin: 1rem;
+  position: relative;
+  overflow: hidden;
 }
+.slides-container {
+  /*height: calc(40vh - 2rem);*/
+  height: 350px;
+  width: 100%;
+  display: flex;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.slide-arrow {
+  position: absolute;
+  display: flex;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  height: 4rem;
+  background-color: white;
+  border: none;
+  width: 2rem;
+  font-size: 3rem;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 100ms;
+}
+.slide-arrow:hover,
+.slide-arrow:focus {
+  opacity: 1;
+}
+#slide-arrow-prev {
+  left: 0;
+  padding-left: 0.25rem;
+  border-radius: 0 2rem 2rem 0;
+}
+#slide-arrow-next {
+  right: 0;
+  padding-left: 0.75rem;
+  border-radius: 2rem 0 0 2rem;
+}
+.slide {
+  width: 100%;
+  height: 100%;
+  flex: 1 0 100%;
+}
+.slide:nth-child(4n+1) {
+  background-color: #49b293;
+}.slide:nth-child(4n+2) {
+  background-color: #b03532;
+}
+.slide:nth-child(4n+3) {
+  background-color: #6a478f;
+  margin: 0;
+}
+.slide:nth-child(4n+4) {
+  background-color: #da6f2b;
+}
+.imgadj{
+  max-width:80%;
+} 
+/*
+footer {
+  padding: 1em;
+  text-align: center;
+  background-color: #FFDFB9;
+}
+footer a {
+  color: inherit;
+  text-decoration: none;
+}
+footer .heart {
+  color: #DC143C;
+}
+*/
 </style>
-<script src="{{ site.baseurl }}{% link mngassets/vendor/js/konva/konva.min.js %}"></script>
-<script src="https://rawgit.com/konvajs/greensock-plugin/master/KonvaPlugin.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenLite.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TimelineLite.min.js"></script>
-<!--<div id="gui-circlestheory"></div>-->
-<!--<canvas id="circlestheory"></canvas>-->
-<div id='konvacontainer'></div>
-  <div id="buttons">
-    <input type="button" id="seek01" value="Seek 01" />
-    <input type="button" id="seek02" value="Seek 02" />
-    <input type="button" id="seek03" value="Seek 03" />
-    <input type="button" id="seek04" value="Seek 04" />
-    <input type="button" id="seek05" value="Seek 05" />
-    <input type="button" id="seek06" value="Seek 06" />
-    <input type="button" id="seek07" value="Seek 07" />
-    <input type="button" id="seek08" value="Seek 08" />
-    <input type="button" id="seek09" value="Seek 09" />
-    <input type="button" id="seek10" value="Seek 10" />
-    <input type="button" id="seek11" value="Seek 11" />
-    <input type="button" id="seek12" value="Seek 12" />
-    <input type="button" id="seek13" value="Seek 13" />
-  </div>
-<!-- USE KONVA WITH BUTTON FNCTIONALITY FOR REVERSING AND FORWADING TO SHOW THIS PROCEDURE -->
+  <button class="slide-arrow" id="slide-arrow-prev">
+    &#8249;
+  </button>
+  <button class="slide-arrow" id="slide-arrow-next">
+    &#8250;
+  </button>
+  <ul class="slides-container" id="slides-container">
+    <li id="s01" class="slide"><img class="imgadj" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/kissing circles 01.svg %}"/></li>
+    <li id="s02" class="slide"><img class="imgadj" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/kissing circles 02.svg %}"/></li>
+    <li id="s03" class="slide"><img class="imgadj" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/kissing circles 03.svg %}"/></li>
+    <li id="s04" class="slide"><img class="imgadj" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/kissing circles 04.svg %}"/></li>
+    <li id="s05" class="slide"><img class="imgadj" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/kissing circles 05.svg %}"/></li>
+    <li id="s06" class="slide"><img class="imgadj" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/kissing circles 06.svg %}"/></li>
+    <li id="s07" class="slide"><img class="imgadj" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/kissing circles 07.svg %}"/></li>
+    <li id="s08" class="slide"><img class="imgadj" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/kissing circles 08.svg %}"/></li>
+    <li id="s09" class="slide"><img class="imgadj" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/img/kissing circles 09.svg %}"/></li>
+    <li id="s10" class="slide"></li>
+  </ul>
+<script>
+const slidesContainer = document.getElementById("slides-container");
+const slide = document.querySelector(".slide");
+const prevButton = document.getElementById("slide-arrow-prev");
+const nextButton = document.getElementById("slide-arrow-next");
+nextButton.addEventListener("click", () => {
+  const slideWidth = slide.clientWidth;
+  slidesContainer.scrollLeft += slideWidth;
+});
+prevButton.addEventListener("click", () => {
+  const slideWidth = slide.clientWidth;
+  slidesContainer.scrollLeft -= slideWidth;
+});
+</script>
 </section>
-<br/>
+For our specific case of three kissing circles, the solution to `R/r` would be:
 
+`R/ r = ((3 + 2 * sqrt(3))/3)`
+
+which gives the relation between the radius `R` of the containing circle against the radius `r` of any of the three inserted circles. For `r = 1`, the value of `R` is (approx) 2.155.
+
+Inverting the proportion gives:
+
+`r/R = 0.464`
+
+which is the value used by JK, probably adjusted to 0.463.
+
+> There is another way to get the same relationship by using the [Descartes' Circle Theorem](https://en.wikipedia.org/wiki/Descartes%27_theorem), where, for this particular example, reduces to  
+>`(3/r - 1/R)^2 = 2(3/(r^2) + 1/(R^2))`
+
+<br/>
+<br/>
+<br/>
 
 
 #### `drawPattern` function: centers, radii, angles and a couple of other magic numbers
@@ -433,28 +512,42 @@ But then he also multiplied the angles by other `magic numbers` at each self cal
 
 The "magic numbers" used by JK had as effect that several different circles rotated under different speeds, also helped by the recursive placing of the different circles.
 
-<section id="section02">
+<section id="sectcanvas01">
 <div id="gui-speedexample"></div>
 <canvas id="speedexample"></canvas>
 <!-- USE CANVAS API WITH THE ACTUAL FUNCTION PLUS DATGUI TO MODIFY THE VALUES OF THE ENTRIES -->
 </section>
+<br/>
+<br/>
+<br/>
 
 #### `draw` function: setting up the size of the first outer circle and the initial speed of rotation
 
 The "magic numbers" used in the `draw` function are more mundane and don't require a lot of discussion. One was used to fit the outest circle to an appropiate size on the screen (the "0.475"). The other one, the 2000 in `let angle = now / 2000;`, was more a way to initialize the angular speed of the first inner circles.
 
-<section id="section03">
+<section id="sectcanvas02">
 <div id="gui-initialsetupexample"></div>
 <canvas id="initialsetupexample"></canvas>
-<!-- USE CANVAS API WITH THE ACTUAL FUNCTION PLUS DATGUI TO MODIFY THE VALUES OF THE ENTRIES -->
 </section>
 
 # Tada!
 
 # So... What did we learn from this code?
 
+This was a very simple but entertaining project! And what's more: it didn't take much to prepare. So it is likely that there will be more posts like this one in the near future.
+
+Particularly because, like this project by JK, there is a lot we can learn from just a few lines of code. And a good bunch of tools we can use to help us reveal their insides. 
+
 # Final Remarks
 
-Meanwhile, I wish you happy coding!
+For the gallery section showing the maths behind the kissing circles I originally thought to use d3.js and scrollama.js. Then I decided to make an exploration of Konva.js, but, although I liked the use of Konva, just approaching the end of the animations with Konva I found that a carousel was a better fit.
 
-https://www.youtube.com/watch?v=pBeHXNRPNi4
+Sometimes a better solution is just the simplest one.
+
+Yes: I wish you happy coding!
+
+----
+
+The carousel used for this project is the same created by [Jemima Abu](https://www.jemimaabu.com/) for [Envato TutsPlus in Codepen](https://codepen.io/tutsplus/pen/XWZqGgX), with small modifications.
+
+The rest of the project is Johan Karlsson's code for canvas API, with added controllers using the [dat-gui](https://github.com/dataarts/dat.gui) package.
