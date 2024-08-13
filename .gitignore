@@ -1,4 +1,8 @@
 _site
+.jekyll-cache
+#no jekyll env variables (https://amcrouch.medium.com/configuring-environments-when-building-sites-with-jekyll-dd6eb2603c39)
+#run 
+_env.yml
 .sass-cache
 .jekyll-metadata
 _archived
