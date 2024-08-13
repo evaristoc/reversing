@@ -24,9 +24,6 @@ categories: blog what-you-need-to
   @media only screen and (max-width: 600px) {
     .guiprojectcanvas{
       margin-top: 50px;
-      margin-left:-220px;
-      grid-column-start: 1;
-      grid-row-start: span row2;
     }
   }
   </style>
