@@ -5,6 +5,8 @@ date:   2024-08-05 12:00:00 +0200
 categories: update
 ---
 
+*(3 min)*
+
 I just recently [finished a post]({{site.baseurl}}{% link _posts/2024-08-05-tried-scrollamajs-and-d3js-and-Jest-in-Jekyll-together-for-the-first-time.markdown %}) where I started to experiment with combining [d3.js](https://d3js.org/) and [scrollama.js](https://github.com/russellsamora/scrollama), as well as [Jest](https://jestjs.io/) - with [Babel](https://babeljs.io/) - on [jekyll](https://jekyllrb.com/). There were some positives after using both of them. But also a few problems. Here how my experience has been so far with those technologies.
 
 # d3.js and scrollama.js
@@ -19,9 +21,7 @@ One of the things I discovered while working with them for the first time was th
 
 There are a few other "glitches" in my code that require further attention.
 
-d3.js is, again, very powerful and it is here where I think I could have done better. But I suspect that any project won't do particularly great if relying completely only on d3.js animation features as in my post. It is very likely that I am missing something, but it could be also those two technologies might not be adequate for projects of certain complexity. For example, the simplity of the scrollama.js package based on a single sometimes unprecised event might not be the thing you are looking for complex storytelling projects.
-
-I wonder if another, more dedicated animation package wouldn't be necessary.
+d3.js is, again, very powerful and it is here where I think I could have done better. But I suspect that any project won't do particularly great if relying completely only on d3.js animation features as in my post. Or maybe it was in part that the combination of those two technologies might not be adequate for projects of certain complexity. For example, the simplity of the scrollama.js package based on a single sometimes unprecised event might not be the thing you are looking for complex storytelling projects. I wonder if another, more dedicated animation package different to scrollama.js wouldn't be necessary in order to take better advantage of d3.js.
 
 # jest and jekyll
 
