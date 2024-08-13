@@ -6,6 +6,30 @@ categories: blog what-you-need-to
 ---
 <script type="module" src="{{ site.baseurl }}{% link mngassets/posts/2024-08-08-how-to-recursively-make-circles-inside-circles-and-animate-them-like-j/js/main.js %}"></script>
 <link rel="stylesheet" href="{{ site.baseurl }}{% link mngassets/styles/table-code-highlight.css %}">
+<style>
+  .guiprojectsect{
+    display:grid;
+    grid-template-columns: [control]245px [rest] auto;
+    grid-template-row:[row1] auto [row2] auto;
+  }
+  .guiprojectgui{
+    grid-column-start: control;
+    grid-column-end: rest;
+    grid-row-start: span row1;
+  }
+  .guiprojectcanvas{
+    grid-column-start: 1;
+    grid-row-start: span row2;
+  }
+  @media only screen and (max-width: 600px) {
+    .guiprojectcanvas{
+      margin-top: 50px;
+      margin-left:-220px;
+      grid-column-start: 1;
+      grid-row-start: span row2;
+    }
+  }
+  </style>
 
 <p class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="jOMROaB" data-pen-title="Recursive Circles III" data-user="DonKarlssonSan" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
   <span>See the Pen <a href="https://codepen.io/DonKarlssonSan/pen/jOMROaB">
@@ -371,7 +395,7 @@ Let's follow the reasoning step by step:
 }
 .slides-container {
   /*height: calc(40vh - 2rem);*/
-  height: 350px;
+  /*height: 350px;*/
   width: 100%;
   display: flex;
   overflow-x: hidden;
@@ -414,6 +438,7 @@ Let's follow the reasoning step by step:
   width: 100%;
   height: 100%;
   flex: 1 0 100%;
+  align-items: stretch;
 }
 .slide:nth-child(4n+1) {
   background-color: #49b293;
@@ -514,9 +539,9 @@ But then he also multiplied the angles by other `magic numbers` at each self cal
 
 The "magic numbers" used by JK had as effect that several different circles rotated under different speeds, also helped by the recursive placing of the different circles.
 
-<section id="sectcanvas01">
-<div id="gui-speedexample"></div>
-<canvas id="speedexample"></canvas>
+<section class='guiprojectsect' id="sectcanvas01">
+<div class='guiprojectgui' id="gui-speedexample"></div>
+<canvas class='guiprojectcanvas' id="speedexample"></canvas>
 <!-- USE CANVAS API WITH THE ACTUAL FUNCTION PLUS DATGUI TO MODIFY THE VALUES OF THE ENTRIES -->
 </section>
 <br/>
@@ -527,9 +552,10 @@ The "magic numbers" used by JK had as effect that several different circles rota
 
 The "magic numbers" used in the `draw` function are more mundane and don't require a lot of discussion. One was used to fit the outest circle to an appropiate size on the screen (the "0.475"). The other one, the 2000 in `let angle = now / 2000;`, was more a way to initialize the angular speed of the first inner circles.
 
-<section id="sectcanvas02">
-<div id="gui-initialsetupexample"></div>
-<canvas id="initialsetupexample"></canvas>
+
+<section class='guiprojectsect' id="sectcanvas02">
+<div class='guiprojectgui' id="gui-initialsetupexample02"></div>
+<canvas class='guiprojectcanvas' id="initialsetupexample02"></canvas>
 </section>
 
 # Tada!
