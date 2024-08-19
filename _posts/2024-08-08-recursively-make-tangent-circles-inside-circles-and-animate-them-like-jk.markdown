@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "How to recursively make kissing circles and animate them like JK"
+title:  "How to recursively make tangent circles inside circles and animate them like JK"
 date:   2024-08-08 12:00:00 +0200
 categories: blog what-you-need-to
 ---
@@ -34,8 +34,6 @@ categories: blog what-you-need-to
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 <script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
-
-***(OBSERVARTION: THIS POST IS A FIRST DRAFT.)***
 
 Some people find circles a fascinating shape. Circles are surrounded by mathematical paradigms. For example: did you know that even if circles are closed curves they still are ruled by one of the most interesting irrational numbers, Pi, which is a [transcendental number](https://en.wikipedia.org/wiki/Transcendental_number)?
 
@@ -575,4 +573,6 @@ Yes: I wish you happy coding!
 
 The carousel used for this project is the same created by [Jemima Abu](https://www.jemimaabu.com/) for [Envato TutsPlus in Codepen](https://codepen.io/tutsplus/pen/XWZqGgX), with small modifications.
 
-The rest of the project is Johan Karlsson's code for canvas API, with added controllers using the [dat-gui](https://github.com/dataarts/dat.gui) package.
+The rest of the code for this project is the same by Johan Karlsson's, with added controllers using the [dat-gui](https://github.com/dataarts/dat.gui) package.
+
+I used Inkscape for the images.
